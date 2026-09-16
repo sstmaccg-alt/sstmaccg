@@ -350,7 +350,12 @@
 
           <div class="field">
             <label>Registro fotográfico</label>
-            <input type="file" id="d-fotos" accept="image/*" capture="environment" multiple>
+            <div style="display:flex; gap:10px;">
+              <button type="button" class="btn-primary" id="btn-tirar-foto" style="width:auto; padding:10px 16px; font-size:13px;">📷 Tirar foto</button>
+              <button type="button" class="btn-primary" id="btn-galeria-foto" style="width:auto; padding:10px 16px; font-size:13px; background:var(--lime-dark);">🖼️ Escolher da galeria</button>
+            </div>
+            <input type="file" id="d-foto-camera" accept="image/*" capture="environment" style="display:none;">
+            <input type="file" id="d-foto-galeria" accept="image/*" multiple style="display:none;">
             <div id="d-fotos-preview" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
           </div>
 
@@ -678,11 +683,24 @@ function mostrarFormularioDesvio(){
 document.getElementById('btn-novo-desvio').addEventListener('click', mostrarFormularioDesvio);
 document.getElementById('btn-voltar-desvios').addEventListener('click', mostrarListaDesvios);
 
-/* ---- fotos selecionadas (antes de salvar) ---- */
+/* ---- fotos selecionadas (antes de salvar): botão de câmera e de galeria ---- */
 let fotosSelecionadas = [];
-document.getElementById('d-fotos').addEventListener('change', (e) => {
-  fotosSelecionadas = fotosSelecionadas.concat(Array.from(e.target.files));
+document.getElementById('btn-tirar-foto').addEventListener('click', () => {
+  document.getElementById('d-foto-camera').click();
+});
+document.getElementById('btn-galeria-foto').addEventListener('click', () => {
+  document.getElementById('d-foto-galeria').click();
+});
+function adicionarFotosSelecionadas(fileList){
+  fotosSelecionadas = fotosSelecionadas.concat(Array.from(fileList));
   renderizarPreviewFotos();
+}
+document.getElementById('d-foto-camera').addEventListener('change', (e) => {
+  adicionarFotosSelecionadas(e.target.files);
+  e.target.value = '';
+});
+document.getElementById('d-foto-galeria').addEventListener('change', (e) => {
+  adicionarFotosSelecionadas(e.target.files);
   e.target.value = '';
 });
 function renderizarPreviewFotos(){
