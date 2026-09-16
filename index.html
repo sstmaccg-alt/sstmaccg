@@ -75,6 +75,20 @@
   .tag.sincronizado{ background:var(--mint); color:var(--lime-dark); }
   .desvio-card p{ font-size:12px; color:var(--text-muted); margin-top:4px; }
   .empty-state{ text-align:center; color:var(--text-muted); font-size:13px; padding:30px 0; }
+
+  .painel-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:10px; }
+  .painel-card{
+    background:var(--white); border-radius:12px; padding:16px 6px; text-align:center;
+    box-shadow:0 1px 3px rgba(18,33,58,.08);
+  }
+  .painel-card.destaque{ background:var(--navy); }
+  .painel-card.destaque .painel-numero, .painel-card.destaque .painel-label{ color:var(--white); }
+  .painel-numero{ display:block; font-size:26px; font-weight:800; color:var(--navy); }
+  .painel-label{ display:block; font-size:11px; color:var(--text-muted); margin-top:4px; }
+  .painel-card.destaque .painel-label{ opacity:.85; }
+  .cor-verde{ color:#2e8b45 !important; }
+  .cor-vermelho{ color:#d64545 !important; }
+  .cor-amarelo{ color:#c99a20 !important; }
   .field .toggle-pass{
     position:absolute; right:4px; top:26px; cursor:pointer;
     font-size:12px; color:var(--text-muted); user-select:none;
@@ -226,6 +240,38 @@
 
       <div class="pending-banner" id="pending-banner">
         0 registro(s) aguardando sincronização
+      </div>
+
+      <!-- Painel executivo -->
+      <div class="painel-grid">
+        <div class="painel-card destaque">
+          <span class="painel-numero" id="painel-abertos">0</span>
+          <span class="painel-label">Desvios abertos</span>
+        </div>
+        <div class="painel-card">
+          <span class="painel-numero cor-verde" id="painel-noprazo">0</span>
+          <span class="painel-label">No prazo</span>
+        </div>
+        <div class="painel-card">
+          <span class="painel-numero cor-vermelho" id="painel-atrasado">0</span>
+          <span class="painel-label">Atrasados</span>
+        </div>
+      </div>
+
+      <p class="home-sub" style="margin-top:6px; margin-bottom:8px;">Por potencial</p>
+      <div class="painel-grid">
+        <div class="painel-card">
+          <span class="painel-numero cor-vermelho" id="painel-alto">0</span>
+          <span class="painel-label">Alto</span>
+        </div>
+        <div class="painel-card">
+          <span class="painel-numero cor-amarelo" id="painel-medio">0</span>
+          <span class="painel-label">Médio</span>
+        </div>
+        <div class="painel-card">
+          <span class="painel-numero cor-verde" id="painel-baixo">0</span>
+          <span class="painel-label">Baixo</span>
+        </div>
       </div>
 
       <div class="card-action" data-goto="view-inspecoes">
@@ -526,6 +572,7 @@ auth.onAuthStateChanged((user) => {
       (user.displayName ? `Olá, ${user.displayName.split(' ')[0]}!` : 'O que você quer registrar hoje?');
     document.getElementById('perfil-info').textContent =
       `${user.displayName || ''} — ${user.email}`;
+    renderizarPainelExecutivo();
   } else {
     appScreen.classList.remove('active');
     authScreen.classList.add('active');
@@ -820,6 +867,20 @@ document.getElementById('desvio-form').addEventListener('submit', async (e) => {
     btn.disabled = false;
   }
 });
+
+/* ---- painel executivo (tela de início): lê o resumo calculado pelo
+   Apps Script a partir da planilha real, não os desvios do próprio app ---- */
+function renderizarPainelExecutivo(){
+  db.collection('estatisticas').doc('painel').onSnapshot((doc) => {
+    const d = doc.exists ? doc.data() : {};
+    document.getElementById('painel-abertos').textContent = (d.noPrazo || 0) + (d.atrasado || 0);
+    document.getElementById('painel-noprazo').textContent = d.noPrazo || 0;
+    document.getElementById('painel-atrasado').textContent = d.atrasado || 0;
+    document.getElementById('painel-alto').textContent = d.alto || 0;
+    document.getElementById('painel-medio').textContent = d.medio || 0;
+    document.getElementById('painel-baixo').textContent = d.baixo || 0;
+  });
+}
 
 /* ---- listagem dos desvios do próprio usuário ---- */
 function renderizarListaDesvios(){
