@@ -52,6 +52,7 @@
   .auth-logo .capacete{ width:56px; height:56px; font-size:26px; margin-bottom:10px; }
   .auth-logo h1{ font-size:19px; color:var(--green); font-weight:800; }
   .auth-logo p{ font-size:12px; color:var(--text-muted); margin-top:4px; }
+  .auth-logo .logo-img{ width:220px; max-width:80%; margin:0 auto 8px; display:block; }
 
   .field{ margin-bottom:16px; position:relative; }
   .field label{ display:block; font-size:12px; font-weight:600; color:var(--navy); margin-bottom:6px; }
@@ -134,19 +135,18 @@
   .home-title{ font-size:20px; font-weight:700; margin-bottom:4px; }
   .home-sub{ font-size:13px; color:var(--text-muted); margin-bottom:20px; }
 
-  /* ---------- Banner de boas-vindas ---------- */
+  /* ---------- Banner de boas-vindas (claro, como no mockup) ---------- */
   .hero-banner{
-    background:linear-gradient(120deg, var(--navy) 0%, var(--green-dark) 100%);
-    border-radius:16px; padding:22px; margin-bottom:18px; color:var(--white);
+    background-image: linear-gradient(90deg, var(--cream) 0%, var(--cream) 45%, rgba(249,249,247,.55) 75%, rgba(249,249,247,.15) 100%),
+      url('https://i.imgur.com/TgGix1S.jpeg');
+    background-size:cover; background-position:right center;
+    border-radius:16px; padding:22px; margin-bottom:18px; color:var(--navy);
     position:relative; overflow:hidden;
   }
-  .hero-banner .capacete-decor{
-    position:absolute; right:-10px; bottom:-16px; font-size:90px; opacity:.18;
-  }
-  .hero-banner .selo{ font-size:11px; letter-spacing:.08em; color:var(--green-tint); font-weight:700; }
-  .hero-banner h2{ font-size:22px; font-weight:800; margin-top:6px; line-height:1.25; }
-  .hero-banner h2 span{ color:#a9d17f; }
-  .hero-banner p{ font-size:13px; color:#d7ddd2; margin-top:8px; max-width:80%; }
+  .hero-banner .selo{ font-size:11px; letter-spacing:.08em; color:var(--text-muted); font-weight:700; }
+  .hero-banner h2{ font-size:24px; font-weight:800; margin-top:6px; line-height:1.25; color:var(--navy); }
+  .hero-banner h2 span{ display:block; color:var(--green); }
+  .hero-banner p{ font-size:13px; color:var(--text-muted); margin-top:8px; max-width:70%; }
 
   .secao-titulo{
     font-size:11px; font-weight:700; letter-spacing:.06em; color:var(--text-muted);
@@ -169,8 +169,8 @@
   .card-action .seta{ color:var(--text-muted); font-size:16px; }
 
   .alerta-card{
-    background:var(--green-tint); border-radius:12px; padding:14px 16px; margin-top:6px;
-    display:flex; align-items:center; gap:12px; font-size:13px; color:var(--green-dark);
+    background:var(--green-dark); border-radius:12px; padding:14px 16px; margin-top:6px;
+    display:flex; align-items:center; gap:12px; font-size:13px; color:var(--white);
   }
   .alerta-card .icon{ font-size:18px; }
 
@@ -195,6 +195,13 @@
     background:var(--green-tint); border-radius:10px; padding:16px; font-size:13px; color:var(--green-dark);
   }
 
+  /* ---------- Cabeçalho de tela secundária (sem faixa escura) ---------- */
+  .tela-header{ display:flex; align-items:center; gap:10px; margin-bottom:4px; }
+  .tela-header .voltar{ background:none; border:none; font-size:20px; cursor:pointer; color:var(--navy); }
+  .tela-selo{ font-size:11px; letter-spacing:.08em; color:var(--green); font-weight:700; text-transform:uppercase; }
+  .tela-titulo{ font-size:24px; font-weight:800; color:var(--navy); margin-top:2px; }
+  .tela-sub{ font-size:13px; color:var(--text-muted); margin-top:6px; margin-bottom:20px; }
+
   /* ---------- Campo com ícone (formulário de desvio) ---------- */
   .field-com-icone{ display:flex; gap:12px; align-items:flex-start; margin-bottom:16px; }
   .field-com-icone .campo-icone{
@@ -215,30 +222,11 @@
   .card-action .icon .icone-svg svg{ width:20px; height:20px; }
   .campo-icone{ color:var(--green-dark); }
   .campo-icone .icone-svg svg{ width:17px; height:17px; }
-  .alerta-card .icon{ color:var(--green-dark); }
+  .alerta-card .icon{ color:var(--white); }
   .alerta-card .icon .icone-svg svg{ width:19px; height:19px; }
-  .capacete-decor .icone-svg svg{ width:90px; height:90px; }
+  .sino{ color:var(--navy); }
+  .sino .icone-svg svg{ width:20px; height:20px; }
   nav.bottom-nav .icone-svg svg{ width:19px; height:19px; }
-
-  /* ---------- Logo real (imagens enviadas) ---------- */
-  .logo-img{ display:block; max-width:100%; height:auto; }
-  .auth-logo .logo-img{ width:220px; margin:0 auto 8px; }
-  .topbar-logo{ height:34px; width:auto; }
-
-  /* ---------- Fundos de imagem ---------- */
-  .hero-banner{
-    background-image: linear-gradient(120deg, rgba(20,33,49,.88) 0%, rgba(76,112,50,.82) 100%),
-      url('https://i.imgur.com/TgGix1S.jpeg');
-    background-size:cover; background-position:center;
-  }
-  .banner-secundario{
-    background-image: linear-gradient(120deg, rgba(20,33,49,.9) 0%, rgba(76,112,50,.85) 100%),
-      url('https://i.imgur.com/oZ80hkV.jpeg');
-    background-size:cover; background-position:center;
-    border-radius:16px; padding:20px; margin-bottom:18px; color:var(--white);
-  }
-  .banner-secundario h2{ font-size:19px; font-weight:800; }
-  .banner-secundario p{ font-size:12px; color:#d7ddd2; margin-top:4px; }
 </style>
 </head>
 <body>
@@ -309,8 +297,17 @@
 <!-- ===================== APP PRINCIPAL ===================== -->
 <section id="app-screen" class="screen">
   <div class="topbar">
-    <img src="https://i.imgur.com/OB1FZh0.jpeg" alt="Segurança do Trabalho CCG" class="logo-img topbar-logo">
-    <span class="status-pill online" id="status-pill">Online</span>
+    <div class="marca">
+      <div class="capacete"><span class="icone-svg" data-icone="capacete"></span></div>
+      <div class="textos">
+        <div class="linha1">Segurança do Trabalho</div>
+        <div class="linha2">CCG</div>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span class="status-pill online" id="status-pill">Online</span>
+      <span class="sino"><span class="icone-svg" data-icone="sino"></span></span>
+    </div>
   </div>
 
   <main>
@@ -403,10 +400,9 @@
 
     <!-- Tela: Inspeções (placeholder) -->
     <div id="view-inspecoes" style="display:none;">
-      <div class="banner-secundario">
-        <h2>Inspeções</h2>
-        <p>Realize e acompanhe as inspeções de campo.</p>
-      </div>
+      <div class="tela-selo">SEGURANÇA</div>
+      <p class="tela-titulo">Inspeções</p>
+      <p class="tela-sub">Realize e acompanhe as inspeções de campo.</p>
       <div class="placeholder-note">Tela em construção — próxima etapa: desenhar o formulário do checklist.</div>
     </div>
 
@@ -415,23 +411,22 @@
 
       <!-- Lista de desvios -->
       <div id="desvios-lista-tela">
-        <div class="banner-secundario">
-          <h2>Desvios</h2>
-          <p>Registre e acompanhe os desvios de segurança.</p>
-        </div>
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-          <p class="home-title" style="margin-bottom:0;">Registros</p>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+          <p class="tela-titulo" style="margin-top:0;">Desvios</p>
           <button class="btn-primary" style="width:auto; padding:10px 18px;" id="btn-novo-desvio">+ Novo</button>
         </div>
+        <p class="tela-sub">Registre e acompanhe os desvios de segurança.</p>
         <div id="desvios-lista"></div>
       </div>
 
       <!-- Formulário de novo desvio -->
       <div id="desvio-form-tela" style="display:none;">
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
-          <button id="btn-voltar-desvios" style="background:none; border:none; font-size:20px; cursor:pointer;">←</button>
-          <p class="home-title" style="margin-bottom:0;">Novo desvio</p>
+        <div class="tela-header">
+          <button id="btn-voltar-desvios" class="voltar">←</button>
         </div>
+        <div class="tela-selo">NOVO DESVIO</div>
+        <p class="tela-titulo">Registrar desvio</p>
+        <p class="tela-sub">Informe as informações abaixo para registrar o desvio de segurança.</p>
 
         <form id="desvio-form">
           <div class="field-com-icone">
@@ -594,11 +589,9 @@
 
     <!-- Tela: Perfil (placeholder) -->
     <div id="view-perfil" style="display:none;">
-      <div class="banner-secundario">
-        <h2>Perfil</h2>
-        <p>Suas informações de acesso.</p>
-      </div>
-      <p class="home-sub" id="perfil-info"></p>
+      <div class="tela-selo">CONTA</div>
+      <p class="tela-titulo">Perfil</p>
+      <p class="tela-sub" id="perfil-info"></p>
       <button class="btn-primary" id="logout-btn" style="margin-top:16px;">Sair</button>
     </div>
   </main>
@@ -640,7 +633,8 @@ const ICONES = {
   barchart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-6"/></svg>',
   message: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4V5Z"/></svg>',
   camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4Z"/><circle cx="12" cy="13.5" r="3.2"/></svg>',
-  imagem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="m21 16-5-5-4 4-3-3-5 5"/></svg>'
+  imagem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="m21 16-5-5-4 4-3-3-5 5"/></svg>',
+  sino: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>'
 };
 document.querySelectorAll('[data-icone]').forEach(el => {
   el.innerHTML = ICONES[el.dataset.icone] || '';
