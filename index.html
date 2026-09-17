@@ -219,6 +219,26 @@
   .alerta-card .icon .icone-svg svg{ width:19px; height:19px; }
   .capacete-decor .icone-svg svg{ width:90px; height:90px; }
   nav.bottom-nav .icone-svg svg{ width:19px; height:19px; }
+
+  /* ---------- Logo real (imagens enviadas) ---------- */
+  .logo-img{ display:block; max-width:100%; height:auto; }
+  .auth-logo .logo-img{ width:220px; margin:0 auto 8px; }
+  .topbar-logo{ height:34px; width:auto; }
+
+  /* ---------- Fundos de imagem ---------- */
+  .hero-banner{
+    background-image: linear-gradient(120deg, rgba(20,33,49,.88) 0%, rgba(76,112,50,.82) 100%),
+      url('https://i.imgur.com/TgGix1S.jpeg');
+    background-size:cover; background-position:center;
+  }
+  .banner-secundario{
+    background-image: linear-gradient(120deg, rgba(20,33,49,.9) 0%, rgba(76,112,50,.85) 100%),
+      url('https://i.imgur.com/oZ80hkV.jpeg');
+    background-size:cover; background-position:center;
+    border-radius:16px; padding:20px; margin-bottom:18px; color:var(--white);
+  }
+  .banner-secundario h2{ font-size:19px; font-weight:800; }
+  .banner-secundario p{ font-size:12px; color:#d7ddd2; margin-top:4px; }
 </style>
 </head>
 <body>
@@ -228,9 +248,7 @@
   <div class="auth-box">
 
     <div class="auth-logo">
-      <div class="capacete"><span class="icone-svg" data-icone="capacete"></span></div>
-      <h1>Segurança do Trabalho</h1>
-      <p>Consórcio Construtor Gávea</p>
+      <img src="https://i.imgur.com/OB1FZh0.jpeg" alt="Segurança do Trabalho CCG" class="logo-img">
     </div>
 
     <!-- ---- Formulário de login ---- -->
@@ -291,13 +309,7 @@
 <!-- ===================== APP PRINCIPAL ===================== -->
 <section id="app-screen" class="screen">
   <div class="topbar">
-    <div class="marca">
-      <div class="capacete"><span class="icone-svg" data-icone="capacete"></span></div>
-      <div class="textos">
-        <div class="linha1">Segurança do Trabalho</div>
-        <div class="linha2">CCG</div>
-      </div>
-    </div>
+    <img src="https://i.imgur.com/OB1FZh0.jpeg" alt="Segurança do Trabalho CCG" class="logo-img topbar-logo">
     <span class="status-pill online" id="status-pill">Online</span>
   </div>
 
@@ -306,7 +318,6 @@
     <div id="view-home">
 
       <div class="hero-banner">
-        <span class="capacete-decor"><span class="icone-svg" data-icone="capacete"></span></span>
         <div class="selo" id="selo-boas-vindas">BEM-VINDO(A)</div>
         <h2 id="user-greeting">Segurança <span>em primeiro lugar</span></h2>
         <p>Juntos por um ambiente de trabalho mais seguro.</p>
@@ -392,8 +403,10 @@
 
     <!-- Tela: Inspeções (placeholder) -->
     <div id="view-inspecoes" style="display:none;">
-      <p class="home-title">Inspeções</p>
-      <p class="home-sub">Lista e novo checklist entram aqui.</p>
+      <div class="banner-secundario">
+        <h2>Inspeções</h2>
+        <p>Realize e acompanhe as inspeções de campo.</p>
+      </div>
       <div class="placeholder-note">Tela em construção — próxima etapa: desenhar o formulário do checklist.</div>
     </div>
 
@@ -402,8 +415,12 @@
 
       <!-- Lista de desvios -->
       <div id="desvios-lista-tela">
+        <div class="banner-secundario">
+          <h2>Desvios</h2>
+          <p>Registre e acompanhe os desvios de segurança.</p>
+        </div>
         <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-          <p class="home-title" style="margin-bottom:0;">Desvios</p>
+          <p class="home-title" style="margin-bottom:0;">Registros</p>
           <button class="btn-primary" style="width:auto; padding:10px 18px;" id="btn-novo-desvio">+ Novo</button>
         </div>
         <div id="desvios-lista"></div>
@@ -577,7 +594,10 @@
 
     <!-- Tela: Perfil (placeholder) -->
     <div id="view-perfil" style="display:none;">
-      <p class="home-title">Perfil</p>
+      <div class="banner-secundario">
+        <h2>Perfil</h2>
+        <p>Suas informações de acesso.</p>
+      </div>
       <p class="home-sub" id="perfil-info"></p>
       <button class="btn-primary" id="logout-btn" style="margin-top:16px;">Sair</button>
     </div>
