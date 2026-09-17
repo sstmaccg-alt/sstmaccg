@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Segurança do Trabalho — CCG</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#12213a">
+<meta name="theme-color" content="#142131">
 
 <!-- Firebase (compat SDK via CDN — sem build step, para caber tudo num index.html só) -->
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
@@ -14,11 +14,11 @@
 
 <style>
   :root{
-    --navy:#12213a;
-    --lime:#8bc53f;
-    --lime-dark:#6f8a3f;
-    --cream:#f4f3f0;
-    --mint:#f6f9f0;
+    --navy:#142131;
+    --green:#5e8a3f;
+    --green-dark:#4c7032;
+    --green-tint:#dbe8cc;
+    --cream:#f9f9f7;
     --white:#ffffff;
     --error:#d64545;
     --text-muted:#6b7280;
@@ -34,27 +34,33 @@
   .screen{ display:none; min-height:100vh; flex-direction:column; }
   .screen.active{ display:flex; }
 
-  /* ---------- Tela de login / cadastro ---------- */
-  #auth-screen.active{ align-items:center; justify-content:center; padding:24px; }
-  .auth-box{ width:100%; max-width:380px; }
-  .auth-logo{ text-align:center; margin-bottom:28px; }
-  .auth-logo h1{ font-size:22px; color:var(--navy); font-weight:700; }
-  .auth-logo p{ font-size:13px; color:var(--text-muted); margin-top:4px; }
+  /* ---------- Marca (logo em ícone de capacete) ---------- */
+  .marca{ display:flex; align-items:center; gap:10px; }
+  .marca .capacete{
+    width:38px; height:38px; border-radius:50%; border:2px solid var(--navy);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px;
+    background:linear-gradient(135deg, var(--green-tint) 0%, var(--white) 60%);
+  }
+  .marca .textos{ line-height:1.15; }
+  .marca .textos .linha1{ font-size:10px; letter-spacing:.03em; color:var(--text-muted); }
+  .marca .textos .linha2{ font-size:18px; font-weight:800; color:var(--green); }
 
-  .field{ margin-bottom:18px; position:relative; }
-  .field label{ display:block; font-size:12px; color:var(--text-muted); margin-bottom:4px; }
-  .field input{
-    width:100%; border:none; border-bottom:1px solid #cfd3da;
-    background:transparent; padding:8px 4px; font-size:15px; color:var(--navy);
-    outline:none;
+  /* ---------- Tela de login / cadastro ---------- */
+  #auth-screen.active{ align-items:center; justify-content:center; padding:24px; background:var(--cream); }
+  .auth-box{ width:100%; max-width:380px; }
+  .auth-logo{ display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:28px; }
+  .auth-logo .capacete{ width:56px; height:56px; font-size:26px; margin-bottom:10px; }
+  .auth-logo h1{ font-size:19px; color:var(--green); font-weight:800; }
+  .auth-logo p{ font-size:12px; color:var(--text-muted); margin-top:4px; }
+
+  .field{ margin-bottom:16px; position:relative; }
+  .field label{ display:block; font-size:12px; font-weight:600; color:var(--navy); margin-bottom:6px; }
+  .field input, .field textarea, .field select{
+    width:100%; border:1px solid #dfe3da; border-radius:10px;
+    background:var(--white); padding:11px 12px; font-size:14px; color:var(--navy);
+    outline:none; font-family:inherit; -webkit-appearance:none; appearance:none;
   }
-  .field input:focus{ border-bottom:2px solid var(--lime); }
-  .field select{
-    width:100%; border:none; border-bottom:1px solid #cfd3da;
-    background:transparent; padding:8px 4px; font-size:15px; color:var(--navy);
-    outline:none; -webkit-appearance:none; appearance:none;
-  }
-  .field select:focus{ border-bottom:2px solid var(--lime); }
+  .field input:focus, .field textarea:focus, .field select:focus{ border-color:var(--green); }
   .foto-thumb{ position:relative; width:64px; height:64px; border-radius:8px; overflow:hidden; }
   .foto-thumb img{ width:100%; height:100%; object-fit:cover; }
   .foto-thumb .remover{
@@ -63,8 +69,8 @@
     cursor:pointer;
   }
   .desvio-card{
-    background:var(--white); border-radius:12px; padding:14px 16px; margin-bottom:12px;
-    box-shadow:0 1px 3px rgba(18,33,58,.08); cursor:pointer;
+    background:var(--white); border-radius:14px; padding:14px 16px; margin-bottom:12px;
+    box-shadow:0 1px 4px rgba(20,33,49,.07); cursor:pointer;
   }
   .desvio-card .linha1{ display:flex; justify-content:space-between; align-items:center; }
   .desvio-card .linha1 b{ font-size:14px; }
@@ -72,70 +78,101 @@
     font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; text-transform:uppercase;
   }
   .tag.pendente{ background:#fff4d6; color:#8a6300; }
-  .tag.sincronizado{ background:var(--mint); color:var(--lime-dark); }
+  .tag.sincronizado{ background:var(--green-tint); color:var(--green-dark); }
   .desvio-card p{ font-size:12px; color:var(--text-muted); margin-top:4px; }
   .empty-state{ text-align:center; color:var(--text-muted); font-size:13px; padding:30px 0; }
 
-  .painel-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:10px; }
+  /* ---------- Painel executivo (cartões com ícone) ---------- */
+  .painel-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
   .painel-card{
-    background:var(--white); border-radius:12px; padding:16px 6px; text-align:center;
-    box-shadow:0 1px 3px rgba(18,33,58,.08);
+    background:var(--white); border-radius:14px; padding:16px;
+    display:flex; align-items:center; gap:12px;
+    box-shadow:0 1px 4px rgba(20,33,49,.07);
   }
-  .painel-card.destaque{ background:var(--navy); }
-  .painel-card.destaque .painel-numero, .painel-card.destaque .painel-label{ color:var(--white); }
-  .painel-numero{ display:block; font-size:26px; font-weight:800; color:var(--navy); }
-  .painel-label{ display:block; font-size:11px; color:var(--text-muted); margin-top:4px; }
-  .painel-card.destaque .painel-label{ opacity:.85; }
-  .cor-verde{ color:#2e8b45 !important; }
-  .cor-vermelho{ color:#d64545 !important; }
+  .painel-card .painel-icone{
+    width:40px; height:40px; border-radius:10px; background:var(--green-tint);
+    display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;
+  }
+  .painel-numero{ display:block; font-size:22px; font-weight:800; color:var(--navy); line-height:1.1; }
+  .painel-label{ display:block; font-size:11px; color:var(--text-muted); margin-top:2px; }
+  .cor-verde{ color:var(--green-dark) !important; }
+  .cor-vermelho{ color:#c84c4c !important; }
   .cor-amarelo{ color:#c99a20 !important; }
   .field .toggle-pass{
-    position:absolute; right:4px; top:26px; cursor:pointer;
+    position:absolute; right:12px; top:38px; cursor:pointer;
     font-size:12px; color:var(--text-muted); user-select:none;
   }
   .field-error{ font-size:11px; color:var(--error); margin-top:4px; display:none; }
-  .field.invalid input{ border-bottom-color:var(--error); }
+  .field.invalid input{ border-color:var(--error); }
   .field.invalid .field-error{ display:block; }
 
   .btn-primary{
-    width:100%; background:var(--navy); color:var(--white); border:none;
-    padding:13px; border-radius:8px; font-size:15px; font-weight:600;
-    cursor:pointer; margin-top:8px;
+    width:100%; background:var(--green); color:var(--white); border:none;
+    padding:14px; border-radius:12px; font-size:15px; font-weight:700;
+    cursor:pointer; margin-top:8px; display:flex; align-items:center; justify-content:center; gap:8px;
   }
   .btn-primary:disabled{ opacity:.5; cursor:not-allowed; }
   .auth-switch{ text-align:center; font-size:13px; color:var(--text-muted); margin-top:18px; }
-  .auth-switch a{ color:var(--lime-dark); font-weight:600; text-decoration:none; cursor:pointer; }
+  .auth-switch a{ color:var(--green); font-weight:700; text-decoration:none; cursor:pointer; }
   .auth-msg{ font-size:13px; text-align:center; margin-top:12px; color:var(--error); display:none; }
   .divider{ text-align:center; font-size:12px; color:var(--text-muted); margin:16px 0; position:relative; }
 
   /* ---------- App principal ---------- */
   #app-screen{ min-height:100vh; }
   .topbar{
-    background:var(--navy); color:var(--white); padding:16px 20px;
+    background:var(--cream); color:var(--navy); padding:16px 20px;
     display:flex; align-items:center; justify-content:space-between;
+    border-bottom:1px solid #eceee8;
   }
-  .topbar h2{ font-size:16px; font-weight:600; }
   .topbar .status-pill{
     font-size:11px; padding:3px 10px; border-radius:12px; font-weight:600;
   }
-  .status-pill.online{ background:var(--lime); color:var(--navy); }
-  .status-pill.offline{ background:#d64545; color:var(--white); }
+  .status-pill.online{ background:var(--green-tint); color:var(--green-dark); }
+  .status-pill.offline{ background:#fbe0e0; color:#c84c4c; }
 
   main{ flex:1; padding:20px; padding-bottom:90px; }
   .home-title{ font-size:20px; font-weight:700; margin-bottom:4px; }
   .home-sub{ font-size:13px; color:var(--text-muted); margin-bottom:20px; }
 
+  /* ---------- Banner de boas-vindas ---------- */
+  .hero-banner{
+    background:linear-gradient(120deg, var(--navy) 0%, var(--green-dark) 100%);
+    border-radius:16px; padding:22px; margin-bottom:18px; color:var(--white);
+    position:relative; overflow:hidden;
+  }
+  .hero-banner .capacete-decor{
+    position:absolute; right:-10px; bottom:-16px; font-size:90px; opacity:.18;
+  }
+  .hero-banner .selo{ font-size:11px; letter-spacing:.08em; color:var(--green-tint); font-weight:700; }
+  .hero-banner h2{ font-size:22px; font-weight:800; margin-top:6px; line-height:1.25; }
+  .hero-banner h2 span{ color:#a9d17f; }
+  .hero-banner p{ font-size:13px; color:#d7ddd2; margin-top:8px; max-width:80%; }
+
+  .secao-titulo{
+    font-size:11px; font-weight:700; letter-spacing:.06em; color:var(--text-muted);
+    text-transform:uppercase; margin:22px 0 12px; padding-bottom:8px; border-bottom:2px solid var(--green-tint);
+    display:inline-block;
+  }
+
   .card-action{
-    background:var(--white); border-radius:12px; padding:18px;
-    display:flex; align-items:center; gap:14px; margin-bottom:14px;
-    box-shadow:0 1px 3px rgba(18,33,58,.08); cursor:pointer;
+    background:var(--white); border-radius:14px; padding:16px;
+    display:flex; align-items:center; gap:14px; margin-bottom:12px;
+    box-shadow:0 1px 4px rgba(20,33,49,.07); cursor:pointer;
   }
   .card-action .icon{
-    width:44px; height:44px; border-radius:10px; background:var(--mint);
-    display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0;
+    width:42px; height:42px; border-radius:10px; background:var(--green-tint);
+    display:flex; align-items:center; justify-content:center; font-size:19px; flex-shrink:0;
   }
-  .card-action .info h3{ font-size:15px; font-weight:600; }
+  .card-action .info{ flex:1; }
+  .card-action .info h3{ font-size:14px; font-weight:700; }
   .card-action .info p{ font-size:12px; color:var(--text-muted); margin-top:2px; }
+  .card-action .seta{ color:var(--text-muted); font-size:16px; }
+
+  .alerta-card{
+    background:var(--green-tint); border-radius:12px; padding:14px 16px; margin-top:6px;
+    display:flex; align-items:center; gap:12px; font-size:13px; color:var(--green-dark);
+  }
+  .alerta-card .icon{ font-size:18px; }
 
   .pending-banner{
     background:#fff4d6; color:#8a6300; font-size:12px; padding:10px 14px;
@@ -145,18 +182,43 @@
 
   nav.bottom-nav{
     position:fixed; bottom:0; left:0; right:0; background:var(--white);
-    border-top:1px solid #e5e7eb; display:flex; padding:8px 0;
+    border-top:1px solid #eceee8; display:flex; padding:8px 0;
   }
   nav.bottom-nav button{
     flex:1; background:none; border:none; display:flex; flex-direction:column;
     align-items:center; gap:2px; font-size:11px; color:var(--text-muted); cursor:pointer;
   }
-  nav.bottom-nav button.active{ color:var(--navy); font-weight:700; }
+  nav.bottom-nav button.active{ color:var(--green); font-weight:700; }
   nav.bottom-nav .nav-icon{ font-size:18px; }
 
   .placeholder-note{
-    background:var(--mint); border-radius:10px; padding:16px; font-size:13px; color:var(--navy);
+    background:var(--green-tint); border-radius:10px; padding:16px; font-size:13px; color:var(--green-dark);
   }
+
+  /* ---------- Campo com ícone (formulário de desvio) ---------- */
+  .field-com-icone{ display:flex; gap:12px; align-items:flex-start; margin-bottom:16px; }
+  .field-com-icone .campo-icone{
+    width:36px; height:36px; border-radius:9px; background:var(--green-tint);
+    display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; margin-top:2px;
+  }
+  .field-com-icone .campo-corpo{ flex:1; }
+  .field-com-icone .field{ margin-bottom:0; }
+
+  /* ---------- Ícones de linha (SVG, monocromáticos) ---------- */
+  .icone-svg{ display:inline-flex; align-items:center; justify-content:center; }
+  .icone-svg svg{ display:block; width:20px; height:20px; }
+  .capacete .icone-svg{ color:var(--navy); }
+  .capacete .icone-svg svg{ width:20px; height:20px; }
+  .auth-logo .capacete .icone-svg svg{ width:28px; height:28px; }
+  .painel-icone{ color:var(--green-dark); }
+  .card-action .icon{ color:var(--green-dark); }
+  .card-action .icon .icone-svg svg{ width:20px; height:20px; }
+  .campo-icone{ color:var(--green-dark); }
+  .campo-icone .icone-svg svg{ width:17px; height:17px; }
+  .alerta-card .icon{ color:var(--green-dark); }
+  .alerta-card .icon .icone-svg svg{ width:19px; height:19px; }
+  .capacete-decor .icone-svg svg{ width:90px; height:90px; }
+  nav.bottom-nav .icone-svg svg{ width:19px; height:19px; }
 </style>
 </head>
 <body>
@@ -166,6 +228,7 @@
   <div class="auth-box">
 
     <div class="auth-logo">
+      <div class="capacete"><span class="icone-svg" data-icone="capacete"></span></div>
       <h1>Segurança do Trabalho</h1>
       <p>Consórcio Construtor Gávea</p>
     </div>
@@ -228,15 +291,26 @@
 <!-- ===================== APP PRINCIPAL ===================== -->
 <section id="app-screen" class="screen">
   <div class="topbar">
-    <h2>Início</h2>
+    <div class="marca">
+      <div class="capacete"><span class="icone-svg" data-icone="capacete"></span></div>
+      <div class="textos">
+        <div class="linha1">Segurança do Trabalho</div>
+        <div class="linha2">CCG</div>
+      </div>
+    </div>
     <span class="status-pill online" id="status-pill">Online</span>
   </div>
 
   <main>
     <!-- Tela: Início -->
     <div id="view-home">
-      <p class="home-title">Olá!</p>
-      <p class="home-sub" id="user-greeting">O que você quer registrar hoje?</p>
+
+      <div class="hero-banner">
+        <span class="capacete-decor"><span class="icone-svg" data-icone="capacete"></span></span>
+        <div class="selo" id="selo-boas-vindas">BEM-VINDO(A)</div>
+        <h2 id="user-greeting">Segurança <span>em primeiro lugar</span></h2>
+        <p>Juntos por um ambiente de trabalho mais seguro.</p>
+      </div>
 
       <div class="pending-banner" id="pending-banner">
         0 registro(s) aguardando sincronização
@@ -244,50 +318,75 @@
 
       <!-- Painel executivo -->
       <div class="painel-grid">
-        <div class="painel-card destaque">
-          <span class="painel-numero" id="painel-abertos">0</span>
-          <span class="painel-label">Desvios abertos</span>
+        <div class="painel-card">
+          <div class="painel-icone"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
+          <div>
+            <span class="painel-numero" id="painel-abertos">0</span>
+            <span class="painel-label">Desvios abertos</span>
+          </div>
         </div>
         <div class="painel-card">
-          <span class="painel-numero cor-verde" id="painel-noprazo">0</span>
-          <span class="painel-label">No prazo</span>
+          <div class="painel-icone"><span class="icone-svg" data-icone="check"></span></div>
+          <div>
+            <span class="painel-numero cor-verde" id="painel-noprazo">0</span>
+            <span class="painel-label">No prazo</span>
+          </div>
         </div>
         <div class="painel-card">
-          <span class="painel-numero cor-vermelho" id="painel-atrasado">0</span>
-          <span class="painel-label">Atrasados</span>
+          <div class="painel-icone"><span class="icone-svg" data-icone="relogio"></span></div>
+          <div>
+            <span class="painel-numero cor-vermelho" id="painel-atrasado">0</span>
+            <span class="painel-label">Atrasados</span>
+          </div>
+        </div>
+        <div class="painel-card">
+          <div class="painel-icone"><span class="icone-svg" data-icone="alvo"></span></div>
+          <div>
+            <span class="painel-numero cor-vermelho" id="painel-alto">0</span>
+            <span class="painel-label">Potencial alto</span>
+          </div>
+        </div>
+      </div>
+      <div class="painel-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="painel-card">
+          <div class="painel-icone"><span class="icone-svg" data-icone="alvo"></span></div>
+          <div>
+            <span class="painel-numero cor-amarelo" id="painel-medio">0</span>
+            <span class="painel-label">Potencial médio</span>
+          </div>
+        </div>
+        <div class="painel-card">
+          <div class="painel-icone"><span class="icone-svg" data-icone="alvo"></span></div>
+          <div>
+            <span class="painel-numero cor-verde" id="painel-baixo">0</span>
+            <span class="painel-label">Potencial baixo</span>
+          </div>
         </div>
       </div>
 
-      <p class="home-sub" style="margin-top:6px; margin-bottom:8px;">Por potencial</p>
-      <div class="painel-grid">
-        <div class="painel-card">
-          <span class="painel-numero cor-vermelho" id="painel-alto">0</span>
-          <span class="painel-label">Alto</span>
-        </div>
-        <div class="painel-card">
-          <span class="painel-numero cor-amarelo" id="painel-medio">0</span>
-          <span class="painel-label">Médio</span>
-        </div>
-        <div class="painel-card">
-          <span class="painel-numero cor-verde" id="painel-baixo">0</span>
-          <span class="painel-label">Baixo</span>
-        </div>
-      </div>
+      <span class="secao-titulo">Acesso rápido</span>
 
       <div class="card-action" data-goto="view-inspecoes">
-        <div class="icon">📋</div>
+        <div class="icon"><span class="icone-svg" data-icone="clipboard"></span></div>
         <div class="info">
           <h3>Inspeções</h3>
           <p>Checklists de segurança em campo</p>
         </div>
+        <div class="seta">›</div>
       </div>
 
       <div class="card-action" data-goto="view-desvios">
-        <div class="icon">⚠️</div>
+        <div class="icon"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
         <div class="info">
           <h3>Desvios</h3>
           <p>Registrar desvios de segurança</p>
         </div>
+        <div class="seta">›</div>
+      </div>
+
+      <div class="alerta-card">
+        <span class="icon"><span class="icone-svg" data-icone="alerta-circulo"></span></span>
+        <span><b>Fique atento!</b> Uso correto dos EPIs é obrigatório.</span>
       </div>
     </div>
 
@@ -318,95 +417,160 @@
         </div>
 
         <form id="desvio-form">
-          <div class="field">
-            <label>Processo / Atividade</label>
-            <select class="dd-select" id="d-processo" data-lista="processo" required></select>
-            <input type="text" class="dd-outro" id="d-processo-outro" placeholder="Descreva o novo processo/atividade" style="display:none; margin-top:8px;">
-          </div>
-
-          <div class="field">
-            <label>Identificação / Local</label>
-            <select class="dd-select" id="d-local" data-lista="local" required></select>
-            <input type="text" class="dd-outro" id="d-local-outro" placeholder="Descreva o novo local" style="display:none; margin-top:8px;">
-          </div>
-
-          <div class="field">
-            <label>Descrição do desvio</label>
-            <textarea id="d-descricao" rows="3" style="width:100%; border:1px solid #cfd3da; border-radius:8px; padding:8px; font-size:14px; font-family:inherit;" required></textarea>
-          </div>
-
-          <div class="field">
-            <label>Tipologia do desvio</label>
-            <select class="dd-select" id="d-tipologia" data-lista="tipologia" required></select>
-            <input type="text" class="dd-outro" id="d-tipologia-outro" placeholder="Descreva a nova tipologia" style="display:none; margin-top:8px;">
-          </div>
-
-          <div class="field">
-            <label>Potencial</label>
-            <select id="d-potencial" required>
-              <option value="">Selecione...</option>
-              <option value="Alto">Alto</option>
-              <option value="Médio">Médio</option>
-              <option value="Baixo">Baixo</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Ações para correção</label>
-            <textarea id="d-acoes" rows="3" style="width:100%; border:1px solid #cfd3da; border-radius:8px; padding:8px; font-size:14px; font-family:inherit;" required></textarea>
-          </div>
-
-          <div class="field">
-            <label>Responsável pela área</label>
-            <select class="dd-select" id="d-resp-area" data-lista="responsavelArea" required></select>
-            <input type="text" class="dd-outro" id="d-resp-area-outro" placeholder="Nome do responsável" style="display:none; margin-top:8px;">
-          </div>
-
-          <div class="field">
-            <label>Inspecionado por</label>
-            <select class="dd-select" id="d-inspecionado" data-lista="inspecionadoPor" required></select>
-            <input type="text" class="dd-outro" id="d-inspecionado-outro" placeholder="Nome de quem inspecionou" style="display:none; margin-top:8px;">
-          </div>
-
-          <div class="field">
-            <label>Prazo para correção</label>
-            <input type="date" id="d-prazo" required>
-          </div>
-
-          <div class="field">
-            <label>Responsável pela correção</label>
-            <select class="dd-select" id="d-resp-correcao" data-lista="responsavelCorrecao" required></select>
-            <input type="text" class="dd-outro" id="d-resp-correcao-outro" placeholder="Nome do responsável" style="display:none; margin-top:8px;">
-          </div>
-
-          <div class="field">
-            <label>Status</label>
-            <select id="d-status" required>
-              <option value="">Selecione...</option>
-              <option value="No prazo">No prazo</option>
-              <option value="Atrasado">Atrasado</option>
-              <option value="Concluído">Concluído</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Observações</label>
-            <textarea id="d-observacoes" rows="2" style="width:100%; border:1px solid #cfd3da; border-radius:8px; padding:8px; font-size:14px; font-family:inherit;"></textarea>
-          </div>
-
-          <div class="field">
-            <label>Registro fotográfico</label>
-            <div style="display:flex; gap:10px;">
-              <button type="button" class="btn-primary" id="btn-tirar-foto" style="width:auto; padding:10px 16px; font-size:13px;">📷 Tirar foto</button>
-              <button type="button" class="btn-primary" id="btn-galeria-foto" style="width:auto; padding:10px 16px; font-size:13px; background:var(--lime-dark);">🖼️ Escolher da galeria</button>
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="clipboard"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Processo / Atividade</label>
+                <select class="dd-select" id="d-processo" data-lista="processo" required></select>
+                <input type="text" class="dd-outro" id="d-processo-outro" placeholder="Descreva o novo processo/atividade" style="display:none; margin-top:8px;">
+              </div>
             </div>
-            <input type="file" id="d-foto-camera" accept="image/*" capture="environment" style="display:none;">
-            <input type="file" id="d-foto-galeria" accept="image/*" multiple style="display:none;">
-            <div id="d-fotos-preview" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="pin"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Identificação / Local</label>
+                <select class="dd-select" id="d-local" data-lista="local" required></select>
+                <input type="text" class="dd-outro" id="d-local-outro" placeholder="Descreva o novo local" style="display:none; margin-top:8px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="filetext"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Descrição do desvio</label>
+                <textarea id="d-descricao" rows="3" required></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Tipologia do desvio</label>
+                <select class="dd-select" id="d-tipologia" data-lista="tipologia" required></select>
+                <input type="text" class="dd-outro" id="d-tipologia-outro" placeholder="Descreva a nova tipologia" style="display:none; margin-top:8px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="alvo"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Potencial</label>
+                <select id="d-potencial" required>
+                  <option value="">Selecione...</option>
+                  <option value="Alto">Alto</option>
+                  <option value="Médio">Médio</option>
+                  <option value="Baixo">Baixo</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="wrench"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Ações para correção</label>
+                <textarea id="d-acoes" rows="3" required></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="user"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Responsável pela área</label>
+                <select class="dd-select" id="d-resp-area" data-lista="responsavelArea" required></select>
+                <input type="text" class="dd-outro" id="d-resp-area-outro" placeholder="Nome do responsável" style="display:none; margin-top:8px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="search"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Inspecionado por</label>
+                <select class="dd-select" id="d-inspecionado" data-lista="inspecionadoPor" required></select>
+                <input type="text" class="dd-outro" id="d-inspecionado-outro" placeholder="Nome de quem inspecionou" style="display:none; margin-top:8px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="calendar"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Prazo para correção</label>
+                <input type="date" id="d-prazo" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="user"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Responsável pela correção</label>
+                <select class="dd-select" id="d-resp-correcao" data-lista="responsavelCorrecao" required></select>
+                <input type="text" class="dd-outro" id="d-resp-correcao-outro" placeholder="Nome do responsável" style="display:none; margin-top:8px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="barchart"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Status</label>
+                <select id="d-status" required>
+                  <option value="">Selecione...</option>
+                  <option value="No prazo">No prazo</option>
+                  <option value="Atrasado">Atrasado</option>
+                  <option value="Concluído">Concluído</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="message"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Observações</label>
+                <textarea id="d-observacoes" rows="2"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="camera"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Registro fotográfico</label>
+                <div style="display:flex; gap:10px;">
+                  <button type="button" class="btn-primary" id="btn-tirar-foto" style="width:auto; padding:10px 16px; font-size:13px;"><span class="icone-svg" data-icone="camera"></span> Tirar foto</button>
+                  <button type="button" class="btn-primary" id="btn-galeria-foto" style="width:auto; padding:10px 16px; font-size:13px; background:var(--navy);"><span class="icone-svg" data-icone="imagem"></span> Escolher da galeria</button>
+                </div>
+                <input type="file" id="d-foto-camera" accept="image/*" capture="environment" style="display:none;">
+                <input type="file" id="d-foto-galeria" accept="image/*" multiple style="display:none;">
+                <div id="d-fotos-preview" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
+              </div>
+            </div>
           </div>
 
           <div class="auth-msg" id="desvio-msg"></div>
-          <button type="submit" class="btn-primary" id="btn-salvar-desvio">Salvar desvio</button>
+          <button type="submit" class="btn-primary" id="btn-salvar-desvio">Salvar desvio →</button>
         </form>
       </div>
     </div>
@@ -424,18 +588,44 @@
       <span class="nav-icon">🏠</span> Início
     </button>
     <button class="nav-btn" data-view="view-inspecoes">
-      <span class="nav-icon">📋</span> Inspeções
+      <span class="nav-icon"><span class="icone-svg" data-icone="clipboard"></span></span> Inspeções
     </button>
     <button class="nav-btn" data-view="view-desvios">
-      <span class="nav-icon">⚠️</span> Desvios
+      <span class="nav-icon"><span class="icone-svg" data-icone="alerta-triangulo"></span></span> Desvios
     </button>
     <button class="nav-btn" data-view="view-perfil">
-      <span class="nav-icon">👤</span> Perfil
+      <span class="nav-icon"><span class="icone-svg" data-icone="user"></span></span> Perfil
     </button>
   </nav>
 </section>
 
 <script>
+/* ======================================================================
+   ÍCONES — SVG de linha, monocromáticos (usam currentColor, sem emoji)
+   ====================================================================== */
+const ICONES = {
+  capacete: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16"/><path d="M6 18a6 6 0 0 1 12 0"/><path d="M12 8v4"/><path d="M10 8h4"/></svg>',
+  clipboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>',
+  'alerta-triangulo': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg>',
+  'alerta-circulo': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>',
+  relogio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
+  alvo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8" fill="currentColor" stroke="none"/></svg>',
+  pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.3"/></svg>',
+  filetext: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7Z"/><path d="M14 3v4h4"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>',
+  wrench: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2Z"/></svg>',
+  user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 5-6 8-6s6.5 2 8 6"/></svg>',
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M3 10h18"/></svg>',
+  barchart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M12 20V4"/><path d="M20 20v-6"/></svg>',
+  message: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4V5Z"/></svg>',
+  camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4Z"/><circle cx="12" cy="13.5" r="3.2"/></svg>',
+  imagem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="m21 16-5-5-4 4-3-3-5 5"/></svg>'
+};
+document.querySelectorAll('[data-icone]').forEach(el => {
+  el.innerHTML = ICONES[el.dataset.icone] || '';
+});
+
 /* ======================================================================
    FIREBASE — config do projeto app-seguranca-trabalho
    ====================================================================== */
@@ -568,8 +758,8 @@ auth.onAuthStateChanged((user) => {
   if(user){
     authScreen.classList.remove('active');
     appScreen.classList.add('active');
-    document.getElementById('user-greeting').textContent =
-      (user.displayName ? `Olá, ${user.displayName.split(' ')[0]}!` : 'O que você quer registrar hoje?');
+    document.getElementById('selo-boas-vindas').textContent =
+      (user.displayName ? `BEM-VINDO(A), ${user.displayName.split(' ')[0].toUpperCase()}` : 'BEM-VINDO(A)');
     document.getElementById('perfil-info').textContent =
       `${user.displayName || ''} — ${user.email}`;
     renderizarPainelExecutivo();
@@ -592,11 +782,6 @@ function irPara(viewId){
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.view === viewId);
   });
-  const titulos = {
-    'view-home':'Início', 'view-inspecoes':'Inspeções',
-    'view-desvios':'Desvios', 'view-perfil':'Perfil'
-  };
-  document.querySelector('.topbar h2').textContent = titulos[viewId];
   if(viewId === 'view-desvios'){ mostrarListaDesvios(); }
 }
 document.querySelectorAll('.nav-btn').forEach(btn => {
