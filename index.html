@@ -24,11 +24,13 @@
     --text-muted:#6b7280;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  html{ overflow-x:hidden; }
   body{
     font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     background:var(--cream);
     color:var(--navy);
     min-height:100vh;
+    overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
   }
   .screen{ display:none; min-height:100vh; flex-direction:column; }
@@ -82,6 +84,28 @@
   .tag.sincronizado{ background:var(--green-tint); color:var(--green-dark); }
   .desvio-card p{ font-size:12px; color:var(--text-muted); margin-top:4px; }
   .empty-state{ text-align:center; color:var(--text-muted); font-size:13px; padding:30px 0; }
+
+  .btn-resolver{
+    background:#3f6b2b; color:var(--white); border:none; border-radius:8px;
+    padding:7px 14px; font-size:12px; font-weight:700; cursor:pointer; margin-top:10px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .aprovacao-card{
+    background:var(--white); border-radius:14px; padding:14px 16px; margin-bottom:14px;
+    box-shadow:0 1px 4px rgba(20,33,49,.07);
+  }
+  .aprovacao-card .linha1{ display:flex; justify-content:space-between; align-items:center; }
+  .aprovacao-card .linha1 b{ font-size:14px; }
+  .aprovacao-card .desc{ font-size:12px; color:var(--text-muted); margin-top:4px; }
+  .aprovacao-card .obs{ font-size:13px; color:var(--navy); margin-top:8px; background:var(--cream); padding:8px 10px; border-radius:8px; }
+  .aprovacao-fotos{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .aprovacao-fotos img{ width:64px; height:64px; object-fit:cover; border-radius:8px; }
+  .aprovacao-acoes{ display:flex; gap:8px; margin-top:12px; }
+  .btn-aprovar, .btn-rejeitar{
+    flex:1; border:none; border-radius:8px; padding:10px; font-size:13px; font-weight:700; cursor:pointer;
+  }
+  .btn-aprovar{ background:#3f6b2b; color:var(--white); }
+  .btn-rejeitar{ background:#fbe0e0; color:#c84c4c; }
 
   /* ---------- Painel executivo (cartões com ícone circular) ---------- */
   .painel-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
@@ -141,7 +165,7 @@
     background-image: linear-gradient(90deg, var(--cream) 0%, var(--cream) 45%, rgba(249,249,247,.55) 75%, rgba(249,249,247,.15) 100%),
       url('https://i.imgur.com/TgGix1S.jpeg');
     background-size:cover; background-position:right center;
-    border-radius:16px; padding:22px; margin-bottom:18px; color:var(--navy);
+    border-radius:0; margin:-20px -20px 18px; padding:22px 20px; color:var(--navy);
     position:relative; overflow:hidden;
   }
   .hero-banner .selo{ font-size:11px; letter-spacing:.08em; color:var(--text-muted); font-weight:700; }
@@ -203,16 +227,24 @@
   .tela-titulo{ font-size:24px; font-weight:800; color:var(--navy); margin-top:2px; }
   .tela-sub{ font-size:13px; color:var(--text-muted); margin-top:6px; margin-bottom:20px; }
 
+  .tela-banner{
+    background-image: linear-gradient(90deg, var(--cream) 0%, var(--cream) 40%, rgba(249,249,247,.5) 75%, rgba(249,249,247,.1) 100%),
+      url('https://i.imgur.com/oZ80hkV.jpeg');
+    background-size:cover; background-position:right center;
+    margin:-20px -20px 18px; padding:20px 20px 16px;
+  }
+  .tela-banner .tela-sub{ max-width:75%; margin-bottom:0; }
+
   /* ---------- Quadro de detalhamento (Responsável / Potencial / Prazo) ---------- */
   .detalhe-card{
     background:var(--white); border-radius:14px; padding:14px;
     box-shadow:0 1px 4px rgba(20,33,49,.07); margin-bottom:18px;
   }
-  .detalhe-abas{ display:flex; gap:8px; margin-bottom:12px; }
+  .detalhe-abas{ display:flex; gap:6px; margin-bottom:12px; }
   .detalhe-aba{
-    flex:1; background:var(--cream); border:1px solid #eceee8; border-radius:10px;
-    padding:9px 6px; text-align:center; font-size:12px; font-weight:700; color:var(--text-muted);
-    cursor:pointer;
+    flex:1; min-width:0; background:var(--cream); border:1px solid #eceee8; border-radius:10px;
+    padding:9px 4px; text-align:center; font-size:11px; font-weight:700; color:var(--text-muted);
+    cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
   .detalhe-aba.active{ background:var(--green); border-color:var(--green); color:var(--white); }
   .detalhe-linha{
@@ -436,41 +468,53 @@
         <div class="seta">›</div>
       </div>
 
-      <div class="alerta-card">
-        <span class="icon"><span class="icone-svg" data-icone="alerta-circulo"></span></span>
-        <span><b>Fique atento!</b> Uso correto dos EPIs é obrigatório.</span>
+      <div class="card-action" data-goto="view-aprovacoes">
+        <div class="icon"><span class="icone-svg" data-icone="check"></span></div>
+        <div class="info">
+          <h3>Aprovações</h3>
+          <p>Revisar resoluções enviadas</p>
+        </div>
+        <div class="seta">›</div>
       </div>
     </div>
 
     <!-- Tela: Inspeções (placeholder) -->
     <div id="view-inspecoes" style="display:none;">
-      <div class="tela-selo">SEGURANÇA</div>
-      <p class="tela-titulo">Inspeções</p>
-      <p class="tela-sub">Realize e acompanhe as inspeções de campo.</p>
+      <div class="tela-banner">
+        <div class="tela-selo">SEGURANÇA</div>
+        <p class="tela-titulo">Inspeções</p>
+        <p class="tela-sub">Realize e acompanhe as inspeções de campo.</p>
+      </div>
       <div class="placeholder-note">Tela em construção — próxima etapa: desenhar o formulário do checklist.</div>
     </div>
 
     <!-- Tela: Qualimetria (placeholder) -->
     <div id="view-qualimetria" style="display:none;">
-      <div class="tela-selo">SEGURANÇA</div>
-      <p class="tela-titulo">Qualimetria</p>
-      <p class="tela-sub">Avaliações de qualidade em campo.</p>
+      <div class="tela-banner">
+        <div class="tela-selo">SEGURANÇA</div>
+        <p class="tela-titulo">Qualimetria</p>
+        <p class="tela-sub">Avaliações de qualidade em campo.</p>
+      </div>
       <div class="placeholder-note">Tela em construção.</div>
     </div>
 
     <!-- Tela: LV (placeholder) -->
     <div id="view-lv" style="display:none;">
-      <div class="tela-selo">SEGURANÇA</div>
-      <p class="tela-titulo">LV</p>
-      <p class="tela-sub">Listas de verificação.</p>
+      <div class="tela-banner">
+        <div class="tela-selo">SEGURANÇA</div>
+        <p class="tela-titulo">LV</p>
+        <p class="tela-sub">Listas de verificação.</p>
+      </div>
       <div class="placeholder-note">Tela em construção.</div>
     </div>
 
     <!-- Tela: Treinamentos (placeholder) -->
     <div id="view-treinamentos" style="display:none;">
-      <div class="tela-selo">SEGURANÇA</div>
-      <p class="tela-titulo">Treinamentos</p>
-      <p class="tela-sub">Conteúdos e capacitações.</p>
+      <div class="tela-banner">
+        <div class="tela-selo">SEGURANÇA</div>
+        <p class="tela-titulo">Treinamentos</p>
+        <p class="tela-sub">Conteúdos e capacitações.</p>
+      </div>
       <div class="placeholder-note">Tela em construção.</div>
     </div>
 
@@ -479,11 +523,13 @@
 
       <!-- Lista de desvios -->
       <div id="desvios-lista-tela">
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
-          <p class="tela-titulo" style="margin-top:0;">Desvios</p>
-          <button class="btn-primary" style="width:auto; padding:10px 18px;" id="btn-novo-desvio">+ Novo</button>
+        <div class="tela-banner">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+            <p class="tela-titulo" style="margin-top:0;">Desvios</p>
+            <button class="btn-primary" style="width:auto; padding:10px 18px;" id="btn-novo-desvio">+ Novo</button>
+          </div>
+          <p class="tela-sub">Registre e acompanhe os desvios de segurança.</p>
         </div>
-        <p class="tela-sub">Registre e acompanhe os desvios de segurança.</p>
 
         <div class="detalhe-card">
           <div class="detalhe-abas">
@@ -494,17 +540,26 @@
           <div id="detalhe-conteudo"></div>
         </div>
 
+        <span class="secao-titulo">Buscar e resolver</span>
+        <div class="field" style="margin-bottom:14px;">
+          <input type="text" id="busca-desvio" placeholder="Buscar por descrição, local ou nº...">
+        </div>
+        <div id="busca-resultados"></div>
+
+        <span class="secao-titulo">Meus registros</span>
         <div id="desvios-lista"></div>
       </div>
 
       <!-- Formulário de novo desvio -->
       <div id="desvio-form-tela" style="display:none;">
-        <div class="tela-header">
-          <button id="btn-voltar-desvios" class="voltar">←</button>
+        <div class="tela-banner">
+          <div class="tela-header">
+            <button id="btn-voltar-desvios" class="voltar">←</button>
+          </div>
+          <div class="tela-selo">NOVO DESVIO</div>
+          <p class="tela-titulo">Registrar desvio</p>
+          <p class="tela-sub">Informe as informações abaixo para registrar o desvio de segurança.</p>
         </div>
-        <div class="tela-selo">NOVO DESVIO</div>
-        <p class="tela-titulo">Registrar desvio</p>
-        <p class="tela-sub">Informe as informações abaixo para registrar o desvio de segurança.</p>
 
         <form id="desvio-form">
           <div class="field-com-icone">
@@ -665,10 +720,65 @@
       </div>
     </div>
 
+    <!-- Tela: Resolver desvio -->
+    <div id="view-resolver" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header">
+          <button id="btn-voltar-resolver" class="voltar">←</button>
+        </div>
+        <div class="tela-selo">RESOLVER DESVIO</div>
+        <p class="tela-titulo" id="resolver-titulo">Nº —</p>
+        <p class="tela-sub" id="resolver-descricao"></p>
+      </div>
+
+      <form id="resolver-form">
+        <div class="field-com-icone">
+          <div class="campo-icone"><span class="icone-svg" data-icone="message"></span></div>
+          <div class="campo-corpo">
+            <div class="field">
+              <label>Observação</label>
+              <textarea id="resolver-observacao" rows="3" required placeholder="Descreva o que foi feito para corrigir o desvio..."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-com-icone">
+          <div class="campo-icone"><span class="icone-svg" data-icone="camera"></span></div>
+          <div class="campo-corpo">
+            <div class="field">
+              <label>Foto da resolução</label>
+              <div style="display:flex; gap:10px;">
+                <button type="button" class="btn-primary" id="btn-resolver-tirar-foto" style="width:auto; padding:10px 16px; font-size:13px;"><span class="icone-svg" data-icone="camera"></span> Tirar foto</button>
+                <button type="button" class="btn-primary" id="btn-resolver-galeria-foto" style="width:auto; padding:10px 16px; font-size:13px; background:var(--navy);"><span class="icone-svg" data-icone="imagem"></span> Galeria</button>
+              </div>
+              <input type="file" id="resolver-foto-camera" accept="image/*" capture="environment" style="display:none;">
+              <input type="file" id="resolver-foto-galeria" accept="image/*" multiple style="display:none;">
+              <div id="resolver-fotos-preview" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-msg" id="resolver-msg"></div>
+        <button type="submit" class="btn-primary" id="btn-enviar-resolucao">Enviar para análise</button>
+      </form>
+    </div>
+
+    <!-- Tela: Aprovações -->
+    <div id="view-aprovacoes" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-selo">SEGURANÇA</div>
+        <p class="tela-titulo">Aprovações</p>
+        <p class="tela-sub">Revise as resoluções enviadas para análise.</p>
+      </div>
+      <div id="aprovacoes-lista"></div>
+    </div>
+
     <!-- Tela: Perfil (placeholder) -->
     <div id="view-perfil" style="display:none;">
-      <div class="tela-selo">CONTA</div>
-      <p class="tela-titulo">Perfil</p>
+      <div class="tela-banner">
+        <div class="tela-selo">CONTA</div>
+        <p class="tela-titulo">Perfil</p>
+      </div>
       <p class="tela-sub" id="perfil-info"></p>
       <button class="btn-primary" id="logout-btn" style="margin-top:16px;">Sair</button>
     </div>
@@ -676,7 +786,7 @@
 
   <nav class="bottom-nav">
     <button class="nav-btn active" data-view="view-home">
-      <span class="nav-icon">🏠</span> Início
+      <span class="nav-icon"><span class="icone-svg" data-icone="casa"></span></span> Início
     </button>
     <button class="nav-btn" data-view="view-inspecoes">
       <span class="nav-icon"><span class="icone-svg" data-icone="clipboard"></span></span> Inspeções
@@ -695,13 +805,13 @@
    ÍCONES — SVG de linha, monocromáticos (usam currentColor, sem emoji)
    ====================================================================== */
 const ICONES = {
-  capacete: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16"/><path d="M6 18a6 6 0 0 1 12 0"/><path d="M12 8v4"/><path d="M10 8h4"/></svg>',
+  capacete: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18"/><path d="M5 16.5a7 7 0 0 1 14 0"/><path d="M12 5.5v3.5"/></svg>',
   clipboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>',
   'alerta-triangulo': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg>',
   'alerta-circulo': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/></svg>',
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>',
   relogio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
-  alvo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r=".8" fill="currentColor" stroke="none"/></svg>',
+  alvo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="3.6"/></svg>',
   pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.3"/></svg>',
   filetext: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7Z"/><path d="M14 3v4h4"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>',
   wrench: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2Z"/></svg>',
@@ -712,7 +822,8 @@ const ICONES = {
   message: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4V5Z"/></svg>',
   camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4Z"/><circle cx="12" cy="13.5" r="3.2"/></svg>',
   imagem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="m21 16-5-5-4 4-3-3-5 5"/></svg>',
-  sino: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>'
+  sino: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>',
+  casa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/></svg>'
 };
 document.querySelectorAll('[data-icone]').forEach(el => {
   el.innerHTML = ICONES[el.dataset.icone] || '';
@@ -868,13 +979,14 @@ document.getElementById('logout-btn').addEventListener('click', () => auth.signO
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-home','view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-perfil'];
+const views = ['view-home','view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-resolver','view-aprovacoes','view-perfil'];
 function irPara(viewId){
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.view === viewId);
   });
   if(viewId === 'view-desvios'){ mostrarListaDesvios(); }
+  if(viewId === 'view-aprovacoes'){ renderizarAprovacoes(); }
 }
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => irPara(btn.dataset.view));
@@ -882,6 +994,26 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 document.querySelectorAll('.card-action').forEach(card => {
   card.addEventListener('click', () => irPara(card.dataset.goto));
 });
+
+/* ---- gesto de arrastar (esquerda -> direita) na Início abre "Novo desvio" ---- */
+(function(){
+  const home = document.getElementById('view-home');
+  let inicioX = null, inicioY = null;
+  home.addEventListener('touchstart', (e) => {
+    inicioX = e.touches[0].clientX;
+    inicioY = e.touches[0].clientY;
+  }, { passive: true });
+  home.addEventListener('touchend', (e) => {
+    if(inicioX === null) return;
+    const dx = e.changedTouches[0].clientX - inicioX;
+    const dy = e.changedTouches[0].clientY - inicioY;
+    if(dx > 90 && Math.abs(dy) < 60){
+      irPara('view-desvios');
+      mostrarFormularioDesvio();
+    }
+    inicioX = null; inicioY = null;
+  });
+})();
 
 /* ======================================================================
    STATUS ONLINE / OFFLINE
@@ -998,6 +1130,7 @@ function mostrarListaDesvios(){
   document.getElementById('desvio-form-tela').style.display = 'none';
   document.getElementById('desvios-lista-tela').style.display = 'block';
   renderizarListaDesvios();
+  carregarDesviosAtivos();
 }
 function mostrarFormularioDesvio(){
   document.getElementById('desvios-lista-tela').style.display = 'none';
@@ -1075,6 +1208,203 @@ async function salvarFotoDesvio(desvioId, file){
     base64,
     nomeArquivo: file.name,
     criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+/* ======================================================================
+   BUSCAR E RESOLVER DESVIOS — usa a coleção desvios_ativos (espelho de
+   TODOS os desvios em aberto da planilha, mantido pelo Apps Script)
+   ====================================================================== */
+let desviosAtivosCache = [];
+let carregouDesviosAtivos = false;
+
+function carregarDesviosAtivos(){
+  if(carregouDesviosAtivos) return;
+  carregouDesviosAtivos = true;
+  db.collection('desvios_ativos').onSnapshot((snap) => {
+    desviosAtivosCache = [];
+    snap.forEach(doc => desviosAtivosCache.push({ id: doc.id, ...doc.data() }));
+    renderizarBuscaDesvios();
+  });
+}
+
+document.getElementById('busca-desvio').addEventListener('input', renderizarBuscaDesvios);
+
+function renderizarBuscaDesvios(){
+  const cont = document.getElementById('busca-resultados');
+  const termo = document.getElementById('busca-desvio').value.trim().toLowerCase();
+  if(!termo){ cont.innerHTML = ''; return; }
+
+  const resultados = desviosAtivosCache.filter(d =>
+    (d.descricao || '').toLowerCase().includes(termo) ||
+    (d.local || '').toLowerCase().includes(termo) ||
+    String(d.numero || '').includes(termo)
+  ).slice(0, 30);
+
+  if(resultados.length === 0){
+    cont.innerHTML = '<p class="empty-state">Nenhum desvio encontrado.</p>';
+    return;
+  }
+
+  cont.innerHTML = resultados.map(d => `
+    <div class="desvio-card">
+      <div class="linha1">
+        <b>Nº ${d.numero}</b>
+        <span class="tag ${d.status === 'Atrasado' ? 'pendente' : 'sincronizado'}">${d.status || ''}</span>
+      </div>
+      <p>${d.local || ''} — ${(d.descricao || '').slice(0, 90)}</p>
+      <button type="button" class="btn-resolver" data-numero="${d.numero}">
+        <span class="icone-svg" data-icone="check"></span> Resolver
+      </button>
+    </div>
+  `).join('');
+
+  cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
+  cont.querySelectorAll('.btn-resolver').forEach(btn => {
+    btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero));
+  });
+}
+
+/* ---- tela de resolver desvio ---- */
+let desvioEmResolucao = null;
+let fotosResolverSelecionadas = [];
+
+function abrirResolverDesvio(numero){
+  const d = desviosAtivosCache.find(x => String(x.numero) === String(numero));
+  desvioEmResolucao = d || { numero };
+  document.getElementById('resolver-titulo').textContent = 'Nº ' + numero;
+  document.getElementById('resolver-descricao').textContent = d ? d.descricao : '';
+  document.getElementById('resolver-form').reset();
+  fotosResolverSelecionadas = [];
+  renderizarPreviewFotosResolver();
+  irPara('view-resolver');
+}
+document.getElementById('btn-voltar-resolver').addEventListener('click', () => irPara('view-desvios'));
+
+document.getElementById('btn-resolver-tirar-foto').addEventListener('click', () => {
+  document.getElementById('resolver-foto-camera').click();
+});
+document.getElementById('btn-resolver-galeria-foto').addEventListener('click', () => {
+  document.getElementById('resolver-foto-galeria').click();
+});
+function adicionarFotosResolver(fileList){
+  fotosResolverSelecionadas = fotosResolverSelecionadas.concat(Array.from(fileList));
+  renderizarPreviewFotosResolver();
+}
+document.getElementById('resolver-foto-camera').addEventListener('change', (e) => {
+  adicionarFotosResolver(e.target.files); e.target.value = '';
+});
+document.getElementById('resolver-foto-galeria').addEventListener('change', (e) => {
+  adicionarFotosResolver(e.target.files); e.target.value = '';
+});
+function renderizarPreviewFotosResolver(){
+  const cont = document.getElementById('resolver-fotos-preview');
+  cont.innerHTML = '';
+  fotosResolverSelecionadas.forEach((file, i) => {
+    const div = document.createElement('div');
+    div.className = 'foto-thumb';
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    const btn = document.createElement('button');
+    btn.className = 'remover';
+    btn.textContent = '✕';
+    btn.onclick = () => { fotosResolverSelecionadas.splice(i,1); renderizarPreviewFotosResolver(); };
+    div.appendChild(img); div.appendChild(btn);
+    cont.appendChild(div);
+  });
+}
+
+document.getElementById('resolver-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msg = document.getElementById('resolver-msg');
+  msg.style.display = 'none';
+  const btn = document.getElementById('btn-enviar-resolucao');
+  btn.disabled = true;
+
+  try{
+    const solicitacao = {
+      numeroDesvio: desvioEmResolucao.numero,
+      descricaoDesvio: desvioEmResolucao.descricao || '',
+      observacao: document.getElementById('resolver-observacao').value.trim(),
+      status: 'pendente',
+      criadoPor: auth.currentUser.uid,
+      criadoPorNome: auth.currentUser.displayName || auth.currentUser.email,
+      criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    const docRef = await db.collection('solicitacoes_resolucao').add(solicitacao);
+
+    for(const file of fotosResolverSelecionadas){
+      const base64 = await comprimirImagem(file);
+      await docRef.collection('fotos').add({
+        base64, nomeArquivo: file.name,
+        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
+
+    document.getElementById('resolver-form').reset();
+    fotosResolverSelecionadas = [];
+    renderizarPreviewFotosResolver();
+    irPara('view-desvios');
+  }catch(err){
+    console.error(err);
+    msg.textContent = 'Não foi possível enviar. Tente novamente.';
+    msg.style.display = 'block';
+  }finally{
+    btn.disabled = false;
+  }
+});
+
+/* ======================================================================
+   APROVAÇÕES — TSTs revisam as solicitações de resolução pendentes
+   ====================================================================== */
+async function renderizarAprovacoes(){
+  const cont = document.getElementById('aprovacoes-lista');
+  cont.innerHTML = '<p class="empty-state">Carregando...</p>';
+
+  const snap = await db.collection('solicitacoes_resolucao').where('status', '==', 'pendente').get();
+  if(snap.empty){
+    cont.innerHTML = '<p class="empty-state">Nenhuma solicitação pendente.</p>';
+    return;
+  }
+
+  const cards = [];
+  for(const doc of snap.docs){
+    const s = doc.data();
+    const fotosSnap = await doc.ref.collection('fotos').get();
+    const fotosHtml = fotosSnap.docs.map(f => `<img src="${f.data().base64}">`).join('');
+
+    cards.push(`
+      <div class="aprovacao-card" data-id="${doc.id}">
+        <div class="linha1">
+          <b>Nº ${s.numeroDesvio}</b>
+          <span class="sub" style="font-size:11px;">${s.criadoPorNome || ''}</span>
+        </div>
+        <div class="desc">${s.descricaoDesvio || ''}</div>
+        <div class="obs">${s.observacao || ''}</div>
+        <div class="aprovacao-fotos">${fotosHtml}</div>
+        <div class="aprovacao-acoes">
+          <button type="button" class="btn-rejeitar" data-id="${doc.id}">Rejeitar</button>
+          <button type="button" class="btn-aprovar" data-id="${doc.id}">Aprovar</button>
+        </div>
+      </div>
+    `);
+  }
+
+  cont.innerHTML = cards.join('');
+
+  cont.querySelectorAll('.btn-aprovar').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      await db.collection('solicitacoes_resolucao').doc(btn.dataset.id).update({ status: 'aprovado' });
+      renderizarAprovacoes();
+    });
+  });
+  cont.querySelectorAll('.btn-rejeitar').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      btn.disabled = true;
+      await db.collection('solicitacoes_resolucao').doc(btn.dataset.id).update({ status: 'rejeitado' });
+      renderizarAprovacoes();
+    });
   });
 }
 
@@ -1180,7 +1510,7 @@ function formatarDataBR(iso){
 }
 
 function diasAteVencer(iso){
-  if(!iso) return null;
+  if(!iso || !/^\d{4}-\d{2}-\d{2}$/.test(String(iso))) return null;
   const hoje = new Date(); hoje.setHours(0,0,0,0);
   const alvo = new Date(iso + 'T00:00:00');
   return Math.round((alvo - hoje) / 86400000);
@@ -1219,10 +1549,11 @@ function renderizarDetalhamento(){
       const dias = diasAteVencer(item.prazo);
       const vencido = dias !== null && dias < 0;
       const subTexto = dias === null ? '' : vencido ? `Vencido há ${Math.abs(dias)} dia(s)` : dias === 0 ? 'Vence hoje' : `Vence em ${dias} dia(s)`;
+      const descricaoCurta = (item.descricao || '').slice(0, 60) + ((item.descricao || '').length > 60 ? '…' : '');
       return `
         <div class="detalhe-linha">
           <div>
-            <span class="nome">${item.local || ('Desvio ' + (item.numero || ''))}</span>
+            <span class="nome">${descricaoCurta || ('Desvio ' + (item.numero || ''))}</span>
             <div class="sub">${subTexto}</div>
           </div>
           <span class="qtd${vencido ? ' vencido' : ''}">${formatarDataBR(item.prazo)}</span>
