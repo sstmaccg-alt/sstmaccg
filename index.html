@@ -124,6 +124,31 @@
   .cor-verde{ color:var(--green-dark) !important; }
   .cor-vermelho{ color:#c84c4c !important; }
   .cor-amarelo{ color:#c99a20 !important; }
+
+  /* ---------- Cartões agrupados (Situação dos desvios / Nível de risco) ---------- */
+  .grupo-titulo{
+    display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700;
+    color:var(--navy); margin:18px 0 8px;
+  }
+  .grupo-titulo .icone-svg svg{ width:16px; height:16px; color:var(--green-dark); }
+  .grupo-titulo .seta{ margin-left:auto; color:var(--text-muted); font-weight:400; font-size:16px; }
+  .grupo-card{
+    background:var(--white); border-radius:14px; padding:14px 4px;
+    box-shadow:0 1px 4px rgba(20,33,49,.07);
+  }
+  .grupo-linha{ display:flex; }
+  .grupo-item{ flex:1; min-width:0; display:flex; align-items:center; gap:8px; padding:0 10px; }
+  .grupo-item + .grupo-item{ border-left:1px solid #eceee8; }
+  .grupo-icone{
+    width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .grupo-icone .icone-svg svg{ width:16px; height:16px; }
+  .grupo-icone.verde{ background:var(--green-tint); color:var(--green-dark); }
+  .grupo-icone.vermelho{ background:#fbe0e0; color:#c84c4c; }
+  .grupo-icone.amarelo{ background:#fbeecb; color:#c99a20; }
+  .grupo-numero{ display:block; font-size:18px; font-weight:800; color:var(--navy); line-height:1.1; }
+  .grupo-label{ display:block; font-size:10px; color:var(--text-muted); margin-top:1px; white-space:nowrap; }
   .field .toggle-pass{
     position:absolute; right:12px; top:38px; cursor:pointer;
     font-size:12px; color:var(--text-muted); user-select:none;
@@ -383,49 +408,64 @@
       </div>
 
       <!-- Painel executivo -->
-      <div class="painel-grid linha-3">
-        <div class="painel-card">
-          <div class="painel-icone"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
-          <div>
-            <span class="painel-numero" id="painel-abertos">0</span>
-            <span class="painel-label">Abertos</span>
+      <div class="grupo-titulo">
+        <span class="icone-svg" data-icone="clipboard"></span>
+        <span>Situação dos desvios</span>
+        <span class="seta">›</span>
+      </div>
+      <div class="grupo-card">
+        <div class="grupo-linha">
+          <div class="grupo-item">
+            <div class="grupo-icone verde"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
+            <div>
+              <span class="grupo-numero" id="painel-abertos">0</span>
+              <span class="grupo-label">Abertos</span>
+            </div>
           </div>
-        </div>
-        <div class="painel-card">
-          <div class="painel-icone"><span class="icone-svg" data-icone="check"></span></div>
-          <div>
-            <span class="painel-numero cor-verde" id="painel-noprazo">0</span>
-            <span class="painel-label">No prazo</span>
+          <div class="grupo-item">
+            <div class="grupo-icone verde"><span class="icone-svg" data-icone="check"></span></div>
+            <div>
+              <span class="grupo-numero" id="painel-noprazo">0</span>
+              <span class="grupo-label">No prazo</span>
+            </div>
           </div>
-        </div>
-        <div class="painel-card">
-          <div class="painel-icone"><span class="icone-svg" data-icone="relogio"></span></div>
-          <div>
-            <span class="painel-numero cor-vermelho" id="painel-atrasado">0</span>
-            <span class="painel-label">Atrasados</span>
+          <div class="grupo-item">
+            <div class="grupo-icone vermelho"><span class="icone-svg" data-icone="relogio"></span></div>
+            <div>
+              <span class="grupo-numero" id="painel-atrasado">0</span>
+              <span class="grupo-label">Atrasados</span>
+            </div>
           </div>
         </div>
       </div>
-      <div class="painel-grid linha-3">
-        <div class="painel-card">
-          <div class="painel-icone"><span class="icone-svg" data-icone="alvo"></span></div>
-          <div>
-            <span class="painel-numero cor-vermelho" id="painel-alto">0</span>
-            <span class="painel-label">Alto</span>
+
+      <div class="grupo-titulo">
+        <span class="icone-svg" data-icone="check"></span>
+        <span>Nível de risco</span>
+        <span class="seta">›</span>
+      </div>
+      <div class="grupo-card">
+        <div class="grupo-linha">
+          <div class="grupo-item">
+            <div class="grupo-icone vermelho"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
+            <div>
+              <span class="grupo-numero" id="painel-alto">0</span>
+              <span class="grupo-label">Alto</span>
+            </div>
           </div>
-        </div>
-        <div class="painel-card">
-          <div class="painel-icone"><span class="icone-svg" data-icone="alvo"></span></div>
-          <div>
-            <span class="painel-numero cor-amarelo" id="painel-medio">0</span>
-            <span class="painel-label">Médio</span>
+          <div class="grupo-item">
+            <div class="grupo-icone amarelo"><span class="icone-svg" data-icone="alvo"></span></div>
+            <div>
+              <span class="grupo-numero" id="painel-medio">0</span>
+              <span class="grupo-label">Médio</span>
+            </div>
           </div>
-        </div>
-        <div class="painel-card">
-          <div class="painel-icone"><span class="icone-svg" data-icone="alvo"></span></div>
-          <div>
-            <span class="painel-numero cor-verde" id="painel-baixo">0</span>
-            <span class="painel-label">Baixo</span>
+          <div class="grupo-item">
+            <div class="grupo-icone verde"><span class="icone-svg" data-icone="alvo"></span></div>
+            <div>
+              <span class="grupo-numero" id="painel-baixo">0</span>
+              <span class="grupo-label">Baixo</span>
+            </div>
           </div>
         </div>
       </div>
