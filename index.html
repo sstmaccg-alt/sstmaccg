@@ -83,8 +83,9 @@
   .desvio-card p{ font-size:12px; color:var(--text-muted); margin-top:4px; }
   .empty-state{ text-align:center; color:var(--text-muted); font-size:13px; padding:30px 0; }
 
-  /* ---------- Painel executivo (cartões com ícone) ---------- */
+  /* ---------- Painel executivo (cartões com ícone circular) ---------- */
   .painel-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+  .painel-grid.linha-3{ grid-template-columns:1fr 1fr 1fr; gap:10px; }
   .painel-card{
     background:var(--white); border-radius:14px; padding:16px;
     display:flex; align-items:center; gap:12px;
@@ -135,7 +136,7 @@
   .home-title{ font-size:20px; font-weight:700; margin-bottom:4px; }
   .home-sub{ font-size:13px; color:var(--text-muted); margin-bottom:20px; }
 
-  /* ---------- Banner de boas-vindas (claro, como no mockup) ---------- */
+  /* ---------- Banner de boas-vindas (claro, com foto, como no mockup) ---------- */
   .hero-banner{
     background-image: linear-gradient(90deg, var(--cream) 0%, var(--cream) 45%, rgba(249,249,247,.55) 75%, rgba(249,249,247,.15) 100%),
       url('https://i.imgur.com/TgGix1S.jpeg');
@@ -201,6 +202,31 @@
   .tela-selo{ font-size:11px; letter-spacing:.08em; color:var(--green); font-weight:700; text-transform:uppercase; }
   .tela-titulo{ font-size:24px; font-weight:800; color:var(--navy); margin-top:2px; }
   .tela-sub{ font-size:13px; color:var(--text-muted); margin-top:6px; margin-bottom:20px; }
+
+  /* ---------- Quadro de detalhamento (Responsável / Potencial / Prazo) ---------- */
+  .detalhe-card{
+    background:var(--white); border-radius:14px; padding:14px;
+    box-shadow:0 1px 4px rgba(20,33,49,.07); margin-bottom:18px;
+  }
+  .detalhe-abas{ display:flex; gap:8px; margin-bottom:12px; }
+  .detalhe-aba{
+    flex:1; background:var(--cream); border:1px solid #eceee8; border-radius:10px;
+    padding:9px 6px; text-align:center; font-size:12px; font-weight:700; color:var(--text-muted);
+    cursor:pointer;
+  }
+  .detalhe-aba.active{ background:var(--green); border-color:var(--green); color:var(--white); }
+  .detalhe-linha{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 6px; border-bottom:1px solid #f0f1ec; cursor:pointer;
+  }
+  .detalhe-linha:last-child{ border-bottom:none; }
+  .detalhe-linha .nome{ font-size:13px; font-weight:600; color:var(--navy); }
+  .detalhe-linha .sub{ font-size:11px; color:var(--text-muted); margin-top:1px; }
+  .detalhe-linha .qtd{
+    font-size:13px; font-weight:800; color:var(--navy); background:var(--green-tint);
+    padding:3px 10px; border-radius:10px; flex-shrink:0;
+  }
+  .detalhe-linha .qtd.vencido{ background:#fbe0e0; color:#c84c4c; }
 
   /* ---------- Campo com ícone (formulário de desvio) ---------- */
   .field-com-icone{ display:flex; gap:12px; align-items:flex-start; margin-bottom:16px; }
@@ -325,12 +351,12 @@
       </div>
 
       <!-- Painel executivo -->
-      <div class="painel-grid">
+      <div class="painel-grid linha-3">
         <div class="painel-card">
           <div class="painel-icone"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
           <div>
             <span class="painel-numero" id="painel-abertos">0</span>
-            <span class="painel-label">Desvios abertos</span>
+            <span class="painel-label">Abertos</span>
           </div>
         </div>
         <div class="painel-card">
@@ -347,47 +373,65 @@
             <span class="painel-label">Atrasados</span>
           </div>
         </div>
+      </div>
+      <div class="painel-grid linha-3">
         <div class="painel-card">
           <div class="painel-icone"><span class="icone-svg" data-icone="alvo"></span></div>
           <div>
             <span class="painel-numero cor-vermelho" id="painel-alto">0</span>
-            <span class="painel-label">Potencial alto</span>
+            <span class="painel-label">Alto</span>
           </div>
         </div>
-      </div>
-      <div class="painel-grid" style="grid-template-columns:1fr 1fr;">
         <div class="painel-card">
           <div class="painel-icone"><span class="icone-svg" data-icone="alvo"></span></div>
           <div>
             <span class="painel-numero cor-amarelo" id="painel-medio">0</span>
-            <span class="painel-label">Potencial médio</span>
+            <span class="painel-label">Médio</span>
           </div>
         </div>
         <div class="painel-card">
           <div class="painel-icone"><span class="icone-svg" data-icone="alvo"></span></div>
           <div>
             <span class="painel-numero cor-verde" id="painel-baixo">0</span>
-            <span class="painel-label">Potencial baixo</span>
+            <span class="painel-label">Baixo</span>
           </div>
         </div>
       </div>
 
       <span class="secao-titulo">Acesso rápido</span>
 
-      <div class="card-action" data-goto="view-inspecoes">
-        <div class="icon"><span class="icone-svg" data-icone="clipboard"></span></div>
-        <div class="info">
-          <h3>Inspeções</h3>
-          <p>Checklists de segurança em campo</p>
-        </div>
-        <div class="seta">›</div>
-      </div>
-
       <div class="card-action" data-goto="view-desvios">
         <div class="icon"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
         <div class="info">
           <h3>Desvios</h3>
           <p>Registrar desvios de segurança</p>
+        </div>
+        <div class="seta">›</div>
+      </div>
+
+      <div class="card-action" data-goto="view-qualimetria">
+        <div class="icon"><span class="icone-svg" data-icone="clipboard"></span></div>
+        <div class="info">
+          <h3>Qualimetria</h3>
+          <p>Avaliações de qualidade em campo</p>
+        </div>
+        <div class="seta">›</div>
+      </div>
+
+      <div class="card-action" data-goto="view-lv">
+        <div class="icon"><span class="icone-svg" data-icone="filetext"></span></div>
+        <div class="info">
+          <h3>LV</h3>
+          <p>Listas de verificação</p>
+        </div>
+        <div class="seta">›</div>
+      </div>
+
+      <div class="card-action" data-goto="view-treinamentos">
+        <div class="icon"><span class="icone-svg" data-icone="message"></span></div>
+        <div class="info">
+          <h3>Treinamentos</h3>
+          <p>Conteúdos e capacitações</p>
         </div>
         <div class="seta">›</div>
       </div>
@@ -406,6 +450,30 @@
       <div class="placeholder-note">Tela em construção — próxima etapa: desenhar o formulário do checklist.</div>
     </div>
 
+    <!-- Tela: Qualimetria (placeholder) -->
+    <div id="view-qualimetria" style="display:none;">
+      <div class="tela-selo">SEGURANÇA</div>
+      <p class="tela-titulo">Qualimetria</p>
+      <p class="tela-sub">Avaliações de qualidade em campo.</p>
+      <div class="placeholder-note">Tela em construção.</div>
+    </div>
+
+    <!-- Tela: LV (placeholder) -->
+    <div id="view-lv" style="display:none;">
+      <div class="tela-selo">SEGURANÇA</div>
+      <p class="tela-titulo">LV</p>
+      <p class="tela-sub">Listas de verificação.</p>
+      <div class="placeholder-note">Tela em construção.</div>
+    </div>
+
+    <!-- Tela: Treinamentos (placeholder) -->
+    <div id="view-treinamentos" style="display:none;">
+      <div class="tela-selo">SEGURANÇA</div>
+      <p class="tela-titulo">Treinamentos</p>
+      <p class="tela-sub">Conteúdos e capacitações.</p>
+      <div class="placeholder-note">Tela em construção.</div>
+    </div>
+
     <!-- Tela: Desvios -->
     <div id="view-desvios" style="display:none;">
 
@@ -416,6 +484,16 @@
           <button class="btn-primary" style="width:auto; padding:10px 18px;" id="btn-novo-desvio">+ Novo</button>
         </div>
         <p class="tela-sub">Registre e acompanhe os desvios de segurança.</p>
+
+        <div class="detalhe-card">
+          <div class="detalhe-abas">
+            <div class="detalhe-aba active" data-aba="responsavel">Responsável</div>
+            <div class="detalhe-aba" data-aba="potencial">Potencial</div>
+            <div class="detalhe-aba" data-aba="prazo">Prazo</div>
+          </div>
+          <div id="detalhe-conteudo"></div>
+        </div>
+
         <div id="desvios-lista"></div>
       </div>
 
@@ -790,7 +868,7 @@ document.getElementById('logout-btn').addEventListener('click', () => auth.signO
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-home','view-inspecoes','view-desvios','view-perfil'];
+const views = ['view-home','view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-perfil'];
 function irPara(viewId){
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
   document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -1069,16 +1147,89 @@ document.getElementById('desvio-form').addEventListener('submit', async (e) => {
 
 /* ---- painel executivo (tela de início): lê o resumo calculado pelo
    Apps Script a partir da planilha real, não os desvios do próprio app ---- */
+let dadosPainel = {};
 function renderizarPainelExecutivo(){
   db.collection('estatisticas').doc('painel').onSnapshot((doc) => {
     const d = doc.exists ? doc.data() : {};
+    dadosPainel = d;
     document.getElementById('painel-abertos').textContent = (d.noPrazo || 0) + (d.atrasado || 0);
     document.getElementById('painel-noprazo').textContent = d.noPrazo || 0;
     document.getElementById('painel-atrasado').textContent = d.atrasado || 0;
     document.getElementById('painel-alto').textContent = d.alto || 0;
     document.getElementById('painel-medio').textContent = d.medio || 0;
     document.getElementById('painel-baixo').textContent = d.baixo || 0;
+    renderizarDetalhamento();
   });
+}
+
+/* ---- quadro de detalhamento: Responsável / Potencial / Prazo ---- */
+let abaDetalheAtual = 'responsavel';
+document.querySelectorAll('.detalhe-aba').forEach(aba => {
+  aba.addEventListener('click', () => {
+    abaDetalheAtual = aba.dataset.aba;
+    document.querySelectorAll('.detalhe-aba').forEach(a => a.classList.toggle('active', a === aba));
+    renderizarDetalhamento();
+  });
+});
+
+function formatarDataBR(iso){
+  if(!iso) return '';
+  const partes = String(iso).split('-');
+  if(partes.length !== 3) return iso;
+  return `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
+
+function diasAteVencer(iso){
+  if(!iso) return null;
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const alvo = new Date(iso + 'T00:00:00');
+  return Math.round((alvo - hoje) / 86400000);
+}
+
+function renderizarDetalhamento(){
+  const cont = document.getElementById('detalhe-conteudo');
+  if(!cont) return;
+
+  if(abaDetalheAtual === 'responsavel'){
+    const lista = dadosPainel.porResponsavel || [];
+    if(lista.length === 0){ cont.innerHTML = '<p class="empty-state">Nenhum desvio em aberto.</p>'; return; }
+    cont.innerHTML = lista.map(item => `
+      <div class="detalhe-linha">
+        <span class="nome">${item.nome}</span>
+        <span class="qtd">${item.quantidade}</span>
+      </div>
+    `).join('');
+  }
+
+  else if(abaDetalheAtual === 'potencial'){
+    const lista = dadosPainel.porPotencial || [];
+    if(lista.every(i => i.quantidade === 0)){ cont.innerHTML = '<p class="empty-state">Nenhum desvio em aberto.</p>'; return; }
+    cont.innerHTML = lista.map(item => `
+      <div class="detalhe-linha">
+        <span class="nome">${item.nome}</span>
+        <span class="qtd">${item.quantidade}</span>
+      </div>
+    `).join('');
+  }
+
+  else if(abaDetalheAtual === 'prazo'){
+    const lista = dadosPainel.porPrazo || [];
+    if(lista.length === 0){ cont.innerHTML = '<p class="empty-state">Nenhum desvio em aberto.</p>'; return; }
+    cont.innerHTML = lista.map(item => {
+      const dias = diasAteVencer(item.prazo);
+      const vencido = dias !== null && dias < 0;
+      const subTexto = dias === null ? '' : vencido ? `Vencido há ${Math.abs(dias)} dia(s)` : dias === 0 ? 'Vence hoje' : `Vence em ${dias} dia(s)`;
+      return `
+        <div class="detalhe-linha">
+          <div>
+            <span class="nome">${item.local || ('Desvio ' + (item.numero || ''))}</span>
+            <div class="sub">${subTexto}</div>
+          </div>
+          <span class="qtd${vencido ? ' vencido' : ''}">${formatarDataBR(item.prazo)}</span>
+        </div>
+      `;
+    }).join('');
+  }
 }
 
 /* ---- listagem dos desvios do próprio usuário ---- */
