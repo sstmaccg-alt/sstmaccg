@@ -2,7 +2,7 @@
 // Isso é separado da persistência de DADOS (que o Firestore já cuida sozinho) —
 // aqui é só o "esqueleto" do app (HTML/CSS/JS) que precisa estar disponível offline.
 
-const CACHE_NAME = 'sst-ccg-v16';
+const CACHE_NAME = 'sst-ccg-v17';
 const ARQUIVOS_PARA_CACHE = [
   './',
   './index.html',
