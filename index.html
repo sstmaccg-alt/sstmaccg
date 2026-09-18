@@ -138,8 +138,21 @@
     box-shadow:0 1px 4px rgba(20,33,49,.07);
   }
   .grupo-linha{ display:flex; }
-  .grupo-item{ flex:1; min-width:0; display:flex; align-items:center; gap:8px; padding:0 10px; }
+  .grupo-item{ flex:1; min-width:0; display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:10px; cursor:pointer; transition:background .15s; }
   .grupo-item + .grupo-item{ border-left:1px solid #eceee8; }
+  .grupo-item:active{ background:var(--cream); }
+  .grupo-item.ativo{ background:var(--green-tint); }
+  .grupo-item.ativo .grupo-numero{ color:var(--green-dark); }
+
+  .filtro-ativo-aviso{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--green-tint); color:var(--green-dark); font-size:12px; font-weight:600;
+    padding:8px 14px; border-radius:10px; margin-bottom:14px;
+  }
+  .filtro-ativo-aviso button{
+    background:none; border:none; color:var(--green-dark); font-weight:700; font-size:12px;
+    text-decoration:underline; cursor:pointer;
+  }
   .grupo-icone{
     width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
     flex-shrink:0;
@@ -191,13 +204,13 @@
     background-image: linear-gradient(90deg, var(--cream) 0%, var(--cream) 45%, rgba(249,249,247,.55) 75%, rgba(249,249,247,.15) 100%),
       url('https://i.imgur.com/TgGix1S.jpeg');
     background-size:cover; background-position:right center;
-    border-radius:0; margin:-20px -20px 18px; padding:22px 20px; color:var(--navy);
+    border-radius:0; margin:-20px -20px 14px; padding:14px 20px; color:var(--navy);
     position:relative; overflow:hidden;
   }
   .hero-banner .selo{ font-size:11px; letter-spacing:.08em; color:var(--text-muted); font-weight:700; }
-  .hero-banner h2{ font-size:24px; font-weight:800; margin-top:6px; line-height:1.25; color:var(--navy); }
+  .hero-banner h2{ font-size:22px; font-weight:800; margin-top:0; line-height:1.2; color:var(--navy); }
   .hero-banner h2 span{ display:block; color:var(--green); }
-  .hero-banner p{ font-size:13px; color:var(--text-muted); margin-top:8px; max-width:70%; }
+  .hero-banner p{ font-size:12px; color:var(--text-muted); margin-top:4px; max-width:70%; }
 
   .secao-titulo{
     font-size:11px; font-weight:700; letter-spacing:.06em; color:var(--text-muted);
@@ -457,21 +470,21 @@
         <!-- Painel executivo -->
         <div class="grupo-card" style="margin-top:20px;">
           <div class="grupo-linha">
-            <div class="grupo-item">
+            <div class="grupo-item" data-filtro-campo="" data-filtro-valor="">
               <div class="grupo-icone verde"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
               <div>
                 <span class="grupo-numero" id="painel-abertos">0</span>
                 <span class="grupo-label">Abertos</span>
               </div>
             </div>
-            <div class="grupo-item">
+            <div class="grupo-item" data-filtro-campo="status" data-filtro-valor="No prazo">
               <div class="grupo-icone verde"><span class="icone-svg" data-icone="check"></span></div>
               <div>
                 <span class="grupo-numero" id="painel-noprazo">0</span>
                 <span class="grupo-label">No prazo</span>
               </div>
             </div>
-            <div class="grupo-item">
+            <div class="grupo-item" data-filtro-campo="status" data-filtro-valor="Atrasado">
               <div class="grupo-icone vermelho"><span class="icone-svg" data-icone="relogio"></span></div>
               <div>
                 <span class="grupo-numero" id="painel-atrasado">0</span>
@@ -487,21 +500,21 @@
         </div>
         <div class="grupo-card" style="margin-bottom:22px;">
           <div class="grupo-linha">
-            <div class="grupo-item">
+            <div class="grupo-item" data-filtro-campo="potencial" data-filtro-valor="Alto">
               <div class="grupo-icone vermelho"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
               <div>
                 <span class="grupo-numero" id="painel-alto">0</span>
                 <span class="grupo-label">Alto</span>
               </div>
             </div>
-            <div class="grupo-item">
+            <div class="grupo-item" data-filtro-campo="potencial" data-filtro-valor="Médio">
               <div class="grupo-icone amarelo"><span class="icone-svg" data-icone="alvo"></span></div>
               <div>
                 <span class="grupo-numero" id="painel-medio">0</span>
                 <span class="grupo-label">Médio</span>
               </div>
             </div>
-            <div class="grupo-item">
+            <div class="grupo-item" data-filtro-campo="potencial" data-filtro-valor="Baixo">
               <div class="grupo-icone verde"><span class="icone-svg" data-icone="alvo"></span></div>
               <div>
                 <span class="grupo-numero" id="painel-baixo">0</span>
@@ -509,6 +522,11 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="filtro-ativo-aviso" id="filtro-ativo-aviso" style="display:none;">
+          <span id="filtro-ativo-texto"></span>
+          <button type="button" id="btn-limpar-filtro">Limpar</button>
         </div>
 
         <div class="detalhe-card">
@@ -962,7 +980,6 @@ auth.onAuthStateChanged((user) => {
     appScreen.classList.add('active');
     document.getElementById('perfil-info').textContent =
       `${user.displayName || ''} — ${user.email}`;
-    renderizarPainelExecutivo();
     irPara('view-desvios');
   } else {
     appScreen.classList.remove('active');
@@ -1223,6 +1240,7 @@ function carregarDesviosAtivos(){
     desviosAtivosCache = [];
     snap.forEach(doc => desviosAtivosCache.push({ id: doc.id, ...doc.data() }));
     renderizarBuscaDesvios();
+    recalcularPainelEDetalhamento();
   });
 }
 
@@ -1473,25 +1491,85 @@ document.getElementById('desvio-form').addEventListener('submit', async (e) => {
   }
 });
 
-/* ---- painel executivo (tela de início): lê o resumo calculado pelo
-   Apps Script a partir da planilha real, não os desvios do próprio app ---- */
-let dadosPainel = {};
-function renderizarPainelExecutivo(){
-  db.collection('estatisticas').doc('painel').onSnapshot((doc) => {
-    const d = doc.exists ? doc.data() : {};
-    dadosPainel = d;
-    document.getElementById('painel-abertos').textContent = (d.noPrazo || 0) + (d.atrasado || 0);
-    document.getElementById('painel-noprazo').textContent = d.noPrazo || 0;
-    document.getElementById('painel-atrasado').textContent = d.atrasado || 0;
-    document.getElementById('painel-alto').textContent = d.alto || 0;
-    document.getElementById('painel-medio').textContent = d.medio || 0;
-    document.getElementById('painel-baixo').textContent = d.baixo || 0;
-    renderizarDetalhamento();
+/* ---- painel executivo interativo: calculado ao vivo a partir dos
+   desvios em aberto (desviosAtivosCache), com suporte a filtro por
+   clique (status ou potencial) que também afeta o quadro de
+   detalhamento (Responsável/Potencial/Prazo) ---- */
+let filtroPainel = null; // { campo: 'status'|'potencial', valor: '...' } ou null
+
+document.querySelectorAll('.grupo-item[data-filtro-campo]').forEach(item => {
+  const campo = item.dataset.filtroCampo;
+  const valor = item.dataset.filtroValor;
+  if(!campo) return; // "Abertos" não filtra nada, só reseta (tratado abaixo)
+  item.addEventListener('click', () => {
+    if(filtroPainel && filtroPainel.campo === campo && filtroPainel.valor === valor){
+      filtroPainel = null; // clicou de novo no mesmo: desliga o filtro
+    } else {
+      filtroPainel = { campo, valor };
+    }
+    recalcularPainelEDetalhamento();
   });
+});
+document.querySelector('.grupo-item[data-filtro-campo=""]').addEventListener('click', () => {
+  filtroPainel = null;
+  recalcularPainelEDetalhamento();
+});
+document.getElementById('btn-limpar-filtro').addEventListener('click', () => {
+  filtroPainel = null;
+  recalcularPainelEDetalhamento();
+});
+
+function recalcularPainelEDetalhamento(){
+  const todos = desviosAtivosCache;
+
+  // linha "Abertos/No prazo/Atrasados": respeita um filtro de potencial ativo,
+  // mas não filtra por si mesma (senão o próprio clique zeraria as outras)
+  const dsStatus = todos.filter(d => (filtroPainel && filtroPainel.campo === 'potencial') ? d.potencial === filtroPainel.valor : true);
+  // linha "Nível de risco": respeita um filtro de status ativo, pelo mesmo motivo
+  const dsPotencial = todos.filter(d => (filtroPainel && filtroPainel.campo === 'status') ? d.status === filtroPainel.valor : true);
+  // quadro de detalhamento: recebe os dois filtros de vez (é o "resultado final")
+  const dsDetalhe = todos.filter(d => {
+    if(!filtroPainel) return true;
+    return filtroPainel.campo === 'status' ? d.status === filtroPainel.valor : d.potencial === filtroPainel.valor;
+  });
+
+  const noPrazo = dsStatus.filter(d => d.status === 'No prazo').length;
+  const atrasado = dsStatus.filter(d => d.status === 'Atrasado').length;
+  const alto = dsPotencial.filter(d => d.potencial === 'Alto').length;
+  const medio = dsPotencial.filter(d => d.potencial === 'Médio').length;
+  const baixo = dsPotencial.filter(d => d.potencial === 'Baixo').length;
+
+  document.getElementById('painel-abertos').textContent = noPrazo + atrasado;
+  document.getElementById('painel-noprazo').textContent = noPrazo;
+  document.getElementById('painel-atrasado').textContent = atrasado;
+  document.getElementById('painel-alto').textContent = alto;
+  document.getElementById('painel-medio').textContent = medio;
+  document.getElementById('painel-baixo').textContent = baixo;
+
+  // destaque visual do item selecionado
+  document.querySelectorAll('.grupo-item').forEach(el => el.classList.remove('ativo'));
+  if(filtroPainel){
+    const sel = document.querySelector(`.grupo-item[data-filtro-campo="${filtroPainel.campo}"][data-filtro-valor="${filtroPainel.valor}"]`);
+    if(sel) sel.classList.add('ativo');
+  }
+
+  // aviso de filtro ativo, com opção de limpar
+  const aviso = document.getElementById('filtro-ativo-aviso');
+  if(filtroPainel){
+    const rotulo = filtroPainel.campo === 'status' ? filtroPainel.valor : 'Potencial ' + filtroPainel.valor;
+    document.getElementById('filtro-ativo-texto').textContent = `Filtrando por: ${rotulo}`;
+    aviso.style.display = 'flex';
+  } else {
+    aviso.style.display = 'none';
+  }
+
+  dadosParaDetalhamento = dsDetalhe;
+  renderizarDetalhamento();
 }
 
 /* ---- quadro de detalhamento: Responsável / Potencial / Prazo ---- */
 let abaDetalheAtual = 'responsavel';
+let dadosParaDetalhamento = [];
 document.querySelectorAll('.detalhe-aba').forEach(aba => {
   aba.addEventListener('click', () => {
     abaDetalheAtual = aba.dataset.aba;
@@ -1501,9 +1579,8 @@ document.querySelectorAll('.detalhe-aba').forEach(aba => {
 });
 
 function formatarDataBR(iso){
-  if(!iso) return '';
+  if(!iso || !/^\d{4}-\d{2}-\d{2}$/.test(String(iso))) return iso || '';
   const partes = String(iso).split('-');
-  if(partes.length !== 3) return iso;
   return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
 
@@ -1517,11 +1594,22 @@ function diasAteVencer(iso){
 function renderizarDetalhamento(){
   const cont = document.getElementById('detalhe-conteudo');
   if(!cont) return;
+  const lista = dadosParaDetalhamento || [];
+
+  if(lista.length === 0){
+    cont.innerHTML = '<p class="empty-state">Nenhum desvio nessa condição.</p>';
+    return;
+  }
 
   if(abaDetalheAtual === 'responsavel'){
-    const lista = dadosPainel.porResponsavel || [];
-    if(lista.length === 0){ cont.innerHTML = '<p class="empty-state">Nenhum desvio em aberto.</p>'; return; }
-    cont.innerHTML = lista.map(item => `
+    const contagem = {};
+    lista.forEach(d => {
+      if(d.respCorrecao){ contagem[d.respCorrecao] = (contagem[d.respCorrecao] || 0) + 1; }
+    });
+    const arr = Object.keys(contagem)
+      .map(nome => ({ nome, quantidade: contagem[nome] }))
+      .sort((a,b) => b.quantidade - a.quantidade);
+    cont.innerHTML = arr.map(item => `
       <div class="detalhe-linha">
         <span class="nome">${item.nome}</span>
         <span class="qtd">${item.quantidade}</span>
@@ -1530,9 +1618,10 @@ function renderizarDetalhamento(){
   }
 
   else if(abaDetalheAtual === 'potencial'){
-    const lista = dadosPainel.porPotencial || [];
-    if(lista.every(i => i.quantidade === 0)){ cont.innerHTML = '<p class="empty-state">Nenhum desvio em aberto.</p>'; return; }
-    cont.innerHTML = lista.map(item => `
+    const arr = ['Alto','Médio','Baixo'].map(nome => ({
+      nome, quantidade: lista.filter(d => d.potencial === nome).length
+    }));
+    cont.innerHTML = arr.map(item => `
       <div class="detalhe-linha">
         <span class="nome">${item.nome}</span>
         <span class="qtd">${item.quantidade}</span>
@@ -1541,9 +1630,10 @@ function renderizarDetalhamento(){
   }
 
   else if(abaDetalheAtual === 'prazo'){
-    const lista = dadosPainel.porPrazo || [];
-    if(lista.length === 0){ cont.innerHTML = '<p class="empty-state">Nenhum desvio em aberto.</p>'; return; }
-    cont.innerHTML = lista.map(item => {
+    const comPrazo = lista.filter(d => d.prazo).slice()
+      .sort((a,b) => String(a.prazo).localeCompare(String(b.prazo)));
+    if(comPrazo.length === 0){ cont.innerHTML = '<p class="empty-state">Nenhum desvio nessa condição.</p>'; return; }
+    cont.innerHTML = comPrazo.map(item => {
       const dias = diasAteVencer(item.prazo);
       const vencido = dias !== null && dias < 0;
       const subTexto = dias === null ? '' : vencido ? `Vencido há ${Math.abs(dias)} dia(s)` : dias === 0 ? 'Vence hoje' : `Vence em ${dias} dia(s)`;
