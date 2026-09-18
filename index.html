@@ -390,134 +390,12 @@
     <div style="display:flex; align-items:center; gap:12px;">
       <span class="status-pill online" id="status-pill">Online</span>
       <span class="sino"><span class="icone-svg" data-icone="sino"></span></span>
+      <span class="sino" id="btn-abrir-perfil" style="cursor:pointer;"><span class="icone-svg" data-icone="user"></span></span>
     </div>
   </div>
 
   <main>
     <!-- Tela: Início -->
-    <div id="view-home">
-
-      <div class="hero-banner">
-        <div class="selo" id="selo-boas-vindas">BEM-VINDO(A)</div>
-        <h2 id="user-greeting">Segurança <span>em primeiro lugar</span></h2>
-        <p>Juntos por um ambiente de trabalho mais seguro.</p>
-      </div>
-
-      <div class="pending-banner" id="pending-banner">
-        0 registro(s) aguardando sincronização
-      </div>
-
-      <!-- Painel executivo -->
-      <div class="grupo-titulo">
-        <span class="icone-svg" data-icone="clipboard"></span>
-        <span>Situação dos desvios</span>
-        <span class="seta">›</span>
-      </div>
-      <div class="grupo-card">
-        <div class="grupo-linha">
-          <div class="grupo-item">
-            <div class="grupo-icone verde"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
-            <div>
-              <span class="grupo-numero" id="painel-abertos">0</span>
-              <span class="grupo-label">Abertos</span>
-            </div>
-          </div>
-          <div class="grupo-item">
-            <div class="grupo-icone verde"><span class="icone-svg" data-icone="check"></span></div>
-            <div>
-              <span class="grupo-numero" id="painel-noprazo">0</span>
-              <span class="grupo-label">No prazo</span>
-            </div>
-          </div>
-          <div class="grupo-item">
-            <div class="grupo-icone vermelho"><span class="icone-svg" data-icone="relogio"></span></div>
-            <div>
-              <span class="grupo-numero" id="painel-atrasado">0</span>
-              <span class="grupo-label">Atrasados</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="grupo-titulo">
-        <span class="icone-svg" data-icone="check"></span>
-        <span>Nível de risco</span>
-        <span class="seta">›</span>
-      </div>
-      <div class="grupo-card">
-        <div class="grupo-linha">
-          <div class="grupo-item">
-            <div class="grupo-icone vermelho"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
-            <div>
-              <span class="grupo-numero" id="painel-alto">0</span>
-              <span class="grupo-label">Alto</span>
-            </div>
-          </div>
-          <div class="grupo-item">
-            <div class="grupo-icone amarelo"><span class="icone-svg" data-icone="alvo"></span></div>
-            <div>
-              <span class="grupo-numero" id="painel-medio">0</span>
-              <span class="grupo-label">Médio</span>
-            </div>
-          </div>
-          <div class="grupo-item">
-            <div class="grupo-icone verde"><span class="icone-svg" data-icone="alvo"></span></div>
-            <div>
-              <span class="grupo-numero" id="painel-baixo">0</span>
-              <span class="grupo-label">Baixo</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <span class="secao-titulo">Acesso rápido</span>
-
-      <div class="card-action" data-goto="view-desvios">
-        <div class="icon"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
-        <div class="info">
-          <h3>Desvios</h3>
-          <p>Registrar desvios de segurança</p>
-        </div>
-        <div class="seta">›</div>
-      </div>
-
-      <div class="card-action" data-goto="view-qualimetria">
-        <div class="icon"><span class="icone-svg" data-icone="clipboard"></span></div>
-        <div class="info">
-          <h3>Qualimetria</h3>
-          <p>Avaliações de qualidade em campo</p>
-        </div>
-        <div class="seta">›</div>
-      </div>
-
-      <div class="card-action" data-goto="view-lv">
-        <div class="icon"><span class="icone-svg" data-icone="filetext"></span></div>
-        <div class="info">
-          <h3>LV</h3>
-          <p>Listas de verificação</p>
-        </div>
-        <div class="seta">›</div>
-      </div>
-
-      <div class="card-action" data-goto="view-treinamentos">
-        <div class="icon"><span class="icone-svg" data-icone="message"></span></div>
-        <div class="info">
-          <h3>Treinamentos</h3>
-          <p>Conteúdos e capacitações</p>
-        </div>
-        <div class="seta">›</div>
-      </div>
-
-      <div class="card-action" data-goto="view-aprovacoes">
-        <div class="icon"><span class="icone-svg" data-icone="check"></span></div>
-        <div class="info">
-          <h3>Aprovações</h3>
-          <p>Revisar resoluções enviadas</p>
-        </div>
-        <div class="seta">›</div>
-      </div>
-    </div>
-
     <!-- Tela: Inspeções (placeholder) -->
     <div id="view-inspecoes" style="display:none;">
       <div class="tela-banner">
@@ -563,12 +441,79 @@
 
       <!-- Lista de desvios -->
       <div id="desvios-lista-tela">
-        <div class="tela-banner">
-          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
-            <p class="tela-titulo" style="margin-top:0;">Desvios</p>
-            <button class="btn-primary" style="width:auto; padding:10px 18px;" id="btn-novo-desvio">+ Novo</button>
+        <div class="hero-banner">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+            <h2 style="margin-top:0;">Desvios</h2>
+            <button class="btn-primary" style="width:auto; padding:10px 18px; margin-top:0;" id="btn-novo-desvio">+ Novo</button>
           </div>
-          <p class="tela-sub">Registre e acompanhe os desvios de segurança.</p>
+          <p>Registre e acompanhe os desvios de segurança.</p>
+        </div>
+
+        <div class="pending-banner" id="pending-banner">
+          0 registro(s) aguardando sincronização
+        </div>
+
+        <!-- Painel executivo -->
+        <div class="grupo-titulo">
+          <span class="icone-svg" data-icone="clipboard"></span>
+          <span>Situação dos desvios</span>
+          <span class="seta">›</span>
+        </div>
+        <div class="grupo-card">
+          <div class="grupo-linha">
+            <div class="grupo-item">
+              <div class="grupo-icone verde"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
+              <div>
+                <span class="grupo-numero" id="painel-abertos">0</span>
+                <span class="grupo-label">Abertos</span>
+              </div>
+            </div>
+            <div class="grupo-item">
+              <div class="grupo-icone verde"><span class="icone-svg" data-icone="check"></span></div>
+              <div>
+                <span class="grupo-numero" id="painel-noprazo">0</span>
+                <span class="grupo-label">No prazo</span>
+              </div>
+            </div>
+            <div class="grupo-item">
+              <div class="grupo-icone vermelho"><span class="icone-svg" data-icone="relogio"></span></div>
+              <div>
+                <span class="grupo-numero" id="painel-atrasado">0</span>
+                <span class="grupo-label">Atrasados</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grupo-titulo">
+          <span class="icone-svg" data-icone="check"></span>
+          <span>Nível de risco</span>
+          <span class="seta">›</span>
+        </div>
+        <div class="grupo-card">
+          <div class="grupo-linha">
+            <div class="grupo-item">
+              <div class="grupo-icone vermelho"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
+              <div>
+                <span class="grupo-numero" id="painel-alto">0</span>
+                <span class="grupo-label">Alto</span>
+              </div>
+            </div>
+            <div class="grupo-item">
+              <div class="grupo-icone amarelo"><span class="icone-svg" data-icone="alvo"></span></div>
+              <div>
+                <span class="grupo-numero" id="painel-medio">0</span>
+                <span class="grupo-label">Médio</span>
+              </div>
+            </div>
+            <div class="grupo-item">
+              <div class="grupo-icone verde"><span class="icone-svg" data-icone="alvo"></span></div>
+              <div>
+                <span class="grupo-numero" id="painel-baixo">0</span>
+                <span class="grupo-label">Baixo</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="detalhe-card">
@@ -820,22 +765,41 @@
         <p class="tela-titulo">Perfil</p>
       </div>
       <p class="tela-sub" id="perfil-info"></p>
+
+      <div class="card-action" data-goto="view-aprovacoes">
+        <div class="icon"><span class="icone-svg" data-icone="check"></span></div>
+        <div class="info">
+          <h3>Aprovações</h3>
+          <p>Revisar resoluções enviadas</p>
+        </div>
+        <div class="seta">›</div>
+      </div>
+
+      <div class="card-action" data-goto="view-inspecoes">
+        <div class="icon"><span class="icone-svg" data-icone="clipboard"></span></div>
+        <div class="info">
+          <h3>Inspeções</h3>
+          <p>Checklists de segurança em campo</p>
+        </div>
+        <div class="seta">›</div>
+      </div>
+
       <button class="btn-primary" id="logout-btn" style="margin-top:16px;">Sair</button>
     </div>
   </main>
 
   <nav class="bottom-nav">
-    <button class="nav-btn active" data-view="view-home">
-      <span class="nav-icon"><span class="icone-svg" data-icone="casa"></span></span> Início
-    </button>
-    <button class="nav-btn" data-view="view-inspecoes">
-      <span class="nav-icon"><span class="icone-svg" data-icone="clipboard"></span></span> Inspeções
-    </button>
-    <button class="nav-btn" data-view="view-desvios">
+    <button class="nav-btn active" data-view="view-desvios">
       <span class="nav-icon"><span class="icone-svg" data-icone="alerta-triangulo"></span></span> Desvios
     </button>
-    <button class="nav-btn" data-view="view-perfil">
-      <span class="nav-icon"><span class="icone-svg" data-icone="user"></span></span> Perfil
+    <button class="nav-btn" data-view="view-qualimetria">
+      <span class="nav-icon"><span class="icone-svg" data-icone="clipboard"></span></span> Qualimetria
+    </button>
+    <button class="nav-btn" data-view="view-lv">
+      <span class="nav-icon"><span class="icone-svg" data-icone="filetext"></span></span> LV
+    </button>
+    <button class="nav-btn" data-view="view-treinamentos">
+      <span class="nav-icon"><span class="icone-svg" data-icone="message"></span></span> Treinamentos
     </button>
   </nav>
 </section>
@@ -1001,11 +965,10 @@ auth.onAuthStateChanged((user) => {
   if(user){
     authScreen.classList.remove('active');
     appScreen.classList.add('active');
-    document.getElementById('selo-boas-vindas').textContent =
-      (user.displayName ? `BEM-VINDO(A), ${user.displayName.split(' ')[0].toUpperCase()}` : 'BEM-VINDO(A)');
     document.getElementById('perfil-info').textContent =
       `${user.displayName || ''} — ${user.email}`;
     renderizarPainelExecutivo();
+    irPara('view-desvios');
   } else {
     appScreen.classList.remove('active');
     authScreen.classList.add('active');
@@ -1019,7 +982,7 @@ document.getElementById('logout-btn').addEventListener('click', () => auth.signO
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-home','view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-resolver','view-aprovacoes','view-perfil'];
+const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-resolver','view-aprovacoes','view-perfil'];
 function irPara(viewId){
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
   document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -1034,21 +997,21 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 document.querySelectorAll('.card-action').forEach(card => {
   card.addEventListener('click', () => irPara(card.dataset.goto));
 });
+document.getElementById('btn-abrir-perfil').addEventListener('click', () => irPara('view-perfil'));
 
-/* ---- gesto de arrastar (esquerda -> direita) na Início abre "Novo desvio" ---- */
+/* ---- gesto de arrastar (esquerda -> direita) na tela de Desvios abre "Novo desvio" ---- */
 (function(){
-  const home = document.getElementById('view-home');
+  const alvo = document.getElementById('desvios-lista-tela');
   let inicioX = null, inicioY = null;
-  home.addEventListener('touchstart', (e) => {
+  alvo.addEventListener('touchstart', (e) => {
     inicioX = e.touches[0].clientX;
     inicioY = e.touches[0].clientY;
   }, { passive: true });
-  home.addEventListener('touchend', (e) => {
+  alvo.addEventListener('touchend', (e) => {
     if(inicioX === null) return;
     const dx = e.changedTouches[0].clientX - inicioX;
     const dy = e.changedTouches[0].clientY - inicioY;
     if(dx > 90 && Math.abs(dy) < 60){
-      irPara('view-desvios');
       mostrarFormularioDesvio();
     }
     inicioX = null; inicioY = null;
