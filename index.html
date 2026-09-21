@@ -112,11 +112,15 @@
   .desvio-card p{ font-size:12px; color:var(--text-muted); margin-top:4px; }
   .sub-prazo{ font-size:11px; color:var(--text-muted); margin-top:6px; }
   .grafico-titulo{ font-size:12px; font-weight:700; color:var(--navy); margin:16px 0 8px; }
-  .grafico-linha{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-  .grafico-rotulo{ width:38%; font-size:11px; color:var(--navy); flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .grafico-trilha{ flex:1; height:10px; background:var(--cream); border-radius:6px; overflow:hidden; }
-  .grafico-barra{ height:100%; background:var(--green); border-radius:6px; }
-  .grafico-valor{ width:22px; text-align:right; font-size:11px; font-weight:700; color:var(--navy); flex-shrink:0; }
+  .grafico-colunas{ display:flex; align-items:flex-end; gap:10px; height:150px; padding:0 2px 22px; overflow-x:auto; }
+  .grafico-coluna{ display:flex; flex-direction:column; align-items:center; justify-content:flex-end; flex:0 0 auto; width:44px; height:100%; position:relative; }
+  .grafico-coluna-valor{ font-size:12px; font-weight:800; color:var(--navy); margin-bottom:4px; }
+  .grafico-coluna-trilha{ width:26px; flex:1; display:flex; align-items:flex-end; background:var(--cream); border-radius:6px; overflow:hidden; }
+  .grafico-coluna-barra{ width:100%; background:var(--green); border-radius:6px 6px 0 0; min-height:2px; }
+  .grafico-coluna-rotulo{
+    position:absolute; bottom:-20px; font-size:10px; color:var(--text-muted); text-align:center;
+    width:60px; left:50%; transform:translateX(-50%); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
   .toggle-duas-opcoes{ display:flex; gap:8px; margin:14px 0; }
   .toggle-duas-opcoes button{
     flex:1; background:var(--cream); border:1px solid var(--border); border-radius:10px;
@@ -329,18 +333,20 @@
 
   /* ---------- Cabeçalho de tela secundária (sem faixa escura) ---------- */
   .tela-header{ display:flex; align-items:center; gap:10px; margin-bottom:4px; }
-  .tela-header .voltar{ background:none; border:none; font-size:20px; cursor:pointer; color:var(--navy); }
+  .tela-header .voltar{
+    background:var(--white); border:1px solid var(--border-strong); border-radius:50%;
+    width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; color:var(--navy); flex-shrink:0; padding:0;
+  }
+  .tela-header .voltar svg{ width:17px; height:17px; }
   .tela-selo{ font-size:11px; letter-spacing:.08em; color:var(--green); font-weight:700; text-transform:uppercase; }
   .tela-titulo{ font-size:24px; font-weight:800; color:var(--navy); margin-top:2px; }
   .tela-sub{ font-size:13px; color:var(--text-muted); margin-top:6px; margin-bottom:20px; }
 
   .tela-banner{
-    background-image: linear-gradient(90deg, var(--cream) 0%, var(--cream) 40%, rgba(249,249,247,.5) 75%, rgba(249,249,247,.1) 100%),
-      url('https://i.imgur.com/oZ80hkV.jpeg');
-    background-size:cover; background-position:right center;
-    margin:-20px -20px 18px; padding:20px 20px 16px;
+    background:transparent; margin:0 0 18px; padding:0;
   }
-  .tela-banner .tela-sub{ max-width:75%; margin-bottom:0; }
+  .tela-banner .tela-sub{ max-width:100%; margin-bottom:0; }
 
   /* ---------- Quadro de detalhamento (Responsável / Potencial / Prazo) ---------- */
   .detalhe-card{
@@ -428,9 +434,7 @@
       <button type="submit" class="btn-primary" id="login-btn">Entrar</button>
     </form>
 
-    <p class="auth-switch">
-      Ainda não tem conta? <a id="show-register">Cadastre-se</a>
-    </p>
+    <!-- Link de autocadastro removido: contas são criadas só pelo administrador -->
 
     <!-- ---- Formulário de cadastro (oculto por padrão) ---- -->
     <form id="register-form" style="display:none; margin-top:6px;">
@@ -614,7 +618,7 @@
       <div id="desvio-form-tela" style="display:none;">
         <div class="tela-banner">
           <div class="tela-header">
-            <button id="btn-voltar-desvios" class="voltar">←</button>
+            <button id="btn-voltar-desvios" class="voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button>
           </div>
           <div class="tela-selo">NOVO DESVIO</div>
           <p class="tela-titulo">Registrar desvio</p>
@@ -795,7 +799,7 @@
     <div id="view-resolver" style="display:none;">
       <div class="tela-banner">
         <div class="tela-header">
-          <button id="btn-voltar-resolver" class="voltar">←</button>
+          <button id="btn-voltar-resolver" class="voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button>
         </div>
         <div class="tela-selo">RESOLVER DESVIO</div>
         <p class="tela-titulo" id="resolver-titulo">Nº —</p>
@@ -837,7 +841,7 @@
     <!-- Tela: desvios de um potencial específico -->
     <div id="view-detalhe-potencial" style="display:none;">
       <div class="tela-header">
-        <button id="btn-voltar-detalhe-potencial" class="voltar">←</button>
+        <button id="btn-voltar-detalhe-potencial" class="voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button>
       </div>
       <p class="tela-titulo" id="detalhe-potencial-titulo">Potencial</p>
       <div id="detalhe-potencial-lista"></div>
@@ -846,7 +850,7 @@
     <!-- Tela: desvios de um responsável específico -->
     <div id="view-detalhe-responsavel" style="display:none;">
       <div class="tela-header">
-        <button id="btn-voltar-detalhe-responsavel" class="voltar">←</button>
+        <button id="btn-voltar-detalhe-responsavel" class="voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button>
       </div>
       <p class="tela-titulo" id="detalhe-responsavel-nome">Responsável</p>
 
@@ -941,6 +945,7 @@ const ICONES = {
   sino: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>',
   casa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/></svg>',
   lua: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>',
+  seta-esquerda: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>',
   sol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>'
 };
 document.querySelectorAll('[data-icone]').forEach(el => {
@@ -1000,10 +1005,6 @@ const appScreen = document.getElementById('app-screen');
 const loginForm = document.getElementById('login-form');
 const registerForm = document.getElementById('register-form');
 
-document.getElementById('show-register').onclick = () => {
-  loginForm.style.display = 'none';
-  registerForm.style.display = 'block';
-};
 document.getElementById('show-login').onclick = () => {
   registerForm.style.display = 'none';
   loginForm.style.display = 'block';
@@ -1958,12 +1959,12 @@ function graficoBarrasHtml(titulo, dados){
   }
   return `
     <p class="grafico-titulo">${titulo}</p>
-    <div class="grafico-barras">
+    <div class="grafico-colunas">
       ${dados.map(d => `
-        <div class="grafico-linha">
-          <span class="grafico-rotulo">${d.rotulo}</span>
-          <div class="grafico-trilha"><div class="grafico-barra" style="width:${(d.valor/max*100)}%"></div></div>
-          <span class="grafico-valor">${d.valor}</span>
+        <div class="grafico-coluna">
+          <span class="grafico-coluna-valor">${d.valor}</span>
+          <div class="grafico-coluna-trilha"><div class="grafico-coluna-barra" style="height:${(d.valor/max*100)}%"></div></div>
+          <span class="grafico-coluna-rotulo" title="${d.rotulo}">${d.rotulo}</span>
         </div>
       `).join('')}
     </div>
