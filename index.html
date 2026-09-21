@@ -84,6 +84,19 @@
   .tag.pendente{ background:#fff4d6; color:#8a6300; }
   .tag.sincronizado{ background:var(--green-tint); color:var(--green-dark); }
   .desvio-card p{ font-size:12px; color:var(--text-muted); margin-top:4px; }
+  .sub-prazo{ font-size:11px; color:var(--text-muted); margin-top:6px; }
+  .grafico-titulo{ font-size:12px; font-weight:700; color:var(--navy); margin:16px 0 8px; }
+  .grafico-linha{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .grafico-rotulo{ width:38%; font-size:11px; color:var(--navy); flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .grafico-trilha{ flex:1; height:10px; background:var(--cream); border-radius:6px; overflow:hidden; }
+  .grafico-barra{ height:100%; background:var(--green); border-radius:6px; }
+  .grafico-valor{ width:22px; text-align:right; font-size:11px; font-weight:700; color:var(--navy); flex-shrink:0; }
+  .toggle-duas-opcoes{ display:flex; gap:8px; margin:14px 0; }
+  .toggle-duas-opcoes button{
+    flex:1; background:var(--cream); border:1px solid #eceee8; border-radius:10px;
+    padding:8px; font-size:12px; font-weight:700; color:var(--text-muted); cursor:pointer;
+  }
+  .toggle-duas-opcoes button.active{ background:var(--green); border-color:var(--green); color:var(--white); }
   .empty-state{ text-align:center; color:var(--text-muted); font-size:13px; padding:30px 0; }
 
   .btn-resolver{
@@ -163,6 +176,23 @@
   .grupo-icone.amarelo{ background:#fbeecb; color:#c99a20; }
   .grupo-numero{ display:block; font-size:18px; font-weight:800; color:var(--navy); line-height:1.1; }
   .grupo-label{ display:block; font-size:10px; color:var(--text-muted); margin-top:1px; white-space:nowrap; }
+
+  /* ---------- Cartões coloridos de Nível de risco ---------- */
+  .grupo-linha.risco{ gap:10px; }
+  .grupo-linha.risco .grupo-item{
+    flex-direction:column; align-items:center; justify-content:center;
+    border-radius:16px; padding:14px 6px; gap:2px; border-left:none !important;
+    color:#fff;
+  }
+  .grupo-linha.risco .grupo-item.ativo{ outline:2px solid rgba(255,255,255,.7); outline-offset:-2px; }
+  .grupo-linha.risco .grupo-item.alto{ background:#e24b4a; }
+  .grupo-linha.risco .grupo-item.medio{ background:#ef9f27; }
+  .grupo-linha.risco .grupo-item.baixo{ background:var(--green); }
+  .grupo-linha.risco .grupo-icone{ background:transparent !important; color:#fff !important; width:auto; height:auto; }
+  .grupo-linha.risco .grupo-icone .icone-svg svg{ width:20px; height:20px; }
+  .grupo-linha.risco .grupo-numero{ color:#fff; font-size:22px; margin-top:4px; }
+  .grupo-linha.risco .grupo-label{ color:rgba(255,255,255,.85); }
+  .grupo-linha.risco .grupo-item.ativo .grupo-numero{ color:#fff; }
   .field .toggle-pass{
     position:absolute; right:12px; top:38px; cursor:pointer;
     font-size:12px; color:var(--text-muted); user-select:none;
@@ -499,23 +529,23 @@
           <span>Nível de risco</span>
         </div>
         <div class="grupo-card" style="margin-bottom:22px;">
-          <div class="grupo-linha">
-            <div class="grupo-item" data-filtro-campo="potencial" data-filtro-valor="Alto">
-              <div class="grupo-icone vermelho"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
+          <div class="grupo-linha risco">
+            <div class="grupo-item alto" data-filtro-campo="potencial" data-filtro-valor="Alto">
+              <div class="grupo-icone"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
               <div>
                 <span class="grupo-numero" id="painel-alto">0</span>
                 <span class="grupo-label">Alto</span>
               </div>
             </div>
-            <div class="grupo-item" data-filtro-campo="potencial" data-filtro-valor="Médio">
-              <div class="grupo-icone amarelo"><span class="icone-svg" data-icone="alvo"></span></div>
+            <div class="grupo-item medio" data-filtro-campo="potencial" data-filtro-valor="Médio">
+              <div class="grupo-icone"><span class="icone-svg" data-icone="alvo"></span></div>
               <div>
                 <span class="grupo-numero" id="painel-medio">0</span>
                 <span class="grupo-label">Médio</span>
               </div>
             </div>
-            <div class="grupo-item" data-filtro-campo="potencial" data-filtro-valor="Baixo">
-              <div class="grupo-icone verde"><span class="icone-svg" data-icone="alvo"></span></div>
+            <div class="grupo-item baixo" data-filtro-campo="potencial" data-filtro-valor="Baixo">
+              <div class="grupo-icone"><span class="icone-svg" data-icone="alvo"></span></div>
               <div>
                 <span class="grupo-numero" id="painel-baixo">0</span>
                 <span class="grupo-label">Baixo</span>
@@ -687,6 +717,17 @@
           </div>
 
           <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="pin"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Origem</label>
+                <select class="dd-select" id="d-origem" data-lista="origem" required></select>
+                <input type="text" class="dd-outro" id="d-origem-outro" placeholder="Descreva a nova origem" style="display:none; margin-top:8px;">
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
             <div class="campo-icone"><span class="icone-svg" data-icone="message"></span></div>
             <div class="campo-corpo">
               <div class="field">
@@ -759,6 +800,31 @@
         <div class="auth-msg" id="resolver-msg"></div>
         <button type="submit" class="btn-primary" id="btn-enviar-resolucao">Enviar para análise</button>
       </form>
+    </div>
+
+    <!-- Tela: desvios de um potencial específico -->
+    <div id="view-detalhe-potencial" style="display:none;">
+      <div class="tela-header">
+        <button id="btn-voltar-detalhe-potencial" class="voltar">←</button>
+      </div>
+      <p class="tela-titulo" id="detalhe-potencial-titulo">Potencial</p>
+      <div id="detalhe-potencial-lista"></div>
+    </div>
+
+    <!-- Tela: desvios de um responsável específico -->
+    <div id="view-detalhe-responsavel" style="display:none;">
+      <div class="tela-header">
+        <button id="btn-voltar-detalhe-responsavel" class="voltar">←</button>
+      </div>
+      <p class="tela-titulo" id="detalhe-responsavel-nome">Responsável</p>
+
+      <div class="detalhe-abas">
+        <div class="detalhe-aba active" data-subaba="potencial">Potencial</div>
+        <div class="detalhe-aba" data-subaba="prazo">Prazo</div>
+        <div class="detalhe-aba" data-subaba="analise">Análise</div>
+      </div>
+
+      <div id="detalhe-responsavel-conteudo"></div>
     </div>
 
     <!-- Tela: Aprovações -->
@@ -973,9 +1039,56 @@ function traduzErroAuth(code){
   return map[code] || 'Ocorreu um erro. Tente novamente.';
 }
 
+/* ---- identificador do dispositivo (persistente neste navegador) ---- */
+function obterDeviceId(){
+  let id = localStorage.getItem('sst_device_id');
+  if(!id){
+    id = (crypto.randomUUID ? crypto.randomUUID() : 'dev-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+    localStorage.setItem('sst_device_id', id);
+  }
+  return id;
+}
+
+/* ---- verifica e registra o dispositivo (máx. 2 por usuário) ---- */
+async function verificarLimiteDispositivos(user){
+  const deviceId = obterDeviceId();
+  const ref = db.collection('usuarios').doc(user.uid);
+  const snap = await ref.get();
+  const dados = snap.exists ? snap.data() : {};
+  const dispositivos = Array.isArray(dados.dispositivos) ? dados.dispositivos : [];
+
+  if(dispositivos.some(d => d.id === deviceId)){
+    return true; // dispositivo já autorizado
+  }
+  if(dispositivos.length < 2){
+    await ref.set({
+      dispositivos: firebase.firestore.FieldValue.arrayUnion({
+        id: deviceId,
+        primeiroAcesso: new Date().toISOString(),
+        userAgent: navigator.userAgent
+      })
+    }, { merge: true });
+    return true;
+  }
+  return false; // limite de 2 dispositivos atingido
+}
+
 /* ---- estado de autenticação ---- */
-auth.onAuthStateChanged((user) => {
+auth.onAuthStateChanged(async (user) => {
   if(user){
+    let autorizado = true;
+    try{
+      autorizado = await verificarLimiteDispositivos(user);
+    }catch(err){
+      console.error('Falha ao verificar limite de dispositivos', err);
+    }
+    if(!autorizado){
+      const msg = document.getElementById('login-msg');
+      msg.textContent = 'Este usuário já está em uso no limite de 2 dispositivos. Entre em contato com o administrador para liberar um novo dispositivo.';
+      msg.style.display = 'block';
+      await auth.signOut();
+      return;
+    }
     authScreen.classList.remove('active');
     appScreen.classList.add('active');
     document.getElementById('perfil-info').textContent =
@@ -994,7 +1107,7 @@ document.getElementById('logout-btn').addEventListener('click', () => auth.signO
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-resolver','view-aprovacoes','view-perfil'];
+const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-aprovacoes','view-perfil'];
 function irPara(viewId){
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
   document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -1068,7 +1181,8 @@ const LISTAS_INICIAIS = {
   tipologia: ['Equipamento, Máquinas e Ferramentas','EPI: Equipamento de Proteção Individual','Organização e limpeza','Meio Ambiente','Sinalização e Isolamento','Ferramentas de Gestão (APR, PT, TDT, Qualimetria, Capacitação/ Trein. etc)','Instalações Elétricas','Andaime, Escadas, Passagens, Rampas e acessos','Manutenção/Estruturas/Instalações','EPC: Equipamento de Proteção Coletiva','Armazenamento e Manuseio de Materiais','Produtos Químicos','Movimentação de Cargas','Banheiros e áreas de vivência'],
   responsavelArea: ['Gelson Isidro','Wagner Cruz','Rogério Sukoski','Cielito Finoti','Fernando Rocha','Matheus Vettiner','José Airton','Marcio Pedroso','Amélia Carbonero','Sebastião Barbosa','David André','Rosana Castro','Vinicius Leite','Sérgio de Souza','Manuel Casadó','Vanderlei de Carvalho','Jorge Carlos','Alex de Carvalho','Jaime Aguiar','Jorge Luis Rosa','Paulo Cesar','José Ivamar','Danilo Cesar'],
   inspecionadoPor: ['Pedro Ivo','Gilvane Pereira','Luana Alves','Michelle Luana Costa','Adelmo Tavares','Renato Guimarães','Marcelo Leal','Uanderson Azevedo','Edmara Chaves'],
-  responsavelCorrecao: ['Fernando Rocha','Rogério Sukoski','David André da Silva','Nilson José Nunes','Sebastião Barbosa','José Airton','Igor Porto','Wagner Nogueira','Silvio Rodrigues','Alex Carvalho','Vanderlei Landim','Sérgio de Souza','Wagner Cruz','Vinicius Leite','Gelson Isidro','NovaMax','Jorge Carlos Rodrigues','Rosana Castro','José Ivamar','Manuel Casadó','Cielito Finoti','Matheus Vettiner','Athos Paulo Monteiro','Amélia Carbonero','Alexandre Pessanha']
+  responsavelCorrecao: ['Fernando Rocha','Rogério Sukoski','David André da Silva','Nilson José Nunes','Sebastião Barbosa','José Airton','Igor Porto','Wagner Nogueira','Silvio Rodrigues','Alex Carvalho','Vanderlei Landim','Sérgio de Souza','Wagner Cruz','Vinicius Leite','Gelson Isidro','NovaMax','Jorge Carlos Rodrigues','Rosana Castro','José Ivamar','Manuel Casadó','Cielito Finoti','Matheus Vettiner','Athos Paulo Monteiro','Amélia Carbonero','Alexandre Pessanha'],
+  origem: ['App Desvios','Qualimetria','PréVer','Avise ao SSTMA','Checklist','LV','Relatório de Instalações Elétricas']
 };
 
 let listasCarregadas = false;
@@ -1246,10 +1360,45 @@ function carregarDesviosAtivos(){
 
 document.getElementById('busca-desvio').addEventListener('input', renderizarBuscaDesvios);
 
+/* ---- helpers compartilhados: descrição organizada (Local + Processo +
+   Descrição) e cartão de desvio com botão Resolver, usados em várias telas ---- */
+function descricaoOrganizada(d){
+  const linha1 = [d.local, d.processo].filter(Boolean).join(' · ');
+  return (linha1 ? `<b>${linha1}</b><br>` : '') + (d.descricao || '');
+}
+
+function cartaoDesvioResolver(d){
+  return `
+    <div class="desvio-card">
+      <div class="linha1">
+        <b>Nº ${d.numero}</b>
+        <span class="tag ${d.status === 'Atrasado' ? 'pendente' : 'sincronizado'}">${d.status || ''}</span>
+      </div>
+      <p>${descricaoOrganizada(d)}</p>
+      <p class="sub-prazo">Vence em: ${formatarDataBR(d.prazo) || '—'}</p>
+      <button type="button" class="btn-resolver" data-numero="${d.numero}">
+        <span class="icone-svg" data-icone="check"></span> Resolver
+      </button>
+    </div>
+  `;
+}
+
+function renderizarListaEmContainer(containerId, lista){
+  const cont = document.getElementById(containerId);
+  if(lista.length === 0){
+    cont.innerHTML = '<p class="empty-state">Nenhum desvio encontrado.</p>';
+    return;
+  }
+  cont.innerHTML = lista.map(cartaoDesvioResolver).join('');
+  cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
+  cont.querySelectorAll('.btn-resolver').forEach(btn => {
+    btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero));
+  });
+}
+
 function renderizarBuscaDesvios(){
-  const cont = document.getElementById('busca-resultados');
   const termo = document.getElementById('busca-desvio').value.trim().toLowerCase();
-  if(!termo){ cont.innerHTML = ''; return; }
+  if(!termo){ document.getElementById('busca-resultados').innerHTML = ''; return; }
 
   const resultados = desviosAtivosCache.filter(d =>
     (d.descricao || '').toLowerCase().includes(termo) ||
@@ -1257,28 +1406,7 @@ function renderizarBuscaDesvios(){
     String(d.numero || '').includes(termo)
   ).slice(0, 30);
 
-  if(resultados.length === 0){
-    cont.innerHTML = '<p class="empty-state">Nenhum desvio encontrado.</p>';
-    return;
-  }
-
-  cont.innerHTML = resultados.map(d => `
-    <div class="desvio-card">
-      <div class="linha1">
-        <b>Nº ${d.numero}</b>
-        <span class="tag ${d.status === 'Atrasado' ? 'pendente' : 'sincronizado'}">${d.status || ''}</span>
-      </div>
-      <p>${d.local || ''} — ${(d.descricao || '').slice(0, 90)}</p>
-      <button type="button" class="btn-resolver" data-numero="${d.numero}">
-        <span class="icone-svg" data-icone="check"></span> Resolver
-      </button>
-    </div>
-  `).join('');
-
-  cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
-  cont.querySelectorAll('.btn-resolver').forEach(btn => {
-    btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero));
-  });
+  renderizarListaEmContainer('busca-resultados', resultados);
 }
 
 /* ---- tela de resolver desvio ---- */
@@ -1439,6 +1567,7 @@ document.getElementById('desvio-form').addEventListener('submit', async (e) => {
     const responsavelArea = await valorFinalDropdown('d-resp-area', 'responsavelArea');
     const inspecionadoPor = await valorFinalDropdown('d-inspecionado', 'inspecionadoPor');
     const responsavelCorrecao = await valorFinalDropdown('d-resp-correcao', 'responsavelCorrecao');
+    const origem = await valorFinalDropdown('d-origem', 'origem');
 
     const hoje = new Date();
     const dataHojeStr = hoje.toLocaleDateString('pt-BR'); // dd/mm/aaaa, igual à planilha
@@ -1458,7 +1587,7 @@ document.getElementById('desvio-form').addEventListener('submit', async (e) => {
       responsavelCorrecao,
       status: document.getElementById('d-status').value,
       observacoes: document.getElementById('d-observacoes').value.trim(),
-      origem: 'App Desvios',
+      origem,
       criadoPor: auth.currentUser.uid,
       criadoPorNome: auth.currentUser.displayName || auth.currentUser.email,
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
@@ -1501,6 +1630,13 @@ document.querySelectorAll('.grupo-item[data-filtro-campo]').forEach(item => {
   const campo = item.dataset.filtroCampo;
   const valor = item.dataset.filtroValor;
   if(!campo) return; // "Abertos" não filtra nada, só reseta (tratado abaixo)
+
+  if(campo === 'potencial'){
+    // Alto/Médio/Baixo: clicar abre a lista de desvios daquele potencial
+    item.addEventListener('click', () => abrirDetalhePotencial(valor));
+    return;
+  }
+
   item.addEventListener('click', () => {
     if(filtroPainel && filtroPainel.campo === campo && filtroPainel.valor === valor){
       filtroPainel = null; // clicou de novo no mesmo: desliga o filtro
@@ -1570,10 +1706,10 @@ function recalcularPainelEDetalhamento(){
 /* ---- quadro de detalhamento: Responsável / Potencial / Prazo ---- */
 let abaDetalheAtual = 'responsavel';
 let dadosParaDetalhamento = [];
-document.querySelectorAll('.detalhe-aba').forEach(aba => {
+document.querySelectorAll('#view-desvios .detalhe-aba').forEach(aba => {
   aba.addEventListener('click', () => {
     abaDetalheAtual = aba.dataset.aba;
-    document.querySelectorAll('.detalhe-aba').forEach(a => a.classList.toggle('active', a === aba));
+    document.querySelectorAll('#view-desvios .detalhe-aba').forEach(a => a.classList.toggle('active', a === aba));
     renderizarDetalhamento();
   });
 });
@@ -1610,11 +1746,14 @@ function renderizarDetalhamento(){
       .map(nome => ({ nome, quantidade: contagem[nome] }))
       .sort((a,b) => b.quantidade - a.quantidade);
     cont.innerHTML = arr.map(item => `
-      <div class="detalhe-linha">
+      <div class="detalhe-linha" data-nome="${item.nome}">
         <span class="nome">${item.nome}</span>
         <span class="qtd">${item.quantidade}</span>
       </div>
     `).join('');
+    cont.querySelectorAll('.detalhe-linha').forEach(el => {
+      el.addEventListener('click', () => abrirDetalheResponsavel(el.dataset.nome));
+    });
   }
 
   else if(abaDetalheAtual === 'potencial'){
@@ -1622,33 +1761,146 @@ function renderizarDetalhamento(){
       nome, quantidade: lista.filter(d => d.potencial === nome).length
     }));
     cont.innerHTML = arr.map(item => `
-      <div class="detalhe-linha">
+      <div class="detalhe-linha" data-potencial="${item.nome}">
         <span class="nome">${item.nome}</span>
         <span class="qtd">${item.quantidade}</span>
       </div>
     `).join('');
+    cont.querySelectorAll('.detalhe-linha').forEach(el => {
+      el.addEventListener('click', () => abrirDetalhePotencial(el.dataset.potencial));
+    });
   }
 
   else if(abaDetalheAtual === 'prazo'){
     const comPrazo = lista.filter(d => d.prazo).slice()
       .sort((a,b) => String(a.prazo).localeCompare(String(b.prazo)));
-    if(comPrazo.length === 0){ cont.innerHTML = '<p class="empty-state">Nenhum desvio nessa condição.</p>'; return; }
-    cont.innerHTML = comPrazo.map(item => {
-      const dias = diasAteVencer(item.prazo);
-      const vencido = dias !== null && dias < 0;
-      const subTexto = dias === null ? '' : vencido ? `Vencido há ${Math.abs(dias)} dia(s)` : dias === 0 ? 'Vence hoje' : `Vence em ${dias} dia(s)`;
-      const descricaoCurta = (item.descricao || '').slice(0, 60) + ((item.descricao || '').length > 60 ? '…' : '');
-      return `
-        <div class="detalhe-linha">
-          <div>
-            <span class="nome">${descricaoCurta || ('Desvio ' + (item.numero || ''))}</span>
-            <div class="sub">${subTexto}</div>
-          </div>
-          <span class="qtd${vencido ? ' vencido' : ''}">${formatarDataBR(item.prazo)}</span>
-        </div>
-      `;
-    }).join('');
+    renderizarListaEmContainer('detalhe-conteudo', comPrazo);
   }
+}
+
+/* ---- tela: desvios de um potencial específico (Alto/Médio/Baixo) ---- */
+function abrirDetalhePotencial(potencial){
+  document.getElementById('detalhe-potencial-titulo').textContent = 'Potencial ' + potencial;
+  const lista = desviosAtivosCache
+    .filter(d => d.potencial === potencial)
+    .sort((a,b) => String(a.prazo || '').localeCompare(String(b.prazo || '')));
+  renderizarListaEmContainer('detalhe-potencial-lista', lista);
+  irPara('view-detalhe-potencial');
+}
+document.getElementById('btn-voltar-detalhe-potencial').addEventListener('click', () => irPara('view-desvios'));
+
+/* ---- tela: desvios de um responsável específico, com sub-abas ---- */
+let responsavelAtual = null;
+let subAbaResponsavelAtual = 'potencial';
+let toggleAnaliseAtual = 'abertos';
+const ORDEM_POTENCIAL = { 'Alto': 0, 'Médio': 1, 'Baixo': 2 };
+
+let desviosConcluidosCache = [];
+let carregouDesviosConcluidos = false;
+function carregarDesviosConcluidos(callback){
+  if(carregouDesviosConcluidos){ callback(); return; }
+  db.collection('desvios_concluidos').get().then((snap) => {
+    desviosConcluidosCache = [];
+    snap.forEach(doc => desviosConcluidosCache.push({ id: doc.id, ...doc.data() }));
+    carregouDesviosConcluidos = true;
+    callback();
+  }).catch((e) => { console.warn('Falha ao carregar desvios concluídos:', e); callback(); });
+}
+
+function abrirDetalheResponsavel(nome){
+  responsavelAtual = nome;
+  subAbaResponsavelAtual = 'potencial';
+  document.getElementById('detalhe-responsavel-nome').textContent = nome;
+  document.querySelectorAll('#view-detalhe-responsavel .detalhe-aba').forEach(a => {
+    a.classList.toggle('active', a.dataset.subaba === 'potencial');
+  });
+  renderizarDetalheResponsavel();
+  irPara('view-detalhe-responsavel');
+}
+document.getElementById('btn-voltar-detalhe-responsavel').addEventListener('click', () => irPara('view-desvios'));
+document.querySelectorAll('#view-detalhe-responsavel .detalhe-aba').forEach(aba => {
+  aba.addEventListener('click', () => {
+    subAbaResponsavelAtual = aba.dataset.subaba;
+    document.querySelectorAll('#view-detalhe-responsavel .detalhe-aba').forEach(a => a.classList.toggle('active', a === aba));
+    renderizarDetalheResponsavel();
+  });
+});
+
+function renderizarDetalheResponsavel(){
+  const cont = document.getElementById('detalhe-responsavel-conteudo');
+  const doResponsavel = desviosAtivosCache.filter(d => d.respCorrecao === responsavelAtual);
+
+  if(subAbaResponsavelAtual === 'potencial'){
+    const ordenado = doResponsavel.slice().sort((a,b) => {
+      const p = (ORDEM_POTENCIAL[a.potencial] ?? 3) - (ORDEM_POTENCIAL[b.potencial] ?? 3);
+      return p !== 0 ? p : String(a.prazo || '').localeCompare(String(b.prazo || ''));
+    });
+    cont.innerHTML = '<div id="dr-lista"></div>';
+    renderizarListaEmContainer('dr-lista', ordenado);
+  }
+
+  else if(subAbaResponsavelAtual === 'prazo'){
+    const ordenado = doResponsavel.slice().sort((a,b) => String(a.prazo || '').localeCompare(String(b.prazo || '')));
+    cont.innerHTML = '<div id="dr-lista"></div>';
+    renderizarListaEmContainer('dr-lista', ordenado);
+  }
+
+  else if(subAbaResponsavelAtual === 'analise'){
+    cont.innerHTML = `
+      <div class="toggle-duas-opcoes">
+        <button type="button" data-toggle="abertos" class="${toggleAnaliseAtual === 'abertos' ? 'active' : ''}">Abertos</button>
+        <button type="button" data-toggle="total" class="${toggleAnaliseAtual === 'total' ? 'active' : ''}">Total</button>
+      </div>
+      <div id="dr-analise-corpo"><p class="empty-state">Carregando...</p></div>
+    `;
+    cont.querySelectorAll('.toggle-duas-opcoes button').forEach(btn => {
+      btn.addEventListener('click', () => { toggleAnaliseAtual = btn.dataset.toggle; renderizarDetalheResponsavel(); });
+    });
+
+    const desenhar = () => {
+      const corpo = document.getElementById('dr-analise-corpo');
+      if(!corpo) return; // a pessoa já saiu da tela antes de terminar de carregar
+      const base = toggleAnaliseAtual === 'total'
+        ? doResponsavel.concat(desviosConcluidosCache.filter(d => d.respCorrecao === responsavelAtual))
+        : doResponsavel;
+
+      const porProcesso = {};
+      base.forEach(d => { const k = d.processo || 'Sem processo'; porProcesso[k] = (porProcesso[k]||0)+1; });
+      const arrProcesso = Object.keys(porProcesso).map(k => ({rotulo:k, valor:porProcesso[k]})).sort((a,b)=>b.valor-a.valor);
+
+      const arrPotencial = ['Alto','Médio','Baixo'].map(p => ({
+        rotulo: p, valor: base.filter(d => d.potencial === p).length
+      }));
+
+      corpo.innerHTML = graficoBarrasHtml('Desvios por Processo/Atividade', arrProcesso) +
+                         graficoBarrasHtml('Desvios por Potencial', arrPotencial);
+    };
+
+    if(toggleAnaliseAtual === 'total'){
+      carregarDesviosConcluidos(desenhar);
+    } else {
+      desenhar();
+    }
+  }
+}
+
+function graficoBarrasHtml(titulo, dados){
+  const max = Math.max(1, ...dados.map(d => d.valor));
+  if(dados.length === 0 || dados.every(d => d.valor === 0)){
+    return `<p class="grafico-titulo">${titulo}</p><p class="empty-state">Sem dados.</p>`;
+  }
+  return `
+    <p class="grafico-titulo">${titulo}</p>
+    <div class="grafico-barras">
+      ${dados.map(d => `
+        <div class="grafico-linha">
+          <span class="grafico-rotulo">${d.rotulo}</span>
+          <div class="grafico-trilha"><div class="grafico-barra" style="width:${(d.valor/max*100)}%"></div></div>
+          <span class="grafico-valor">${d.valor}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
 }
 
 /* ---- listagem dos desvios do próprio usuário ---- */
