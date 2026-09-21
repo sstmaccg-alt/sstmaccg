@@ -351,10 +351,15 @@
   }
   .detalhe-aba.active{ background:var(--green); border-color:var(--green); color:var(--white); }
   .detalhe-linha{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:10px 6px; border-bottom:1px solid #f0f1ec; cursor:pointer;
+    display:flex; align-items:center; gap:10px; justify-content:space-between;
+    padding:10px 6px; border-bottom:1px solid var(--border); cursor:pointer;
   }
   .detalhe-linha:last-child{ border-bottom:none; }
+  .detalhe-linha .info{ display:flex; align-items:center; gap:10px; min-width:0; }
+  .detalhe-linha .avatar{
+    flex-shrink:0; width:30px; height:30px; border-radius:10px; background:var(--green-tint);
+    color:var(--green-dark); font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center;
+  }
   .detalhe-linha .nome{ font-size:13px; font-weight:600; color:var(--navy); }
   .detalhe-linha .sub{ font-size:11px; color:var(--text-muted); margin-top:1px; }
   .detalhe-linha .qtd{
@@ -1774,6 +1779,13 @@ function diasAteVencer(iso){
   return Math.round((alvo - hoje) / 86400000);
 }
 
+function iniciaisDoNome(nome){
+  if(!nome) return '?';
+  const partes = String(nome).trim().split(/[\s/]+/).filter(Boolean);
+  if(partes.length === 1) return partes[0].slice(0, 2).toUpperCase();
+  return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+}
+
 function renderizarDetalhamento(){
   const cont = document.getElementById('detalhe-conteudo');
   if(!cont) return;
@@ -1794,7 +1806,10 @@ function renderizarDetalhamento(){
       .sort((a,b) => b.quantidade - a.quantidade);
     cont.innerHTML = arr.map(item => `
       <div class="detalhe-linha" data-nome="${item.nome}">
-        <span class="nome">${item.nome}</span>
+        <div class="info">
+          <span class="avatar">${iniciaisDoNome(item.nome)}</span>
+          <span class="nome">${item.nome}</span>
+        </div>
         <span class="qtd">${item.quantidade}</span>
       </div>
     `).join('');
