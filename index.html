@@ -22,7 +22,22 @@
     --white:#ffffff;
     --error:#d64545;
     --text-muted:#6b7280;
+    --border:#eceee8;
+    --border-strong:#dfe3da;
   }
+  html[data-theme="dark"]{
+    --navy:#eef1f5;
+    --green:#8bc34a;
+    --green-dark:#a9d17f;
+    --green-tint:#2a3a22;
+    --cream:#12181f;
+    --white:#1b232c;
+    --error:#e6797a;
+    --text-muted:#9aa6b2;
+    --border:#2b3540;
+    --border-strong:#38424e;
+  }
+  html[data-theme="dark"] body{ background:var(--cream); color:var(--navy); }
   *{box-sizing:border-box; margin:0; padding:0;}
   html{ overflow-x:hidden; }
   body{
@@ -49,7 +64,14 @@
   .marca .textos .linha2{ font-size:18px; font-weight:800; color:var(--green); }
 
   /* ---------- Tela de login / cadastro ---------- */
-  #auth-screen.active{ align-items:center; justify-content:center; padding:24px; background:var(--cream); }
+  #auth-screen.active{ align-items:center; justify-content:center; padding:24px; background:var(--cream); position:relative; }
+  .btn-tema{
+    position:absolute; top:18px; right:18px; width:38px; height:38px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; border:1px solid var(--border-strong);
+    background:var(--white); color:var(--navy); cursor:pointer;
+  }
+  .btn-tema .icone-svg svg{ width:19px; height:19px; }
+  .topbar .btn-tema{ position:static; width:34px; height:34px; border:none; background:transparent; }
   .auth-box{ width:100%; max-width:380px; }
   .auth-logo{ display:flex; flex-direction:column; align-items:center; text-align:center; margin-bottom:28px; }
   .auth-logo .capacete{ width:56px; height:56px; font-size:26px; margin-bottom:10px; }
@@ -60,7 +82,7 @@
   .field{ margin-bottom:16px; position:relative; }
   .field label{ display:block; font-size:12px; font-weight:600; color:var(--navy); margin-bottom:6px; }
   .field input, .field textarea, .field select{
-    width:100%; border:1px solid #dfe3da; border-radius:10px;
+    width:100%; border:1px solid var(--border-strong); border-radius:10px;
     background:var(--white); padding:11px 12px; font-size:14px; color:var(--navy);
     outline:none; font-family:inherit; -webkit-appearance:none; appearance:none;
   }
@@ -93,7 +115,7 @@
   .grafico-valor{ width:22px; text-align:right; font-size:11px; font-weight:700; color:var(--navy); flex-shrink:0; }
   .toggle-duas-opcoes{ display:flex; gap:8px; margin:14px 0; }
   .toggle-duas-opcoes button{
-    flex:1; background:var(--cream); border:1px solid #eceee8; border-radius:10px;
+    flex:1; background:var(--cream); border:1px solid var(--border); border-radius:10px;
     padding:8px; font-size:12px; font-weight:700; color:var(--text-muted); cursor:pointer;
   }
   .toggle-duas-opcoes button.active{ background:var(--green); border-color:var(--green); color:var(--white); }
@@ -152,7 +174,7 @@
   }
   .grupo-linha{ display:flex; }
   .grupo-item{ flex:1; min-width:0; display:flex; align-items:center; gap:8px; padding:6px 10px; border-radius:10px; cursor:pointer; transition:background .15s; }
-  .grupo-item + .grupo-item{ border-left:1px solid #eceee8; }
+  .grupo-item + .grupo-item{ border-left:1px solid var(--border); }
   .grupo-item:active{ background:var(--cream); }
   .grupo-item.ativo{ background:var(--green-tint); }
   .grupo-item.ativo .grupo-numero{ color:var(--green-dark); }
@@ -177,22 +199,34 @@
   .grupo-numero{ display:block; font-size:18px; font-weight:800; color:var(--navy); line-height:1.1; }
   .grupo-label{ display:block; font-size:10px; color:var(--text-muted); margin-top:1px; white-space:nowrap; }
 
-  /* ---------- Cartões coloridos de Nível de risco ---------- */
-  .grupo-linha.risco{ gap:10px; }
-  .grupo-linha.risco .grupo-item{
+  /* ---------- Chips de status (Todos / Atrasados / No prazo) ---------- */
+  .chips-status{ display:flex; gap:8px; overflow-x:auto; padding:2px 0 4px; }
+  .chips-status .grupo-item.chip{
+    flex:0 0 auto; padding:9px 16px; border-radius:20px; font-size:13px; font-weight:600;
+    border:1px solid var(--border-strong); color:var(--navy); background:var(--white);
+    display:inline-flex; gap:4px; align-items:center; white-space:nowrap;
+  }
+  .chips-status .grupo-item.chip.vermelho{ color:#c84c4c; border-color:#f3d3d3; }
+  .chips-status .grupo-item.chip.verde{ color:var(--green-dark); border-color:var(--green-tint); }
+  .chips-status .grupo-item.chip.ativo{ background:var(--navy); color:#fff; border-color:var(--navy); }
+  .grupo-linha.blocos{ gap:10px; }
+  .grupo-linha.blocos .grupo-item{
     flex-direction:column; align-items:center; justify-content:center;
     border-radius:16px; padding:14px 6px; gap:2px; border-left:none !important;
     color:#fff;
   }
-  .grupo-linha.risco .grupo-item.ativo{ outline:2px solid rgba(255,255,255,.7); outline-offset:-2px; }
-  .grupo-linha.risco .grupo-item.alto{ background:#e24b4a; }
-  .grupo-linha.risco .grupo-item.medio{ background:#ef9f27; }
-  .grupo-linha.risco .grupo-item.baixo{ background:var(--green); }
-  .grupo-linha.risco .grupo-icone{ background:transparent !important; color:#fff !important; width:auto; height:auto; }
-  .grupo-linha.risco .grupo-icone .icone-svg svg{ width:20px; height:20px; }
-  .grupo-linha.risco .grupo-numero{ color:#fff; font-size:22px; margin-top:4px; }
-  .grupo-linha.risco .grupo-label{ color:rgba(255,255,255,.85); }
-  .grupo-linha.risco .grupo-item.ativo .grupo-numero{ color:#fff; }
+  .grupo-linha.blocos .grupo-item.ativo{ outline:2px solid rgba(255,255,255,.7); outline-offset:-2px; }
+  .grupo-linha.blocos .grupo-item.alto{ background:#e24b4a; }
+  .grupo-linha.blocos .grupo-item.medio{ background:#ef9f27; }
+  .grupo-linha.blocos .grupo-item.baixo{ background:var(--green); }
+  .grupo-linha.blocos .grupo-item.aberto{ background:var(--navy); }
+  .grupo-linha.blocos .grupo-item.noprazo{ background:var(--green); }
+  .grupo-linha.blocos .grupo-item.atrasado{ background:#e24b4a; }
+  .grupo-linha.blocos .grupo-icone{ background:transparent !important; color:#fff !important; width:auto; height:auto; }
+  .grupo-linha.blocos .grupo-icone .icone-svg svg{ width:20px; height:20px; }
+  .grupo-linha.blocos .grupo-numero{ color:#fff; font-size:22px; margin-top:4px; }
+  .grupo-linha.blocos .grupo-label{ color:rgba(255,255,255,.85); }
+  .grupo-linha.blocos .grupo-item.ativo .grupo-numero{ color:#fff; }
   .field .toggle-pass{
     position:absolute; right:12px; top:38px; cursor:pointer;
     font-size:12px; color:var(--text-muted); user-select:none;
@@ -217,7 +251,7 @@
   .topbar{
     background:var(--cream); color:var(--navy); padding:16px 20px;
     display:flex; align-items:center; justify-content:space-between;
-    border-bottom:1px solid #eceee8;
+    border-bottom:1px solid var(--border);
   }
   .topbar .status-pill{
     font-size:11px; padding:3px 10px; border-radius:12px; font-weight:600;
@@ -276,7 +310,7 @@
 
   nav.bottom-nav{
     position:fixed; bottom:0; left:0; right:0; background:var(--white);
-    border-top:1px solid #eceee8; display:flex; padding:8px 0;
+    border-top:1px solid var(--border); display:flex; padding:8px 0;
   }
   nav.bottom-nav button{
     flex:1; background:none; border:none; display:flex; flex-direction:column;
@@ -311,7 +345,7 @@
   }
   .detalhe-abas{ display:flex; gap:6px; margin-bottom:12px; }
   .detalhe-aba{
-    flex:1; min-width:0; background:var(--cream); border:1px solid #eceee8; border-radius:10px;
+    flex:1; min-width:0; background:var(--cream); border:1px solid var(--border); border-radius:10px;
     padding:9px 4px; text-align:center; font-size:11px; font-weight:700; color:var(--text-muted);
     cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
@@ -360,6 +394,7 @@
 
 <!-- ===================== TELA DE LOGIN / CADASTRO ===================== -->
 <section id="auth-screen" class="screen active">
+  <button type="button" class="btn-tema" id="btn-tema-auth" aria-label="Alternar tema"><span class="icone-svg" data-icone="lua"></span></button>
   <div class="auth-box">
 
     <div class="auth-logo">
@@ -432,6 +467,7 @@
       </div>
     </div>
     <div style="display:flex; align-items:center; gap:12px;">
+      <button type="button" class="btn-tema" id="btn-tema-app" aria-label="Alternar tema"><span class="icone-svg" data-icone="lua"></span></button>
       <span class="status-pill online" id="status-pill">Online</span>
       <span class="sino"><span class="icone-svg" data-icone="sino"></span></span>
       <span class="sino" id="btn-abrir-perfil" style="cursor:pointer;"><span class="icone-svg" data-icone="user"></span></span>
@@ -498,38 +534,25 @@
         </div>
 
         <!-- Painel executivo -->
-        <div class="grupo-card" style="margin-top:20px;">
-          <div class="grupo-linha">
-            <div class="grupo-item" data-filtro-campo="" data-filtro-valor="">
-              <div class="grupo-icone verde"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
-              <div>
-                <span class="grupo-numero" id="painel-abertos">0</span>
-                <span class="grupo-label">Abertos</span>
-              </div>
-            </div>
-            <div class="grupo-item" data-filtro-campo="status" data-filtro-valor="No prazo">
-              <div class="grupo-icone verde"><span class="icone-svg" data-icone="check"></span></div>
-              <div>
-                <span class="grupo-numero" id="painel-noprazo">0</span>
-                <span class="grupo-label">No prazo</span>
-              </div>
-            </div>
-            <div class="grupo-item" data-filtro-campo="status" data-filtro-valor="Atrasado">
-              <div class="grupo-icone vermelho"><span class="icone-svg" data-icone="relogio"></span></div>
-              <div>
-                <span class="grupo-numero" id="painel-atrasado">0</span>
-                <span class="grupo-label">Atrasados</span>
-              </div>
-            </div>
+        <div class="chips-status">
+          <div class="grupo-item chip" data-filtro-campo="" data-filtro-valor="">
+            <span>Todos ·</span> <span class="grupo-numero" id="painel-abertos">0</span>
+          </div>
+          <div class="grupo-item chip vermelho" data-filtro-campo="status" data-filtro-valor="Atrasado">
+            <span>Atrasados ·</span> <span class="grupo-numero" id="painel-atrasado">0</span>
+          </div>
+          <div class="grupo-item chip verde" data-filtro-campo="status" data-filtro-valor="No prazo">
+            <span>No prazo ·</span> <span class="grupo-numero" id="painel-noprazo">0</span>
           </div>
         </div>
+
 
         <div class="grupo-titulo">
           <span class="icone-svg" data-icone="check"></span>
           <span>Nível de risco</span>
         </div>
         <div class="grupo-card" style="margin-bottom:22px;">
-          <div class="grupo-linha risco">
+          <div class="grupo-linha blocos">
             <div class="grupo-item alto" data-filtro-campo="potencial" data-filtro-valor="Alto">
               <div class="grupo-icone"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
               <div>
@@ -906,11 +929,32 @@ const ICONES = {
   camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2h6l2 2h3v11H4Z"/><circle cx="12" cy="13.5" r="3.2"/></svg>',
   imagem: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="m21 16-5-5-4 4-3-3-5 5"/></svg>',
   sino: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>',
-  casa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/></svg>'
+  casa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/></svg>',
+  lua: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>',
+  sol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>'
 };
 document.querySelectorAll('[data-icone]').forEach(el => {
   el.innerHTML = ICONES[el.dataset.icone] || '';
 });
+
+/* ======================================================================
+   TEMA CLARO / ESCURO
+   ====================================================================== */
+function aplicarTema(tema){
+  document.documentElement.setAttribute('data-theme', tema);
+  localStorage.setItem('sst_tema', tema);
+  document.querySelectorAll('.btn-tema .icone-svg').forEach(el => {
+    el.dataset.icone = (tema === 'dark') ? 'sol' : 'lua';
+    el.innerHTML = ICONES[el.dataset.icone] || '';
+  });
+}
+function alternarTema(){
+  const atual = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  aplicarTema(atual === 'dark' ? 'light' : 'dark');
+}
+aplicarTema(localStorage.getItem('sst_tema') === 'dark' ? 'dark' : 'light');
+document.getElementById('btn-tema-auth').addEventListener('click', alternarTema);
+document.getElementById('btn-tema-app').addEventListener('click', alternarTema);
 
 /* ======================================================================
    FIREBASE — config do projeto app-seguranca-trabalho
@@ -1687,6 +1731,9 @@ function recalcularPainelEDetalhamento(){
   if(filtroPainel){
     const sel = document.querySelector(`.grupo-item[data-filtro-campo="${filtroPainel.campo}"][data-filtro-valor="${filtroPainel.valor}"]`);
     if(sel) sel.classList.add('ativo');
+  } else {
+    const todosChip = document.querySelector('.grupo-item[data-filtro-campo=""]');
+    if(todosChip) todosChip.classList.add('ativo');
   }
 
   // aviso de filtro ativo, com opção de limpar
