@@ -18,6 +18,8 @@
     --green:#5e8a3f;
     --green-dark:#4c7032;
     --green-tint:#dbe8cc;
+    --lime:#AEC155;
+    --olive:#6B7A2F;
     --cream:#f9f9f7;
     --white:#ffffff;
     --error:#d64545;
@@ -30,6 +32,8 @@
     --green:#8bc34a;
     --green-dark:#a9d17f;
     --green-tint:#2a3a22;
+    --lime:#AEC155;
+    --olive:#AEC155;
     --cream:#12181f;
     --white:#1b232c;
     --error:#e6797a;
@@ -54,14 +58,14 @@
   /* ---------- Marca (logo em ícone de capacete) ---------- */
   .marca{ display:flex; align-items:center; gap:10px; }
   .marca .capacete{
-    width:38px; height:38px; border-radius:50%; border:2px solid var(--navy);
+    width:38px; height:38px; border-radius:12px; border:none;
     display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:18px;
-    background:var(--white); overflow:hidden;
+    background:var(--green); overflow:hidden; padding:6px;
   }
-  .marca .capacete-img{ width:100%; height:100%; object-fit:cover; }
+  .marca .capacete-img{ width:100%; height:100%; object-fit:contain; }
   .marca .textos{ line-height:1.15; }
   .marca .textos .linha1{ font-size:10px; letter-spacing:.03em; color:var(--text-muted); }
-  .marca .textos .linha2{ font-size:18px; font-weight:800; color:var(--green); }
+  .marca .textos .linha2{ font-size:18px; font-weight:800; color:var(--navy); }
 
   /* ---------- Tela de login / cadastro ---------- */
   #auth-screen.active{ align-items:center; justify-content:center; padding:24px; background:var(--cream); position:relative; }
@@ -163,8 +167,8 @@
 
   /* ---------- Cartões agrupados (Situação dos desvios / Nível de risco) ---------- */
   .grupo-titulo{
-    display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700;
-    color:var(--navy); margin:18px 0 8px;
+    display:flex; align-items:center; gap:8px; font-size:11px; font-weight:700;
+    letter-spacing:.05em; color:var(--text-muted); margin:18px 0 8px;
   }
   .grupo-titulo .icone-svg svg{ width:16px; height:16px; color:var(--green-dark); }
   .grupo-titulo .seta{ margin-left:auto; color:var(--text-muted); font-weight:400; font-size:16px; }
@@ -207,25 +211,27 @@
     display:inline-flex; gap:4px; align-items:center; white-space:nowrap;
   }
   .chips-status .grupo-item.chip.vermelho{ color:#c84c4c; border-color:#f3d3d3; }
-  .chips-status .grupo-item.chip.verde{ color:var(--green-dark); border-color:var(--green-tint); }
-  .chips-status .grupo-item.chip.ativo{ background:var(--navy); color:#fff; border-color:var(--navy); }
+  .chips-status .grupo-item.chip.verde{ color:var(--olive); border-color:var(--border-strong); }
+  .chips-status .grupo-item.chip.ativo{ background:var(--navy); color:var(--cream); border-color:var(--navy); }
+  .chips-status .grupo-item.chip.ativo .grupo-numero{ color:var(--cream); }
+  #btn-novo-desvio{ background:var(--lime) !important; color:#142131 !important; border-radius:20px !important; font-size:13px; font-weight:600; }
   .grupo-linha.blocos{ gap:10px; }
   .grupo-linha.blocos .grupo-item{
     flex-direction:column; align-items:center; justify-content:center;
-    border-radius:16px; padding:14px 6px; gap:2px; border-left:none !important;
+    border-radius:18px; padding:14px 8px; gap:2px; border-left:none !important; text-align:center;
     color:#fff;
   }
   .grupo-linha.blocos .grupo-item.ativo{ outline:2px solid rgba(255,255,255,.7); outline-offset:-2px; }
   .grupo-linha.blocos .grupo-item.alto{ background:#e24b4a; }
   .grupo-linha.blocos .grupo-item.medio{ background:#ef9f27; }
-  .grupo-linha.blocos .grupo-item.baixo{ background:var(--green); }
+  .grupo-linha.blocos .grupo-item.baixo{ background:#6B7A2F; }
   .grupo-linha.blocos .grupo-item.aberto{ background:var(--navy); }
   .grupo-linha.blocos .grupo-item.noprazo{ background:var(--green); }
   .grupo-linha.blocos .grupo-item.atrasado{ background:#e24b4a; }
   .grupo-linha.blocos .grupo-icone{ background:transparent !important; color:#fff !important; width:auto; height:auto; }
   .grupo-linha.blocos .grupo-icone .icone-svg svg{ width:20px; height:20px; }
-  .grupo-linha.blocos .grupo-numero{ color:#fff; font-size:22px; margin-top:4px; }
-  .grupo-linha.blocos .grupo-label{ color:rgba(255,255,255,.85); }
+  .grupo-linha.blocos .grupo-numero{ color:#fff; font-size:24px; margin-top:4px; }
+  .grupo-linha.blocos .grupo-label{ color:rgba(255,255,255,.85); font-size:11px; }
   .grupo-linha.blocos .grupo-item.ativo .grupo-numero{ color:#fff; }
   .field .toggle-pass{
     position:absolute; right:12px; top:38px; cursor:pointer;
@@ -263,16 +269,14 @@
   .home-title{ font-size:20px; font-weight:700; margin-bottom:4px; }
   .home-sub{ font-size:13px; color:var(--text-muted); margin-bottom:20px; }
 
-  /* ---------- Banner de boas-vindas (claro, com foto, como no mockup) ---------- */
+  /* ---------- Banner de boas-vindas (liso, sem foto) ---------- */
   .hero-banner{
-    background-image: linear-gradient(90deg, var(--cream) 0%, var(--cream) 45%, rgba(249,249,247,.55) 75%, rgba(249,249,247,.15) 100%),
-      url('https://i.imgur.com/TgGix1S.jpeg');
-    background-size:cover; background-position:right center;
-    border-radius:0; margin:-20px -20px 14px; padding:14px 20px; color:var(--navy);
+    background:transparent;
+    border-radius:0; margin:0 0 14px; padding:0; color:var(--navy);
     position:relative; overflow:hidden;
   }
   .hero-banner .selo{ font-size:11px; letter-spacing:.08em; color:var(--text-muted); font-weight:700; }
-  .hero-banner h2{ font-size:22px; font-weight:800; margin-top:0; line-height:1.2; color:var(--navy); }
+  .hero-banner h2{ font-size:26px; font-weight:800; margin-top:0; line-height:1.2; color:var(--navy); }
   .hero-banner h2 span{ display:block; color:var(--green); }
   .hero-banner p{ font-size:12px; color:var(--text-muted); margin-top:4px; max-width:70%; }
 
@@ -316,7 +320,7 @@
     flex:1; background:none; border:none; display:flex; flex-direction:column;
     align-items:center; gap:2px; font-size:11px; color:var(--text-muted); cursor:pointer;
   }
-  nav.bottom-nav button.active{ color:var(--green); font-weight:700; }
+  nav.bottom-nav button.active{ color:var(--olive); font-weight:700; }
   nav.bottom-nav .nav-icon{ font-size:18px; }
 
   .placeholder-note{
@@ -340,10 +344,13 @@
 
   /* ---------- Quadro de detalhamento (Responsável / Potencial / Prazo) ---------- */
   .detalhe-card{
-    background:var(--white); border-radius:14px; padding:14px;
-    box-shadow:0 1px 4px rgba(20,33,49,.07); margin-bottom:18px;
+    background:transparent; border-radius:0; padding:0;
+    box-shadow:none; margin-bottom:18px;
   }
   .detalhe-abas{ display:flex; gap:6px; margin-bottom:12px; }
+  .detalhe-header-fixo{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .detalhe-titulo-fixo{ font-size:12px; letter-spacing:.03em; color:var(--text-muted); font-weight:600; }
+  .detalhe-ver-todos{ font-size:12px; font-weight:600; color:var(--olive); cursor:pointer; }
   .detalhe-aba{
     flex:1; min-width:0; background:var(--cream); border:1px solid var(--border); border-radius:10px;
     padding:9px 4px; text-align:center; font-size:11px; font-weight:700; color:var(--text-muted);
@@ -352,21 +359,21 @@
   .detalhe-aba.active{ background:var(--green); border-color:var(--green); color:var(--white); }
   .detalhe-linha{
     display:flex; align-items:center; gap:10px; justify-content:space-between;
-    padding:10px 6px; border-bottom:1px solid var(--border); cursor:pointer;
+    padding:11px 4px; border-bottom:1px solid var(--border); cursor:pointer;
   }
   .detalhe-linha:last-child{ border-bottom:none; }
   .detalhe-linha .info{ display:flex; align-items:center; gap:10px; min-width:0; }
   .detalhe-linha .avatar{
-    flex-shrink:0; width:30px; height:30px; border-radius:10px; background:var(--green-tint);
-    color:var(--green-dark); font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; width:30px; height:30px; border-radius:10px; background:var(--lime);
+    color:#142131; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center;
   }
-  .detalhe-linha .nome{ font-size:13px; font-weight:600; color:var(--navy); }
+  .detalhe-linha .nome{ font-size:14px; font-weight:500; color:var(--navy); }
   .detalhe-linha .sub{ font-size:11px; color:var(--text-muted); margin-top:1px; }
   .detalhe-linha .qtd{
-    font-size:13px; font-weight:800; color:var(--navy); background:var(--green-tint);
-    padding:3px 10px; border-radius:10px; flex-shrink:0;
+    font-size:14px; font-weight:600; color:var(--navy); background:none;
+    padding:0; flex-shrink:0;
   }
-  .detalhe-linha .qtd.vencido{ background:#fbe0e0; color:#c84c4c; }
+  .detalhe-linha .qtd.vencido{ background:none; color:#c84c4c; }
 
   /* ---------- Campo com ícone (formulário de desvio) ---------- */
   .field-com-icone{ display:flex; gap:12px; align-items:flex-start; margin-bottom:16px; }
@@ -531,7 +538,6 @@
             <h2 style="margin-top:0;">Desvios</h2>
             <button class="btn-primary" style="width:auto; padding:10px 18px; margin-top:0;" id="btn-novo-desvio">+ Novo</button>
           </div>
-          <p>Registre e acompanhe os desvios de segurança.</p>
         </div>
 
         <div class="pending-banner" id="pending-banner">
@@ -553,10 +559,9 @@
 
 
         <div class="grupo-titulo">
-          <span class="icone-svg" data-icone="check"></span>
-          <span>Nível de risco</span>
+          <span>NÍVEL DE RISCO</span>
         </div>
-        <div class="grupo-card" style="margin-bottom:22px;">
+        <div class="grupo-card" style="margin-bottom:22px; background:transparent; box-shadow:none; padding:0;">
           <div class="grupo-linha blocos">
             <div class="grupo-item alto" data-filtro-campo="potencial" data-filtro-valor="Alto">
               <div class="grupo-icone"><span class="icone-svg" data-icone="alerta-triangulo"></span></div>
@@ -566,14 +571,14 @@
               </div>
             </div>
             <div class="grupo-item medio" data-filtro-campo="potencial" data-filtro-valor="Médio">
-              <div class="grupo-icone"><span class="icone-svg" data-icone="alvo"></span></div>
+              <div class="grupo-icone"><span class="icone-svg" data-icone="alerta-circulo"></span></div>
               <div>
                 <span class="grupo-numero" id="painel-medio">0</span>
                 <span class="grupo-label">Médio</span>
               </div>
             </div>
             <div class="grupo-item baixo" data-filtro-campo="potencial" data-filtro-valor="Baixo">
-              <div class="grupo-icone"><span class="icone-svg" data-icone="alvo"></span></div>
+              <div class="grupo-icone"><span class="icone-svg" data-icone="check-circulo"></span></div>
               <div>
                 <span class="grupo-numero" id="painel-baixo">0</span>
                 <span class="grupo-label">Baixo</span>
@@ -588,10 +593,9 @@
         </div>
 
         <div class="detalhe-card">
-          <div class="detalhe-abas">
-            <div class="detalhe-aba active" data-aba="responsavel">Responsável</div>
-            <div class="detalhe-aba" data-aba="potencial">Potencial</div>
-            <div class="detalhe-aba" data-aba="prazo">Prazo</div>
+          <div class="detalhe-header-fixo">
+            <span class="detalhe-titulo-fixo">RESPONSÁVEIS</span>
+            <span class="detalhe-ver-todos">Ver todos</span>
           </div>
           <div id="detalhe-conteudo"></div>
         </div>
@@ -922,6 +926,7 @@ const ICONES = {
   'alerta-circulo': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/></svg>',
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>',
   relogio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
+  'check-circulo': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><path d="m8.5 12.2 2.5 2.5 4.5-5"/></svg>',
   alvo: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="3.6"/></svg>',
   pin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11Z"/><circle cx="12" cy="10" r="2.3"/></svg>',
   filetext: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7Z"/><path d="M14 3v4h4"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>',
