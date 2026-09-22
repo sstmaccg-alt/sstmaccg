@@ -1898,12 +1898,17 @@ let toggleAnaliseAtual = 'abertos';
 const ORDEM_POTENCIAL = { 'Alto': 0, 'Médio': 1, 'Baixo': 2 };
 
 let desviosConcluidosCache = [];
+let erroCarregarConcluidos = null;
 function carregarDesviosConcluidos(callback){
   db.collection('desvios_concluidos').get().then((snap) => {
     desviosConcluidosCache = [];
     snap.forEach(doc => desviosConcluidosCache.push({ id: doc.id, ...doc.data() }));
     callback();
-  }).catch((e) => { console.warn('Falha ao carregar desvios concluídos:', e); callback(); });
+  }).catch((e) => {
+    console.warn('Falha ao carregar desvios concluídos:', e);
+    erroCarregarConcluidos = (e && e.message) ? e.message : String(e);
+    callback();
+  });
 }
 
 function abrirDetalheResponsavel(nome){
@@ -1971,11 +1976,23 @@ function renderizarDetalheResponsavel(){
         rotulo: p, valor: base.filter(d => d.potencial === p).length
       }));
 
-      corpo.innerHTML = graficoBarrasHtml('Desvios por Processo/Atividade', arrProcesso) +
+      const avisoErro = (toggleAnaliseAtual === 'total' && erroCarregarConcluidos)
+        ? `<p style="color:var(--error); font-size:12px; margin-bottom:10px;">Não consegui carregar os concluídos: ${erroCarregarConcluidos}</p>`
+        : '';
+      const concluidosDoResponsavel = toggleAnaliseAtual === 'total'
+        ? desviosConcluidosCache.filter(d => String(d.respCorrecao || '').trim() === String(responsavelAtual || '').trim())
+        : [];
+      const debugInfo = toggleAnaliseAtual === 'total'
+        ? `<p style="color:var(--text-muted); font-size:11px; margin-bottom:10px;">(diagnóstico: ${desviosConcluidosCache.length} concluído(s) no total carregados do banco, ${concluidosDoResponsavel.length} deles no nome "${responsavelAtual}")</p>`
+        : '';
+
+      corpo.innerHTML = avisoErro + debugInfo +
+                         graficoBarrasHtml('Desvios por Processo/Atividade', arrProcesso) +
                          graficoBarrasHtml('Desvios por Potencial', arrPotencial);
     };
 
     if(toggleAnaliseAtual === 'total'){
+      erroCarregarConcluidos = null;
       carregarDesviosConcluidos(desenhar);
     } else {
       desenhar();
