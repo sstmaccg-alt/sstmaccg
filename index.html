@@ -20,7 +20,7 @@
     --green-tint:#dbe8cc;
     --lime:#AEC155;
     --olive:#6B7A2F;
-    --cream:#f9f9f7;
+    --cream:#fcfcfb;
     --white:#ffffff;
     --error:#d64545;
     --text-muted:#6b7280;
@@ -285,7 +285,7 @@
   /* ---------- Atalhos rápidos (fileira sob o cabeçalho navy) ---------- */
   .atalhos-rapidos{
     background:#142131; display:flex; justify-content:space-around;
-    padding:6px 20px 40px; margin:-2px -20px 0;
+    padding:6px 20px 40px; margin:-20px -20px 0;
   }
   .atalho-item{ text-align:center; background:none; border:none; cursor:pointer; padding:0; }
   .atalho-icone{
@@ -1781,9 +1781,6 @@ function recalcularPainelEDetalhamento(){
   if(filtroPainel){
     const sel = document.querySelector(`[data-filtro-campo="${filtroPainel.campo}"][data-filtro-valor="${filtroPainel.valor}"]`);
     if(sel) sel.classList.add('ativo');
-  } else {
-    const todosChip = document.querySelector('[data-filtro-campo=""]');
-    if(todosChip) todosChip.classList.add('ativo');
   }
 
   // aviso de filtro ativo, com opção de limpar
