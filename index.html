@@ -68,25 +68,15 @@
   .marca .textos .linha2{ font-size:18px; font-weight:800; color:var(--navy); }
 
   /* ---------- Tela de login / cadastro ---------- */
-  #auth-screen.active{
-    align-items:stretch; justify-content:flex-start; padding:0;
-    background:var(--cream); position:relative;
-  }
-  .auth-topo{
-    background:#142131; padding:38px 24px 50px; position:relative;
-    display:flex; flex-direction:column; align-items:center;
-  }
+  #auth-screen.active{ align-items:center; justify-content:center; padding:24px; background:var(--cream); position:relative; }
   .btn-tema{
     width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    border:none; background:none; cursor:pointer;
+    border:1px solid var(--border-strong); background:var(--white); color:var(--navy); cursor:pointer;
   }
-  .auth-topo .btn-tema{ position:absolute; top:18px; right:18px; color:#cfd8dd; }
+  #auth-screen .btn-tema{ position:absolute; top:18px; right:18px; }
   .btn-tema .icone-svg svg{ width:19px; height:19px; }
-  .topbar .btn-tema{ position:static; width:34px; height:34px; color:#cfd8dd; }
-  .auth-logo-card{
-    background:#fff; border-radius:10px; padding:14px 18px; box-shadow:0 4px 14px rgba(0,0,0,.18);
-  }
-  .auth-box{ width:100%; max-width:380px; margin:-30px auto 0; padding:0 24px 32px; }
+  .topbar .btn-tema{ position:static; width:34px; height:34px; border:none; background:transparent; color:#cfd8dd; }
+  .auth-box{ width:100%; max-width:380px; }
   .auth-card{
     background:var(--white); border-radius:10px; box-shadow:0 6px 20px rgba(20,33,49,.12);
     padding:24px 22px;
@@ -219,7 +209,7 @@
   /* ---------- Cartão flutuante (Desvios em aberto) ---------- */
   .hero-flutuante{
     background:var(--white); border-radius:10px; box-shadow:0 6px 20px rgba(20,33,49,.12);
-    padding:16px 18px; margin:-30px 20px 18px; position:relative; cursor:pointer;
+    padding:16px 18px; margin:-22px 20px 18px; position:relative; cursor:pointer;
   }
   .hero-flutuante .rotulo{ font-size:10px; color:var(--text-muted); margin:0 0 3px; letter-spacing:.04em; }
   .hero-flutuante .linha{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
@@ -289,15 +279,13 @@
   .topbar .sino{ color:#cfd8dd; }
   .topbar .sino .icone-svg svg{ color:#cfd8dd; }
   .topbar .btn-tema{ background:none; border:none; color:#cfd8dd; }
-  .marca .capacete{ border-color:#fff !important; }
-  .marca .capacete-img{ filter:brightness(0) invert(1); }
   .marca .textos .linha1{ color:#9fb0a3 !important; }
   .marca .textos .linha2{ color:#fff !important; }
 
   /* ---------- Atalhos rápidos (fileira sob o cabeçalho navy) ---------- */
   .atalhos-rapidos{
     background:#142131; display:flex; justify-content:space-around;
-    padding:6px 18px 22px; margin-top:-2px;
+    padding:6px 18px 40px; margin-top:-2px;
   }
   .atalho-item{ text-align:center; background:none; border:none; cursor:pointer; padding:0; }
   .atalho-icone{
@@ -450,10 +438,7 @@
 
 <!-- ===================== TELA DE LOGIN / CADASTRO ===================== -->
 <section id="auth-screen" class="screen active">
-  <div class="auth-topo">
-    <button type="button" class="btn-tema" id="btn-tema-auth" aria-label="Alternar tema"><span class="icone-svg" data-icone="lua"></span></button>
-    <p style="color:#fff; font-weight:800; font-size:16px; letter-spacing:.02em; margin:0;">Segurança do Trabalho <span style="color:#a9d17f;">CCG</span></p>
-  </div>
+  <button type="button" class="btn-tema" id="btn-tema-auth" aria-label="Alternar tema"><span class="icone-svg" data-icone="lua"></span></button>
   <div class="auth-box">
 
     <div class="auth-card">
