@@ -1898,13 +1898,10 @@ let toggleAnaliseAtual = 'abertos';
 const ORDEM_POTENCIAL = { 'Alto': 0, 'Médio': 1, 'Baixo': 2 };
 
 let desviosConcluidosCache = [];
-let carregouDesviosConcluidos = false;
 function carregarDesviosConcluidos(callback){
-  if(carregouDesviosConcluidos){ callback(); return; }
   db.collection('desvios_concluidos').get().then((snap) => {
     desviosConcluidosCache = [];
     snap.forEach(doc => desviosConcluidosCache.push({ id: doc.id, ...doc.data() }));
-    carregouDesviosConcluidos = true;
     callback();
   }).catch((e) => { console.warn('Falha ao carregar desvios concluídos:', e); callback(); });
 }
