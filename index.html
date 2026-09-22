@@ -1963,7 +1963,7 @@ function renderizarDetalheResponsavel(){
       const corpo = document.getElementById('dr-analise-corpo');
       if(!corpo) return; // a pessoa já saiu da tela antes de terminar de carregar
       const base = toggleAnaliseAtual === 'total'
-        ? doResponsavel.concat(desviosConcluidosCache.filter(d => d.respCorrecao === responsavelAtual))
+        ? doResponsavel.concat(desviosConcluidosCache.filter(d => String(d.respCorrecao || '').trim() === String(responsavelAtual || '').trim()))
         : doResponsavel;
 
       const porProcesso = {};
