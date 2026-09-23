@@ -131,6 +131,11 @@
   }
   .tag.pendente{ background:#fff4d6; color:#8a6300; }
   .tag.sincronizado{ background:var(--green-tint); color:var(--green-dark); }
+  .tag.fechado{ background:var(--border); color:var(--text-muted); }
+  .btn-ver-todos-registros{
+    display:block; width:100%; text-align:center; background:none; border:none;
+    color:var(--green-dark); font-weight:700; font-size:13px; padding:12px 0 4px; cursor:pointer;
+  }
   .desvio-card p{ font-size:12px; color:var(--text-muted); margin-top:4px; }
   .sub-prazo{ font-size:11px; color:var(--text-muted); margin-top:6px; }
   .grafico-titulo{ font-size:12px; font-weight:700; color:var(--navy); margin:16px 0 8px; }
@@ -1622,7 +1627,7 @@ async function valorFinalDropdown(selectId, campo){
 function mostrarListaDesvios(){
   document.getElementById('desvio-form-tela').style.display = 'none';
   document.getElementById('desvios-lista-tela').style.display = 'block';
-  renderizarListaDesvios();
+  iniciarListaDesvios();
   carregarDesviosAtivos();
 }
 function mostrarFormularioDesvio(){
@@ -1721,6 +1726,7 @@ async function salvarFotoDesvio(desvioId, file){
    TODOS os desvios em aberto da planilha, mantido pelo Apps Script)
    ====================================================================== */
 let desviosAtivosCache = [];
+let desviosPendentesCache = [];
 let carregouDesviosAtivos = false;
 
 function carregarDesviosAtivos(){
@@ -1730,6 +1736,16 @@ function carregarDesviosAtivos(){
     desviosAtivosCache = [];
     snap.forEach(doc => desviosAtivosCache.push({ id: doc.id, ...doc.data() }));
     renderizarBuscaDesvios();
+    recalcularPainelEDetalhamento();
+    renderizarListaDesvios();
+  });
+
+  // desvios já criados no app mas que ainda não passaram pela sincronização
+  // com a planilha (sem número): contam no painel na mesma hora, sem esperar
+  // o Apps Script rodar.
+  db.collection('desvios').where('numero', '==', null).onSnapshot((snap) => {
+    desviosPendentesCache = [];
+    snap.forEach(doc => desviosPendentesCache.push({ id: doc.id, ...doc.data() }));
     recalcularPainelEDetalhamento();
   });
 }
@@ -2035,7 +2051,13 @@ document.getElementById('btn-limpar-filtro').addEventListener('click', () => {
 });
 
 function recalcularPainelEDetalhamento(){
-  const todos = desviosAtivosCache;
+  // soma os já sincronizados (desvios_ativos) com os recém-criados no app que
+  // ainda não passaram pela sincronização com a planilha (sem número ainda)
+  const pendentesNormalizados = desviosPendentesCache.map(d => ({
+    ...d,
+    respCorrecao: d.responsavelCorrecao || d.respCorrecao || ''
+  }));
+  const todos = desviosAtivosCache.concat(pendentesNormalizados);
 
   // linha "Abertos/No prazo/Atrasados": respeita um filtro de potencial ativo,
   // mas não filtra por si mesma (senão o próprio clique zeraria as outras)
@@ -2503,47 +2525,88 @@ function graficoBarrasHtml(titulo, dados){
 }
 
 /* ---- listagem dos desvios do próprio usuário ---- */
-function renderizarListaDesvios(){
-  const cont = document.getElementById('desvios-lista');
-  if(!auth.currentUser){ return; }
+let meusRegistrosCache = [];
+let carregouMeusRegistros = false;
+let mostrarTodosMeusRegistros = false;
+
+function iniciarListaDesvios(){
+  if(carregouMeusRegistros) return;
+  carregouMeusRegistros = true;
+  if(!auth.currentUser) return;
 
   db.collection('desvios')
     .where('criadoPor', '==', auth.currentUser.uid)
     .onSnapshot((snap) => {
-      const itens = [];
-      snap.forEach(doc => itens.push({ id: doc.id, ...doc.data() }));
-      // ordena no cliente (evita precisar de índice composto no Firestore)
-      itens.sort((a,b) => {
+      meusRegistrosCache = [];
+      snap.forEach(doc => meusRegistrosCache.push({ id: doc.id, ...doc.data() }));
+      // ordena no cliente (evita precisar de índice composto no Firestore),
+      // sempre os mais recentes primeiro
+      meusRegistrosCache.sort((a,b) => {
         const ta = a.criadoEm && a.criadoEm.toMillis ? a.criadoEm.toMillis() : 0;
         const tb = b.criadoEm && b.criadoEm.toMillis ? b.criadoEm.toMillis() : 0;
         return tb - ta;
       });
-
-      if(itens.length === 0){
-        cont.innerHTML = '<p class="empty-state">Nenhum desvio registrado ainda.</p>';
-        return;
-      }
-
-      cont.innerHTML = itens.map(d => `
-        <div class="desvio-card">
-          <div class="linha1">
-            <b>${d.numero ? 'Nº ' + d.numero : d.local || 'Desvio'}</b>
-            <span class="tag ${d.numero ? 'sincronizado' : 'pendente'}">${d.numero ? 'Sincronizado' : 'Pendente'}</span>
-          </div>
-          <p>${d.processo || ''} · ${d.local || ''} · Potencial: ${d.potencial || '-'}</p>
-          <p>${(d.descricao || '').slice(0,80)}${(d.descricao||'').length>80?'…':''}</p>
-          ${d.numero ? `
-            <button type="button" class="btn-resolver" data-numero="${d.numero}" data-auto="1" style="margin-top:8px;">
-              <span class="icone-svg" data-icone="check"></span> Resolver
-            </button>
-          ` : ''}
-        </div>
-      `).join('');
-      cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
-      cont.querySelectorAll('.btn-resolver').forEach(btn => {
-        btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero, btn.dataset.auto === '1'));
-      });
+      renderizarListaDesvios();
     });
+}
+
+function renderizarListaDesvios(){
+  const cont = document.getElementById('desvios-lista');
+  if(!cont) return;
+  const itens = meusRegistrosCache;
+
+  if(itens.length === 0){
+    cont.innerHTML = '<p class="empty-state">Nenhum desvio registrado ainda.</p>';
+    return;
+  }
+
+  // pra saber se um desvio já sincronizado ainda está aberto ou já foi
+  // fechado, cruza com desvios_ativos (que reflete o status real e
+  // atualizado da planilha) — o campo status do registro original nunca
+  // muda depois de resolvido, então não dá pra confiar só nele
+  const numerosAbertos = new Set(desviosAtivosCache.map(d => String(d.numero)));
+  const visiveis = mostrarTodosMeusRegistros ? itens : itens.slice(0, 5);
+
+  cont.innerHTML = visiveis.map(d => {
+    let tagClasse, tagTexto, botaoHtml;
+    if(!d.numero){
+      tagClasse = 'pendente'; tagTexto = 'Pendente'; botaoHtml = '';
+    } else if(numerosAbertos.has(String(d.numero))){
+      tagClasse = 'sincronizado'; tagTexto = 'Aberto';
+      botaoHtml = `
+        <button type="button" class="btn-resolver" data-numero="${d.numero}" data-auto="1" style="margin-top:8px;">
+          <span class="icone-svg" data-icone="check"></span> Resolver
+        </button>`;
+    } else {
+      tagClasse = 'fechado'; tagTexto = 'Fechado'; botaoHtml = '';
+    }
+    return `
+      <div class="desvio-card">
+        <div class="linha1">
+          <b>${d.numero ? 'Nº ' + d.numero : d.local || 'Desvio'}</b>
+          <span class="tag ${tagClasse}">${tagTexto}</span>
+        </div>
+        <p>${d.processo || ''} · ${d.local || ''} · Potencial: ${d.potencial || '-'}</p>
+        <p>${(d.descricao || '').slice(0,80)}${(d.descricao||'').length>80?'…':''}</p>
+        ${botaoHtml}
+      </div>
+    `;
+  }).join('');
+
+  if(itens.length > 5){
+    cont.innerHTML += mostrarTodosMeusRegistros
+      ? `<button type="button" class="btn-ver-todos-registros" id="btn-menos-registros">Ver menos</button>`
+      : `<button type="button" class="btn-ver-todos-registros" id="btn-ver-todos-registros">Ver todos (${itens.length})</button>`;
+  }
+
+  cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
+  cont.querySelectorAll('.btn-resolver').forEach(btn => {
+    btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero, btn.dataset.auto === '1'));
+  });
+  const btnVer = document.getElementById('btn-ver-todos-registros');
+  if(btnVer) btnVer.addEventListener('click', () => { mostrarTodosMeusRegistros = true; renderizarListaDesvios(); });
+  const btnMenos = document.getElementById('btn-menos-registros');
+  if(btnMenos) btnMenos.addEventListener('click', () => { mostrarTodosMeusRegistros = false; renderizarListaDesvios(); });
 }
 </script>
 </body>
