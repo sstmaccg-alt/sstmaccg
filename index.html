@@ -1760,6 +1760,18 @@ function descricaoOrganizada(d){
 }
 
 function cartaoDesvioResolver(d){
+  if(!d.numero){
+    return `
+      <div class="desvio-card">
+        <div class="linha1">
+          <b>${d.local || 'Desvio'}</b>
+          <span class="tag pendente">Pendente</span>
+        </div>
+        <p>${descricaoOrganizada(d)}</p>
+        <p class="sub-prazo">Ainda sincronizando com a planilha...</p>
+      </div>
+    `;
+  }
   return `
     <div class="desvio-card">
       <div class="linha1">
@@ -2190,7 +2202,11 @@ function renderizarDetalhamento(){
 /* ---- tela: desvios de um potencial específico (Alto/Médio/Baixo) ---- */
 function abrirDetalhePotencial(potencial){
   document.getElementById('detalhe-potencial-titulo').textContent = 'Potencial ' + potencial;
-  const lista = desviosAtivosCache
+  const pendentesNormalizados = desviosPendentesCache.map(d => ({
+    ...d,
+    respCorrecao: d.responsavelCorrecao || d.respCorrecao || ''
+  }));
+  const lista = desviosAtivosCache.concat(pendentesNormalizados)
     .filter(d => d.potencial === potencial)
     .sort((a,b) => String(a.prazo || '').localeCompare(String(b.prazo || '')));
   renderizarListaEmContainer('detalhe-potencial-lista', lista);
@@ -2533,6 +2549,7 @@ function iniciarListaDesvios(){
   if(carregouMeusRegistros) return;
   carregouMeusRegistros = true;
   if(!auth.currentUser) return;
+  carregarDesviosConcluidos(renderizarListaDesvios); // carrega em paralelo, só pra confirmar "Fechado" com segurança
 
   db.collection('desvios')
     .where('criadoPor', '==', auth.currentUser.uid)
@@ -2564,21 +2581,26 @@ function renderizarListaDesvios(){
   // fechado, cruza com desvios_ativos (que reflete o status real e
   // atualizado da planilha) — o campo status do registro original nunca
   // muda depois de resolvido, então não dá pra confiar só nele
-  const numerosAbertos = new Set(desviosAtivosCache.map(d => String(d.numero)));
+  // "Fechado" só quando CONFIRMADO nos concluídos — nunca por dedução/ausência,
+  // pra não errar durante aquele intervalo curto entre uma coisa e outra na sincronização
+  const numerosFechados = new Set(desviosConcluidosCache.map(d => String(d.numero)));
   const visiveis = mostrarTodosMeusRegistros ? itens : itens.slice(0, 5);
 
   cont.innerHTML = visiveis.map(d => {
     let tagClasse, tagTexto, botaoHtml;
     if(!d.numero){
       tagClasse = 'pendente'; tagTexto = 'Pendente'; botaoHtml = '';
-    } else if(numerosAbertos.has(String(d.numero))){
+    } else if(numerosFechados.has(String(d.numero))){
+      tagClasse = 'fechado'; tagTexto = 'Fechado'; botaoHtml = '';
+    } else {
+      // aberto confirmado, ou ainda não confirmado em nenhum dos dois (caso
+      // ambíguo durante a sincronização): assume aberto, nunca esconde o
+      // botão sem ter certeza de que já foi fechado
       tagClasse = 'sincronizado'; tagTexto = 'Aberto';
       botaoHtml = `
         <button type="button" class="btn-resolver" data-numero="${d.numero}" data-auto="1" style="margin-top:8px;">
           <span class="icone-svg" data-icone="check"></span> Resolver
         </button>`;
-    } else {
-      tagClasse = 'fechado'; tagTexto = 'Fechado'; botaoHtml = '';
     }
     return `
       <div class="desvio-card">
