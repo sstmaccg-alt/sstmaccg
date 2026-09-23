@@ -144,6 +144,18 @@
     width:74px; left:50%; transform:translateX(-50%); line-height:1.25;
     display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
   }
+  .grafico-multi-scroll{ display:flex; gap:16px; overflow-x:auto; padding:0 2px 8px; align-items:flex-end; }
+  .grafico-multi-pessoa{ display:flex; flex-direction:column; align-items:center; flex:0 0 auto; width:52px; }
+  .grafico-multi-barras{ display:flex; align-items:flex-end; gap:2px; height:94px; }
+  .multibar{ width:5px; border-radius:2px 2px 0 0; min-height:4px; }
+  .multibar-vazia{ width:5px; }
+  .grafico-multi-nome{
+    font-size:9.5px; color:var(--text-muted); text-align:center; margin-top:6px; line-height:1.2;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .legenda-meses{ display:flex; flex-wrap:wrap; gap:8px 12px; margin-top:12px; padding-top:10px; border-top:1px solid var(--border); }
+  .legenda-item{ display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-muted); }
+  .legenda-dot{ width:8px; height:8px; border-radius:2px; flex-shrink:0; }
   .toggle-duas-opcoes{ display:flex; gap:8px; margin:14px 0; }
   .toggle-duas-opcoes button{
     flex:1; background:var(--cream); border:1px solid var(--border); border-radius:10px;
@@ -949,6 +961,42 @@
       <div id="detalhe-responsavel-conteudo"></div>
     </div>
 
+    <!-- Tela: Análise geral (usada nas reuniões) -->
+    <div id="view-analise-geral" style="display:none;">
+      <div class="tela-header">
+        <button id="btn-voltar-analise" class="voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button>
+      </div>
+      <p class="tela-titulo" style="margin-bottom:14px;">Análise geral</p>
+
+      <div style="display:flex; gap:8px; margin-bottom:18px;">
+        <div class="field" style="flex:1; margin-bottom:0;">
+          <select id="analise-filtro-ano" class="dd-select"></select>
+        </div>
+        <div class="field" style="flex:1; margin-bottom:0;">
+          <select id="analise-filtro-mes" class="dd-select"></select>
+        </div>
+      </div>
+
+      <div id="analise-geral-corpo"><p class="empty-state">Carregando...</p></div>
+
+      <div class="grupo-titulo" style="margin-top:18px;"><span>Nº DE DESVIOS POR RESPONSÁVEL</span></div>
+      <p id="analise-multi-ano-usado" style="font-size:11px; color:var(--text-muted); margin:-6px 0 10px;"></p>
+
+      <div style="display:flex; gap:8px; margin-bottom:10px;">
+        <div class="field" style="flex:1; margin-bottom:0;">
+          <select id="analise-multi-granularidade" class="dd-select">
+            <option value="mes">Mês a mês</option>
+            <option value="tri">Trimestral</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="margin-bottom:12px;">
+        <input type="text" id="analise-multi-busca" placeholder="Filtrar por nome do responsável...">
+      </div>
+
+      <div id="analise-multi-corpo"><p class="empty-state">Carregando...</p></div>
+    </div>
+
     <!-- Tela: Aprovações -->
     <div id="view-aprovacoes" style="display:none;">
       <div class="tela-banner">
@@ -1425,7 +1473,7 @@ document.getElementById('logout-btn').addEventListener('click', () => auth.signO
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-aprovacoes','view-perfil'];
+const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-perfil'];
 function irPara(viewId){
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
   document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -1433,6 +1481,7 @@ function irPara(viewId){
   });
   if(viewId === 'view-desvios'){ mostrarListaDesvios(); }
   if(viewId === 'view-aprovacoes'){ renderizarAprovacoes(); }
+  if(viewId === 'view-analise-geral'){ abrirAnaliseGeral(); }
 }
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => irPara(btn.dataset.view));
@@ -1594,8 +1643,9 @@ document.getElementById('atalho-resolver').addEventListener('click', () => {
   document.getElementById('busca-desvio').focus();
 });
 document.getElementById('atalho-analise').addEventListener('click', () => {
-  document.querySelector('.detalhe-header-fixo').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  irPara('view-analise-geral');
 });
+document.getElementById('btn-voltar-analise').addEventListener('click', () => irPara('view-desvios'));
 document.getElementById('btn-voltar-desvios').addEventListener('click', mostrarListaDesvios);
 
 /* ---- fotos selecionadas (antes de salvar): botão de câmera e de galeria ---- */
@@ -2236,6 +2286,182 @@ function renderizarDetalheResponsavel(){
       desenhar();
     }
   }
+}
+
+/* ======================================================================
+   ANÁLISE GERAL (tela usada nas reuniões) — status, tipologia, local e
+   responsável, com filtro de ano/mês/todos
+   ====================================================================== */
+let todosDesviosAnaliseCache = null; // ativos + concluídos, juntos, carregado 1x
+
+function MESES_NOMES(){
+  return ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+}
+
+function carregarTodosDesviosParaAnalise(callback){
+  if(todosDesviosAnaliseCache){ callback(); return; }
+  carregarDesviosConcluidos(() => {
+    todosDesviosAnaliseCache = desviosAtivosCache.concat(desviosConcluidosCache);
+    callback();
+  });
+}
+
+function popularFiltrosAnalise(){
+  const selAno = document.getElementById('analise-filtro-ano');
+  const selMes = document.getElementById('analise-filtro-mes');
+  if(selAno.options.length === 0){
+    const anos = new Set();
+    todosDesviosAnaliseCache.forEach(d => {
+      const ano = (d.data || '').slice(0,4);
+      if(ano) anos.add(ano);
+    });
+    const anosOrdenados = Array.from(anos).sort().reverse();
+    selAno.innerHTML = '<option value="">Todos os anos</option>' +
+      anosOrdenados.map(a => `<option value="${a}">${a}</option>`).join('');
+    selMes.innerHTML = '<option value="">Todos os meses</option>' +
+      MESES_NOMES().map((m,i) => `<option value="${i+1}">${m}</option>`).join('');
+    selAno.addEventListener('change', () => { renderizarAnaliseGeral(); renderizarGraficoMultiResponsavel(); });
+    selMes.addEventListener('change', () => { renderizarAnaliseGeral(); renderizarGraficoMultiResponsavel(); });
+  }
+}
+
+function abrirAnaliseGeral(){
+  document.getElementById('analise-geral-corpo').innerHTML = '<p class="empty-state">Carregando...</p>';
+  document.getElementById('analise-multi-corpo').innerHTML = '<p class="empty-state">Carregando...</p>';
+  carregarTodosDesviosParaAnalise(() => {
+    popularFiltrosAnalise();
+    renderizarAnaliseGeral();
+    renderizarGraficoMultiResponsavel();
+  });
+}
+document.getElementById('analise-multi-granularidade').addEventListener('change', renderizarGraficoMultiResponsavel);
+document.getElementById('analise-multi-busca').addEventListener('input', renderizarGraficoMultiResponsavel);
+
+function corMes(indice){
+  const paleta = ['#1a3a6b','#d64545','#c9c3ae','#6a4c93','#2196c9','#e0a72e','#4c9a4c','#d63384','#5e8a3f','#a0522d','#607d8b','#8e44ad'];
+  return paleta[indice % paleta.length];
+}
+function corTrimestre(indice){
+  const paleta = ['#2196c9','#4c9a4c','#d63384','#e0a72e'];
+  return paleta[indice % paleta.length];
+}
+
+function renderizarGraficoMultiResponsavel(){
+  if(!todosDesviosAnaliseCache) return;
+
+  // segue os MESMOS filtros de Ano/Mês da tela (sem escolher nada sozinho:
+  // se estiver em "Todos", agrupa combinando todos os anos/meses disponíveis)
+  const ano = document.getElementById('analise-filtro-ano').value;
+  const mes = document.getElementById('analise-filtro-mes').value;
+  const granularidade = document.getElementById('analise-multi-granularidade').value;
+  const termoBusca = (document.getElementById('analise-multi-busca').value || '').trim().toLowerCase();
+
+  let base = todosDesviosAnaliseCache.filter(d => d.data);
+  if(ano) base = base.filter(d => d.data.slice(0,4) === ano);
+  if(mes) base = base.filter(d => String(parseInt(d.data.slice(5,7), 10)) === mes);
+
+  const porPessoa = {};
+  base.forEach(d => {
+    const nome = (d.respCorrecao || '').trim();
+    if(!nome) return;
+    if(termoBusca && !nome.toLowerCase().includes(termoBusca)) return;
+    const mesNum = parseInt(d.data.slice(5,7), 10);
+    if(!mesNum) return;
+    const bucket = granularidade === 'tri' ? Math.ceil(mesNum/3) : mesNum;
+    if(!porPessoa[nome]) porPessoa[nome] = {};
+    porPessoa[nome][bucket] = (porPessoa[nome][bucket] || 0) + 1;
+  });
+
+  const nomes = Object.keys(porPessoa).sort((a,b) => {
+    const totalA = Object.values(porPessoa[a]).reduce((s,v)=>s+v,0);
+    const totalB = Object.values(porPessoa[b]).reduce((s,v)=>s+v,0);
+    return totalB - totalA;
+  });
+
+  const totalBuckets = granularidade === 'tri' ? 4 : 12;
+  const rotulosBuckets = granularidade === 'tri'
+    ? ['1º TRI','2º TRI','3º TRI','4º TRI']
+    : MESES_NOMES().map(m => m.slice(0,3));
+  const corFn = granularidade === 'tri' ? corTrimestre : corMes;
+
+  let maxValor = 1;
+  nomes.forEach(nome => {
+    Object.values(porPessoa[nome]).forEach(v => { if(v > maxValor) maxValor = v; });
+  });
+  const alturaMax = 90;
+
+  const colunasHtml = nomes.map(nome => {
+    const barrasHtml = Array.from({length: totalBuckets}, (_, i) => {
+      const bucket = i + 1;
+      const valor = porPessoa[nome][bucket] || 0;
+      if(valor === 0) return `<div class="multibar-vazia"></div>`;
+      const altura = Math.max(4, Math.round((valor / maxValor) * alturaMax));
+      return `<div class="multibar" style="height:${altura}px; background:${corFn(i)};" title="${rotulosBuckets[i]}: ${valor}"></div>`;
+    }).join('');
+    return `
+      <div class="grafico-multi-pessoa">
+        <div class="grafico-multi-barras">${barrasHtml}</div>
+        <p class="grafico-multi-nome" title="${nome}">${nome}</p>
+      </div>
+    `;
+  }).join('');
+
+  const legendaHtml = rotulosBuckets.map((r,i) => `
+    <span class="legenda-item"><span class="legenda-dot" style="background:${corFn(i)};"></span>${r}</span>
+  `).join('');
+
+  document.getElementById('analise-multi-corpo').innerHTML = nomes.length ? `
+    <div class="grafico-multi-scroll">${colunasHtml}</div>
+    <div class="legenda-meses">${legendaHtml}</div>
+  ` : '<p class="empty-state">Sem dados pra esse período.</p>';
+}
+
+function contarPorCampo(lista, campo){
+  const contagem = {};
+  lista.forEach(d => {
+    const chave = (d[campo] || '').trim() || 'Não informado';
+    contagem[chave] = (contagem[chave] || 0) + 1;
+  });
+  return Object.keys(contagem)
+    .map(k => ({ rotulo: k, valor: contagem[k] }))
+    .sort((a,b) => b.valor - a.valor);
+}
+
+function renderizarAnaliseGeral(){
+  const ano = document.getElementById('analise-filtro-ano').value;
+  const mes = document.getElementById('analise-filtro-mes').value;
+
+  const filtrados = todosDesviosAnaliseCache.filter(d => {
+    if(!d.data) return !ano && !mes; // sem data: só entra se não tiver filtro nenhum
+    if(ano && d.data.slice(0,4) !== ano) return false;
+    if(mes && String(parseInt(d.data.slice(5,7), 10)) !== mes) return false;
+    return true;
+  });
+
+  const noPrazo = filtrados.filter(d => d.status === 'No prazo').length;
+  const atrasado = filtrados.filter(d => d.status === 'Atrasado').length;
+  const concluido = filtrados.filter(d => d.status === 'Concluído').length;
+
+  const corpo = document.getElementById('analise-geral-corpo');
+  corpo.innerHTML = `
+    <p style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">${filtrados.length} desvio(s) no período selecionado</p>
+
+    <div class="grupo-titulo" style="margin-top:14px;"><span>STATUS DE ATENDIMENTO</span></div>
+    ${graficoBarrasHtml('', [
+      { rotulo: 'Concluído', valor: concluido },
+      { rotulo: 'Atrasado', valor: atrasado },
+      { rotulo: 'No prazo', valor: noPrazo }
+    ])}
+
+    <div class="grupo-titulo" style="margin-top:18px;"><span>TIPOLOGIA</span></div>
+    ${graficoBarrasHtml('', contarPorCampo(filtrados, 'tipologia'))}
+
+    <div class="grupo-titulo" style="margin-top:18px;"><span>LOCAL</span></div>
+    ${graficoBarrasHtml('', contarPorCampo(filtrados, 'local'))}
+
+    <div class="grupo-titulo" style="margin-top:18px;"><span>RESPONSÁVEL PELA CORREÇÃO</span></div>
+    ${graficoBarrasHtml('', contarPorCampo(filtrados, 'respCorrecao'))}
+  `;
 }
 
 function graficoBarrasHtml(titulo, dados){
