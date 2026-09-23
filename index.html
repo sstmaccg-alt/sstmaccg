@@ -144,11 +144,14 @@
     width:74px; left:50%; transform:translateX(-50%); line-height:1.25;
     display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
   }
-  .grafico-multi-scroll{ display:flex; gap:16px; overflow-x:auto; padding:0 2px 8px; align-items:flex-end; }
-  .grafico-multi-pessoa{ display:flex; flex-direction:column; align-items:center; flex:0 0 auto; width:52px; }
-  .grafico-multi-barras{ display:flex; align-items:flex-end; gap:2px; height:94px; }
-  .multibar{ width:5px; border-radius:2px 2px 0 0; min-height:4px; }
-  .multibar-vazia{ width:5px; }
+  .grafico-multi-scroll{ display:flex; gap:20px; overflow-x:auto; padding:0 2px 8px; align-items:flex-end; }
+  .grafico-multi-pessoa{ display:flex; flex-direction:column; align-items:center; flex:0 0 auto; width:70px; }
+  .multibar-total{ font-size:12px; font-weight:800; color:var(--navy); margin:0 0 4px; }
+  .grafico-multi-barras{ display:flex; align-items:flex-end; gap:3px; height:112px; }
+  .multibar-col{ display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; }
+  .multibar{ width:6px; border-radius:2px 2px 0 0; min-height:4px; }
+  .multibar-valor{ font-size:8px; font-weight:700; color:var(--text-muted); margin-bottom:2px; writing-mode:vertical-rl; transform:rotate(180deg); }
+  .multibar-vazia{ width:6px; }
   .grafico-multi-nome{
     font-size:9.5px; color:var(--text-muted); text-align:center; margin-top:6px; line-height:1.2;
     display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
@@ -980,21 +983,15 @@
       <div id="analise-geral-corpo"><p class="empty-state">Carregando...</p></div>
 
       <div class="grupo-titulo" style="margin-top:18px;"><span>Nº DE DESVIOS POR RESPONSÁVEL</span></div>
-      <p id="analise-multi-ano-usado" style="font-size:11px; color:var(--text-muted); margin:-6px 0 10px;"></p>
-
-      <div style="display:flex; gap:8px; margin-bottom:10px;">
-        <div class="field" style="flex:1; margin-bottom:0;">
-          <select id="analise-multi-granularidade" class="dd-select">
-            <option value="mes">Mês a mês</option>
-            <option value="tri">Trimestral</option>
-          </select>
-        </div>
-      </div>
-      <div class="field" style="margin-bottom:12px;">
+      <div class="field" style="margin-bottom:14px;">
         <input type="text" id="analise-multi-busca" placeholder="Filtrar por nome do responsável...">
       </div>
 
-      <div id="analise-multi-corpo"><p class="empty-state">Carregando...</p></div>
+      <p style="font-size:12px; font-weight:700; color:var(--navy); margin:0 0 8px;">Mês a mês</p>
+      <div id="analise-multi-mes-corpo"><p class="empty-state">Carregando...</p></div>
+
+      <p style="font-size:12px; font-weight:700; color:var(--navy); margin:22px 0 8px;">Trimestral</p>
+      <div id="analise-multi-tri-corpo"><p class="empty-state">Carregando...</p></div>
     </div>
 
     <!-- Tela: Aprovações -->
@@ -2294,6 +2291,18 @@ function renderizarDetalheResponsavel(){
    ====================================================================== */
 let todosDesviosAnaliseCache = null; // ativos + concluídos, juntos, carregado 1x
 
+// A planilha às vezes guarda a data como "2026-08-27" (ISO) e às vezes como
+// "27/08/2026" (texto solto, quando a célula não é reconhecida como data de
+// verdade). Essa função lê os dois formatos sem quebrar.
+function extrairAnoMes(dataStr){
+  if(!dataStr) return null;
+  let m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(dataStr);
+  if(m) return { ano: m[1], mes: parseInt(m[2], 10) };
+  m = /^(\d{1,2})\/(\d{1,2})\/(\d{4})/.exec(dataStr);
+  if(m) return { ano: m[3], mes: parseInt(m[2], 10) };
+  return null;
+}
+
 function MESES_NOMES(){
   return ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 }
@@ -2312,8 +2321,8 @@ function popularFiltrosAnalise(){
   if(selAno.options.length === 0){
     const anos = new Set();
     todosDesviosAnaliseCache.forEach(d => {
-      const ano = (d.data || '').slice(0,4);
-      if(ano) anos.add(ano);
+      const am = extrairAnoMes(d.data);
+      if(am) anos.add(am.ano);
     });
     const anosOrdenados = Array.from(anos).sort().reverse();
     selAno.innerHTML = '<option value="">Todos os anos</option>' +
@@ -2327,14 +2336,14 @@ function popularFiltrosAnalise(){
 
 function abrirAnaliseGeral(){
   document.getElementById('analise-geral-corpo').innerHTML = '<p class="empty-state">Carregando...</p>';
-  document.getElementById('analise-multi-corpo').innerHTML = '<p class="empty-state">Carregando...</p>';
+  document.getElementById('analise-multi-mes-corpo').innerHTML = '<p class="empty-state">Carregando...</p>';
+  document.getElementById('analise-multi-tri-corpo').innerHTML = '<p class="empty-state">Carregando...</p>';
   carregarTodosDesviosParaAnalise(() => {
     popularFiltrosAnalise();
     renderizarAnaliseGeral();
     renderizarGraficoMultiResponsavel();
   });
 }
-document.getElementById('analise-multi-granularidade').addEventListener('change', renderizarGraficoMultiResponsavel);
 document.getElementById('analise-multi-busca').addEventListener('input', renderizarGraficoMultiResponsavel);
 
 function corMes(indice){
@@ -2346,28 +2355,15 @@ function corTrimestre(indice){
   return paleta[indice % paleta.length];
 }
 
-function renderizarGraficoMultiResponsavel(){
-  if(!todosDesviosAnaliseCache) return;
-
-  // segue os MESMOS filtros de Ano/Mês da tela (sem escolher nada sozinho:
-  // se estiver em "Todos", agrupa combinando todos os anos/meses disponíveis)
-  const ano = document.getElementById('analise-filtro-ano').value;
-  const mes = document.getElementById('analise-filtro-mes').value;
-  const granularidade = document.getElementById('analise-multi-granularidade').value;
-  const termoBusca = (document.getElementById('analise-multi-busca').value || '').trim().toLowerCase();
-
-  let base = todosDesviosAnaliseCache.filter(d => d.data);
-  if(ano) base = base.filter(d => d.data.slice(0,4) === ano);
-  if(mes) base = base.filter(d => String(parseInt(d.data.slice(5,7), 10)) === mes);
-
+function montarGraficoMulti(base, granularidade, termoBusca, idContainer){
   const porPessoa = {};
   base.forEach(d => {
     const nome = (d.respCorrecao || '').trim();
     if(!nome) return;
     if(termoBusca && !nome.toLowerCase().includes(termoBusca)) return;
-    const mesNum = parseInt(d.data.slice(5,7), 10);
-    if(!mesNum) return;
-    const bucket = granularidade === 'tri' ? Math.ceil(mesNum/3) : mesNum;
+    const am = extrairAnoMes(d.data);
+    if(!am) return;
+    const bucket = granularidade === 'tri' ? Math.ceil(am.mes/3) : am.mes;
     if(!porPessoa[nome]) porPessoa[nome] = {};
     porPessoa[nome][bucket] = (porPessoa[nome][bucket] || 0) + 1;
   });
@@ -2391,15 +2387,20 @@ function renderizarGraficoMultiResponsavel(){
   const alturaMax = 90;
 
   const colunasHtml = nomes.map(nome => {
+    const totalPessoa = Object.values(porPessoa[nome]).reduce((s,v)=>s+v,0);
     const barrasHtml = Array.from({length: totalBuckets}, (_, i) => {
       const bucket = i + 1;
       const valor = porPessoa[nome][bucket] || 0;
-      if(valor === 0) return `<div class="multibar-vazia"></div>`;
+      if(valor === 0) return `<div class="multibar-col"><div class="multibar-vazia"></div></div>`;
       const altura = Math.max(4, Math.round((valor / maxValor) * alturaMax));
-      return `<div class="multibar" style="height:${altura}px; background:${corFn(i)};" title="${rotulosBuckets[i]}: ${valor}"></div>`;
+      return `<div class="multibar-col">
+        <span class="multibar-valor">${valor}</span>
+        <div class="multibar" style="height:${altura}px; background:${corFn(i)};"></div>
+      </div>`;
     }).join('');
     return `
       <div class="grafico-multi-pessoa">
+        <p class="multibar-total">${totalPessoa}</p>
         <div class="grafico-multi-barras">${barrasHtml}</div>
         <p class="grafico-multi-nome" title="${nome}">${nome}</p>
       </div>
@@ -2410,10 +2411,27 @@ function renderizarGraficoMultiResponsavel(){
     <span class="legenda-item"><span class="legenda-dot" style="background:${corFn(i)};"></span>${r}</span>
   `).join('');
 
-  document.getElementById('analise-multi-corpo').innerHTML = nomes.length ? `
+  document.getElementById(idContainer).innerHTML = nomes.length ? `
     <div class="grafico-multi-scroll">${colunasHtml}</div>
     <div class="legenda-meses">${legendaHtml}</div>
   ` : '<p class="empty-state">Sem dados pra esse período.</p>';
+}
+
+function renderizarGraficoMultiResponsavel(){
+  if(!todosDesviosAnaliseCache) return;
+
+  // segue os MESMOS filtros de Ano/Mês da tela (sem escolher nada sozinho:
+  // se estiver em "Todos", agrupa combinando todos os anos/meses disponíveis)
+  const ano = document.getElementById('analise-filtro-ano').value;
+  const mes = document.getElementById('analise-filtro-mes').value;
+  const termoBusca = (document.getElementById('analise-multi-busca').value || '').trim().toLowerCase();
+
+  let base = todosDesviosAnaliseCache.filter(d => extrairAnoMes(d.data));
+  if(ano) base = base.filter(d => extrairAnoMes(d.data).ano === ano);
+  if(mes) base = base.filter(d => String(extrairAnoMes(d.data).mes) === mes);
+
+  montarGraficoMulti(base, 'mes', termoBusca, 'analise-multi-mes-corpo');
+  montarGraficoMulti(base, 'tri', termoBusca, 'analise-multi-tri-corpo');
 }
 
 function contarPorCampo(lista, campo){
@@ -2432,9 +2450,10 @@ function renderizarAnaliseGeral(){
   const mes = document.getElementById('analise-filtro-mes').value;
 
   const filtrados = todosDesviosAnaliseCache.filter(d => {
-    if(!d.data) return !ano && !mes; // sem data: só entra se não tiver filtro nenhum
-    if(ano && d.data.slice(0,4) !== ano) return false;
-    if(mes && String(parseInt(d.data.slice(5,7), 10)) !== mes) return false;
+    const am = extrairAnoMes(d.data);
+    if(!am) return !ano && !mes; // sem data reconhecível: só entra se não tiver filtro nenhum
+    if(ano && am.ano !== ano) return false;
+    if(mes && String(am.mes) !== mes) return false;
     return true;
   });
 
