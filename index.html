@@ -1726,8 +1726,24 @@ async function salvarFotoDesvio(desvioId, file){
    TODOS os desvios em aberto da planilha, mantido pelo Apps Script)
    ====================================================================== */
 let desviosAtivosCache = [];
-let desviosPendentesCache = [];
+let desviosPendentesCache = []; // calculado: pendentes de verdade + "zona cinza" recém-sincronizados
+let desviosRecentesCache = [];
 let carregouDesviosAtivos = false;
+
+// pendentes de verdade (sem número) + desvios que JÁ ganharam número mas
+// ainda não apareceram nem em desvios_ativos nem em desvios_concluidos —
+// aquele intervalo curto, dentro da mesma rodada de sincronização, entre
+// uma coisa e outra. Sem isso, o desvio "some" do painel por alguns segundos.
+function atualizarDesviosPendentesEfetivos(){
+  const numerosEmAtivos = new Set(desviosAtivosCache.map(d => String(d.numero)));
+  const numerosEmConcluidos = new Set(desviosConcluidosCache.map(d => String(d.numero)));
+  desviosPendentesCache = desviosRecentesCache
+    .filter(d => !d.resolvidoPeloUsuario) // já resolvido pela pessoa: conta como fechado, não como aberto
+    .filter(d => {
+      if(!d.numero) return true;
+      return !numerosEmAtivos.has(String(d.numero)) && !numerosEmConcluidos.has(String(d.numero));
+    });
+}
 
 function carregarDesviosAtivos(){
   if(carregouDesviosAtivos) return;
@@ -1740,12 +1756,19 @@ function carregarDesviosAtivos(){
     renderizarListaDesvios();
   });
 
-  // desvios já criados no app mas que ainda não passaram pela sincronização
-  // com a planilha (sem número): contam no painel na mesma hora, sem esperar
-  // o Apps Script rodar.
-  db.collection('desvios').where('numero', '==', null).onSnapshot((snap) => {
-    desviosPendentesCache = [];
-    snap.forEach(doc => desviosPendentesCache.push({ id: doc.id, ...doc.data() }));
+  // carrega os concluídos cedo (não só quando abre Meus Registros/Análise),
+  // porque agora eles também são usados aqui pra saber com segurança se um
+  // desvio recém-sincronizado já apareceu em algum dos dois lugares
+  carregarDesviosConcluidos(() => { recalcularPainelEDetalhamento(); renderizarListaDesvios(); });
+
+  // desvios recentes criados no app: cobre tanto os que ainda não têm número
+  // (pendentes de verdade) quanto aqueles que JÁ ganharam número mas ainda
+  // não apareceram em desvios_ativos nem em desvios_concluidos — aquele
+  // intervalo curto, dentro da mesma rodada de sincronização, entre uma
+  // coisa e outra. Sem isso, o desvio "sumia" do painel por alguns segundos.
+  db.collection('desvios').orderBy('criadoEm', 'desc').limit(200).onSnapshot((snap) => {
+    desviosRecentesCache = [];
+    snap.forEach(doc => desviosRecentesCache.push({ id: doc.id, ...doc.data() }));
     recalcularPainelEDetalhamento();
   });
 }
@@ -1817,12 +1840,27 @@ function renderizarBuscaDesvios(){
 let desvioEmResolucao = null;
 let fotosResolverSelecionadas = [];
 let resolverAutoAprovar = false;
+let desvioPendenteEmResolucaoId = null; // preenchido quando resolvendo um desvio que ainda não tem número
 
 function abrirResolverDesvio(numero, autoAprovar){
   const d = desviosAtivosCache.find(x => String(x.numero) === String(numero));
   desvioEmResolucao = d || { numero };
+  desvioPendenteEmResolucaoId = null;
   resolverAutoAprovar = !!autoAprovar;
   document.getElementById('resolver-titulo').textContent = 'Nº ' + numero;
+  document.getElementById('resolver-descricao').textContent = d ? d.descricao : '';
+  document.getElementById('resolver-form').reset();
+  fotosResolverSelecionadas = [];
+  renderizarPreviewFotosResolver();
+  irPara('view-resolver');
+}
+
+function abrirResolverDesvioPendente(docId){
+  const d = desviosPendentesCache.find(x => x.id === docId);
+  desvioEmResolucao = d || { id: docId };
+  desvioPendenteEmResolucaoId = docId;
+  resolverAutoAprovar = false;
+  document.getElementById('resolver-titulo').textContent = (d && d.local) ? d.local : 'Desvio pendente';
   document.getElementById('resolver-descricao').textContent = d ? d.descricao : '';
   document.getElementById('resolver-form').reset();
   fotosResolverSelecionadas = [];
@@ -1872,23 +1910,41 @@ document.getElementById('resolver-form').addEventListener('submit', async (e) =>
   btn.disabled = true;
 
   try{
-    const solicitacao = {
-      numeroDesvio: desvioEmResolucao.numero,
-      descricaoDesvio: desvioEmResolucao.descricao || '',
-      observacao: document.getElementById('resolver-observacao').value.trim(),
-      status: resolverAutoAprovar ? 'aprovado' : 'pendente',
-      criadoPor: auth.currentUser.uid,
-      criadoPorNome: auth.currentUser.displayName || auth.currentUser.email,
-      criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-    };
-    const docRef = await db.collection('solicitacoes_resolucao').add(solicitacao);
-
-    for(const file of fotosResolverSelecionadas){
-      const base64 = await comprimirImagem(file);
-      await docRef.collection('fotos').add({
-        base64, nomeArquivo: file.name,
-        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    if(desvioPendenteEmResolucaoId){
+      // desvio ainda não sincronizado com a planilha: grava a resolução direto
+      // no próprio registro. Quando o Apps Script sincronizar, ele já entra
+      // direto como Concluído, sem precisar de uma aprovação separada.
+      await db.collection('desvios').doc(desvioPendenteEmResolucaoId).update({
+        resolvidoPeloUsuario: true,
+        resolvidoObservacao: document.getElementById('resolver-observacao').value.trim(),
+        resolvidoEm: firebase.firestore.FieldValue.serverTimestamp()
       });
+      for(const file of fotosResolverSelecionadas){
+        const base64 = await comprimirImagem(file);
+        await db.collection('desvios').doc(desvioPendenteEmResolucaoId).collection('fotosResolucao').add({
+          base64, nomeArquivo: file.name,
+          criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }
+    } else {
+      const solicitacao = {
+        numeroDesvio: desvioEmResolucao.numero,
+        descricaoDesvio: desvioEmResolucao.descricao || '',
+        observacao: document.getElementById('resolver-observacao').value.trim(),
+        status: resolverAutoAprovar ? 'aprovado' : 'pendente',
+        criadoPor: auth.currentUser.uid,
+        criadoPorNome: auth.currentUser.displayName || auth.currentUser.email,
+        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      };
+      const docRef = await db.collection('solicitacoes_resolucao').add(solicitacao);
+
+      for(const file of fotosResolverSelecionadas){
+        const base64 = await comprimirImagem(file);
+        await docRef.collection('fotos').add({
+          base64, nomeArquivo: file.name,
+          criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }
     }
 
     document.getElementById('resolver-form').reset();
@@ -2063,6 +2119,7 @@ document.getElementById('btn-limpar-filtro').addEventListener('click', () => {
 });
 
 function recalcularPainelEDetalhamento(){
+  atualizarDesviosPendentesEfetivos();
   // soma os já sincronizados (desvios_ativos) com os recém-criados no app que
   // ainda não passaram pela sincronização com a planilha (sem número ainda)
   const pendentesNormalizados = desviosPendentesCache.map(d => ({
@@ -2255,7 +2312,11 @@ document.querySelectorAll('#view-detalhe-responsavel .detalhe-aba').forEach(aba 
 
 function renderizarDetalheResponsavel(){
   const cont = document.getElementById('detalhe-responsavel-conteudo');
-  const doResponsavel = desviosAtivosCache.filter(d => d.respCorrecao === responsavelAtual);
+  const pendentesNormalizados = desviosPendentesCache.map(d => ({
+    ...d,
+    respCorrecao: d.responsavelCorrecao || d.respCorrecao || ''
+  }));
+  const doResponsavel = desviosAtivosCache.concat(pendentesNormalizados).filter(d => d.respCorrecao === responsavelAtual);
 
   if(subAbaResponsavelAtual === 'potencial'){
     const ordenado = doResponsavel.slice().sort((a,b) => {
@@ -2589,7 +2650,11 @@ function renderizarListaDesvios(){
   cont.innerHTML = visiveis.map(d => {
     let tagClasse, tagTexto, botaoHtml;
     if(!d.numero){
-      tagClasse = 'pendente'; tagTexto = 'Pendente'; botaoHtml = '';
+      tagClasse = 'pendente'; tagTexto = 'Pendente';
+      botaoHtml = `
+        <button type="button" class="btn-resolver-pendente" data-id="${d.id}" style="margin-top:8px;">
+          <span class="icone-svg" data-icone="check"></span> Resolver
+        </button>`;
     } else if(numerosFechados.has(String(d.numero))){
       tagClasse = 'fechado'; tagTexto = 'Fechado'; botaoHtml = '';
     } else {
@@ -2624,6 +2689,9 @@ function renderizarListaDesvios(){
   cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
   cont.querySelectorAll('.btn-resolver').forEach(btn => {
     btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero, btn.dataset.auto === '1'));
+  });
+  cont.querySelectorAll('.btn-resolver-pendente').forEach(btn => {
+    btn.addEventListener('click', () => abrirResolverDesvioPendente(btn.dataset.id));
   });
   const btnVer = document.getElementById('btn-ver-todos-registros');
   if(btnVer) btnVer.addEventListener('click', () => { mostrarTodosMeusRegistros = true; renderizarListaDesvios(); });
