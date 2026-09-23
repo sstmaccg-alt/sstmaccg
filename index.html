@@ -88,6 +88,15 @@
   .auth-logo .logo-img{ width:210px; max-width:100%; margin:0 auto; display:block; }
 
   .field{ margin-bottom:16px; position:relative; }
+  .lista-requisitos{ list-style:none; padding:0; margin:0 0 18px; }
+  .lista-requisitos li{
+    font-size:12.5px; color:var(--text-muted); padding:4px 0 4px 24px; position:relative;
+  }
+  .lista-requisitos li::before{
+    content:'○'; position:absolute; left:0; top:4px; font-size:13px; color:var(--border-strong);
+  }
+  .lista-requisitos li.ok{ color:var(--green-dark); font-weight:600; }
+  .lista-requisitos li.ok::before{ content:'✓'; color:var(--green-dark); font-weight:800; }
   .field label{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
   .btn-ditado{
     display:inline-flex; align-items:center; justify-content:center; gap:5px;
@@ -477,14 +486,21 @@
       <p style="font-size:13px; color:var(--text-muted); margin:0 0 20px;">Por segurança, defina uma senha só sua antes de continuar.</p>
       <div class="field">
         <label>Nova senha</label>
-        <input type="password" id="nova-senha-1" autocomplete="new-password" required minlength="6">
+        <input type="password" id="nova-senha-1" autocomplete="new-password" required minlength="8">
         <span class="toggle-pass" data-target="nova-senha-1">mostrar</span>
       </div>
       <div class="field">
         <label>Confirmar nova senha</label>
-        <input type="password" id="nova-senha-2" autocomplete="new-password" required minlength="6">
+        <input type="password" id="nova-senha-2" autocomplete="new-password" required minlength="8">
         <span class="toggle-pass" data-target="nova-senha-2">mostrar</span>
       </div>
+      <ul class="lista-requisitos" id="lista-requisitos-senha">
+        <li data-req="tamanho">Mínimo de 8 caracteres</li>
+        <li data-req="minuscula">Pelo menos 1 letra minúscula</li>
+        <li data-req="maiuscula">Pelo menos 1 letra maiúscula</li>
+        <li data-req="especial">Pelo menos 1 caractere especial</li>
+        <li data-req="iguais">As duas senhas são iguais</li>
+      </ul>
       <div class="auth-msg" id="nova-senha-msg"></div>
       <button type="submit" class="btn-primary" id="btn-criar-senha">Criar senha</button>
     </form>
@@ -1062,7 +1078,7 @@ function configurarDitado(idTextarea, idBotao){
     reconhecimento.onresult = (event) => {
       let final = '';
       let parcial = '';
-      for(let i = 0; i < event.results.length; i++){
+      for(let i = event.resultIndex; i < event.results.length; i++){
         if(event.results[i].isFinal) final += event.results[i][0].transcript;
         else parcial += event.results[i][0].transcript;
       }
@@ -1287,15 +1303,32 @@ function mostrarTelaPerfilNome(){
   document.getElementById('form-perfil-nome').style.display = 'block';
 }
 
+function avaliarRequisitosSenha(){
+  const s1 = document.getElementById('nova-senha-1').value;
+  const s2 = document.getElementById('nova-senha-2').value;
+  const requisitos = {
+    tamanho: s1.length >= 8,
+    minuscula: /[a-z]/.test(s1),
+    maiuscula: /[A-Z]/.test(s1),
+    especial: /[^A-Za-z0-9]/.test(s1),
+    iguais: s1.length > 0 && s1 === s2
+  };
+  document.querySelectorAll('#lista-requisitos-senha li').forEach(li => {
+    li.classList.toggle('ok', !!requisitos[li.dataset.req]);
+  });
+  return Object.values(requisitos).every(Boolean);
+}
+document.getElementById('nova-senha-1').addEventListener('input', avaliarRequisitosSenha);
+document.getElementById('nova-senha-2').addEventListener('input', avaliarRequisitosSenha);
+
 document.getElementById('form-nova-senha').addEventListener('submit', async (e) => {
   e.preventDefault();
   const msg = document.getElementById('nova-senha-msg');
   msg.style.display = 'none';
   const senha1 = document.getElementById('nova-senha-1').value;
-  const senha2 = document.getElementById('nova-senha-2').value;
 
-  if(senha1 !== senha2){
-    msg.textContent = 'As senhas não coincidem.';
+  if(!avaliarRequisitosSenha()){
+    msg.textContent = 'Complete todos os requisitos da senha listados acima.';
     msg.style.display = 'block';
     return;
   }
