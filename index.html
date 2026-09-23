@@ -1054,31 +1054,23 @@ function configurarDitado(idTextarea, idBotao){
     return;
   }
 
-  let gravando = false;
+  let gravando = false;      // o usuário pediu pra continuar ouvindo
   let reconhecimento = null;
   let textoBase = '';
 
-  botao.addEventListener('click', () => {
-    if(gravando){
-      reconhecimento.stop();
-      return;
-    }
-    textoBase = textarea.value;
-    if(textoBase && !/\s$/.test(textoBase)) textoBase += ' ';
-
+  function iniciarTrecho(){
     reconhecimento = new Reconhecimento();
     reconhecimento.lang = 'pt-BR';
-    reconhecimento.continuous = true;
+    // Importante: NÃO usar continuous:true — no Android isso faz o navegador
+    // reenviar tudo que já foi dito antes, duplicando e embaralhando o texto.
+    // Em vez disso, cada "sessão" reconhece só um trecho e reinicia sozinha.
+    reconhecimento.continuous = false;
     reconhecimento.interimResults = true;
 
-    reconhecimento.onstart = () => {
-      gravando = true;
-      botao.classList.add('gravando');
-    };
     reconhecimento.onresult = (event) => {
       let final = '';
       let parcial = '';
-      for(let i = event.resultIndex; i < event.results.length; i++){
+      for(let i = 0; i < event.results.length; i++){
         if(event.results[i].isFinal) final += event.results[i][0].transcript;
         else parcial += event.results[i][0].transcript;
       }
@@ -1089,13 +1081,31 @@ function configurarDitado(idTextarea, idBotao){
       console.warn('Erro no ditado:', event.error);
       if(event.error === 'not-allowed' || event.error === 'service-not-allowed'){
         alert('Pra usar o ditado, permita o acesso ao microfone nas configurações do navegador/app.');
+        gravando = false;
       }
     };
     reconhecimento.onend = () => {
-      gravando = false;
-      botao.classList.remove('gravando');
+      if(gravando){
+        // o trecho acabou mas o usuário ainda não apertou pra parar: reinicia sozinho
+        try{ iniciarTrecho(); }catch(e){ gravando = false; botao.classList.remove('gravando'); }
+      } else {
+        botao.classList.remove('gravando');
+      }
     };
     reconhecimento.start();
+  }
+
+  botao.addEventListener('click', () => {
+    if(gravando){
+      gravando = false;
+      if(reconhecimento) reconhecimento.stop();
+      return;
+    }
+    textoBase = textarea.value;
+    if(textoBase && !/\s$/.test(textoBase)) textoBase += ' ';
+    gravando = true;
+    botao.classList.add('gravando');
+    iniciarTrecho();
   });
 }
 configurarDitado('d-descricao', 'btn-ditado-descricao');
