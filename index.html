@@ -88,6 +88,15 @@
   .auth-logo .logo-img{ width:210px; max-width:100%; margin:0 auto; display:block; }
 
   .field{ margin-bottom:16px; position:relative; }
+  .field label{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .btn-ditado{
+    display:inline-flex; align-items:center; justify-content:center; gap:5px;
+    border:1px solid var(--border-strong); background:var(--white); color:var(--text-muted);
+    border-radius:14px; padding:4px 10px; font-size:11px; font-weight:600; cursor:pointer; flex-shrink:0;
+  }
+  .btn-ditado .icone-svg svg{ width:13px; height:13px; }
+  .btn-ditado.gravando{ background:#fbe0e0; border-color:#e9a6a6; color:#a3312f; animation:pulsarDitado 1.1s infinite; }
+  @keyframes pulsarDitado{ 0%,100%{ opacity:1; } 50%{ opacity:.55; } }
   .field label{ display:block; font-size:12px; font-weight:600; color:var(--navy); margin-bottom:6px; }
   .field input, .field textarea, .field select{
     width:100%; border:1px solid var(--border-strong); border-radius:10px;
@@ -462,6 +471,40 @@
       <button type="submit" class="btn-primary" id="login-btn">Entrar</button>
     </form>
 
+    <!-- ---- Primeiro acesso: criar nova senha ---- -->
+    <form id="form-nova-senha" style="display:none;">
+      <h2 style="font-size:19px; font-weight:800; color:var(--navy); margin:0 0 4px;">Crie sua nova senha</h2>
+      <p style="font-size:13px; color:var(--text-muted); margin:0 0 20px;">Por segurança, defina uma senha só sua antes de continuar.</p>
+      <div class="field">
+        <label>Nova senha</label>
+        <input type="password" id="nova-senha-1" autocomplete="new-password" required minlength="6">
+        <span class="toggle-pass" data-target="nova-senha-1">mostrar</span>
+      </div>
+      <div class="field">
+        <label>Confirmar nova senha</label>
+        <input type="password" id="nova-senha-2" autocomplete="new-password" required minlength="6">
+        <span class="toggle-pass" data-target="nova-senha-2">mostrar</span>
+      </div>
+      <div class="auth-msg" id="nova-senha-msg"></div>
+      <button type="submit" class="btn-primary" id="btn-criar-senha">Criar senha</button>
+    </form>
+
+    <!-- ---- Primeiro acesso: nome e sobrenome ---- -->
+    <form id="form-perfil-nome" style="display:none;">
+      <h2 style="font-size:19px; font-weight:800; color:var(--navy); margin:0 0 4px;">Como você se chama?</h2>
+      <p style="font-size:13px; color:var(--text-muted); margin:0 0 20px;">Isso ajuda a identificar seus registros no app.</p>
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" id="perfil-nome" required>
+      </div>
+      <div class="field">
+        <label>Sobrenome</label>
+        <input type="text" id="perfil-sobrenome" required>
+      </div>
+      <div class="auth-msg" id="perfil-nome-msg"></div>
+      <button type="submit" class="btn-primary" id="btn-salvar-nome">Continuar</button>
+    </form>
+
     </div>
 
     <!-- Link de autocadastro removido: contas são criadas só pelo administrador -->
@@ -654,6 +697,22 @@
 
         <form id="desvio-form">
           <div class="field-com-icone">
+            <div class="campo-icone"><span class="icone-svg" data-icone="camera"></span></div>
+            <div class="campo-corpo">
+              <div class="field">
+                <label>Registro fotográfico</label>
+                <div style="display:flex; gap:10px;">
+                  <button type="button" class="btn-primary" id="btn-tirar-foto" style="width:auto; padding:10px 16px; font-size:13px;"><span class="icone-svg" data-icone="camera"></span> Tirar foto</button>
+                  <button type="button" class="btn-primary" id="btn-galeria-foto" style="width:auto; padding:10px 16px; font-size:13px; background:var(--navy);"><span class="icone-svg" data-icone="imagem"></span> Escolher da galeria</button>
+                </div>
+                <input type="file" id="d-foto-camera" accept="image/*" capture="environment" style="display:none;">
+                <input type="file" id="d-foto-galeria" accept="image/*" multiple style="display:none;">
+                <div id="d-fotos-preview" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-com-icone">
             <div class="campo-icone"><span class="icone-svg" data-icone="clipboard"></span></div>
             <div class="campo-corpo">
               <div class="field">
@@ -679,7 +738,7 @@
             <div class="campo-icone"><span class="icone-svg" data-icone="filetext"></span></div>
             <div class="campo-corpo">
               <div class="field">
-                <label>Descrição do desvio</label>
+                <label>Descrição do desvio <button type="button" class="btn-ditado" id="btn-ditado-descricao"><span class="icone-svg" data-icone="microfone"></span> Ditar</button></label>
                 <textarea id="d-descricao" rows="3" required></textarea>
               </div>
             </div>
@@ -715,7 +774,7 @@
             <div class="campo-icone"><span class="icone-svg" data-icone="wrench"></span></div>
             <div class="campo-corpo">
               <div class="field">
-                <label>Ações para correção</label>
+                <label>Ações para correção <button type="button" class="btn-ditado" id="btn-ditado-acoes"><span class="icone-svg" data-icone="microfone"></span> Ditar</button></label>
                 <textarea id="d-acoes" rows="3" required></textarea>
               </div>
             </div>
@@ -794,24 +853,8 @@
             <div class="campo-icone"><span class="icone-svg" data-icone="message"></span></div>
             <div class="campo-corpo">
               <div class="field">
-                <label>Observações</label>
+                <label>Observações <button type="button" class="btn-ditado" id="btn-ditado-observacoes"><span class="icone-svg" data-icone="microfone"></span> Ditar</button></label>
                 <textarea id="d-observacoes" rows="2"></textarea>
-              </div>
-            </div>
-          </div>
-
-          <div class="field-com-icone">
-            <div class="campo-icone"><span class="icone-svg" data-icone="camera"></span></div>
-            <div class="campo-corpo">
-              <div class="field">
-                <label>Registro fotográfico</label>
-                <div style="display:flex; gap:10px;">
-                  <button type="button" class="btn-primary" id="btn-tirar-foto" style="width:auto; padding:10px 16px; font-size:13px;"><span class="icone-svg" data-icone="camera"></span> Tirar foto</button>
-                  <button type="button" class="btn-primary" id="btn-galeria-foto" style="width:auto; padding:10px 16px; font-size:13px; background:var(--navy);"><span class="icone-svg" data-icone="imagem"></span> Escolher da galeria</button>
-                </div>
-                <input type="file" id="d-foto-camera" accept="image/*" capture="environment" style="display:none;">
-                <input type="file" id="d-foto-galeria" accept="image/*" multiple style="display:none;">
-                <div id="d-fotos-preview" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
               </div>
             </div>
           </div>
@@ -838,7 +881,7 @@
           <div class="campo-icone"><span class="icone-svg" data-icone="message"></span></div>
           <div class="campo-corpo">
             <div class="field">
-              <label>Observação</label>
+              <label>Observação <button type="button" class="btn-ditado" id="btn-ditado-resolver"><span class="icone-svg" data-icone="microfone"></span> Ditar</button></label>
               <textarea id="resolver-observacao" rows="3" required placeholder="Descreva o que foi feito para corrigir o desvio..."></textarea>
             </div>
           </div>
@@ -974,11 +1017,75 @@ const ICONES = {
   lua: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>',
   'seta-esquerda': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>',
   plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
+  microfone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></svg>',
   sol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>'
 };
 document.querySelectorAll('[data-icone]').forEach(el => {
   el.innerHTML = ICONES[el.dataset.icone] || '';
 });
+
+/* ======================================================================
+   DITADO POR VOZ (microfone nos campos de texto longo)
+   ====================================================================== */
+function configurarDitado(idTextarea, idBotao){
+  const textarea = document.getElementById(idTextarea);
+  const botao = document.getElementById(idBotao);
+  if(!textarea || !botao) return;
+
+  const Reconhecimento = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!Reconhecimento){
+    botao.style.display = 'none'; // navegador não suporta ditado
+    return;
+  }
+
+  let gravando = false;
+  let reconhecimento = null;
+  let textoBase = '';
+
+  botao.addEventListener('click', () => {
+    if(gravando){
+      reconhecimento.stop();
+      return;
+    }
+    textoBase = textarea.value;
+    if(textoBase && !/\s$/.test(textoBase)) textoBase += ' ';
+
+    reconhecimento = new Reconhecimento();
+    reconhecimento.lang = 'pt-BR';
+    reconhecimento.continuous = true;
+    reconhecimento.interimResults = true;
+
+    reconhecimento.onstart = () => {
+      gravando = true;
+      botao.classList.add('gravando');
+    };
+    reconhecimento.onresult = (event) => {
+      let final = '';
+      let parcial = '';
+      for(let i = 0; i < event.results.length; i++){
+        if(event.results[i].isFinal) final += event.results[i][0].transcript;
+        else parcial += event.results[i][0].transcript;
+      }
+      if(final){ textoBase += final.trim() + ' '; }
+      textarea.value = textoBase + parcial;
+    };
+    reconhecimento.onerror = (event) => {
+      console.warn('Erro no ditado:', event.error);
+      if(event.error === 'not-allowed' || event.error === 'service-not-allowed'){
+        alert('Pra usar o ditado, permita o acesso ao microfone nas configurações do navegador/app.');
+      }
+    };
+    reconhecimento.onend = () => {
+      gravando = false;
+      botao.classList.remove('gravando');
+    };
+    reconhecimento.start();
+  });
+}
+configurarDitado('d-descricao', 'btn-ditado-descricao');
+configurarDitado('d-acoes', 'btn-ditado-acoes');
+configurarDitado('d-observacoes', 'btn-ditado-observacoes');
+configurarDitado('resolver-observacao', 'btn-ditado-resolver');
 
 /* ======================================================================
    TEMA CLARO / ESCURO
@@ -1141,7 +1248,7 @@ async function verificarLimiteDispositivos(user){
   const dispositivos = Array.isArray(dados.dispositivos) ? dados.dispositivos : [];
 
   if(dispositivos.some(d => d.id === deviceId)){
-    return true; // dispositivo já autorizado
+    return { autorizado: true, dados };
   }
   if(dispositivos.length < 2){
     await ref.set({
@@ -1151,37 +1258,122 @@ async function verificarLimiteDispositivos(user){
         userAgent: navigator.userAgent
       })
     }, { merge: true });
-    return true;
+    return { autorizado: true, dados };
   }
-  return false; // limite de 2 dispositivos atingido
+  return { autorizado: false, dados };
 }
+
+/* ---- mostra o app principal (depois de login + dispositivo + primeiro acesso ok) ---- */
+function mostrarAppPrincipal(user){
+  document.getElementById('login-form').style.display = 'block';
+  document.getElementById('form-nova-senha').style.display = 'none';
+  document.getElementById('form-perfil-nome').style.display = 'none';
+  authScreen.classList.remove('active');
+  appScreen.classList.add('active');
+  document.getElementById('perfil-info').textContent =
+    `${user.displayName || ''} — ${user.email}`;
+  irPara('view-desvios');
+}
+
+/* ---- telas de primeiro acesso ---- */
+function mostrarTelaNovaSenha(){
+  document.getElementById('login-form').style.display = 'none';
+  document.getElementById('form-nova-senha').style.display = 'block';
+  document.getElementById('form-perfil-nome').style.display = 'none';
+}
+function mostrarTelaPerfilNome(){
+  document.getElementById('login-form').style.display = 'none';
+  document.getElementById('form-nova-senha').style.display = 'none';
+  document.getElementById('form-perfil-nome').style.display = 'block';
+}
+
+document.getElementById('form-nova-senha').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msg = document.getElementById('nova-senha-msg');
+  msg.style.display = 'none';
+  const senha1 = document.getElementById('nova-senha-1').value;
+  const senha2 = document.getElementById('nova-senha-2').value;
+
+  if(senha1 !== senha2){
+    msg.textContent = 'As senhas não coincidem.';
+    msg.style.display = 'block';
+    return;
+  }
+  const btn = document.getElementById('btn-criar-senha');
+  btn.disabled = true;
+  try{
+    await auth.currentUser.updatePassword(senha1);
+    await db.collection('usuarios').doc(auth.currentUser.uid).set({ senhaRedefinida: true }, { merge: true });
+    document.getElementById('form-nova-senha').reset();
+    mostrarTelaPerfilNome();
+  }catch(err){
+    console.error(err);
+    msg.textContent = (err && err.code === 'auth/requires-recent-login')
+      ? 'Por segurança, saia e entre de novo com a senha temporária pra trocar a senha.'
+      : 'Não foi possível salvar a nova senha. Tente novamente.';
+    msg.style.display = 'block';
+  }finally{
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('form-perfil-nome').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msg = document.getElementById('perfil-nome-msg');
+  msg.style.display = 'none';
+  const nome = document.getElementById('perfil-nome').value.trim();
+  const sobrenome = document.getElementById('perfil-sobrenome').value.trim();
+  const btn = document.getElementById('btn-salvar-nome');
+  btn.disabled = true;
+  try{
+    await auth.currentUser.updateProfile({ displayName: nome + ' ' + sobrenome });
+    await db.collection('usuarios').doc(auth.currentUser.uid).set({
+      nome, sobrenome, perfilCompleto: true
+    }, { merge: true });
+    document.getElementById('form-perfil-nome').reset();
+    mostrarAppPrincipal(auth.currentUser);
+  }catch(err){
+    console.error(err);
+    msg.textContent = 'Não foi possível salvar. Tente novamente.';
+    msg.style.display = 'block';
+  }finally{
+    btn.disabled = false;
+  }
+});
 
 /* ---- estado de autenticação ---- */
 auth.onAuthStateChanged(async (user) => {
   if(user){
-    let autorizado = true;
+    let resultado = { autorizado: true, dados: {} };
     try{
-      autorizado = await verificarLimiteDispositivos(user);
+      resultado = await verificarLimiteDispositivos(user);
     }catch(err){
       console.error('Falha ao verificar limite de dispositivos', err);
     }
-    if(!autorizado){
+    if(!resultado.autorizado){
       const msg = document.getElementById('login-msg');
       msg.textContent = 'Este usuário já está em uso no limite de 2 dispositivos. Entre em contato com o administrador para liberar um novo dispositivo.';
       msg.style.display = 'block';
       await auth.signOut();
       return;
     }
-    authScreen.classList.remove('active');
-    appScreen.classList.add('active');
-    document.getElementById('perfil-info').textContent =
-      `${user.displayName || ''} — ${user.email}`;
-    irPara('view-desvios');
+
+    const dados = resultado.dados || {};
+    if(!dados.senhaRedefinida){
+      mostrarTelaNovaSenha();
+    } else if(!dados.perfilCompleto){
+      mostrarTelaPerfilNome();
+    } else {
+      mostrarAppPrincipal(user);
+    }
   } else {
     appScreen.classList.remove('active');
     authScreen.classList.add('active');
     loginForm.reset();
     registerForm.reset();
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('form-nova-senha').style.display = 'none';
+    document.getElementById('form-perfil-nome').style.display = 'none';
   }
 });
 
@@ -1506,10 +1698,12 @@ function renderizarBuscaDesvios(){
 /* ---- tela de resolver desvio ---- */
 let desvioEmResolucao = null;
 let fotosResolverSelecionadas = [];
+let resolverAutoAprovar = false;
 
-function abrirResolverDesvio(numero){
+function abrirResolverDesvio(numero, autoAprovar){
   const d = desviosAtivosCache.find(x => String(x.numero) === String(numero));
   desvioEmResolucao = d || { numero };
+  resolverAutoAprovar = !!autoAprovar;
   document.getElementById('resolver-titulo').textContent = 'Nº ' + numero;
   document.getElementById('resolver-descricao').textContent = d ? d.descricao : '';
   document.getElementById('resolver-form').reset();
@@ -1564,7 +1758,7 @@ document.getElementById('resolver-form').addEventListener('submit', async (e) =>
       numeroDesvio: desvioEmResolucao.numero,
       descricaoDesvio: desvioEmResolucao.descricao || '',
       observacao: document.getElementById('resolver-observacao').value.trim(),
-      status: 'pendente',
+      status: resolverAutoAprovar ? 'aprovado' : 'pendente',
       criadoPor: auth.currentUser.uid,
       criadoPorNome: auth.currentUser.displayName || auth.currentUser.email,
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
@@ -2050,8 +2244,17 @@ function renderizarListaDesvios(){
           </div>
           <p>${d.processo || ''} · ${d.local || ''} · Potencial: ${d.potencial || '-'}</p>
           <p>${(d.descricao || '').slice(0,80)}${(d.descricao||'').length>80?'…':''}</p>
+          ${d.numero ? `
+            <button type="button" class="btn-resolver" data-numero="${d.numero}" data-auto="1" style="margin-top:8px;">
+              <span class="icone-svg" data-icone="check"></span> Resolver
+            </button>
+          ` : ''}
         </div>
       `).join('');
+      cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
+      cont.querySelectorAll('.btn-resolver').forEach(btn => {
+        btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero, btn.dataset.auto === '1'));
+      });
     });
 }
 </script>
