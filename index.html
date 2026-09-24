@@ -1594,8 +1594,9 @@ async function carregarTodasListas(){
 
 /* mostrar campo "outro" quando selecionado */
 document.querySelectorAll('.dd-select').forEach(sel => {
+  const outroInput = document.getElementById(sel.id + '-outro');
+  if(!outroInput) return; // este dropdown (ex: filtros de Análise) não tem opção "Outro" — pula
   sel.addEventListener('change', () => {
-    const outroInput = document.getElementById(sel.id + '-outro');
     if(sel.value === '__outro__'){
       outroInput.style.display = 'block';
       outroInput.required = true;
