@@ -1788,7 +1788,7 @@ function cartaoDesvioResolver(d){
       <div class="desvio-card">
         <div class="linha1">
           <b>${d.local || 'Desvio'}</b>
-          <span class="tag pendente">Pendente</span>
+          <span class="tag pendente">Pendente sincronização</span>
         </div>
         <p>${descricaoOrganizada(d)}</p>
         <p class="sub-prazo">Ainda sincronizando com a planilha...</p>
@@ -2657,7 +2657,7 @@ function renderizarListaDesvios(){
   cont.innerHTML = visiveis.map(d => {
     let tagClasse, tagTexto, botaoHtml;
     if(!d.numero){
-      tagClasse = 'pendente'; tagTexto = 'Pendente';
+      tagClasse = 'pendente'; tagTexto = 'Pendente sincronização';
       botaoHtml = `
         <button type="button" class="btn-resolver btn-resolver-pendente" data-id="${d.id}" style="margin-top:8px;">
           <span class="icone-svg" data-icone="check"></span> Resolver
