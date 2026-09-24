@@ -207,6 +207,11 @@
   .btn-confirmar-rej{ background:#c84c4c !important; color:#fff !important; }
   .btn-cancelar-rej{ background:var(--border) !important; color:var(--text-muted) !important; }
   .aprovacao-card.novo-rejeitado{ box-shadow:0 0 0 2px #e8a3a3, 0 1px 4px rgba(20,33,49,.07); }
+  .historico-tentativas{ margin-top:12px; border-top:1px solid var(--border); padding-top:10px; }
+  .historico-tentativas summary{ font-size:12px; font-weight:700; color:var(--text-muted); cursor:pointer; }
+  .historico-tentativas .tentativa{ margin-top:10px; padding:10px; border-radius:10px; background:var(--cream); }
+  .historico-tentativas .tentativa .linha1{ display:flex; justify-content:space-between; align-items:center; }
+  .historico-tentativas .tentativa .obs{ background:var(--white); }
   .selo-novo{ font-size:10px; font-weight:700; color:#fff; background:var(--error); border-radius:6px; padding:2px 6px; margin-left:6px; }
   .btn-em-analise{
     background:#e3ecf7; color:#2c5282; border:none; border-radius:8px;
@@ -1062,7 +1067,12 @@
         <p class="tela-titulo">Aprovações</p>
         <p class="tela-sub">Revise as resoluções enviadas para análise.</p>
       </div>
+      <div class="toggle-duas-opcoes" id="aprovacoes-abas">
+        <button type="button" data-aba="pendentes" class="active">Pendentes</button>
+        <button type="button" data-aba="historico">Histórico</button>
+      </div>
       <div id="aprovacoes-lista"></div>
+      <div id="aprovacoes-historico" style="display:none;"></div>
     </div>
 
     <!-- Tela: Enviados (quem não é TST acompanha as resoluções que mandou) -->
@@ -1105,6 +1115,9 @@
       </div>
 
       <button class="btn-primary" id="logout-btn" style="margin-top:16px;">Sair</button>
+      <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:8px;">
+        Depois de sair, só dá pra entrar de novo com internet. Se você só fechar o app, ele continua abrindo sem sinal.
+      </p>
     </div>
   </main>
 
@@ -1313,6 +1326,11 @@ loginForm.addEventListener('submit', async (e) => {
   const msg = document.getElementById('login-msg');
   msg.style.display = 'none';
 
+  if(!navigator.onLine){
+    msg.textContent = traduzErroAuth('auth/network-request-failed');
+    msg.style.display = 'block';
+    return;
+  }
   try{
     await auth.signInWithEmailAndPassword(email, senha);
   }catch(err){
@@ -1369,7 +1387,9 @@ function traduzErroAuth(code){
     'auth/user-not-found': 'Usuário não encontrado.',
     'auth/wrong-password': 'Senha incorreta.',
     'auth/invalid-credential': 'E-mail ou senha incorretos.',
-    'auth/popup-closed-by-user': 'Login cancelado.'
+    'auth/popup-closed-by-user': 'Login cancelado.',
+    'auth/network-request-failed': 'Sem internet. Para entrar é preciso estar online — depois de entrar, o app abre normalmente sem sinal (desde que você não toque em "Sair").',
+    'auth/too-many-requests': 'Muitas tentativas seguidas. Aguarde alguns minutos e tente de novo.'
   };
   return map[code] || 'Ocorreu um erro. Tente novamente.';
 }
@@ -2192,6 +2212,7 @@ let minhasSolicitacoesCache = [];    // tudo que EU enviei
 let solicitacoesLocais = [];         // acabei de enviar, snapshot ainda não chegou
 let mapaSituacaoPorNumero = {};      // numero -> 'pendente' | 'aprovado'
 let minhaUltimaSolicitacaoPorNumero = {}; // numero -> minha solicitação mais recente
+const numerosJaAprovados = new Set();   // Nº aprovados vistos nesta sessão
 const rascunhosRejeicao = {};        // id -> { aberto, texto } (não perde o texto se a lista atualizar)
 let carregouSolicitacoes = false;
 
@@ -2204,6 +2225,9 @@ function atualizarMapaSolicitacoes(){
     const k = String(x.numeroDesvio);
     if(x.status === 'pendente') mapaSituacaoPorNumero[k] = 'pendente';
     else if(x.status === 'aprovado' && mapaSituacaoPorNumero[k] !== 'pendente') mapaSituacaoPorNumero[k] = 'aprovado';
+  });
+  solicitacoesAbertasCache.concat(minhasSolicitacoesCache).forEach(x => {
+    if((x.status === 'aprovado' || x.status === 'concluido') && x.numeroDesvio != null) numerosJaAprovados.add(String(x.numeroDesvio));
   });
   minhaUltimaSolicitacaoPorNumero = {};
   minhasSolicitacoesCache.concat(solicitacoesLocais).forEach(x => {
@@ -2231,6 +2255,7 @@ function situacaoResolucao(numero){
   if(numero === undefined || numero === null || numero === '') return null;
   const k = String(numero);
   if(mapaSituacaoPorNumero[k]) return mapaSituacaoPorNumero[k];
+  if(numerosJaAprovados.has(k)) return 'aprovado';
   // devolvido: a MINHA última resolução desse desvio foi rejeitada pelo TST
   const ultima = minhaUltimaSolicitacaoPorNumero[k];
   if(ultima && ultima.status === 'rejeitado') return 'rejeitado';
@@ -2324,7 +2349,75 @@ function preencherFotosNoCartao(cont, id, status){
 /* ======================================================================
    APROVAÇÕES — TSTs revisam as solicitações de resolução pendentes
    ====================================================================== */
+/* ---- abas Pendentes / Histórico ---- */
+let abaAprovacoes = 'pendentes';
+let historicoTSTCache = [];
+let ouvindoHistoricoTST = false;
+document.querySelectorAll('#aprovacoes-abas button').forEach(b => {
+  b.addEventListener('click', () => {
+    abaAprovacoes = b.dataset.aba;
+    renderizarAprovacoes();
+  });
+});
+function iniciarHistoricoTST(){
+  if(ouvindoHistoricoTST || !auth.currentUser || !auth.currentUser.email) return;
+  ouvindoHistoricoTST = true;
+  // tudo que EU avaliei (aprovado, fechado na planilha ou rejeitado)
+  db.collection('solicitacoes_resolucao').where('avaliadoPorEmail', '==', auth.currentUser.email)
+    .onSnapshot((snap) => {
+      historicoTSTCache = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      if(document.getElementById('view-aprovacoes').style.display === 'block' && abaAprovacoes === 'historico'){
+        renderizarHistoricoTST();
+      }
+    }, (err) => { console.warn('Falha ao ler histórico do TST:', err); ouvindoHistoricoTST = false; });
+}
+function renderizarHistoricoTST(){
+  const cont = document.getElementById('aprovacoes-historico');
+  const lista = historicoTSTCache
+    .filter(x => x.status !== 'pendente')
+    .sort((a, b) => msDe(b.avaliadoEm) - msDe(a.avaliadoEm)); // mais recentes primeiro
+  if(lista.length === 0){
+    cont.innerHTML = '<p class="empty-state">Você ainda não avaliou nenhuma resolução.</p>';
+    return;
+  }
+  const aprovados = lista.filter(x => x.status !== 'rejeitado').length;
+  const rejeitados = lista.length - aprovados;
+  const rotulos = {
+    aprovado:  { classe: 'sincronizado', texto: 'Aprovado' },
+    concluido: { classe: 'sincronizado', texto: 'Aprovado · fechado' },
+    rejeitado: { classe: 'rejeitado',    texto: 'Rejeitado' }
+  };
+  cont.innerHTML = `<p class="meta" style="margin:0 0 12px;">${aprovados} aprovado(s) · ${rejeitados} rejeitado(s)</p>` +
+    lista.map(s => {
+      const r = rotulos[s.status] || { classe: 'fechado', texto: s.status || '—' };
+      return `
+        <div class="aprovacao-card">
+          <div class="linha1">
+            <b>Nº ${escaparHtml(s.numeroDesvio)}</b>
+            <span class="tag ${r.classe}">${r.texto}</span>
+          </div>
+          <div class="desc">${s.localDesvio ? '<b>' + escaparHtml(s.localDesvio) + '</b> · ' : ''}${escaparHtml(s.descricaoDesvio || '')}</div>
+          <div class="obs">${escaparHtml(s.observacao || '')}</div>
+          ${(s.status === 'rejeitado' && s.motivoRejeicao) ? `<div class="obs" style="background:#fbe0e0; color:#8c2f2f;"><b>Motivo:</b> ${escaparHtml(s.motivoRejeicao)}</div>` : ''}
+          <div class="aprovacao-fotos" data-id="${s.id}"></div>
+          <div class="meta">Enviado por ${escaparHtml(s.criadoPorNome || '—')} em ${dataHoraBR(s.criadoEm) || '—'}</div>
+          <div class="meta">${s.status === 'rejeitado' ? 'Rejeitado' : 'Aprovado'} por você em ${dataHoraBR(s.avaliadoEm) || 'agora'}</div>
+        </div>`;
+    }).join('');
+  lista.forEach(s => preencherFotosNoCartao(cont, s.id, s.status));
+}
+
 function renderizarAprovacoes(){
+  iniciarHistoricoTST();
+  const qtdPend = solicitacoesAbertasCache.filter(x => x.status === 'pendente').length;
+  document.querySelectorAll('#aprovacoes-abas button').forEach(b => {
+    b.classList.toggle('active', b.dataset.aba === abaAprovacoes);
+    if(b.dataset.aba === 'pendentes') b.textContent = qtdPend ? `Pendentes (${qtdPend})` : 'Pendentes';
+  });
+  document.getElementById('aprovacoes-lista').style.display = abaAprovacoes === 'pendentes' ? 'block' : 'none';
+  document.getElementById('aprovacoes-historico').style.display = abaAprovacoes === 'historico' ? 'block' : 'none';
+  if(abaAprovacoes === 'historico'){ renderizarHistoricoTST(); return; }
+
   const cont = document.getElementById('aprovacoes-lista');
   const pendentes = solicitacoesAbertasCache
     .filter(x => x.status === 'pendente')
@@ -2436,10 +2529,9 @@ function renderizarAprovacoes(){
    ====================================================================== */
 function renderizarEnviados(){
   const cont = document.getElementById('enviados-lista');
-  const lista = minhasSolicitacoesCache.concat(solicitacoesLocais)
-    .sort((a, b) => msDe(b.criadoEm) - msDe(a.criadoEm)); // mais recentes primeiro
+  const todas = minhasSolicitacoesCache.concat(solicitacoesLocais);
 
-  if(lista.length === 0){
+  if(todas.length === 0){
     cont.innerHTML = '<p class="empty-state">Você ainda não enviou nenhuma resolução.</p>';
     return;
   }
@@ -2451,8 +2543,22 @@ function renderizarEnviados(){
     rejeitado: { classe: 'rejeitado',    texto: 'Rejeitado' }
   };
 
+  // agrupa por desvio: o card mostra a tentativa MAIS RECENTE (que é o
+  // status que vale) e as anteriores ficam num histórico logo abaixo
+  const grupos = {};
+  todas.forEach(x => {
+    const k = String(x.numeroDesvio);
+    (grupos[k] = grupos[k] || []).push(x);
+  });
+  const listaGrupos = Object.values(grupos)
+    .map(g => g.sort((a, b) => msDe(b.criadoEm) - msDe(a.criadoEm)))
+    .sort((a, b) => msDe(b[0].criadoEm) - msDe(a[0].criadoEm));
+
   const naoVistas = new Set(rejeicoesNaoVistas().map(x => x.id));
-  cont.innerHTML = lista.map(s => {
+
+  cont.innerHTML = listaGrupos.map(g => {
+    const s = g[0];
+    const anteriores = g.slice(1);
     const r = rotulos[s.status] || { classe: 'pendente', texto: s.status || '—' };
     const novo = naoVistas.has(s.id);
     const avaliacao = (s.status !== 'pendente' && s.avaliadoPorNome)
@@ -2460,12 +2566,28 @@ function renderizarEnviados(){
       : '';
     const motivo = (s.status === 'rejeitado' && s.motivoRejeicao)
       ? `<div class="obs" style="background:#fbe0e0; color:#8c2f2f;"><b>Motivo:</b> ${escaparHtml(s.motivoRejeicao)}</div>` : '';
-    // botão só na rejeição MAIS RECENTE daquele desvio, e só se ele ainda está aberto
-    const ultima = minhaUltimaSolicitacaoPorNumero[String(s.numeroDesvio)];
-    const reenviar = (s.status === 'rejeitado' && ultima && ultima.id === s.id
+    const reenviar = (s.status === 'rejeitado'
         && situacaoResolucao(s.numeroDesvio) === 'rejeitado'
         && desviosAtivosCache.some(x => String(x.numero) === String(s.numeroDesvio)))
       ? `<button type="button" class="btn-resolver btn-reenviar" data-numero="${escaparHtml(s.numeroDesvio)}"><span class="icone-svg" data-icone="check"></span> Enviar novamente para análise</button>` : '';
+
+    const historico = anteriores.length ? `
+      <details class="historico-tentativas">
+        <summary>Tentativas anteriores (${anteriores.length})</summary>
+        ${anteriores.map((a, i) => {
+          const ra = rotulos[a.status] || { classe: 'fechado', texto: a.status || '—' };
+          return `
+            <div class="tentativa">
+              <div class="linha1"><span class="meta" style="margin:0;">${anteriores.length - i}ª tentativa · ${dataHoraBR(a.criadoEm) || '—'}</span>
+                <span class="tag ${ra.classe}">${ra.texto}</span></div>
+              <div class="obs">${escaparHtml(a.observacao || '')}</div>
+              ${(a.status === 'rejeitado' && a.motivoRejeicao) ? `<div class="obs" style="background:#fbe0e0; color:#8c2f2f;"><b>Motivo:</b> ${escaparHtml(a.motivoRejeicao)}</div>` : ''}
+              <div class="aprovacao-fotos" data-id="${a.id}"></div>
+              ${a.avaliadoPorNome ? `<div class="meta">${a.status === 'rejeitado' ? 'Rejeitado' : 'Aprovado'} por ${escaparHtml(a.avaliadoPorNome)}${a.avaliadoEm ? ' em ' + dataHoraBR(a.avaliadoEm) : ''}</div>` : ''}
+            </div>`;
+        }).join('')}
+      </details>` : '';
+
     return `
       <div class="aprovacao-card${novo ? ' novo-rejeitado' : ''}">
         <div class="linha1">
@@ -2479,11 +2601,12 @@ function renderizarEnviados(){
         <div class="meta">Enviado em ${dataHoraBR(s.criadoEm) || 'agora (aguardando sinal)'}</div>
         ${avaliacao}
         ${reenviar}
+        ${historico}
       </div>
     `;
   }).join('');
 
-  lista.forEach(s => { if(!s._local) preencherFotosNoCartao(cont, s.id, s.status); });
+  todas.forEach(x => { if(!x._local) preencherFotosNoCartao(cont, x.id, x.status); });
   cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
   cont.querySelectorAll('.btn-reenviar').forEach(btn => {
     btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero, false));
@@ -2762,15 +2885,36 @@ const ORDEM_POTENCIAL = { 'Alto': 0, 'Médio': 1, 'Baixo': 2 };
 
 let desviosConcluidosCache = [];
 let erroCarregarConcluidos = null;
+/* Antes isso era lido UMA vez só (get): quando o Apps Script fechava um
+   desvio na planilha, o app só ficava sabendo depois de recarregar — por
+   isso o card continuava "Aberto". Agora é um ouvinte ao vivo: a primeira
+   leitura custa o mesmo de antes e depois só chegam as novidades. */
+let ouvindoConcluidos = false;
+let concluidosCarregados = false;
+const esperandoConcluidos = [];
 function carregarDesviosConcluidos(callback){
-  db.collection('desvios_concluidos').get().then((snap) => {
+  if(callback){
+    if(concluidosCarregados) callback();
+    else esperandoConcluidos.push(callback);
+  }
+  if(ouvindoConcluidos) return;
+  ouvindoConcluidos = true;
+  db.collection('desvios_concluidos').onSnapshot((snap) => {
     desviosConcluidosCache = [];
     snap.forEach(doc => desviosConcluidosCache.push({ id: doc.id, ...doc.data() }));
-    callback();
-  }).catch((e) => {
+    erroCarregarConcluidos = null;
+    const primeiraVez = !concluidosCarregados;
+    concluidosCarregados = true;
+    if(primeiraVez){
+      esperandoConcluidos.splice(0).forEach(cb => cb());
+    }
+    recalcularPainelEDetalhamento();
+    renderizarListaDesvios();
+  }, (e) => {
     console.warn('Falha ao carregar desvios concluídos:', e);
     erroCarregarConcluidos = (e && e.message) ? e.message : String(e);
-    callback();
+    ouvindoConcluidos = false;
+    esperandoConcluidos.splice(0).forEach(cb => cb());
   });
 }
 
@@ -3157,7 +3301,9 @@ function renderizarListaDesvios(){
             <span class="icone-svg" data-icone="check"></span> Resolver
           </button>`;
       }
-    } else if(numerosFechados.has(String(d.numero))){
+    } else if(numerosFechados.has(String(d.numero)) ||
+              situacaoResolucao(d.numero) === 'aprovado'){
+      // fechado na planilha OU aprovado pelo TST (a planilha fecha na próxima rodada)
       tagClasse = 'fechado'; tagTexto = 'Fechado'; botaoHtml = '';
     } else if(resolvidoLocalmente){
       // já foi enviado pra resolução (auto-aprovada) mas a planilha ainda não
