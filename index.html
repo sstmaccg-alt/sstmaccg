@@ -126,7 +126,7 @@
   }
   .desvio-card .linha1{ display:flex; justify-content:space-between; align-items:center; }
   .desvio-card .linha1 b{ font-size:14px; }
-  .desvio-card .tag{
+  .desvio-card .tag, .aprovacao-card .tag{
     font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; text-transform:uppercase;
   }
   .tag.pendente{ background:#fff4d6; color:#8a6300; }
@@ -192,7 +192,43 @@
   .aprovacao-card .desc{ font-size:12px; color:var(--text-muted); margin-top:4px; }
   .aprovacao-card .obs{ font-size:13px; color:var(--navy); margin-top:8px; background:var(--cream); padding:8px 10px; border-radius:8px; }
   .aprovacao-fotos{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
-  .aprovacao-fotos img{ width:64px; height:64px; object-fit:cover; border-radius:8px; }
+  .aprovacao-fotos img{ width:88px; height:88px; object-fit:cover; border-radius:8px; cursor:zoom-in; }
+  .aprovacao-fotos .dica-ampliar{ width:100%; font-size:11px; color:var(--text-muted); margin:2px 0 0; }
+  .aprovacao-card .meta{ font-size:11px; color:var(--text-muted); margin-top:8px; }
+  .tag.analise{ background:#e3ecf7; color:#2c5282; }
+  .tag.rejeitado{ background:#fbe0e0; color:#c84c4c; }
+  .btn-em-analise{
+    background:#e3ecf7; color:#2c5282; border:none; border-radius:8px;
+    padding:7px 14px; font-size:12px; font-weight:700; cursor:default; margin-top:10px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .atalho-icone{ position:relative; }
+  .atalho-badge{
+    position:absolute; top:-5px; right:-5px; min-width:17px; height:17px; padding:0 4px;
+    border-radius:9px; background:var(--error); color:#fff; font-size:10px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; line-height:1;
+  }
+  /* visualizador de foto em tela cheia */
+  .foto-lightbox{
+    position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.94);
+    display:none; align-items:center; justify-content:center; touch-action:pan-x pan-y pinch-zoom;
+  }
+  .foto-lightbox.aberto{ display:flex; }
+  .foto-lightbox .lb-area{ width:100%; height:100%; overflow:auto; display:flex; align-items:center; justify-content:center; -webkit-overflow-scrolling:touch; }
+  .foto-lightbox img{ max-width:100%; max-height:100%; object-fit:contain; cursor:zoom-in; }
+  .foto-lightbox .lb-area.zoom{ display:block; }
+  .foto-lightbox .lb-area.zoom img{ max-width:none; max-height:none; width:250%; cursor:zoom-out; }
+  .foto-lightbox .lb-fechar, .foto-lightbox .lb-nav{
+    position:absolute; background:rgba(255,255,255,.14); color:#fff; border:none; cursor:pointer;
+    width:42px; height:42px; border-radius:50%; font-size:22px; line-height:42px; text-align:center;
+  }
+  .foto-lightbox .lb-fechar{ top:calc(14px + env(safe-area-inset-top, 0px)); right:14px; }
+  .foto-lightbox .lb-nav.ant{ left:10px; top:50%; transform:translateY(-50%); }
+  .foto-lightbox .lb-nav.prox{ right:10px; top:50%; transform:translateY(-50%); }
+  .foto-lightbox .lb-contador{
+    position:absolute; bottom:calc(18px + env(safe-area-inset-bottom, 0px)); left:0; right:0;
+    text-align:center; color:#fff; font-size:13px; opacity:.8;
+  }
   .aprovacao-acoes{ display:flex; gap:8px; margin-top:12px; }
   .btn-aprovar, .btn-rejeitar{
     flex:1; border:none; border-radius:8px; padding:10px; font-size:13px; font-weight:700; cursor:pointer;
@@ -661,9 +697,9 @@
             <div class="atalho-icone"><span class="icone-svg" data-icone="search"></span></div>
             <p class="atalho-label">Buscar</p>
           </button>
-          <button type="button" class="atalho-item" id="atalho-resolver">
-            <div class="atalho-icone"><span class="icone-svg" data-icone="check-circulo"></span></div>
-            <p class="atalho-label">Resolver</p>
+          <button type="button" class="atalho-item" id="atalho-aprovacoes">
+            <div class="atalho-icone"><span class="icone-svg" data-icone="check-circulo"></span><span class="atalho-badge" id="badge-aprovacoes" style="display:none;"></span></div>
+            <p class="atalho-label" id="atalho-aprovacoes-label">Enviados</p>
           </button>
           <button type="button" class="atalho-item" id="atalho-analise">
             <div class="atalho-icone"><span class="icone-svg" data-icone="barchart"></span></div>
@@ -1008,11 +1044,27 @@
     <!-- Tela: Aprovações -->
     <div id="view-aprovacoes" style="display:none;">
       <div class="tela-banner">
+        <div class="tela-header">
+          <button id="btn-voltar-aprovacoes" class="voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button>
+        </div>
         <div class="tela-selo">SEGURANÇA</div>
         <p class="tela-titulo">Aprovações</p>
         <p class="tela-sub">Revise as resoluções enviadas para análise.</p>
       </div>
       <div id="aprovacoes-lista"></div>
+    </div>
+
+    <!-- Tela: Enviados (quem não é TST acompanha as resoluções que mandou) -->
+    <div id="view-enviados" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header">
+          <button id="btn-voltar-enviados" class="voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button>
+        </div>
+        <div class="tela-selo">SEGURANÇA</div>
+        <p class="tela-titulo">Enviados</p>
+        <p class="tela-sub">Acompanhe as resoluções que você mandou para análise.</p>
+      </div>
+      <div id="enviados-lista"></div>
     </div>
 
     <!-- Tela: Perfil (placeholder) -->
@@ -1023,7 +1075,7 @@
       </div>
       <p class="tela-sub" id="perfil-info"></p>
 
-      <div class="card-action" data-goto="view-aprovacoes">
+      <div class="card-action" data-goto="view-aprovacoes" id="perfil-card-aprovacoes" style="display:none;">
         <div class="icon"><span class="icone-svg" data-icone="check"></span></div>
         <div class="info">
           <h3>Aprovações</h3>
@@ -1347,6 +1399,9 @@ async function verificarLimiteDispositivos(user){
 
 /* ---- mostra o app principal (depois de login + dispositivo + primeiro acesso ok) ---- */
 function mostrarAppPrincipal(user){
+  aplicarPerfilTST();
+  iniciarListaTST();
+  iniciarSolicitacoesResolucao();
   document.getElementById('login-form').style.display = 'block';
   document.getElementById('form-nova-senha').style.display = 'none';
   document.getElementById('form-perfil-nome').style.display = 'none';
@@ -1429,6 +1484,7 @@ document.getElementById('form-perfil-nome').addEventListener('submit', async (e)
     await db.collection('usuarios').doc(auth.currentUser.uid).set({
       nome, sobrenome, perfilCompleto: true
     }, { merge: true });
+    salvarPerfilLocal(auth.currentUser.uid, { senhaRedefinida: true, perfilCompleto: true });
     document.getElementById('form-perfil-nome').reset();
     mostrarAppPrincipal(auth.currentUser);
   }catch(err){
@@ -1440,24 +1496,74 @@ document.getElementById('form-perfil-nome').addEventListener('submit', async (e)
   }
 });
 
+/* ---- guarda no aparelho que esse usuário já passou pelo primeiro acesso,
+   pra conseguir abrir o app sem internet (sem isso, offline ele não
+   conseguia ler o perfil e caía na tela de "criar senha" ou travava) ---- */
+function salvarPerfilLocal(uid, dados){
+  try{
+    localStorage.setItem('sst_perfil_' + uid, JSON.stringify({
+      senhaRedefinida: !!dados.senhaRedefinida,
+      perfilCompleto: !!dados.perfilCompleto
+    }));
+  }catch(e){}
+}
+function lerPerfilLocal(uid){
+  try{ return JSON.parse(localStorage.getItem('sst_perfil_' + uid) || 'null'); }
+  catch(e){ return null; }
+}
+function comTempoLimite(promessa, ms){
+  return Promise.race([
+    promessa,
+    new Promise((_, rej) => setTimeout(() => rej(new Error('tempo-limite')), ms))
+  ]);
+}
+function bloquearPorLimiteDispositivos(){
+  const msg = document.getElementById('login-msg');
+  msg.textContent = 'Este usuário já está em uso no limite de 2 dispositivos. Entre em contato com o administrador para liberar um novo dispositivo.';
+  msg.style.display = 'block';
+  auth.signOut();
+}
+
 /* ---- estado de autenticação ---- */
 auth.onAuthStateChanged(async (user) => {
   if(user){
-    let resultado = { autorizado: true, dados: {} };
+    // 1) já entrou antes neste aparelho: abre na hora (funciona offline)
+    //    e confere o limite de dispositivos em segundo plano quando der
+    const perfilLocal = lerPerfilLocal(user.uid);
+    if(perfilLocal && perfilLocal.senhaRedefinida && perfilLocal.perfilCompleto){
+      mostrarAppPrincipal(user);
+      verificarLimiteDispositivos(user).then((res) => {
+        if(!res.autorizado){ bloquearPorLimiteDispositivos(); return; }
+        salvarPerfilLocal(user.uid, res.dados || {});
+      }).catch(() => { /* sem sinal: confere na próxima abertura */ });
+      return;
+    }
+
+    // 2) primeira vez neste aparelho (ou antes dessa atualização): fluxo normal,
+    //    mas com tempo limite e leitura do cache se estiver sem internet
+    let resultado = null;
     try{
-      resultado = await verificarLimiteDispositivos(user);
+      resultado = await comTempoLimite(verificarLimiteDispositivos(user), 6000);
     }catch(err){
-      console.error('Falha ao verificar limite de dispositivos', err);
+      console.warn('Sem resposta do servidor, tentando o cache local', err);
+      try{
+        const snapCache = await db.collection('usuarios').doc(user.uid).get({ source: 'cache' });
+        if(snapCache.exists) resultado = { autorizado: true, dados: snapCache.data() };
+      }catch(e2){ /* nada no cache */ }
+    }
+    if(!resultado){
+      // sem internet e sem nada salvo: a pessoa já está logada (o Firebase
+      // guardou a sessão), então abre o app em vez de travar na tela de login
+      mostrarAppPrincipal(user);
+      return;
     }
     if(!resultado.autorizado){
-      const msg = document.getElementById('login-msg');
-      msg.textContent = 'Este usuário já está em uso no limite de 2 dispositivos. Entre em contato com o administrador para liberar um novo dispositivo.';
-      msg.style.display = 'block';
-      await auth.signOut();
+      bloquearPorLimiteDispositivos();
       return;
     }
 
     const dados = resultado.dados || {};
+    salvarPerfilLocal(user.uid, dados);
     if(!dados.senhaRedefinida){
       mostrarTelaNovaSenha();
     } else if(!dados.perfilCompleto){
@@ -1481,14 +1587,18 @@ document.getElementById('logout-btn').addEventListener('click', () => auth.signO
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-perfil'];
+const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil'];
 function irPara(viewId){
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.view === viewId);
   });
   if(viewId === 'view-desvios'){ mostrarListaDesvios(); }
-  if(viewId === 'view-aprovacoes'){ renderizarAprovacoes(); }
+  if(viewId === 'view-aprovacoes'){
+    if(!ehTST()){ irPara('view-enviados'); return; }
+    renderizarAprovacoes();
+  }
+  if(viewId === 'view-enviados'){ renderizarEnviados(); }
   if(viewId === 'view-analise-geral'){ abrirAnaliseGeral(); }
 }
 document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -1647,10 +1757,11 @@ document.getElementById('atalho-buscar').addEventListener('click', () => {
   document.getElementById('busca-desvio').scrollIntoView({ behavior: 'smooth', block: 'center' });
   document.getElementById('busca-desvio').focus();
 });
-document.getElementById('atalho-resolver').addEventListener('click', () => {
-  document.getElementById('busca-desvio').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  document.getElementById('busca-desvio').focus();
+document.getElementById('atalho-aprovacoes').addEventListener('click', () => {
+  irPara(ehTST() ? 'view-aprovacoes' : 'view-enviados');
 });
+document.getElementById('btn-voltar-aprovacoes').addEventListener('click', () => irPara('view-desvios'));
+document.getElementById('btn-voltar-enviados').addEventListener('click', () => irPara('view-desvios'));
 document.getElementById('atalho-analise').addEventListener('click', () => {
   irPara('view-analise-geral');
 });
@@ -1719,13 +1830,21 @@ function comprimirImagem(file, maxLargura = 1000, qualidade = 0.6){
     reader.readAsDataURL(file);
   });
 }
+/* IMPORTANTE (offline): as gravações do Firestore só "terminam" (resolvem
+   a promessa) quando o servidor confirma. Sem internet isso nunca
+   acontece, e era por isso que a tela ficava parada depois de salvar.
+   A gravação já fica guardada no aparelho na hora em que é chamada, então
+   aqui a gente NÃO espera o servidor: dispara e segue a vida. */
+function gravarSemEsperar(promessa, descricao){
+  promessa.catch(err => console.warn('Falha ao gravar (' + descricao + '):', err));
+}
 async function salvarFotoDesvio(desvioId, file){
-  const base64 = await comprimirImagem(file);
-  await db.collection('desvios').doc(desvioId).collection('fotos').add({
+  const base64 = await comprimirImagem(file); // isso é local, pode esperar
+  gravarSemEsperar(db.collection('desvios').doc(desvioId).collection('fotos').add({
     base64,
     nomeArquivo: file.name,
     criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-  });
+  }), 'foto do desvio');
 }
 
 /* ======================================================================
@@ -1813,11 +1932,27 @@ function cartaoDesvioResolver(d){
       </div>
       <p>${descricaoOrganizada(d)}</p>
       <p class="sub-prazo">Vence em: ${formatarDataBR(d.prazo) || '—'}</p>
-      <button type="button" class="btn-resolver" data-numero="${d.numero}">
-        <span class="icone-svg" data-icone="check"></span> Resolver
-      </button>
+      ${botaoResolverOuSituacao(d.numero, false)}
     </div>
   `;
+}
+
+/* Botão do cartão de um desvio com número: se já tem resolução enviada
+   (aguardando TST) mostra "Enviado para análise"; se já foi aprovada e só
+   falta a planilha fechar, mostra "Aprovado"; senão, o botão Resolver. */
+function botaoResolverOuSituacao(numero, autoAprovar, estiloExtra){
+  const sit = situacaoResolucao(numero);
+  const estilo = estiloExtra ? ` style="${estiloExtra}"` : '';
+  if(sit === 'pendente'){
+    return `<button type="button" class="btn-em-analise" disabled${estilo}>
+      <span class="icone-svg" data-icone="relogio"></span> Enviado para análise</button>`;
+  }
+  if(sit === 'aprovado'){
+    return `<button type="button" class="btn-resolver-feito" disabled${estilo}>
+      <span class="icone-svg" data-icone="check"></span> Aprovado · fechando na planilha</button>`;
+  }
+  return `<button type="button" class="btn-resolver" data-numero="${numero}"${autoAprovar ? ' data-auto="1"' : ''}${estilo}>
+    <span class="icone-svg" data-icone="check"></span> Resolver</button>`;
 }
 
 function renderizarListaEmContainer(containerId, lista){
@@ -1927,17 +2062,17 @@ document.getElementById('resolver-form').addEventListener('submit', async (e) =>
       // desvio ainda não sincronizado com a planilha: grava a resolução direto
       // no próprio registro. Quando o Apps Script sincronizar, ele já entra
       // direto como Concluído, sem precisar de uma aprovação separada.
-      await db.collection('desvios').doc(desvioPendenteEmResolucaoId).update({
+      gravarSemEsperar(db.collection('desvios').doc(desvioPendenteEmResolucaoId).update({
         resolvidoPeloUsuario: true,
         resolvidoObservacao: document.getElementById('resolver-observacao').value.trim(),
         resolvidoEm: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      }), 'resolução do desvio pendente');
       for(const file of fotosResolverSelecionadas){
         const base64 = await comprimirImagem(file);
-        await db.collection('desvios').doc(desvioPendenteEmResolucaoId).collection('fotosResolucao').add({
+        gravarSemEsperar(db.collection('desvios').doc(desvioPendenteEmResolucaoId).collection('fotosResolucao').add({
           base64, nomeArquivo: file.name,
           criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        }), 'foto da resolução');
       }
     } else {
       const solicitacao = {
@@ -1949,14 +2084,22 @@ document.getElementById('resolver-form').addEventListener('submit', async (e) =>
         criadoPorNome: auth.currentUser.displayName || auth.currentUser.email,
         criadoEm: firebase.firestore.FieldValue.serverTimestamp()
       };
-      const docRef = await db.collection('solicitacoes_resolucao').add(solicitacao);
+      solicitacao.criadoPorEmail = auth.currentUser.email || '';
+      solicitacao.localDesvio = desvioEmResolucao.local || '';
+      solicitacao.qtdFotos = fotosResolverSelecionadas.length;
+      const docRef = db.collection('solicitacoes_resolucao').doc();
+      gravarSemEsperar(docRef.set(solicitacao), 'solicitação de resolução');
+      // já marca aqui mesmo (antes do snapshot chegar) pra busca trocar o
+      // botão "Resolver" por "Enviado para análise" na hora
+      solicitacoesLocais.push({ id: docRef.id, ...solicitacao, criadoEm: null, _local: true });
+      atualizarMapaSolicitacoes();
 
       for(const file of fotosResolverSelecionadas){
         const base64 = await comprimirImagem(file);
-        await docRef.collection('fotos').add({
+        gravarSemEsperar(docRef.collection('fotos').add({
           base64, nomeArquivo: file.name,
           criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        }), 'foto da solicitação');
       }
     }
 
@@ -1985,56 +2128,261 @@ document.getElementById('resolver-form').addEventListener('submit', async (e) =>
 });
 
 /* ======================================================================
+   TST — quem é TST vê "Aprovações"; quem não é vê "Enviados".
+   A lista de e-mails vem da planilha de TSTs, que o Apps Script copia
+   para config/tsts no Firestore. Fica guardada no aparelho pra funcionar
+   offline também.
+   ====================================================================== */
+let emailsTST = new Set();
+try{
+  const salvo = JSON.parse(localStorage.getItem('sst_emails_tst') || '[]');
+  emailsTST = new Set(salvo.map(e => String(e).trim().toLowerCase()));
+}catch(e){}
+let carregouListaTST = false;
+
+function ehTST(){
+  const u = auth.currentUser;
+  return !!(u && u.email && emailsTST.has(u.email.trim().toLowerCase()));
+}
+function aplicarPerfilTST(){
+  const tst = ehTST();
+  document.getElementById('atalho-aprovacoes-label').textContent = tst ? 'Aprovações' : 'Enviados';
+  document.getElementById('perfil-card-aprovacoes').style.display = tst ? 'flex' : 'none';
+  atualizarBadgeAprovacoes();
+}
+function iniciarListaTST(){
+  if(carregouListaTST) return;
+  carregouListaTST = true;
+  db.collection('config').doc('tsts').onSnapshot((snap) => {
+    const lista = (snap.exists && Array.isArray(snap.data().emails)) ? snap.data().emails : [];
+    emailsTST = new Set(lista.map(e => String(e).trim().toLowerCase()));
+    try{ localStorage.setItem('sst_emails_tst', JSON.stringify(Array.from(emailsTST))); }catch(e){}
+    aplicarPerfilTST();
+    // se estava numa das duas telas, troca pra certa
+    const vAp = document.getElementById('view-aprovacoes').style.display === 'block';
+    const vEn = document.getElementById('view-enviados').style.display === 'block';
+    if(vAp && !ehTST()) irPara('view-enviados');
+    if(vEn && ehTST()) irPara('view-aprovacoes');
+  }, (err) => console.warn('Falha ao ler lista de TSTs:', err));
+}
+
+/* ======================================================================
+   SOLICITAÇÕES DE RESOLUÇÃO — acompanhadas ao vivo (e offline, pelo cache)
+   ----------------------------------------------------------------------
+   status: 'pendente'  -> aguardando TST
+           'aprovado'  -> TST aprovou, Apps Script ainda vai fechar na planilha
+           'concluido' -> Apps Script já fechou na planilha (continua salvo
+                          pra quem enviou ver em "Enviados")
+           'rejeitado' -> TST rejeitou (o desvio volta a poder ser resolvido)
+   ====================================================================== */
+let solicitacoesAbertasCache = [];   // pendente + aprovado (de todo mundo)
+let minhasSolicitacoesCache = [];    // tudo que EU enviei
+let solicitacoesLocais = [];         // acabei de enviar, snapshot ainda não chegou
+let mapaSituacaoPorNumero = {};      // numero -> 'pendente' | 'aprovado'
+let carregouSolicitacoes = false;
+
+function atualizarMapaSolicitacoes(){
+  const idsServidor = new Set(solicitacoesAbertasCache.map(x => x.id).concat(minhasSolicitacoesCache.map(x => x.id)));
+  solicitacoesLocais = solicitacoesLocais.filter(x => !idsServidor.has(x.id));
+  mapaSituacaoPorNumero = {};
+  solicitacoesAbertasCache.concat(solicitacoesLocais).forEach(x => {
+    if(x.numeroDesvio === undefined || x.numeroDesvio === null) return;
+    const k = String(x.numeroDesvio);
+    if(x.status === 'pendente') mapaSituacaoPorNumero[k] = 'pendente';
+    else if(x.status === 'aprovado' && mapaSituacaoPorNumero[k] !== 'pendente') mapaSituacaoPorNumero[k] = 'aprovado';
+  });
+  atualizarBadgeAprovacoes();
+  renderizarBuscaDesvios();
+  renderizarListaDesvios();
+  if(document.getElementById('view-aprovacoes').style.display === 'block') renderizarAprovacoes();
+  if(document.getElementById('view-enviados').style.display === 'block') renderizarEnviados();
+}
+function situacaoResolucao(numero){
+  if(numero === undefined || numero === null || numero === '') return null;
+  return mapaSituacaoPorNumero[String(numero)] || null;
+}
+function atualizarBadgeAprovacoes(){
+  const badge = document.getElementById('badge-aprovacoes');
+  if(!badge) return;
+  const qtd = ehTST() ? solicitacoesAbertasCache.filter(x => x.status === 'pendente').length : 0;
+  badge.textContent = qtd > 99 ? '99+' : String(qtd);
+  badge.style.display = qtd > 0 ? 'flex' : 'none';
+}
+function iniciarSolicitacoesResolucao(){
+  if(carregouSolicitacoes || !auth.currentUser) return;
+  carregouSolicitacoes = true;
+  db.collection('solicitacoes_resolucao').where('status', 'in', ['pendente', 'aprovado'])
+    .onSnapshot((snap) => {
+      solicitacoesAbertasCache = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      atualizarMapaSolicitacoes();
+    }, (err) => console.warn('Falha ao ler solicitações abertas:', err));
+  db.collection('solicitacoes_resolucao').where('criadoPor', '==', auth.currentUser.uid)
+    .onSnapshot((snap) => {
+      minhasSolicitacoesCache = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      atualizarMapaSolicitacoes();
+    }, (err) => console.warn('Falha ao ler minhas solicitações:', err));
+}
+
+function msDe(ts){ return ts && ts.toMillis ? ts.toMillis() : Date.now(); }
+function dataHoraBR(ts){
+  if(!ts || !ts.toDate) return '';
+  const d = ts.toDate();
+  return d.toLocaleDateString('pt-BR') + ' ' + d.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+}
+function escaparHtml(t){
+  return String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+}
+
+/* fotos de uma solicitação: carregadas só quando o cartão aparece.
+   Guardadas em memória pra não baixar de novo a cada atualização. */
+const cacheFotosSolicitacao = {};
+async function carregarFotosSolicitacao(id){
+  if(cacheFotosSolicitacao[id]) return cacheFotosSolicitacao[id];
+  try{
+    const snap = await db.collection('solicitacoes_resolucao').doc(id).collection('fotos').get();
+    const lista = snap.docs.map(f => f.data().base64).filter(Boolean);
+    if(lista.length) cacheFotosSolicitacao[id] = lista;
+    return lista;
+  }catch(e){
+    console.warn('Falha ao carregar fotos da solicitação', id, e);
+    return [];
+  }
+}
+function preencherFotosNoCartao(cont, id, status){
+  const alvo = cont.querySelector(`.aprovacao-fotos[data-id="${id}"]`);
+  if(!alvo) return;
+  carregarFotosSolicitacao(id).then((fotos) => {
+    if(!fotos.length){
+      alvo.innerHTML = (status === 'concluido')
+        ? '<p class="dica-ampliar">Fotos já arquivadas na pasta do Drive.</p>'
+        : '<p class="dica-ampliar">Sem fotos (ou ainda sincronizando).</p>';
+      return;
+    }
+    alvo.innerHTML = fotos.map((src, i) => `<img src="${src}" data-i="${i}" alt="Foto ${i+1}">`).join('') +
+      '<p class="dica-ampliar">Toque na foto para ampliar</p>';
+    alvo.querySelectorAll('img').forEach(im => {
+      im.addEventListener('click', () => abrirVisualizadorFoto(fotos, Number(im.dataset.i)));
+    });
+  });
+}
+
+/* ======================================================================
    APROVAÇÕES — TSTs revisam as solicitações de resolução pendentes
    ====================================================================== */
-async function renderizarAprovacoes(){
+function renderizarAprovacoes(){
   const cont = document.getElementById('aprovacoes-lista');
-  cont.innerHTML = '<p class="empty-state">Carregando...</p>';
+  const pendentes = solicitacoesAbertasCache
+    .filter(x => x.status === 'pendente')
+    .sort((a, b) => msDe(a.criadoEm) - msDe(b.criadoEm)); // mais antigas primeiro
 
-  const snap = await db.collection('solicitacoes_resolucao').where('status', '==', 'pendente').get();
-  if(snap.empty){
+  if(pendentes.length === 0){
     cont.innerHTML = '<p class="empty-state">Nenhuma solicitação pendente.</p>';
     return;
   }
 
-  const cards = [];
-  for(const doc of snap.docs){
-    const s = doc.data();
-    const fotosSnap = await doc.ref.collection('fotos').get();
-    const fotosHtml = fotosSnap.docs.map(f => `<img src="${f.data().base64}">`).join('');
-
-    cards.push(`
-      <div class="aprovacao-card" data-id="${doc.id}">
+  cont.innerHTML = pendentes.map(s => {
+    const d = desviosAtivosCache.find(x => String(x.numero) === String(s.numeroDesvio)) || {};
+    const local = s.localDesvio || d.local || '';
+    return `
+      <div class="aprovacao-card" data-id="${s.id}">
         <div class="linha1">
-          <b>Nº ${s.numeroDesvio}</b>
-          <span class="sub" style="font-size:11px;">${s.criadoPorNome || ''}</span>
+          <b>Nº ${escaparHtml(s.numeroDesvio)}</b>
+          <span class="sub" style="font-size:11px;">${escaparHtml(s.criadoPorNome || '')}</span>
         </div>
-        <div class="desc">${s.descricaoDesvio || ''}</div>
-        <div class="obs">${s.observacao || ''}</div>
-        <div class="aprovacao-fotos">${fotosHtml}</div>
+        <div class="desc">${local ? '<b>' + escaparHtml(local) + '</b> · ' : ''}${escaparHtml(s.descricaoDesvio || d.descricao || '')}</div>
+        ${d.respCorrecao ? `<div class="meta">Responsável pela correção: ${escaparHtml(d.respCorrecao)}</div>` : ''}
+        <div class="obs">${escaparHtml(s.observacao || '')}</div>
+        <div class="aprovacao-fotos" data-id="${s.id}"><p class="dica-ampliar">Carregando fotos...</p></div>
+        <div class="meta">Enviado em ${dataHoraBR(s.criadoEm) || 'agora'}</div>
         <div class="aprovacao-acoes">
-          <button type="button" class="btn-rejeitar" data-id="${doc.id}">Rejeitar</button>
-          <button type="button" class="btn-aprovar" data-id="${doc.id}">Aprovar</button>
+          <button type="button" class="btn-rejeitar" data-id="${s.id}">Rejeitar</button>
+          <button type="button" class="btn-aprovar" data-id="${s.id}">Aprovar</button>
         </div>
       </div>
-    `);
-  }
+    `;
+  }).join('');
 
-  cont.innerHTML = cards.join('');
+  pendentes.forEach(s => preencherFotosNoCartao(cont, s.id, s.status));
 
+  const quem = () => (auth.currentUser.displayName || auth.currentUser.email);
   cont.querySelectorAll('.btn-aprovar').forEach(btn => {
-    btn.addEventListener('click', async () => {
+    btn.addEventListener('click', () => {
       btn.disabled = true;
-      await db.collection('solicitacoes_resolucao').doc(btn.dataset.id).update({ status: 'aprovado' });
-      renderizarAprovacoes();
+      // sem await: offline também funciona, sobe quando o sinal voltar
+      gravarSemEsperar(db.collection('solicitacoes_resolucao').doc(btn.dataset.id).update({
+        status: 'aprovado',
+        avaliadoPorNome: quem(),
+        avaliadoPorEmail: auth.currentUser.email || '',
+        avaliadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      }), 'aprovar solicitação');
     });
   });
   cont.querySelectorAll('.btn-rejeitar').forEach(btn => {
-    btn.addEventListener('click', async () => {
+    btn.addEventListener('click', () => {
+      const motivo = prompt('Motivo da rejeição (quem enviou vai ver):', '');
+      if(motivo === null) return; // cancelou
       btn.disabled = true;
-      await db.collection('solicitacoes_resolucao').doc(btn.dataset.id).update({ status: 'rejeitado' });
-      renderizarAprovacoes();
+      gravarSemEsperar(db.collection('solicitacoes_resolucao').doc(btn.dataset.id).update({
+        status: 'rejeitado',
+        motivoRejeicao: motivo.trim(),
+        avaliadoPorNome: quem(),
+        avaliadoPorEmail: auth.currentUser.email || '',
+        avaliadoEm: firebase.firestore.FieldValue.serverTimestamp()
+      }), 'rejeitar solicitação');
     });
+  });
+}
+
+/* ======================================================================
+   ENVIADOS — quem não é TST acompanha o que mandou pra análise
+   ====================================================================== */
+function renderizarEnviados(){
+  const cont = document.getElementById('enviados-lista');
+  const lista = minhasSolicitacoesCache.concat(solicitacoesLocais)
+    .sort((a, b) => msDe(b.criadoEm) - msDe(a.criadoEm)); // mais recentes primeiro
+
+  if(lista.length === 0){
+    cont.innerHTML = '<p class="empty-state">Você ainda não enviou nenhuma resolução.</p>';
+    return;
+  }
+
+  const rotulos = {
+    pendente:  { classe: 'analise',      texto: 'Em análise' },
+    aprovado:  { classe: 'sincronizado', texto: 'Aprovado' },
+    concluido: { classe: 'sincronizado', texto: 'Aprovado · fechado' },
+    rejeitado: { classe: 'rejeitado',    texto: 'Rejeitado' }
+  };
+
+  cont.innerHTML = lista.map(s => {
+    const r = rotulos[s.status] || { classe: 'pendente', texto: s.status || '—' };
+    const avaliacao = (s.status !== 'pendente' && s.avaliadoPorNome)
+      ? `<div class="meta">${s.status === 'rejeitado' ? 'Rejeitado' : 'Aprovado'} por ${escaparHtml(s.avaliadoPorNome)}${s.avaliadoEm ? ' em ' + dataHoraBR(s.avaliadoEm) : ''}</div>`
+      : '';
+    const motivo = (s.status === 'rejeitado' && s.motivoRejeicao)
+      ? `<div class="obs" style="background:#fbe0e0; color:#8c2f2f;"><b>Motivo:</b> ${escaparHtml(s.motivoRejeicao)}</div>` : '';
+    const reenviar = (s.status === 'rejeitado' && desviosAtivosCache.some(x => String(x.numero) === String(s.numeroDesvio)) && !situacaoResolucao(s.numeroDesvio))
+      ? `<button type="button" class="btn-resolver btn-reenviar" data-numero="${escaparHtml(s.numeroDesvio)}"><span class="icone-svg" data-icone="check"></span> Resolver de novo</button>` : '';
+    return `
+      <div class="aprovacao-card">
+        <div class="linha1">
+          <b>Nº ${escaparHtml(s.numeroDesvio)}</b>
+          <span class="tag ${r.classe}">${r.texto}</span>
+        </div>
+        <div class="desc">${s.localDesvio ? '<b>' + escaparHtml(s.localDesvio) + '</b> · ' : ''}${escaparHtml(s.descricaoDesvio || '')}</div>
+        <div class="obs">${escaparHtml(s.observacao || '')}</div>
+        ${motivo}
+        <div class="aprovacao-fotos" data-id="${s.id}"></div>
+        <div class="meta">Enviado em ${dataHoraBR(s.criadoEm) || 'agora (aguardando sinal)'}</div>
+        ${avaliacao}
+        ${reenviar}
+      </div>
+    `;
+  }).join('');
+
+  lista.forEach(s => { if(!s._local) preencherFotosNoCartao(cont, s.id, s.status); });
+  cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
+  cont.querySelectorAll('.btn-reenviar').forEach(btn => {
+    btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero, false));
   });
 }
 
@@ -2082,7 +2430,8 @@ document.getElementById('desvio-form').addEventListener('submit', async (e) => {
 
     // .add() já gera um ID único na hora, mesmo offline — é o nosso
     // "registro interno" que evita duplicidade antes da sincronização.
-    const docRef = await db.collection('desvios').add(desvio);
+    const docRef = db.collection('desvios').doc(); // ID gerado no aparelho, sem precisar de rede
+    gravarSemEsperar(docRef.set(desvio), 'desvio');
 
     // fotos: viram documentos na subcoleção fotos/, comprimidas e em base64.
     // Escreve no Firestore, então funciona offline igual ao resto do formulário.
@@ -2713,11 +3062,10 @@ function renderizarListaDesvios(){
       // aberto confirmado, ou ainda não confirmado em nenhum dos dois (caso
       // ambíguo durante a sincronização): assume aberto, nunca esconde o
       // botão sem ter certeza de que já foi fechado
-      tagClasse = 'sincronizado'; tagTexto = 'Aberto';
-      botaoHtml = `
-        <button type="button" class="btn-resolver" data-numero="${d.numero}" data-auto="1" style="margin-top:8px;">
-          <span class="icone-svg" data-icone="check"></span> Resolver
-        </button>`;
+      const sit = situacaoResolucao(d.numero);
+      if(sit === 'pendente'){ tagClasse = 'analise'; tagTexto = 'Em análise'; }
+      else { tagClasse = 'sincronizado'; tagTexto = 'Aberto'; }
+      botaoHtml = botaoResolverOuSituacao(d.numero, true, 'margin-top:8px;');
     }
     return `
       <div class="desvio-card">
@@ -2750,6 +3098,68 @@ function renderizarListaDesvios(){
   const btnMenos = document.getElementById('btn-menos-registros');
   if(btnMenos) btnMenos.addEventListener('click', () => { mostrarTodosMeusRegistros = false; renderizarListaDesvios(); });
 }
+</script>
+
+<!-- Visualizador de foto em tela cheia (Aprovações / Enviados) -->
+<div class="foto-lightbox" id="foto-lightbox">
+  <div class="lb-area" id="lb-area"><img id="lb-img" alt="Foto ampliada"></div>
+  <button type="button" class="lb-fechar" id="lb-fechar" aria-label="Fechar">✕</button>
+  <button type="button" class="lb-nav ant" id="lb-ant" aria-label="Anterior">‹</button>
+  <button type="button" class="lb-nav prox" id="lb-prox" aria-label="Próxima">›</button>
+  <div class="lb-contador" id="lb-contador"></div>
+</div>
+<script>
+/* ---- visualizador de foto: toque na miniatura abre em tela cheia;
+   deslizar ou setas trocam de foto; toque no fundo ou ✕ fecha ---- */
+(function(){
+  const box = document.getElementById('foto-lightbox');
+  const img = document.getElementById('lb-img');
+  let fotos = [], atual = 0, inicioX = null;
+  const area = document.getElementById('lb-area');
+  function mostrar(){
+    area.classList.remove('zoom');
+    img.src = fotos[atual];
+    const varias = fotos.length > 1;
+    document.getElementById('lb-ant').style.display = varias ? 'block' : 'none';
+    document.getElementById('lb-prox').style.display = varias ? 'block' : 'none';
+    document.getElementById('lb-contador').textContent = varias ? (atual + 1) + ' / ' + fotos.length : '';
+  }
+  window.abrirVisualizadorFoto = function(lista, indice){
+    fotos = lista; atual = indice || 0; mostrar(); box.classList.add('aberto');
+  };
+  function fechar(){ box.classList.remove('aberto'); img.src = ''; }
+  function passo(d){ atual = (atual + d + fotos.length) % fotos.length; mostrar(); }
+  document.getElementById('lb-fechar').addEventListener('click', fechar);
+  document.getElementById('lb-ant').addEventListener('click', (e) => { e.stopPropagation(); passo(-1); });
+  document.getElementById('lb-prox').addEventListener('click', (e) => { e.stopPropagation(); passo(1); });
+  box.addEventListener('click', (e) => { if(e.target === box || e.target === area) fechar(); });
+  // toque na foto: amplia 2,5x (arraste pra ver os detalhes); toque de novo volta
+  img.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const ampliando = !area.classList.contains('zoom');
+    area.classList.toggle('zoom', ampliando);
+    if(ampliando){
+      const r = img.getBoundingClientRect();
+      requestAnimationFrame(() => {
+        area.scrollLeft = (area.scrollWidth - area.clientWidth) * ((e.clientX - r.left) / r.width);
+        area.scrollTop = (area.scrollHeight - area.clientHeight) * ((e.clientY - r.top) / r.height);
+      });
+    }
+  });
+  box.addEventListener('touchstart', (e) => { if(e.touches.length === 1) inicioX = e.touches[0].clientX; }, { passive:true });
+  box.addEventListener('touchend', (e) => {
+    if(inicioX === null || fotos.length < 2 || area.classList.contains('zoom')) return;
+    const dx = e.changedTouches[0].clientX - inicioX;
+    if(Math.abs(dx) > 60) passo(dx < 0 ? 1 : -1);
+    inicioX = null;
+  });
+  document.addEventListener('keydown', (e) => {
+    if(!box.classList.contains('aberto')) return;
+    if(e.key === 'Escape') fechar();
+    if(e.key === 'ArrowLeft') passo(-1);
+    if(e.key === 'ArrowRight') passo(1);
+  });
+})();
 </script>
 </body>
 </html>
