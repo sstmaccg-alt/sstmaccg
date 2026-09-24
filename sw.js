@@ -7,7 +7,7 @@
 // descartar o cache antigo. Mesmo assim, o index.html agora é buscado na
 // rede primeiro (veja abaixo), então atualizações aparecem sozinhas.
 
-const CACHE_NAME = 'sst-ccg-v50';
+const CACHE_NAME = 'sst-ccg-v51';
 const ARQUIVOS_PARA_CACHE = [
   './',
   './index.html',
