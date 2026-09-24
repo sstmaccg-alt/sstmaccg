@@ -2615,8 +2615,8 @@ let mostrarTodosMeusRegistros = false;
 
 function iniciarListaDesvios(){
   if(carregouMeusRegistros) return;
+  if(!auth.currentUser) return; // ainda não logou de verdade: tenta de novo na próxima chamada
   carregouMeusRegistros = true;
-  if(!auth.currentUser) return;
   carregarDesviosConcluidos(renderizarListaDesvios); // carrega em paralelo, só pra confirmar "Fechado" com segurança
 
   db.collection('desvios')
