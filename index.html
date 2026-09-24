@@ -1792,6 +1792,9 @@ function cartaoDesvioResolver(d){
         </div>
         <p>${descricaoOrganizada(d)}</p>
         <p class="sub-prazo">Ainda sincronizando com a planilha...</p>
+        <button type="button" class="btn-resolver btn-resolver-pendente" data-id="${d.id}">
+          <span class="icone-svg" data-icone="check"></span> Resolver
+        </button>
       </div>
     `;
   }
@@ -1818,8 +1821,11 @@ function renderizarListaEmContainer(containerId, lista){
   }
   cont.innerHTML = lista.map(cartaoDesvioResolver).join('');
   cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
-  cont.querySelectorAll('.btn-resolver').forEach(btn => {
+  cont.querySelectorAll('.btn-resolver:not(.btn-resolver-pendente)').forEach(btn => {
     btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero));
+  });
+  cont.querySelectorAll('.btn-resolver-pendente').forEach(btn => {
+    btn.addEventListener('click', () => abrirResolverDesvioPendente(btn.dataset.id));
   });
 }
 
@@ -2052,6 +2058,7 @@ document.getElementById('desvio-form').addEventListener('submit', async (e) => {
       origem,
       criadoPor: auth.currentUser.uid,
       criadoPorNome: auth.currentUser.displayName || auth.currentUser.email,
+      criadoPorEmail: auth.currentUser.email,
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     };
 
@@ -2652,7 +2659,7 @@ function renderizarListaDesvios(){
     if(!d.numero){
       tagClasse = 'pendente'; tagTexto = 'Pendente';
       botaoHtml = `
-        <button type="button" class="btn-resolver-pendente" data-id="${d.id}" style="margin-top:8px;">
+        <button type="button" class="btn-resolver btn-resolver-pendente" data-id="${d.id}" style="margin-top:8px;">
           <span class="icone-svg" data-icone="check"></span> Resolver
         </button>`;
     } else if(numerosFechados.has(String(d.numero))){
@@ -2687,7 +2694,7 @@ function renderizarListaDesvios(){
   }
 
   cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
-  cont.querySelectorAll('.btn-resolver').forEach(btn => {
+  cont.querySelectorAll('.btn-resolver:not(.btn-resolver-pendente)').forEach(btn => {
     btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero, btn.dataset.auto === '1'));
   });
   cont.querySelectorAll('.btn-resolver-pendente').forEach(btn => {
