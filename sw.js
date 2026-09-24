@@ -7,11 +7,20 @@
 // descartar o cache antigo. Mesmo assim, o index.html agora é buscado na
 // rede primeiro (veja abaixo), então atualizações aparecem sozinhas.
 
-const CACHE_NAME = 'sst-ccg-v53';
+const CACHE_NAME = 'sst-ccg-v54';
 const ARQUIVOS_PARA_CACHE = [
   './',
   './index.html',
   './manifest.json'
+];
+
+// Bibliotecas do Firebase: sem elas o app nem começa, então já guardamos
+// na instalação (antes elas só entravam no cache "se" fossem baixadas
+// depois, e às vezes o celular abria offline sem elas).
+const FIREBASE_SCRIPTS = [
+  'https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js',
+  'https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js',
+  'https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js'
 ];
 
 // Quanto tempo esperar a rede antes de abrir a cópia guardada (sinal ruim no campo)
@@ -19,10 +28,17 @@ const TEMPO_LIMITE_REDE_MS = 4000;
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) =>
+    caches.open(CACHE_NAME).then(async (cache) => {
       // cache: 'reload' ignora o cache HTTP do navegador e baixa a versão nova de verdade
-      cache.addAll(ARQUIVOS_PARA_CACHE.map((url) => new Request(url, { cache: 'reload' })))
-    )
+      await cache.addAll(ARQUIVOS_PARA_CACHE.map((url) => new Request(url, { cache: 'reload' })));
+      // Firebase: um por um, sem derrubar a instalação se algum falhar
+      await Promise.all(FIREBASE_SCRIPTS.map(async (url) => {
+        try{
+          const resp = await fetch(url, { mode: 'cors' });
+          if (resp.ok) await cache.put(url, resp);
+        }catch(e){ /* tenta de novo na próxima vez que o script for pedido */ }
+      }));
+    })
   );
   self.skipWaiting();
 });
@@ -91,11 +107,14 @@ self.addEventListener('fetch', (event) => {
 
   // Demais arquivos (scripts do Firebase, imagens, manifest): cache primeiro
   event.respondWith(
-    caches.match(event.request).then((respostaCache) => {
+    caches.match(event.request, { ignoreVary: true }).then((respostaCache) => {
       return respostaCache || fetch(event.request).then((respostaRede) => {
         // guarda uma cópia no cache para a próxima vez que estiver offline
-        const copia = respostaRede.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copia));
+        // (só respostas boas ou "opacas" de outro site — nunca erro 404/500)
+        if (respostaRede && (respostaRede.ok || respostaRede.type === 'opaque')) {
+          const copia = respostaRede.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copia));
+        }
         return respostaRede;
       }).catch(() => caches.match('./index.html'));
     })
