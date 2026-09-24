@@ -197,6 +197,17 @@
   .aprovacao-card .meta{ font-size:11px; color:var(--text-muted); margin-top:8px; }
   .tag.analise{ background:#e3ecf7; color:#2c5282; }
   .tag.rejeitado{ background:#fbe0e0; color:#c84c4c; }
+  .rejeicao-box{ margin-top:12px; padding:12px; border-radius:10px; background:#fdf1f1; border:1px solid #f3cccc; }
+  .rejeicao-box label{ display:block; font-size:12px; font-weight:700; color:#8c2f2f; margin-bottom:6px; }
+  .rejeicao-box textarea{
+    width:100%; box-sizing:border-box; border:1px solid #efc2c2; border-radius:8px; padding:8px 10px;
+    font:inherit; font-size:13px; resize:vertical; background:var(--white); color:var(--navy);
+  }
+  .rejeicao-box .erro{ font-size:11px; color:#c84c4c; margin-top:4px; display:none; }
+  .btn-confirmar-rej{ background:#c84c4c !important; color:#fff !important; }
+  .btn-cancelar-rej{ background:var(--border) !important; color:var(--text-muted) !important; }
+  .aprovacao-card.novo-rejeitado{ box-shadow:0 0 0 2px #e8a3a3, 0 1px 4px rgba(20,33,49,.07); }
+  .selo-novo{ font-size:10px; font-weight:700; color:#fff; background:var(--error); border-radius:6px; padding:2px 6px; margin-left:6px; }
   .btn-em-analise{
     background:#e3ecf7; color:#2c5282; border:none; border-radius:8px;
     padding:7px 14px; font-size:12px; font-weight:700; cursor:default; margin-top:10px;
@@ -1951,8 +1962,9 @@ function botaoResolverOuSituacao(numero, autoAprovar, estiloExtra){
     return `<button type="button" class="btn-resolver-feito" disabled${estilo}>
       <span class="icone-svg" data-icone="check"></span> Aprovado · fechando na planilha</button>`;
   }
+  const rotulo = (sit === 'rejeitado') ? 'Enviar novamente para análise' : 'Resolver';
   return `<button type="button" class="btn-resolver" data-numero="${numero}"${autoAprovar ? ' data-auto="1"' : ''}${estilo}>
-    <span class="icone-svg" data-icone="check"></span> Resolver</button>`;
+    <span class="icone-svg" data-icone="check"></span> ${rotulo}</button>`;
 }
 
 function renderizarListaEmContainer(containerId, lista){
@@ -2179,6 +2191,8 @@ let solicitacoesAbertasCache = [];   // pendente + aprovado (de todo mundo)
 let minhasSolicitacoesCache = [];    // tudo que EU enviei
 let solicitacoesLocais = [];         // acabei de enviar, snapshot ainda não chegou
 let mapaSituacaoPorNumero = {};      // numero -> 'pendente' | 'aprovado'
+let minhaUltimaSolicitacaoPorNumero = {}; // numero -> minha solicitação mais recente
+const rascunhosRejeicao = {};        // id -> { aberto, texto } (não perde o texto se a lista atualizar)
 let carregouSolicitacoes = false;
 
 function atualizarMapaSolicitacoes(){
@@ -2191,20 +2205,61 @@ function atualizarMapaSolicitacoes(){
     if(x.status === 'pendente') mapaSituacaoPorNumero[k] = 'pendente';
     else if(x.status === 'aprovado' && mapaSituacaoPorNumero[k] !== 'pendente') mapaSituacaoPorNumero[k] = 'aprovado';
   });
+  minhaUltimaSolicitacaoPorNumero = {};
+  minhasSolicitacoesCache.concat(solicitacoesLocais).forEach(x => {
+    if(x.numeroDesvio === undefined || x.numeroDesvio === null) return;
+    const k = String(x.numeroDesvio);
+    const atual = minhaUltimaSolicitacaoPorNumero[k];
+    if(!atual || msDe(x.criadoEm) >= msDe(atual.criadoEm)) minhaUltimaSolicitacaoPorNumero[k] = x;
+  });
   atualizarBadgeAprovacoes();
   renderizarBuscaDesvios();
   renderizarListaDesvios();
-  if(document.getElementById('view-aprovacoes').style.display === 'block') renderizarAprovacoes();
+  if(document.getElementById('view-aprovacoes').style.display === 'block'){
+    // se o TST está digitando um motivo, espera ele sair do campo pra
+    // redesenhar (senão o teclado fecha no meio da digitação)
+    const ativo = document.activeElement;
+    if(ativo && ativo.closest && ativo.closest('.rejeicao-box')){
+      ativo.addEventListener('blur', () => setTimeout(renderizarAprovacoes, 300), { once: true });
+    } else {
+      renderizarAprovacoes();
+    }
+  }
   if(document.getElementById('view-enviados').style.display === 'block') renderizarEnviados();
 }
 function situacaoResolucao(numero){
   if(numero === undefined || numero === null || numero === '') return null;
-  return mapaSituacaoPorNumero[String(numero)] || null;
+  const k = String(numero);
+  if(mapaSituacaoPorNumero[k]) return mapaSituacaoPorNumero[k];
+  // devolvido: a MINHA última resolução desse desvio foi rejeitada pelo TST
+  const ultima = minhaUltimaSolicitacaoPorNumero[k];
+  if(ultima && ultima.status === 'rejeitado') return 'rejeitado';
+  return null;
+}
+
+/* rejeições que a pessoa ainda não viu (aviso vermelho no botão Enviados) */
+function rejeicoesVistas(){
+  try{ return new Set(JSON.parse(localStorage.getItem('sst_rejeicoes_vistas') || '[]')); }
+  catch(e){ return new Set(); }
+}
+function marcarRejeicoesComoVistas(){
+  const vistas = rejeicoesVistas();
+  minhasSolicitacoesCache.filter(x => x.status === 'rejeitado').forEach(x => vistas.add(x.id));
+  try{ localStorage.setItem('sst_rejeicoes_vistas', JSON.stringify(Array.from(vistas))); }catch(e){}
+  atualizarBadgeAprovacoes();
+}
+function rejeicoesNaoVistas(){
+  const vistas = rejeicoesVistas();
+  // só conta a rejeição se ela ainda é a última resposta daquele desvio
+  return Object.values(minhaUltimaSolicitacaoPorNumero)
+    .filter(x => x.status === 'rejeitado' && !vistas.has(x.id));
 }
 function atualizarBadgeAprovacoes(){
   const badge = document.getElementById('badge-aprovacoes');
   if(!badge) return;
-  const qtd = ehTST() ? solicitacoesAbertasCache.filter(x => x.status === 'pendente').length : 0;
+  const qtd = ehTST()
+    ? solicitacoesAbertasCache.filter(x => x.status === 'pendente').length
+    : rejeicoesNaoVistas().length;
   badge.textContent = qtd > 99 ? '99+' : String(qtd);
   badge.style.display = qtd > 0 ? 'flex' : 'none';
 }
@@ -2294,9 +2349,18 @@ function renderizarAprovacoes(){
         <div class="obs">${escaparHtml(s.observacao || '')}</div>
         <div class="aprovacao-fotos" data-id="${s.id}"><p class="dica-ampliar">Carregando fotos...</p></div>
         <div class="meta">Enviado em ${dataHoraBR(s.criadoEm) || 'agora'}</div>
-        <div class="aprovacao-acoes">
+        <div class="aprovacao-acoes" data-acoes="${s.id}" style="${(rascunhosRejeicao[s.id] && rascunhosRejeicao[s.id].aberto) ? 'display:none;' : ''}">
           <button type="button" class="btn-rejeitar" data-id="${s.id}">Rejeitar</button>
           <button type="button" class="btn-aprovar" data-id="${s.id}">Aprovar</button>
+        </div>
+        <div class="rejeicao-box" data-rej="${s.id}" style="${(rascunhosRejeicao[s.id] && rascunhosRejeicao[s.id].aberto) ? '' : 'display:none;'}">
+          <label>Por que está sendo rejeitado?</label>
+          <textarea rows="3" data-id="${s.id}" placeholder="Ex.: a foto não mostra o guarda-corpo instalado; falta sinalização no acesso...">${escaparHtml((rascunhosRejeicao[s.id] && rascunhosRejeicao[s.id].texto) || '')}</textarea>
+          <p class="erro">Escreva o motivo para quem enviou saber o que corrigir.</p>
+          <div class="aprovacao-acoes">
+            <button type="button" class="btn-rejeitar btn-cancelar-rej" data-id="${s.id}">Cancelar</button>
+            <button type="button" class="btn-rejeitar btn-confirmar-rej" data-id="${s.id}">Confirmar rejeição</button>
+          </div>
         </div>
       </div>
     `;
@@ -2317,14 +2381,48 @@ function renderizarAprovacoes(){
       }), 'aprovar solicitação');
     });
   });
-  cont.querySelectorAll('.btn-rejeitar').forEach(btn => {
+  // Rejeitar: abre a caixa do motivo (em vez de rejeitar direto)
+  const caixa = (id) => cont.querySelector(`.rejeicao-box[data-rej="${id}"]`);
+  const acoes = (id) => cont.querySelector(`.aprovacao-acoes[data-acoes="${id}"]`);
+  cont.querySelectorAll('.btn-rejeitar:not(.btn-cancelar-rej):not(.btn-confirmar-rej)').forEach(btn => {
     btn.addEventListener('click', () => {
-      const motivo = prompt('Motivo da rejeição (quem enviou vai ver):', '');
-      if(motivo === null) return; // cancelou
+      const id = btn.dataset.id;
+      rascunhosRejeicao[id] = { aberto: true, texto: (rascunhosRejeicao[id] && rascunhosRejeicao[id].texto) || '' };
+      acoes(id).style.display = 'none';
+      caixa(id).style.display = 'block';
+      caixa(id).querySelector('textarea').focus();
+    });
+  });
+  cont.querySelectorAll('.rejeicao-box textarea').forEach(ta => {
+    ta.addEventListener('input', () => {
+      rascunhosRejeicao[ta.dataset.id] = { aberto: true, texto: ta.value };
+      if(ta.value.trim()) caixa(ta.dataset.id).querySelector('.erro').style.display = 'none';
+    });
+  });
+  cont.querySelectorAll('.btn-cancelar-rej').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      delete rascunhosRejeicao[id];
+      caixa(id).style.display = 'none';
+      caixa(id).querySelector('textarea').value = '';
+      acoes(id).style.display = 'flex';
+    });
+  });
+  cont.querySelectorAll('.btn-confirmar-rej').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      const motivo = caixa(id).querySelector('textarea').value.trim();
+      if(!motivo){
+        caixa(id).querySelector('.erro').style.display = 'block';
+        return;
+      }
       btn.disabled = true;
-      gravarSemEsperar(db.collection('solicitacoes_resolucao').doc(btn.dataset.id).update({
+      delete rascunhosRejeicao[id];
+      // só muda o status da SOLICITAÇÃO: a planilha e o Drive não são tocados.
+      // O desvio continua aberto e volta a mostrar o botão pra reenviar.
+      gravarSemEsperar(db.collection('solicitacoes_resolucao').doc(id).update({
         status: 'rejeitado',
-        motivoRejeicao: motivo.trim(),
+        motivoRejeicao: motivo,
         avaliadoPorNome: quem(),
         avaliadoPorEmail: auth.currentUser.email || '',
         avaliadoEm: firebase.firestore.FieldValue.serverTimestamp()
@@ -2353,19 +2451,25 @@ function renderizarEnviados(){
     rejeitado: { classe: 'rejeitado',    texto: 'Rejeitado' }
   };
 
+  const naoVistas = new Set(rejeicoesNaoVistas().map(x => x.id));
   cont.innerHTML = lista.map(s => {
     const r = rotulos[s.status] || { classe: 'pendente', texto: s.status || '—' };
+    const novo = naoVistas.has(s.id);
     const avaliacao = (s.status !== 'pendente' && s.avaliadoPorNome)
       ? `<div class="meta">${s.status === 'rejeitado' ? 'Rejeitado' : 'Aprovado'} por ${escaparHtml(s.avaliadoPorNome)}${s.avaliadoEm ? ' em ' + dataHoraBR(s.avaliadoEm) : ''}</div>`
       : '';
     const motivo = (s.status === 'rejeitado' && s.motivoRejeicao)
       ? `<div class="obs" style="background:#fbe0e0; color:#8c2f2f;"><b>Motivo:</b> ${escaparHtml(s.motivoRejeicao)}</div>` : '';
-    const reenviar = (s.status === 'rejeitado' && desviosAtivosCache.some(x => String(x.numero) === String(s.numeroDesvio)) && !situacaoResolucao(s.numeroDesvio))
-      ? `<button type="button" class="btn-resolver btn-reenviar" data-numero="${escaparHtml(s.numeroDesvio)}"><span class="icone-svg" data-icone="check"></span> Resolver de novo</button>` : '';
+    // botão só na rejeição MAIS RECENTE daquele desvio, e só se ele ainda está aberto
+    const ultima = minhaUltimaSolicitacaoPorNumero[String(s.numeroDesvio)];
+    const reenviar = (s.status === 'rejeitado' && ultima && ultima.id === s.id
+        && situacaoResolucao(s.numeroDesvio) === 'rejeitado'
+        && desviosAtivosCache.some(x => String(x.numero) === String(s.numeroDesvio)))
+      ? `<button type="button" class="btn-resolver btn-reenviar" data-numero="${escaparHtml(s.numeroDesvio)}"><span class="icone-svg" data-icone="check"></span> Enviar novamente para análise</button>` : '';
     return `
-      <div class="aprovacao-card">
+      <div class="aprovacao-card${novo ? ' novo-rejeitado' : ''}">
         <div class="linha1">
-          <b>Nº ${escaparHtml(s.numeroDesvio)}</b>
+          <b>Nº ${escaparHtml(s.numeroDesvio)}${novo ? '<span class="selo-novo">NOVO</span>' : ''}</b>
           <span class="tag ${r.classe}">${r.texto}</span>
         </div>
         <div class="desc">${s.localDesvio ? '<b>' + escaparHtml(s.localDesvio) + '</b> · ' : ''}${escaparHtml(s.descricaoDesvio || '')}</div>
@@ -2384,6 +2488,11 @@ function renderizarEnviados(){
   cont.querySelectorAll('.btn-reenviar').forEach(btn => {
     btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.numero, false));
   });
+  // abriu a tela: as rejeições já foram vistas (some o aviso vermelho do botão,
+  // mas o destaque "NOVO" continua nesta visita pra pessoa achar o card)
+  if(naoVistas.size && document.getElementById('view-enviados').style.display === 'block'){
+    setTimeout(marcarRejeicoesComoVistas, 0);
+  }
 }
 
 /* ---- salvar novo desvio ---- */
@@ -3064,6 +3173,7 @@ function renderizarListaDesvios(){
       // botão sem ter certeza de que já foi fechado
       const sit = situacaoResolucao(d.numero);
       if(sit === 'pendente'){ tagClasse = 'analise'; tagTexto = 'Em análise'; }
+      else if(sit === 'rejeitado'){ tagClasse = 'rejeitado'; tagTexto = 'Devolvido'; }
       else { tagClasse = 'sincronizado'; tagTexto = 'Aberto'; }
       botaoHtml = botaoResolverOuSituacao(d.numero, true, 'margin-top:8px;');
     }
