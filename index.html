@@ -177,6 +177,12 @@
     padding:7px 14px; font-size:12px; font-weight:700; cursor:pointer; margin-top:10px;
     display:inline-flex; align-items:center; gap:6px;
   }
+  .btn-resolver-feito{
+    background:var(--border); color:var(--text-muted); border:none; border-radius:8px;
+    padding:7px 14px; font-size:12px; font-weight:700; cursor:default; margin-top:10px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .btn-resolver-feito .icone-svg svg{ opacity:.7; }
   .aprovacao-card{
     background:var(--white); border-radius:14px; padding:14px 16px; margin-bottom:14px;
     box-shadow:0 1px 4px rgba(20,33,49,.07);
@@ -1954,6 +1960,17 @@ document.getElementById('resolver-form').addEventListener('submit', async (e) =>
       }
     }
 
+    // marca na hora como resolvido (sem esperar a planilha sincronizar) pra já
+    // atualizar o card em "Meus desvios" pra "Resolvido" e travar o botão —
+    // só faz sentido quando quem resolveu é o próprio dono do desvio, que é
+    // exatamente quando isso já sai auto-aprovado / grava resolvidoPeloUsuario
+    if(desvioPendenteEmResolucaoId){
+      resolvidosLocalmenteIds.add(desvioPendenteEmResolucaoId);
+    } else if(resolverAutoAprovar && desvioEmResolucao && desvioEmResolucao.numero){
+      resolvidosLocalmenteNumeros.add(String(desvioEmResolucao.numero));
+    }
+    renderizarListaDesvios();
+
     document.getElementById('resolver-form').reset();
     fotosResolverSelecionadas = [];
     renderizarPreviewFotosResolver();
@@ -2613,6 +2630,15 @@ function graficoBarrasHtml(titulo, dados){
 let meusRegistrosCache = [];
 let carregouMeusRegistros = false;
 let mostrarTodosMeusRegistros = false;
+// Otimista: marca na hora (antes da planilha sincronizar) os desvios que a
+// própria pessoa acabou de resolver, pra já virar "Resolvido" no card sem
+// esperar minutos até desviosConcluidosCache confirmar. É só de memória
+// (dura a sessão); quando a sincronização confirmar de verdade, o desvio
+// passa a vir por numerosFechados também, então não tem problema nenhum
+// se a página for recarregada antes disso — o botão só volta a aparecer
+// até o próximo "Resolver" ser enviado de novo.
+let resolvidosLocalmenteNumeros = new Set();
+let resolvidosLocalmenteIds = new Set();
 
 function iniciarListaDesvios(){
   if(carregouMeusRegistros) return;
@@ -2657,14 +2683,32 @@ function renderizarListaDesvios(){
 
   cont.innerHTML = visiveis.map(d => {
     let tagClasse, tagTexto, botaoHtml;
+    const resolvidoLocalmente = resolvidosLocalmenteIds.has(d.id) ||
+      (!!d.numero && resolvidosLocalmenteNumeros.has(String(d.numero)));
     if(!d.numero){
-      tagClasse = 'pendente'; tagTexto = 'Pendente sincronização';
-      botaoHtml = `
-        <button type="button" class="btn-resolver btn-resolver-pendente" data-id="${d.id}" style="margin-top:8px;">
-          <span class="icone-svg" data-icone="check"></span> Resolver
-        </button>`;
+      if(resolvidoLocalmente){
+        tagClasse = 'fechado'; tagTexto = 'Fechado';
+        botaoHtml = `
+          <button type="button" class="btn-resolver-feito" disabled style="margin-top:8px;">
+            <span class="icone-svg" data-icone="check"></span> Resolvido
+          </button>`;
+      } else {
+        tagClasse = 'pendente'; tagTexto = 'Pendente sincronização';
+        botaoHtml = `
+          <button type="button" class="btn-resolver btn-resolver-pendente" data-id="${d.id}" style="margin-top:8px;">
+            <span class="icone-svg" data-icone="check"></span> Resolver
+          </button>`;
+      }
     } else if(numerosFechados.has(String(d.numero))){
       tagClasse = 'fechado'; tagTexto = 'Fechado'; botaoHtml = '';
+    } else if(resolvidoLocalmente){
+      // já foi enviado pra resolução (auto-aprovada) mas a planilha ainda não
+      // confirmou por numerosFechados — mostra "Resolvido" travado mesmo assim
+      tagClasse = 'fechado'; tagTexto = 'Fechado';
+      botaoHtml = `
+        <button type="button" class="btn-resolver-feito" disabled style="margin-top:8px;">
+          <span class="icone-svg" data-icone="check"></span> Resolvido
+        </button>`;
     } else {
       // aberto confirmado, ou ainda não confirmado em nenhum dos dois (caso
       // ambíguo durante a sincronização): assume aberto, nunca esconde o
