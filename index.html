@@ -54,6 +54,24 @@
   }
   .screen{ display:none; min-height:100vh; flex-direction:column; }
   .screen.active{ display:flex; }
+  /* tela de abertura: fica até o app saber se a pessoa está logada
+     (antes a tela de login aparecia por um instante e "piscava") */
+  #splash-inicial{
+    position:fixed; inset:0; z-index:9000; background:var(--cream);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px;
+    transition:opacity .2s ease;
+  }
+  #splash-inicial.saindo{ opacity:0; pointer-events:none; }
+  #splash-inicial .splash-logo{
+    width:88px; height:88px; border-radius:22px; object-fit:cover;
+    box-shadow:0 4px 14px rgba(20,33,49,.12);
+  }
+  #splash-inicial .splash-carregando{
+    width:26px; height:26px; border-radius:50%;
+    border:3px solid var(--border); border-top-color:var(--green-dark, #4a6b32);
+    animation:splashGira .8s linear infinite;
+  }
+  @keyframes splashGira{ to{ transform:rotate(360deg); } }
 
   /* ---------- Marca (logo em ícone de capacete) ---------- */
   .marca{ display:flex; align-items:center; gap:10px; }
@@ -534,7 +552,11 @@
 <body>
 
 <!-- ===================== TELA DE LOGIN / CADASTRO ===================== -->
-<section id="auth-screen" class="screen active">
+<div id="splash-inicial" aria-hidden="true">
+  <img class="splash-logo" src="./icon-192.png" alt="Segurança do Trabalho CCG">
+  <div class="splash-carregando"></div>
+</div>
+<section id="auth-screen" class="screen">
   <button type="button" class="btn-tema" id="btn-tema-auth" aria-label="Alternar tema"><span class="icone-svg" data-icone="lua"></span></button>
   <div class="auth-box">
 
@@ -1280,6 +1302,28 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+/* LOGIN QUE NÃO SAI AO FECHAR O APP: deixa explícito que a sessão fica
+   guardada no aparelho (só termina ao tocar em "Sair"), e pede ao
+   navegador pra não apagar os dados do app quando faltar espaço. */
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+  .catch(err => console.warn('Não consegui fixar a persistência do login:', err));
+if(navigator.storage && navigator.storage.persist){
+  navigator.storage.persist().catch(() => {});
+}
+function esconderSplash(){
+  const sp = document.getElementById('splash-inicial');
+  if(!sp || sp.classList.contains('saindo')) return;
+  sp.classList.add('saindo');
+  setTimeout(() => sp.remove(), 250);
+}
+// segurança: se por algum motivo o Firebase demorar demais, mostra o login
+setTimeout(() => {
+  if(!document.getElementById('app-screen').classList.contains('active')){
+    document.getElementById('auth-screen').classList.add('active');
+  }
+  esconderSplash();
+}, 10000);
+
 /* Persistência offline: grava local primeiro, sincroniza sozinho quando
    a conexão voltar. Precisa vir logo após initializeApp. */
 db.enablePersistence({ synchronizeTabs: true }).catch((err) => {
@@ -1438,6 +1482,7 @@ function mostrarAppPrincipal(user){
   document.getElementById('form-perfil-nome').style.display = 'none';
   authScreen.classList.remove('active');
   appScreen.classList.add('active');
+  esconderSplash();
   document.getElementById('perfil-info').textContent =
     `${user.displayName || ''} — ${user.email}`;
   irPara('view-desvios');
@@ -1445,11 +1490,13 @@ function mostrarAppPrincipal(user){
 
 /* ---- telas de primeiro acesso ---- */
 function mostrarTelaNovaSenha(){
+  authScreen.classList.add('active'); esconderSplash();
   document.getElementById('login-form').style.display = 'none';
   document.getElementById('form-nova-senha').style.display = 'block';
   document.getElementById('form-perfil-nome').style.display = 'none';
 }
 function mostrarTelaPerfilNome(){
+  authScreen.classList.add('active'); esconderSplash();
   document.getElementById('login-form').style.display = 'none';
   document.getElementById('form-nova-senha').style.display = 'none';
   document.getElementById('form-perfil-nome').style.display = 'block';
@@ -1558,6 +1605,7 @@ function bloquearPorLimiteDispositivos(){
 /* ---- estado de autenticação ---- */
 auth.onAuthStateChanged(async (user) => {
   if(user){
+    try{ localStorage.setItem('sst_logado', '1'); }catch(e){}
     // 1) já entrou antes neste aparelho: abre na hora (funciona offline)
     //    e confere o limite de dispositivos em segundo plano quando der
     const perfilLocal = lerPerfilLocal(user.uid);
@@ -1605,6 +1653,15 @@ auth.onAuthStateChanged(async (user) => {
   } else {
     appScreen.classList.remove('active');
     authScreen.classList.add('active');
+    esconderSplash();
+    // se o aparelho lembra que tinha alguém logado e a pessoa NÃO tocou em
+    // "Sair", avisa (ajuda a descobrir se algo está apagando a sessão)
+    if(localStorage.getItem('sst_logado') === '1'){
+      const aviso = document.getElementById('login-msg');
+      aviso.textContent = 'Sua sessão foi encerrada neste aparelho. Entre novamente — da próxima vez o app vai lembrar de você.';
+      aviso.style.display = 'block';
+      try{ localStorage.removeItem('sst_logado'); }catch(e){}
+    }
     loginForm.reset();
     registerForm.reset();
     document.getElementById('login-form').style.display = 'block';
@@ -1613,7 +1670,10 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
-document.getElementById('logout-btn').addEventListener('click', () => auth.signOut());
+document.getElementById('logout-btn').addEventListener('click', () => {
+  try{ localStorage.removeItem('sst_logado'); }catch(e){}
+  auth.signOut();
+});
 
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
@@ -2328,9 +2388,20 @@ async function carregarFotosSolicitacao(id){
     return [];
   }
 }
+/* depois de rejeitar, as fotos daquela tentativa saem do Firestore
+   (não vão pro Drive e não pesam o app nem o banco) */
+function apagarFotosSolicitacao(id){
+  delete cacheFotosSolicitacao[id];
+  db.collection('solicitacoes_resolucao').doc(id).collection('fotos').get()
+    .then(snap => snap.forEach(f => gravarSemEsperar(f.ref.delete(), 'apagar foto rejeitada')))
+    .catch(err => console.warn('Não consegui apagar as fotos da solicitação rejeitada', id, err));
+}
+
 function preencherFotosNoCartao(cont, id, status){
   const alvo = cont.querySelector(`.aprovacao-fotos[data-id="${id}"]`);
   if(!alvo) return;
+  // rejeitada: as fotos não servem mais (e já foram apagadas do banco)
+  if(status === 'rejeitado'){ alvo.remove(); return; }
   carregarFotosSolicitacao(id).then((fotos) => {
     if(!fotos.length){
       alvo.innerHTML = (status === 'concluido')
@@ -2520,6 +2591,7 @@ function renderizarAprovacoes(){
         avaliadoPorEmail: auth.currentUser.email || '',
         avaliadoEm: firebase.firestore.FieldValue.serverTimestamp()
       }), 'rejeitar solicitação');
+      apagarFotosSolicitacao(id);
     });
   });
 }
