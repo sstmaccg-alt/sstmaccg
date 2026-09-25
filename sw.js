@@ -7,11 +7,12 @@
 // descartar o cache antigo. Mesmo assim, o index.html agora é buscado na
 // rede primeiro (veja abaixo), então atualizações aparecem sozinhas.
 
-const CACHE_NAME = 'sst-ccg-v56';
+const CACHE_NAME = 'sst-ccg-v58';
 const ARQUIVOS_PARA_CACHE = [
   './',
   './index.html',
-  './manifest.json'
+  './manifest.json',
+  './icon-192.png'   // ícone da tela de abertura (aparece mesmo offline)
 ];
 
 // Bibliotecas do Firebase: sem elas o app nem começa, então já guardamos
@@ -95,6 +96,14 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
   const url = new URL(event.request.url);
+
+  // IMPORTANTE: não mexe em NADA de outros sites além das bibliotecas do
+  // Firebase. Antes o service worker guardava (e às vezes devolvia velhas,
+  // ou devolvia o index.html no lugar) as chamadas de login e do banco de
+  // dados — o que podia derrubar a sessão ao reabrir o app.
+  const ehBibliotecaFirebase =
+    url.hostname === 'www.gstatic.com' && url.pathname.startsWith('/firebasejs/');
+  if (url.origin !== self.location.origin && !ehBibliotecaFirebase) return;
   const ehPaginaDoApp =
     event.request.mode === 'navigate' ||
     (url.origin === self.location.origin &&
