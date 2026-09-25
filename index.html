@@ -183,6 +183,92 @@
   .legenda-item{ display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-muted); }
   .legenda-dot{ width:8px; height:8px; border-radius:2px; flex-shrink:0; }
   .toggle-duas-opcoes{ display:flex; gap:8px; margin:14px 0; }
+
+  /* ---------- Análise geral em quadros (pensado pra reunião) ---------- */
+  .ag-topo{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+  .btn-apresentacao{
+    display:inline-flex; align-items:center; gap:8px; border:none; cursor:pointer;
+    background:var(--green); color:#fff; font-weight:700; font-size:13px;
+    padding:10px 16px; border-radius:10px; white-space:nowrap;
+  }
+  .btn-apresentacao svg{ width:16px; height:16px; }
+  .ag-periodo{ font-size:12px; color:var(--text-muted); margin:0 0 12px; }
+  .ag-kpis{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; }
+  .ag-kpi{ background:var(--cream); border-radius:12px; padding:14px 16px; }
+  .ag-kpi-rot{ font-size:12px; color:var(--text-muted); margin:0; }
+  .ag-kpi-val{ font-size:28px; font-weight:800; color:var(--navy); margin:4px 0 0; line-height:1.1; }
+  .ag-kpi-val small{ font-size:13px; font-weight:600; color:var(--text-muted); margin-left:4px; }
+  .ag-quadro{
+    background:var(--white); border:1px solid var(--border); border-radius:16px;
+    padding:20px 22px 22px; margin-bottom:20px; box-shadow:0 1px 4px rgba(20,33,49,.05);
+  }
+  .ag-quadro-titulo{ font-size:16px; font-weight:800; color:var(--navy); margin:0; }
+  .ag-quadro-sub{ font-size:12px; color:var(--text-muted); margin:3px 0 18px; }
+  /* colunas em pé (Status, Local) */
+  .ag-colunas{
+    display:flex; align-items:flex-end; justify-content:space-around; gap:18px;
+    height:230px; padding:0 8px; border-bottom:1px solid var(--border); overflow-x:auto;
+  }
+  .ag-col{ display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; flex:1 1 0; min-width:56px; max-width:120px; }
+  .ag-col-val{ font-size:15px; font-weight:800; color:var(--navy); margin-bottom:6px; }
+  .ag-col-barra{ width:62%; max-width:68px; min-height:3px; border-radius:8px 8px 0 0; background:var(--green); }
+  .ag-col-rotulos{ display:flex; justify-content:space-around; gap:18px; padding:8px 8px 0; }
+  .ag-col-rotulos span{ flex:1 1 0; min-width:56px; max-width:120px; text-align:center; font-size:12px; color:var(--text-muted); line-height:1.25; }
+  /* barras deitadas (Tipologia, Responsável) */
+  .ag-hb{ display:grid; grid-template-columns:minmax(110px, 38%) minmax(0,1fr) 44px; align-items:center; gap:12px; margin-bottom:10px; }
+  .ag-hb-rot{ font-size:12.5px; color:var(--navy); line-height:1.25; }
+  .ag-hb-trilha{ height:20px; }
+  .ag-hb-barra{ height:100%; min-width:3px; border-radius:0 6px 6px 0; background:var(--green); }
+  .ag-hb-barra.outras{ background:#b4b2a9; }
+  .ag-hb-val{ font-size:14px; font-weight:800; color:var(--navy); text-align:right; }
+  .ag-ver-todos{ background:none; border:none; color:var(--green-dark); font-weight:700; font-size:13px; cursor:pointer; padding:6px 0 0; }
+  .ag-quadro .field{ margin-bottom:14px; }
+  @media (max-width:560px){
+    .ag-kpis{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    .ag-quadro{ padding:16px 14px 18px; }
+  }
+
+  /* ---------- Modo apresentação: um gráfico por vez, tela cheia ---------- */
+  .apresentacao{
+    position:fixed; inset:0; z-index:9500; background:var(--cream);
+    display:none; flex-direction:column;
+    padding:calc(14px + env(safe-area-inset-top, 0px)) 18px calc(14px + env(safe-area-inset-bottom, 0px));
+  }
+  .apresentacao.aberta{ display:flex; }
+  .apr-topo{ display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+  .apr-logo{ width:36px; height:36px; border-radius:9px; }
+  .apr-titulos{ flex:1; min-width:0; }
+  .apr-titulos b{ display:block; font-size:15px; color:var(--navy); }
+  .apr-titulos span{ font-size:12px; color:var(--text-muted); }
+  .apr-contador{ font-size:13px; font-weight:700; color:var(--text-muted); }
+  .apr-fechar{ width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:var(--white); color:var(--navy); font-size:20px; cursor:pointer; }
+  .apr-palco{ flex:1; min-height:0; display:flex; align-items:center; justify-content:center; overflow:auto; }
+  .apr-palco .ag-quadro{ width:100%; max-width:1200px; margin:0; padding:clamp(18px, 3vw, 40px); }
+  .apr-palco .ag-quadro-titulo{ font-size:clamp(20px, 3vw, 34px); }
+  .apr-palco .ag-quadro-sub{ font-size:clamp(13px, 1.6vw, 18px); margin-bottom:clamp(16px, 3vh, 32px); }
+  .apr-palco .ag-colunas{ height:clamp(220px, 52vh, 620px); }
+  .apr-palco .ag-col-barra{ max-width:120px; }
+  .apr-palco .ag-col-val{ font-size:clamp(16px, 2.2vw, 28px); }
+  .apr-palco .ag-col-rotulos span{ font-size:clamp(12px, 1.5vw, 18px); }
+  .apr-palco .ag-hb{ margin-bottom:clamp(8px, 1.6vh, 18px); }
+  .apr-palco .ag-hb-rot{ font-size:clamp(13px, 1.6vw, 19px); }
+  .apr-palco .ag-hb-trilha{ height:clamp(20px, 3.4vh, 36px); }
+  .apr-palco .ag-hb-val{ font-size:clamp(15px, 2vw, 24px); }
+  .apr-palco .ag-kpis{ gap:clamp(12px, 2vw, 28px); }
+  .apr-palco .ag-kpi{ padding:clamp(16px, 3vh, 36px) clamp(16px, 2vw, 28px); }
+  .apr-palco .ag-kpi-rot{ font-size:clamp(13px, 1.6vw, 20px); }
+  .apr-palco .ag-kpi-val{ font-size:clamp(30px, 5vw, 64px); }
+  .apr-palco .grafico-multi-scroll, .apr-palco .legenda-meses{ zoom:1.5; }
+  .apr-palco .ag-ver-todos, .apr-palco .field{ display:none; }
+  .apr-nav{ display:flex; align-items:center; justify-content:center; gap:18px; margin-top:12px; }
+  .apr-nav button{
+    width:52px; height:52px; border-radius:50%; border:1px solid var(--border);
+    background:var(--white); color:var(--navy); font-size:26px; cursor:pointer; line-height:1;
+  }
+  .apr-nav button:disabled{ opacity:.35; cursor:default; }
+  .apr-pontos{ display:flex; gap:8px; }
+  .apr-pontos i{ width:9px; height:9px; border-radius:50%; background:var(--border); cursor:pointer; }
+  .apr-pontos i.atual{ background:var(--green); width:24px; border-radius:5px; }
   .toggle-duas-opcoes button{
     flex:1; background:var(--cream); border:1px solid var(--border); border-radius:10px;
     padding:8px; font-size:12px; font-weight:700; color:var(--text-muted); cursor:pointer;
@@ -1054,7 +1140,12 @@
       <div class="tela-header">
         <button id="btn-voltar-analise" class="voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button>
       </div>
-      <p class="tela-titulo" style="margin-bottom:14px;">Análise geral</p>
+      <div class="ag-topo">
+        <p class="tela-titulo" style="margin:0;">Análise geral</p>
+        <button type="button" class="btn-apresentacao" id="btn-apresentacao">
+          <span class="icone-svg" data-icone="apresentacao"></span> Apresentação
+        </button>
+      </div>
 
       <div style="display:flex; gap:8px; margin-bottom:18px;">
         <div class="field" style="flex:1; margin-bottom:0;">
@@ -1067,16 +1158,20 @@
 
       <div id="analise-geral-corpo"><p class="empty-state">Carregando...</p></div>
 
-      <div class="grupo-titulo" style="margin-top:18px;"><span>Nº DE DESVIOS POR RESPONSÁVEL</span></div>
-      <div class="field" style="margin-bottom:14px;">
-        <input type="text" id="analise-multi-busca" placeholder="Filtrar por nome do responsável...">
+      <div class="ag-quadro" data-slide="Desvios por responsável — mês a mês">
+        <p class="ag-quadro-titulo">Desvios por responsável — mês a mês</p>
+        <p class="ag-quadro-sub">Como os desvios de cada responsável se distribuem ao longo dos meses</p>
+        <div class="field">
+          <input type="text" id="analise-multi-busca" placeholder="Filtrar por nome do responsável...">
+        </div>
+        <div id="analise-multi-mes-corpo"><p class="empty-state">Carregando...</p></div>
       </div>
 
-      <p style="font-size:12px; font-weight:700; color:var(--navy); margin:0 0 8px;">Mês a mês</p>
-      <div id="analise-multi-mes-corpo"><p class="empty-state">Carregando...</p></div>
-
-      <p style="font-size:12px; font-weight:700; color:var(--navy); margin:22px 0 8px;">Trimestral</p>
-      <div id="analise-multi-tri-corpo"><p class="empty-state">Carregando...</p></div>
+      <div class="ag-quadro" data-slide="Desvios por responsável — trimestral">
+        <p class="ag-quadro-titulo">Desvios por responsável — trimestral</p>
+        <p class="ag-quadro-sub">O mesmo recorte, agrupado por trimestre</p>
+        <div id="analise-multi-tri-corpo"><p class="empty-state">Carregando...</p></div>
+      </div>
     </div>
 
     <!-- Tela: Aprovações -->
@@ -1164,6 +1259,7 @@
    ÍCONES — SVG de linha, monocromáticos (usam currentColor, sem emoji)
    ====================================================================== */
 const ICONES = {
+  apresentacao: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18"/><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4"/><path d="M12 16v4"/><path d="M9 20h6"/><path d="M8 12l3-3 2 2 3-3"/></svg>',
   capacete: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18"/><path d="M5 16.5a7 7 0 0 1 14 0"/><path d="M12 5.5v3.5"/></svg>',
   clipboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>',
   'alerta-triangulo': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg>',
@@ -3243,6 +3339,16 @@ function contarPorCampo(lista, campo){
     .sort((a,b) => b.valor - a.valor);
 }
 
+let agResponsaveisTodos = false; // "Ver todos" no quadro de responsáveis
+
+function textoPeriodoAnalise(){
+  const selAno = document.getElementById('analise-filtro-ano');
+  const selMes = document.getElementById('analise-filtro-mes');
+  const ano = selAno.value ? selAno.value : 'Todos os anos';
+  const mes = selMes.value ? selMes.options[selMes.selectedIndex].text : 'todos os meses';
+  return ano + ' · ' + mes;
+}
+
 function renderizarAnaliseGeral(){
   const ano = document.getElementById('analise-filtro-ano').value;
   const mes = document.getElementById('analise-filtro-mes').value;
@@ -3255,50 +3361,189 @@ function renderizarAnaliseGeral(){
     return true;
   });
 
+  const total = filtrados.length;
   const noPrazo = filtrados.filter(d => d.status === 'No prazo').length;
   const atrasado = filtrados.filter(d => d.status === 'Atrasado').length;
   const concluido = filtrados.filter(d => d.status === 'Concluído').length;
+  const pct = total ? Math.round(concluido / total * 100) : 0;
+
+  const responsaveis = contarPorCampo(filtrados, 'respCorrecao').filter(r => r.rotulo !== 'Não informado');
+  const limiteResp = agResponsaveisTodos ? responsaveis.length : 6;
 
   const corpo = document.getElementById('analise-geral-corpo');
   corpo.innerHTML = `
-    <p style="font-size:11px; color:var(--text-muted); margin-bottom:6px;">${filtrados.length} desvio(s) no período selecionado</p>
+    <p class="ag-periodo">${total} desvio(s) no período selecionado</p>
 
-    <div class="grupo-titulo" style="margin-top:14px;"><span>STATUS DE ATENDIMENTO</span></div>
-    ${graficoBarrasHtml('', [
-      { rotulo: 'Concluído', valor: concluido },
-      { rotulo: 'Atrasado', valor: atrasado },
-      { rotulo: 'No prazo', valor: noPrazo }
-    ])}
+    <div class="ag-quadro" data-slide="Resumo do período">
+      <p class="ag-quadro-titulo">Resumo do período</p>
+      <p class="ag-quadro-sub">Visão geral dos desvios registrados</p>
+      <div class="ag-kpis">
+        <div class="ag-kpi"><p class="ag-kpi-rot">Total de desvios</p><p class="ag-kpi-val">${total}</p></div>
+        <div class="ag-kpi"><p class="ag-kpi-rot">Concluídos</p><p class="ag-kpi-val" style="color:var(--green-dark);">${concluido}<small>${pct}%</small></p></div>
+        <div class="ag-kpi"><p class="ag-kpi-rot">No prazo</p><p class="ag-kpi-val">${noPrazo}</p></div>
+        <div class="ag-kpi"><p class="ag-kpi-rot">Atrasados</p><p class="ag-kpi-val" style="color:var(--error);">${atrasado}</p></div>
+      </div>
+    </div>
 
-    <div class="grupo-titulo" style="margin-top:18px;"><span>TIPOLOGIA</span></div>
-    ${graficoBarrasHtml('', contarPorCampo(filtrados, 'tipologia'))}
+    <div class="ag-quadro" data-slide="Status de atendimento">
+      <p class="ag-quadro-titulo">Status de atendimento</p>
+      <p class="ag-quadro-sub">Situação de todos os desvios no período</p>
+      ${agColunasHtml([
+        { rotulo: 'Concluído', valor: concluido, cor: 'var(--green)' },
+        { rotulo: 'No prazo',  valor: noPrazo,   cor: '#9cc26f' },
+        { rotulo: 'Atrasado',  valor: atrasado,  cor: 'var(--error)' }
+      ])}
+    </div>
 
-    <div class="grupo-titulo" style="margin-top:18px;"><span>LOCAL</span></div>
-    ${graficoBarrasHtml('', contarPorCampo(filtrados, 'local'))}
+    <div class="ag-quadro" data-slide="Tipologia">
+      <p class="ag-quadro-titulo">Tipologia</p>
+      <p class="ag-quadro-sub">Quais tipos de desvio mais aparecem</p>
+      ${agBarrasDeitadasHtml(agAgruparOutras(contarPorCampo(filtrados, 'tipologia'), 8, 'tipologias'))}
+    </div>
 
-    <div class="grupo-titulo" style="margin-top:18px;"><span>RESPONSÁVEL PELA CORREÇÃO</span></div>
-    ${graficoBarrasHtml('', contarPorCampo(filtrados, 'respCorrecao'))}
-  `;
-}
+    <div class="ag-quadro" data-slide="Local">
+      <p class="ag-quadro-titulo">Local</p>
+      <p class="ag-quadro-sub">Onde os desvios foram registrados</p>
+      ${agColunasHtml(agAgruparOutras(contarPorCampo(filtrados, 'local'), 7, 'locais'))}
+    </div>
 
-function graficoBarrasHtml(titulo, dados){
-  const max = Math.max(1, ...dados.map(d => d.valor));
-  if(dados.length === 0 || dados.every(d => d.valor === 0)){
-    return `<p class="grafico-titulo">${titulo}</p><p class="empty-state">Sem dados.</p>`;
-  }
-  return `
-    <p class="grafico-titulo">${titulo}</p>
-    <div class="grafico-colunas">
-      ${dados.map(d => `
-        <div class="grafico-coluna">
-          <span class="grafico-coluna-valor">${d.valor}</span>
-          <div class="grafico-coluna-trilha"><div class="grafico-coluna-barra" style="height:${(d.valor/max*100)}%"></div></div>
-          <span class="grafico-coluna-rotulo" title="${d.rotulo}">${d.rotulo}</span>
-        </div>
-      `).join('')}
+    <div class="ag-quadro" data-slide="Responsável pela correção" data-slide-top="10">
+      <p class="ag-quadro-titulo">Responsável pela correção</p>
+      <p class="ag-quadro-sub">${agResponsaveisTodos ? 'Todos os responsáveis' : 'Top 6'} — quem mais recebeu desvios</p>
+      <div class="ag-resp-lista">${agBarrasDeitadasHtml(responsaveis.slice(0, limiteResp))}</div>
+      ${responsaveis.length > 6 ? `<button type="button" class="ag-ver-todos" id="ag-ver-todos">${agResponsaveisTodos ? 'Mostrar só os 6 primeiros' : 'Ver todos (' + responsaveis.length + ')'}</button>` : ''}
     </div>
   `;
+
+  // guarda a lista completa pra apresentação montar o "top 10"
+  corpo.querySelector('[data-slide="Responsável pela correção"]').dataset.top10 =
+    agBarrasDeitadasHtml(responsaveis.slice(0, 10));
+
+  const btnTodos = document.getElementById('ag-ver-todos');
+  if(btnTodos) btnTodos.addEventListener('click', () => { agResponsaveisTodos = !agResponsaveisTodos; renderizarAnaliseGeral(); });
 }
+
+// junta a "cauda" em uma barra só ("Outras (N tipologias)"), pra não poluir
+function agAgruparOutras(dados, maximo, nomePlural){
+  if(dados.length <= maximo) return dados;
+  const principais = dados.slice(0, maximo - 1);
+  const resto = dados.slice(maximo - 1);
+  principais.push({ rotulo: `Outras (${resto.length} ${nomePlural})`, valor: resto.reduce((s, d) => s + d.valor, 0), outras: true });
+  return principais;
+}
+
+function agColunasHtml(dados){
+  if(!dados.length || dados.every(d => d.valor === 0)) return '<p class="empty-state">Sem dados nesse período.</p>';
+  const max = Math.max(1, ...dados.map(d => d.valor));
+  return `
+    <div class="ag-colunas">
+      ${dados.map(d => `
+        <div class="ag-col">
+          <span class="ag-col-val">${d.valor}</span>
+          <div class="ag-col-barra" style="height:calc((100% - 30px) * ${d.valor / max}); background:${d.outras ? '#b4b2a9' : (d.cor || 'var(--green)')};"></div>
+        </div>`).join('')}
+    </div>
+    <div class="ag-col-rotulos">${dados.map(d => `<span>${escaparHtml(d.rotulo)}</span>`).join('')}</div>`;
+}
+
+function agBarrasDeitadasHtml(dados){
+  if(!dados.length || dados.every(d => d.valor === 0)) return '<p class="empty-state">Sem dados nesse período.</p>';
+  const max = Math.max(1, ...dados.map(d => d.valor));
+  return dados.map(d => `
+    <div class="ag-hb">
+      <span class="ag-hb-rot">${escaparHtml(d.rotulo)}</span>
+      <div class="ag-hb-trilha"><div class="ag-hb-barra${d.outras ? ' outras' : ''}" style="width:${d.valor / max * 100}%;"></div></div>
+      <span class="ag-hb-val">${d.valor}</span>
+    </div>`).join('');
+}
+
+/* ======================================================================
+   MODO APRESENTAÇÃO — tela cheia, um quadro por vez
+   Setas do teclado / botões / deslizar o dedo passam de gráfico.
+   ====================================================================== */
+// o HTML da apresentação fica no fim da página, então liga tudo depois que ela carregar
+document.addEventListener('DOMContentLoaded', function(){
+  const overlay = document.getElementById('apresentacao');
+  const palco = document.getElementById('apr-palco');
+  let slides = [], atual = 0, inicioX = null;
+
+  function montarSlides(){
+    const quadros = document.querySelectorAll('#view-analise-geral .ag-quadro[data-slide]');
+    slides = Array.from(quadros).map(q => {
+      const copia = q.cloneNode(true);
+      copia.querySelectorAll('[id]').forEach(el => el.removeAttribute('id')); // evita IDs duplicados
+      // responsável: na apresentação mostra o top 10 (independe do "Ver todos")
+      if(q.dataset.top10){
+        const lista = copia.querySelector('.ag-resp-lista');
+        if(lista) lista.innerHTML = q.dataset.top10;
+        const sub = copia.querySelector('.ag-quadro-sub');
+        if(sub) sub.textContent = 'Top 10 — quem mais recebeu desvios';
+      }
+      // quadros mês a mês/trimestral: esconde o campo de filtro
+      return copia;
+    });
+  }
+  function mostrar(){
+    palco.innerHTML = '';
+    if(!slides.length){ palco.innerHTML = '<p class="empty-state">Sem gráficos pra mostrar.</p>'; return; }
+    palco.appendChild(slides[atual]);
+    document.getElementById('apr-contador').textContent = (atual + 1) + ' / ' + slides.length;
+    document.getElementById('apr-ant').disabled = atual === 0;
+    document.getElementById('apr-prox').disabled = atual === slides.length - 1;
+    const pontos = document.getElementById('apr-pontos');
+    pontos.innerHTML = slides.map((_, i) => `<i data-i="${i}" class="${i === atual ? 'atual' : ''}"></i>`).join('');
+    pontos.querySelectorAll('i').forEach(p => p.addEventListener('click', () => { atual = Number(p.dataset.i); mostrar(); }));
+    palco.scrollTop = 0;
+  }
+  function ir(passo){
+    const novo = atual + passo;
+    if(novo < 0 || novo >= slides.length) return;
+    atual = novo; mostrar();
+  }
+  function abrir(){
+    montarSlides();
+    atual = 0;
+    document.getElementById('apr-periodo').textContent = textoPeriodoAnalise();
+    overlay.classList.add('aberta');
+    mostrar();
+    // tenta tela cheia de verdade (esconde barra do navegador); se não der, segue igual
+    const el = document.documentElement;
+    const pedir = el.requestFullscreen || el.webkitRequestFullscreen;
+    if(pedir){ try{ const p = pedir.call(el); if(p && p.catch) p.catch(() => {}); }catch(e){} }
+    try{ if(screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); }catch(e){}
+  }
+  function fechar(){
+    overlay.classList.remove('aberta');
+    palco.innerHTML = '';
+    const sair = document.exitFullscreen || document.webkitExitFullscreen;
+    if((document.fullscreenElement || document.webkitFullscreenElement) && sair){
+      try{ const p = sair.call(document); if(p && p.catch) p.catch(() => {}); }catch(e){}
+    }
+    try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){}
+  }
+
+  document.getElementById('btn-apresentacao').addEventListener('click', abrir);
+  document.getElementById('apr-fechar').addEventListener('click', fechar);
+  document.getElementById('apr-ant').addEventListener('click', () => ir(-1));
+  document.getElementById('apr-prox').addEventListener('click', () => ir(1));
+  document.addEventListener('keydown', (e) => {
+    if(!overlay.classList.contains('aberta')) return;
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ e.preventDefault(); ir(1); }
+    if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); ir(-1); }
+    if(e.key === 'Escape') fechar();
+  });
+  // se a pessoa sair da tela cheia pelo botão do navegador, fecha a apresentação também
+  document.addEventListener('fullscreenchange', () => {
+    if(!document.fullscreenElement && overlay.classList.contains('aberta')) fechar();
+  });
+  overlay.addEventListener('touchstart', (e) => { if(e.touches.length === 1) inicioX = e.touches[0].clientX; }, { passive: true });
+  overlay.addEventListener('touchend', (e) => {
+    if(inicioX === null) return;
+    const dx = e.changedTouches[0].clientX - inicioX;
+    if(Math.abs(dx) > 60) ir(dx < 0 ? 1 : -1);
+    inicioX = null;
+  });
+});
 
 /* ---- listagem dos desvios do próprio usuário ---- */
 let meusRegistrosCache = [];
@@ -3427,6 +3672,22 @@ function renderizarListaDesvios(){
   if(btnMenos) btnMenos.addEventListener('click', () => { mostrarTodosMeusRegistros = false; renderizarListaDesvios(); });
 }
 </script>
+
+<!-- Modo apresentação da Análise geral -->
+<div class="apresentacao" id="apresentacao" role="dialog" aria-label="Apresentação da análise geral">
+  <div class="apr-topo">
+    <img class="apr-logo" src="./icon-192.png" alt="">
+    <div class="apr-titulos"><b>Análise geral de desvios</b><span id="apr-periodo"></span></div>
+    <span class="apr-contador" id="apr-contador"></span>
+    <button type="button" class="apr-fechar" id="apr-fechar" aria-label="Sair da apresentação">✕</button>
+  </div>
+  <div class="apr-palco" id="apr-palco"></div>
+  <div class="apr-nav">
+    <button type="button" id="apr-ant" aria-label="Gráfico anterior">‹</button>
+    <div class="apr-pontos" id="apr-pontos"></div>
+    <button type="button" id="apr-prox" aria-label="Próximo gráfico">›</button>
+  </div>
+</div>
 
 <!-- Visualizador de foto em tela cheia (Aprovações / Enviados) -->
 <div class="foto-lightbox" id="foto-lightbox">
