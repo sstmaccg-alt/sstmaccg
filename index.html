@@ -205,15 +205,17 @@
   .ag-quadro-titulo{ font-size:16px; font-weight:800; color:var(--navy); margin:0; }
   .ag-quadro-sub{ font-size:12px; color:var(--text-muted); margin:3px 0 18px; }
   /* colunas em pé (Status, Local) */
-  .ag-colunas{
-    display:flex; align-items:flex-end; justify-content:space-around; gap:18px;
-    height:230px; padding:0 8px; border-bottom:1px solid var(--border); overflow-x:auto;
+  /* cada coluna leva o próprio nome embaixo (antes os nomes ficavam numa
+     linha separada e desalinhavam quando as colunas rolavam pro lado) */
+  .ag-colunas{ display:flex; justify-content:space-around; overflow-x:auto; }
+  .ag-col{ display:flex; flex-direction:column; align-items:stretch; flex:1 1 0; min-width:62px; max-width:140px; }
+  .ag-col-area{
+    height:230px; display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+    border-bottom:1px solid var(--border-strong); padding:0 6px;
   }
-  .ag-col{ display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; flex:1 1 0; min-width:56px; max-width:120px; }
   .ag-col-val{ font-size:15px; font-weight:800; color:var(--navy); margin-bottom:6px; }
   .ag-col-barra{ width:62%; max-width:68px; min-height:3px; border-radius:8px 8px 0 0; background:var(--green); }
-  .ag-col-rotulos{ display:flex; justify-content:space-around; gap:18px; padding:8px 8px 0; }
-  .ag-col-rotulos span{ flex:1 1 0; min-width:56px; max-width:120px; text-align:center; font-size:12px; color:var(--text-muted); line-height:1.25; }
+  .ag-col-rot{ margin-top:8px; padding:0 4px; font-size:12px; color:var(--text-muted); text-align:center; line-height:1.25; overflow-wrap:anywhere; }
   /* barras deitadas (Tipologia, Responsável) */
   .ag-hb{ display:grid; grid-template-columns:minmax(110px, 38%) minmax(0,1fr) 44px; align-items:center; gap:12px; margin-bottom:10px; }
   .ag-hb-rot{ font-size:12.5px; color:var(--navy); line-height:1.25; }
@@ -276,10 +278,10 @@
   .apr-slide .ag-quadro{ margin:0; padding:34px 40px; }
   .apr-slide .ag-quadro-titulo{ font-size:30px; }
   .apr-slide .ag-quadro-sub{ font-size:16px; margin-bottom:26px; }
-  .apr-slide .ag-colunas{ height:420px; }
+  .apr-slide .ag-col-area{ height:420px; }
   .apr-slide .ag-col-barra{ max-width:110px; }
   .apr-slide .ag-col-val{ font-size:24px; }
-  .apr-slide .ag-col-rotulos span{ font-size:16px; }
+  .apr-slide .ag-col-rot{ font-size:16px; }
   .apr-slide .ag-hb{ margin-bottom:14px; grid-template-columns:minmax(200px, 36%) minmax(0,1fr) 60px; }
   .apr-slide .ag-hb-rot{ font-size:17px; }
   .apr-slide .ag-hb-trilha{ height:30px; }
@@ -303,6 +305,29 @@
   }
   .apr-direita{ display:flex; align-items:center; gap:12px; flex:1; justify-content:flex-end; }
   .apr-contador{ font-size:13px; font-weight:700; color:var(--text-muted); }
+  .apr-baixar{
+    display:inline-flex; align-items:center; gap:6px; border:1px solid var(--border-strong);
+    background:var(--white); color:var(--navy); font:inherit; font-size:13px; font-weight:700;
+    padding:10px 14px; border-radius:10px; cursor:pointer; white-space:nowrap;
+  }
+  .apr-baixar svg{ width:16px; height:16px; }
+  .apr-baixar:disabled{ opacity:.5; cursor:default; }
+  /* palco escondido onde cada página do PDF é montada (1600x900, 16:9) */
+  .apresentacao.apr-export{
+    position:fixed; inset:auto; left:-20000px; top:0; width:1600px; height:900px;
+    display:flex; padding:28px 34px 22px; z-index:-1;
+  }
+  .apr-export .apr-faixa-titulo{ font-size:40px; }
+  .apr-export .apr-faixa-sub b{ font-size:19px; }
+  .apr-export .apr-faixa-sub span{ font-size:15px; display:block; }
+  .apr-export .apr-logos{ height:72px; }
+  .apr-export .ag-ver-todos{ display:none; }
+  .apr-export-rodape{ display:flex; justify-content:space-between; font-size:14px; color:var(--text-muted); }
+  .apr-progresso{
+    position:fixed; inset:0; z-index:9800; background:rgba(20,33,49,.55);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .apr-progresso div{ background:#fff; color:#142131; border-radius:14px; padding:20px 26px; font-weight:700; font-size:15px; }
   .apr-fechar{ width:44px; height:44px; border-radius:50%; border:1px solid var(--border); background:var(--white); color:var(--navy); font-size:20px; cursor:pointer; }
   .apr-nav{ display:flex; align-items:center; justify-content:center; gap:16px; }
   .apr-nav button{
@@ -932,6 +957,12 @@
 
         <span class="secao-titulo">Meus registros</span>
         <div id="desvios-lista"></div>
+
+        <!-- só pra quem NÃO é TST: resoluções que a pessoa mandou pra análise -->
+        <div id="meus-envios-secao" style="display:none;">
+          <span class="secao-titulo">Meus envios</span>
+          <div id="meus-envios-lista"></div>
+        </div>
         </div>
       </div>
 
@@ -2371,6 +2402,8 @@ function aplicarPerfilTST(){
   const tst = ehTST();
   document.getElementById('atalho-aprovacoes-label').textContent = tst ? 'Aprovações' : 'Enviados';
   document.getElementById('perfil-card-aprovacoes').style.display = tst ? 'flex' : 'none';
+  document.getElementById('meus-envios-secao').style.display = tst ? 'none' : 'block';
+  renderizarMeusEnvios();
   atualizarBadgeAprovacoes();
 }
 function iniciarListaTST(){
@@ -2428,6 +2461,7 @@ function atualizarMapaSolicitacoes(){
     if(!atual || msDe(x.criadoEm) >= msDe(atual.criadoEm)) minhaUltimaSolicitacaoPorNumero[k] = x;
   });
   atualizarBadgeAprovacoes();
+  renderizarMeusEnvios();
   renderizarBuscaDesvios();
   renderizarListaDesvios();
   if(document.getElementById('view-aprovacoes').style.display === 'block'){
@@ -2725,6 +2759,53 @@ function renderizarAprovacoes(){
       apagarFotosSolicitacao(id);
     });
   });
+}
+
+/* ---- "Meus envios" na tela de Desvios: mesmo visual de "Meus registros",
+   um card por desvio mostrando a tentativa mais recente ---- */
+function renderizarMeusEnvios(){
+  const cont = document.getElementById('meus-envios-lista');
+  if(!cont || ehTST()) return;
+  const ultimas = Object.values(minhaUltimaSolicitacaoPorNumero)
+    .sort((a, b) => msDe(b.criadoEm) - msDe(a.criadoEm));
+  if(!ultimas.length){
+    cont.innerHTML = '<p class="empty-state">Você ainda não enviou nenhuma resolução.</p>';
+    return;
+  }
+  const rotulos = {
+    pendente:  { classe: 'analise',      texto: 'Em análise' },
+    aprovado:  { classe: 'sincronizado', texto: 'Aprovado' },
+    concluido: { classe: 'fechado',      texto: 'Aprovado · fechado' },
+    rejeitado: { classe: 'rejeitado',    texto: 'Rejeitado' }
+  };
+  const naoVistas = new Set(rejeicoesNaoVistas().map(x => x.id));
+  cont.innerHTML = ultimas.slice(0, 5).map(s => {
+    const r = rotulos[s.status] || { classe: 'pendente', texto: s.status || '—' };
+    const reenviar = (s.status === 'rejeitado'
+        && situacaoResolucao(s.numeroDesvio) === 'rejeitado'
+        && desviosAtivosCache.some(x => String(x.numero) === String(s.numeroDesvio)))
+      ? `<button type="button" class="btn-resolver" data-reenviar="${escaparHtml(s.numeroDesvio)}" style="margin-top:8px;">
+           <span class="icone-svg" data-icone="check"></span> Enviar novamente para análise</button>` : '';
+    const desc = s.descricaoDesvio || '';
+    const obs = s.observacao || '';
+    return `
+      <div class="desvio-card${naoVistas.has(s.id) ? ' novo-rejeitado' : ''}">
+        <div class="linha1">
+          <b>Nº ${escaparHtml(s.numeroDesvio)}${naoVistas.has(s.id) ? '<span class="selo-novo">NOVO</span>' : ''}</b>
+          <span class="tag ${r.classe}">${r.texto}</span>
+        </div>
+        <p>${s.localDesvio ? escaparHtml(s.localDesvio) + ' · ' : ''}${escaparHtml(desc.slice(0, 80))}${desc.length > 80 ? '…' : ''}</p>
+        <p>Sua resolução: ${escaparHtml(obs.slice(0, 80))}${obs.length > 80 ? '…' : ''}</p>
+        ${(s.status === 'rejeitado' && s.motivoRejeicao) ? `<p style="color:#c84c4c;"><b>Motivo:</b> ${escaparHtml(s.motivoRejeicao)}</p>` : ''}
+        ${reenviar}
+      </div>`;
+  }).join('') + `<button type="button" class="btn-ver-todos-registros" id="btn-ver-meus-envios">${ultimas.length > 5 ? 'Ver todos (' + ultimas.length + ')' : 'Ver detalhes e histórico'}</button>`;
+
+  cont.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
+  cont.querySelectorAll('[data-reenviar]').forEach(btn => {
+    btn.addEventListener('click', () => abrirResolverDesvio(btn.dataset.reenviar, false));
+  });
+  document.getElementById('btn-ver-meus-envios').addEventListener('click', () => irPara('view-enviados'));
 }
 
 /* ======================================================================
@@ -3361,11 +3442,13 @@ function agColunasHtml(dados){
     <div class="ag-colunas">
       ${dados.map(d => `
         <div class="ag-col">
-          <span class="ag-col-val">${d.valor}</span>
-          <div class="ag-col-barra" style="height:calc((100% - 30px) * ${d.valor / max}); background:${d.outras ? '#b4b2a9' : (d.cor || 'var(--green)')};"></div>
+          <div class="ag-col-area">
+            <span class="ag-col-val">${d.valor}</span>
+            <div class="ag-col-barra" style="height:calc((100% - 30px) * ${d.valor / max}); background:${d.outras ? '#b4b2a9' : (d.cor || 'var(--green)')};"></div>
+          </div>
+          <span class="ag-col-rot">${escaparHtml(d.rotulo)}</span>
         </div>`).join('')}
-    </div>
-    <div class="ag-col-rotulos">${dados.map(d => `<span>${escaparHtml(d.rotulo)}</span>`).join('')}</div>`;
+    </div>`;
 }
 
 function agBarrasDeitadasHtml(dados){
@@ -3652,6 +3735,78 @@ document.addEventListener('DOMContentLoaded', function(){
     renderizarAnaliseGeral(); // a página reflete o filtro escolhido lá dentro
   }
 
+  /* ---- Baixar PDF: uma página por quadro, com a data da exportação ---- */
+  function carregarScript(url){
+    return new Promise((ok, erro) => {
+      if(document.querySelector(`script[src="${url}"]`)) return ok();
+      const sc = document.createElement('script');
+      sc.src = url; sc.onload = ok; sc.onerror = () => erro(new Error('falha ao carregar ' + url));
+      document.head.appendChild(sc);
+    });
+  }
+  async function baixarPdf(){
+    if(!navigator.onLine){
+      alert('Para gerar o PDF é preciso estar com internet.');
+      return;
+    }
+    const botao = document.getElementById('apr-baixar');
+    botao.disabled = true;
+    const aviso = document.createElement('div');
+    aviso.className = 'apr-progresso';
+    aviso.innerHTML = '<div id="apr-progresso-texto">Preparando o PDF...</div>';
+    document.body.appendChild(aviso);
+    const palcoExport = document.createElement('div');
+    try{
+      await carregarScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+      await carregarScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+      const { jsPDF } = window.jspdf;
+
+      const agora = new Date();
+      const dataBR = agora.toLocaleDateString('pt-BR') + ' às ' + agora.toLocaleTimeString('pt-BR', { hour:'2-digit', minute:'2-digit' });
+      const dataArquivo = agora.toISOString().slice(0, 10);
+      const periodo = textoPeriodoAnalise();
+      const logos = document.querySelector('#apresentacao .apr-logos').src;
+      const lista = agMontarQuadros('apresentacao');
+
+      palcoExport.className = 'apresentacao apr-export';
+      document.body.appendChild(palcoExport);
+      const pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1600, 900], hotfixes: ['px_scaling'] });
+
+      for(let i = 0; i < lista.length; i++){
+        document.getElementById('apr-progresso-texto').textContent = `Gerando página ${i + 1} de ${lista.length}...`;
+        const item = lista[i];
+        palcoExport.innerHTML = `
+          <div class="apr-cabecalho">
+            <div class="apr-faixa">
+              <span class="apr-faixa-titulo">Desvios</span>
+              <span class="apr-faixa-sub"><b>${item.titulo}</b><span>${periodo}</span></span>
+            </div>
+            <img class="apr-logos" alt="" src="${logos}">
+          </div>
+          <div class="apr-palco"><div class="apr-slide${item.larga ? ' larga' : ''}">${agQuadroHtml(item)}</div></div>
+          <div class="apr-export-rodape"><span>Exportado em ${dataBR}</span><span>Página ${i + 1} de ${lista.length}</span></div>`;
+        // mesmo ajuste de escala da apresentação: o quadro cabe inteiro na página
+        const palcoEl = palcoExport.querySelector('.apr-palco');
+        const slide = palcoExport.querySelector('.apr-slide');
+        const escala = Math.min(palcoEl.clientWidth / slide.offsetWidth, palcoEl.clientHeight / slide.offsetHeight);
+        slide.style.transform = `translate(-50%, -50%) scale(${escala})`;
+        await new Promise(r => setTimeout(r, 30));
+        const canvas = await html2canvas(palcoExport, { scale: 1.5, backgroundColor: '#f4f5f2', logging: false, useCORS: true });
+        if(i > 0) pdf.addPage([1600, 900], 'landscape');
+        pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 1600, 900);
+      }
+      pdf.save(`Desvios_${dataArquivo}.pdf`);
+    }catch(err){
+      console.error('Falha ao gerar o PDF', err);
+      alert('Não consegui gerar o PDF. Confira a internet e tente de novo.');
+    }finally{
+      palcoExport.remove();
+      aviso.remove();
+      botao.disabled = false;
+    }
+  }
+  document.getElementById('apr-baixar').addEventListener('click', baixarPdf);
+
   document.getElementById('btn-apresentacao').addEventListener('click', abrir);
   document.getElementById('apr-fechar').addEventListener('click', fechar);
   document.getElementById('apr-ant').addEventListener('click', () => ir(-1));
@@ -3825,6 +3980,10 @@ function renderizarListaDesvios(){
       <button type="button" id="apr-prox" aria-label="Próximo gráfico">›</button>
     </div>
     <div class="apr-direita">
+      <button type="button" class="apr-baixar" id="apr-baixar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>
+        Baixar PDF
+      </button>
       <span class="apr-contador" id="apr-contador"></span>
       <button type="button" class="apr-fechar" id="apr-fechar" aria-label="Sair da apresentação">✕</button>
     </div>
