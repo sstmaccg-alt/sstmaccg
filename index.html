@@ -2274,7 +2274,10 @@ function abrirResolverDesvio(numero, autoAprovar){
   const d = desviosAtivosCache.find(x => String(x.numero) === String(numero));
   desvioEmResolucao = d || { numero };
   desvioPendenteEmResolucaoId = null;
-  resolverAutoAprovar = !!autoAprovar;
+  // se o desvio é da própria pessoa (está em "Meus registros"), a resolução
+  // já entra aprovada — vale também quando ela resolve pela busca
+  const ehMeu = meusRegistrosCache.some(r => r.numero != null && String(r.numero) === String(numero));
+  resolverAutoAprovar = !!autoAprovar || ehMeu;
   document.getElementById('resolver-titulo').textContent = 'Nº ' + numero;
   document.getElementById('resolver-descricao').textContent = d ? d.descricao : '';
   document.getElementById('resolver-form').reset();
@@ -2353,6 +2356,7 @@ document.getElementById('resolver-form').addEventListener('submit', async (e) =>
       // direto como Concluído, sem precisar de uma aprovação separada.
       gravarSemEsperar(db.collection('desvios').doc(desvioPendenteEmResolucaoId).update({
         resolvidoPeloUsuario: true,
+        resolucaoProcessada: false, // o Apps Script procura por isso se o desvio já tiver ganhado número
         resolvidoObservacao: document.getElementById('resolver-observacao').value.trim(),
         resolvidoEm: firebase.firestore.FieldValue.serverTimestamp()
       }), 'resolução do desvio pendente');
