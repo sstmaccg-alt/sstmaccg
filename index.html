@@ -1173,7 +1173,7 @@
           <div class="campo-icone"><span class="icone-svg" data-icone="camera"></span></div>
           <div class="campo-corpo">
             <div class="field">
-              <label>Foto da resolução</label>
+              <label>Foto da resolução <span style="color:var(--error);">*</span> <span style="font-weight:400; font-size:11px; color:var(--text-muted);">(obrigatória)</span></label>
               <div style="display:flex; gap:10px;">
                 <button type="button" class="btn-primary" id="btn-resolver-tirar-foto" style="width:auto; padding:10px 16px; font-size:13px;"><span class="icone-svg" data-icone="camera"></span> Tirar foto</button>
                 <button type="button" class="btn-primary" id="btn-resolver-galeria-foto" style="width:auto; padding:10px 16px; font-size:13px; background:var(--navy);"><span class="icone-svg" data-icone="imagem"></span> Galeria</button>
@@ -2309,6 +2309,15 @@ document.getElementById('resolver-form').addEventListener('submit', async (e) =>
   const msg = document.getElementById('resolver-msg');
   msg.style.display = 'none';
   const btn = document.getElementById('btn-enviar-resolucao');
+
+  // sem foto não envia: é a prova de que o desvio foi corrigido
+  // (e é ela que entra no relatório de fechamento)
+  if(fotosResolverSelecionadas.length === 0){
+    msg.textContent = 'Adicione pelo menos uma foto mostrando o desvio já corrigido.';
+    msg.style.display = 'block';
+    document.getElementById('resolver-fotos-preview').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
   btn.disabled = true;
 
   try{
