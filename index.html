@@ -765,17 +765,17 @@
       <button type="submit" class="btn-primary" id="btn-criar-senha">Criar senha</button>
     </form>
 
-    <!-- ---- Primeiro acesso: nome e sobrenome ---- -->
+    <!-- ---- Primeiro acesso: nome completo e matrícula ---- -->
     <form id="form-perfil-nome" style="display:none;">
-      <h2 style="font-size:19px; font-weight:800; color:var(--navy); margin:0 0 4px;">Como você se chama?</h2>
-      <p style="font-size:13px; color:var(--text-muted); margin:0 0 20px;">Isso ajuda a identificar seus registros no app.</p>
+      <h2 style="font-size:19px; font-weight:800; color:var(--navy); margin:0 0 4px;">Seus dados</h2>
+      <p style="font-size:13px; color:var(--text-muted); margin:0 0 20px;">Eles aparecem nos relatórios dos desvios que você registrar ou resolver.</p>
       <div class="field">
-        <label>Nome</label>
-        <input type="text" id="perfil-nome" required>
+        <label>Nome completo</label>
+        <input type="text" id="perfil-nome-completo" required autocomplete="name" placeholder="Ex.: Byanca Brasil Pereira dos Santos">
       </div>
       <div class="field">
-        <label>Sobrenome</label>
-        <input type="text" id="perfil-sobrenome" required>
+        <label>Matrícula</label>
+        <input type="text" id="perfil-matricula" required inputmode="numeric" placeholder="Ex.: 262">
       </div>
       <div class="auth-msg" id="perfil-nome-msg"></div>
       <button type="submit" class="btn-primary" id="btn-salvar-nome">Continuar</button>
@@ -1101,21 +1101,6 @@
                 <label>Responsável pela correção</label>
                 <select class="dd-select" id="d-resp-correcao" data-lista="responsavelCorrecao" required></select>
                 <input type="text" class="dd-outro" id="d-resp-correcao-outro" placeholder="Nome do responsável" style="display:none; margin-top:8px;">
-              </div>
-            </div>
-          </div>
-
-          <div class="field-com-icone">
-            <div class="campo-icone"><span class="icone-svg" data-icone="barchart"></span></div>
-            <div class="campo-corpo">
-              <div class="field">
-                <label>Status</label>
-                <select id="d-status" required>
-                  <option value="">Selecione...</option>
-                  <option value="No prazo">No prazo</option>
-                  <option value="Atrasado">Atrasado</option>
-                  <option value="Concluído">Concluído</option>
-                </select>
               </div>
             </div>
           </div>
@@ -1645,8 +1630,9 @@ function mostrarAppPrincipal(user){
   authScreen.classList.remove('active');
   appScreen.classList.add('active');
   esconderSplash();
+  const pl = lerPerfilLocal(user.uid) || {};
   document.getElementById('perfil-info').textContent =
-    `${user.displayName || ''} — ${user.email}`;
+    `${pl.nomeCompleto || user.displayName || ''}${pl.matricula ? ' · Matrícula ' + pl.matricula : ''} — ${user.email}`;
   irPara('view-desvios');
 }
 
@@ -1657,8 +1643,17 @@ function mostrarTelaNovaSenha(){
   document.getElementById('form-nova-senha').style.display = 'block';
   document.getElementById('form-perfil-nome').style.display = 'none';
 }
-function mostrarTelaPerfilNome(){
+function mostrarTelaPerfilNome(dados){
+  dados = dados || {};
+  appScreen.classList.remove('active');
   authScreen.classList.add('active'); esconderSplash();
+  // já preenche o que der (quem tinha nome/sobrenome do cadastro antigo)
+  const campoNome = document.getElementById('perfil-nome-completo');
+  if(!campoNome.value){
+    campoNome.value = dados.nomeCompleto || [dados.nome, dados.sobrenome].filter(Boolean).join(' ') ||
+      (auth.currentUser && auth.currentUser.displayName) || '';
+  }
+  if(dados.matricula) document.getElementById('perfil-matricula').value = dados.matricula;
   document.getElementById('login-form').style.display = 'none';
   document.getElementById('form-nova-senha').style.display = 'none';
   document.getElementById('form-perfil-nome').style.display = 'block';
@@ -1715,16 +1710,34 @@ document.getElementById('form-perfil-nome').addEventListener('submit', async (e)
   e.preventDefault();
   const msg = document.getElementById('perfil-nome-msg');
   msg.style.display = 'none';
-  const nome = document.getElementById('perfil-nome').value.trim();
-  const sobrenome = document.getElementById('perfil-sobrenome').value.trim();
+  const nomeCompleto = document.getElementById('perfil-nome-completo').value.trim().replace(/\s+/g, ' ');
+  const matricula = document.getElementById('perfil-matricula').value.trim();
+  if(nomeCompleto.split(' ').length < 2){
+    msg.textContent = 'Escreva o nome completo (nome e sobrenome).';
+    msg.style.display = 'block';
+    return;
+  }
+  if(!matricula){
+    msg.textContent = 'Informe a sua matrícula.';
+    msg.style.display = 'block';
+    return;
+  }
+  const partes = nomeCompleto.split(' ');
   const btn = document.getElementById('btn-salvar-nome');
   btn.disabled = true;
   try{
-    await auth.currentUser.updateProfile({ displayName: nome + ' ' + sobrenome });
-    await db.collection('usuarios').doc(auth.currentUser.uid).set({
-      nome, sobrenome, perfilCompleto: true
-    }, { merge: true });
-    salvarPerfilLocal(auth.currentUser.uid, { senhaRedefinida: true, perfilCompleto: true });
+    // nome no login: tenta, mas não trava se estiver sem sinal
+    comTempoLimite(auth.currentUser.updateProfile({ displayName: nomeCompleto }), 5000)
+      .catch(err => console.warn('Nome do login será atualizado depois:', err));
+    // perfil: grava no aparelho na hora e sobe quando tiver sinal
+    const perfil = {
+      nomeCompleto, matricula,
+      email: (auth.currentUser.email || '').toLowerCase(),
+      nome: partes[0], sobrenome: partes.slice(1).join(' '),
+      perfilCompleto: true
+    };
+    gravarSemEsperar(db.collection('usuarios').doc(auth.currentUser.uid).set(perfil, { merge: true }), 'perfil');
+    salvarPerfilLocal(auth.currentUser.uid, Object.assign({ senhaRedefinida: true }, perfil));
     document.getElementById('form-perfil-nome').reset();
     mostrarAppPrincipal(auth.currentUser);
   }catch(err){
@@ -1739,11 +1752,17 @@ document.getElementById('form-perfil-nome').addEventListener('submit', async (e)
 /* ---- guarda no aparelho que esse usuário já passou pelo primeiro acesso,
    pra conseguir abrir o app sem internet (sem isso, offline ele não
    conseguia ler o perfil e caía na tela de "criar senha" ou travava) ---- */
+function perfilEstaCompleto(dados){
+  // agora o perfil precisa de nome completo E matrícula (usados nos relatórios)
+  return !!(dados && dados.perfilCompleto && dados.nomeCompleto && dados.matricula);
+}
 function salvarPerfilLocal(uid, dados){
   try{
     localStorage.setItem('sst_perfil_' + uid, JSON.stringify({
       senhaRedefinida: !!dados.senhaRedefinida,
-      perfilCompleto: !!dados.perfilCompleto
+      perfilCompleto: perfilEstaCompleto(dados),
+      nomeCompleto: dados.nomeCompleto || '',
+      matricula: dados.matricula || ''
     }));
   }catch(e){}
 }
@@ -1775,7 +1794,14 @@ auth.onAuthStateChanged(async (user) => {
       mostrarAppPrincipal(user);
       verificarLimiteDispositivos(user).then((res) => {
         if(!res.autorizado){ bloquearPorLimiteDispositivos(); return; }
-        salvarPerfilLocal(user.uid, res.dados || {});
+        const d = res.dados || {};
+        // quem já usava o app mas ainda não tem matrícula: pede uma vez só
+        if(d.perfilCompleto && !perfilEstaCompleto(d)){
+          salvarPerfilLocal(user.uid, d);
+          mostrarTelaPerfilNome(d);
+          return;
+        }
+        salvarPerfilLocal(user.uid, d);
       }).catch(() => { /* sem sinal: confere na próxima abertura */ });
       return;
     }
@@ -1807,8 +1833,8 @@ auth.onAuthStateChanged(async (user) => {
     salvarPerfilLocal(user.uid, dados);
     if(!dados.senhaRedefinida){
       mostrarTelaNovaSenha();
-    } else if(!dados.perfilCompleto){
-      mostrarTelaPerfilNome();
+    } else if(!perfilEstaCompleto(dados)){
+      mostrarTelaPerfilNome(dados);
     } else {
       mostrarAppPrincipal(user);
     }
@@ -2944,7 +2970,7 @@ document.getElementById('desvio-form').addEventListener('submit', async (e) => {
       inspecionadoPor,
       prazo: document.getElementById('d-prazo').value, // aaaa-mm-dd
       responsavelCorrecao,
-      status: document.getElementById('d-status').value,
+      status: '', // a planilha calcula sozinha (No prazo / Atrasado) pela data do prazo
       observacoes: document.getElementById('d-observacoes').value.trim(),
       origem,
       criadoPor: auth.currentUser.uid,
