@@ -1136,7 +1136,7 @@
         <p class="tela-titulo" id="q-ficha-titulo">Nova ficha</p>
       </div>
       <section class="q-cab" id="q-cab" aria-label="Dados da ficha"></section>
-      <p class="q-alerta" id="q-aviso-enc">Escolha o encarregado/supervisor/líder para começar. As sugestões vêm da aba "Participantes" da planilha.</p>
+      <p class="q-alerta" id="q-aviso-enc">Escolha o encarregado/supervisor/líder para começar. As sugestões vêm da aba "Líderes" da planilha.</p>
       <div id="q-corpo">
         <div class="toggle-duas-opcoes" id="q-abas">
           <button type="button" data-q="q1">1ª quinzena</button>
@@ -4692,7 +4692,7 @@ const Q_PAPEIS = [
   { chave: 'saude', rotulo: 'Saúde Ocupacional' }
 ];
 
-let qParticipantes = [];          // aba "Participantes" (via config/participantes)
+let qParticipantes = [];          // aba "Líderes" (via config/participantes)
 let qFichasMes = [];              // fichas do mês escolhido (TST)
 let qMinhasFichas = [];           // fichas em que eu sou signatário
 let qMes = qMesAtual();
@@ -4979,7 +4979,7 @@ function qRenderFicha(){
       <datalist id="q-dl-area">${qSugestoes('area').map(v => `<option value="${escaparHtml(v)}">`).join('')}</datalist></label>
     <label class="q-campo">Local de trabalho<input type="text" id="q-local" list="q-dl-local" value="${escaparHtml(f.local)}" ${editar ? '' : 'disabled'}>
       <datalist id="q-dl-local">${qSugestoes('local').map(v => `<option value="${escaparHtml(v)}">`).join('')}</datalist></label>
-    ${f.id && !f.encarregado.email ? `<p class="q-alerta q-campo-largo">${escaparHtml(f.encarregado.nome)} não está na aba "Participantes" da planilha — sem isso ele não consegue assinar.</p>` : ''}`;
+    ${f.id && !f.encarregado.email ? `<p class="q-alerta q-campo-largo">${escaparHtml(f.encarregado.nome)} não está na aba "Líderes" da planilha — sem isso ele não consegue assinar.</p>` : ''}`;
 
   const enc = document.getElementById('q-enc');
   if(!f.id){
@@ -5122,11 +5122,11 @@ function qAbrirEscolhaSignatarios(){
   const caixa = document.getElementById('q-signatarios');
   caixa.innerHTML = `
     <b>Quem assina esta quinzena</b>
-    <div class="q-sig-linha"><span>Encarregado</span><b>${escaparHtml(f.encarregado.nome)}${f.encarregado.email ? '' : ' <em>(sem cadastro na aba Participantes)</em>'}</b></div>
+    <div class="q-sig-linha"><span>Encarregado</span><b>${escaparHtml(f.encarregado.nome)}${f.encarregado.email ? '' : ' <em>(sem cadastro na aba Líderes)</em>'}</b></div>
     <div class="q-sig-linha"><span>Segurança do Trabalho</span><b>${escaparHtml(qMeuPerfil().nome)} (você)</b></div>
     <label class="q-campo">Meio Ambiente<select id="q-sel-ma">${opt(ma)}</select></label>
     <label class="q-campo">Saúde Ocupacional<select id="q-sel-sa">${opt(sa)}</select></label>
-    <p class="q-alerta" style="display:${f.encarregado.email ? 'none' : 'block'}">Cadastre o encarregado na aba "Participantes" (com o e-mail do login dele) para poder pedir a assinatura.</p>
+    <p class="q-alerta" style="display:${f.encarregado.email ? 'none' : 'block'}">Cadastre o encarregado na aba "Líderes" (com o e-mail do login dele) para poder pedir a assinatura.</p>
     <div class="q-sig-botoes">
       <button type="button" class="btn-cancelar-rej" id="q-sig-cancelar">Voltar</button>
       <button type="button" class="btn-primary" id="q-sig-confirmar" ${f.encarregado.email ? '' : 'disabled'}>Confirmar e pedir assinaturas</button>
