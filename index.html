@@ -857,6 +857,89 @@
     #view-resolver form, #view-perfil > *{ max-width:760px; }
   }
 
+
+  /* ---------- Qualimetria ---------- */
+  .q-topo{ display:flex; gap:10px; align-items:center; margin-bottom:14px; }
+  .q-topo select{ flex:1; height:44px; border:1px solid var(--border-strong); border-radius:12px; padding:0 12px; font:inherit; font-size:14px; background:var(--white); color:var(--navy); }
+  .q-btn-nova{ height:44px; padding:0 16px; border:none; border-radius:12px; background:var(--green); color:#fff; font:inherit; font-size:14px; font-weight:800; cursor:pointer; align-items:center; }
+  .q-resumo{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; }
+  .q-kpi{ background:var(--white); border-radius:12px; padding:10px 12px; display:flex; flex-direction:column; box-shadow:0 1px 4px rgba(20,33,49,.06); }
+  .q-kpi b{ font-size:20px; color:var(--navy); } .q-kpi span{ font-size:11px; color:var(--text-muted); }
+  .q-kpi-alerta{ background:#fdf1f1; } .q-kpi-alerta b{ color:#a32d2d; }
+  .q-card{ width:100%; text-align:left; display:flex; flex-direction:column; gap:8px; background:var(--white); border:none; border-radius:14px; padding:14px 16px; margin-bottom:10px; box-shadow:0 1px 4px rgba(20,33,49,.07); font:inherit; color:var(--navy); cursor:pointer; }
+  .q-card-pend{ border:2px solid #e2a23a; }
+  .q-card-pend span{ font-size:12px; color:var(--text-muted); }
+  .q-card-topo{ display:flex; align-items:center; gap:8px; } .q-card-topo b{ font-size:15px; flex:1; }
+  .q-nota-mes{ font-size:15px; font-weight:800; }
+  .q-card-sub{ font-size:12px; color:var(--text-muted); }
+  .q-quinzenas{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
+  .q-q{ border-radius:10px; padding:7px 10px; font-size:12px; font-weight:700; display:flex; flex-direction:column; gap:2px; }
+  .q-q small{ font-size:10px; font-weight:700; color:var(--text-muted); letter-spacing:.3px; }
+  .q-q-ok{ background:#e9f2df; color:#2d5214; } .q-q-assinando{ background:#fdf0d5; color:#7a4b06; } .q-q-vazia{ background:var(--cream); color:var(--text-muted); }
+  .q-tag{ font-size:11px; font-weight:800; padding:4px 9px; border-radius:8px; align-self:flex-start; white-space:nowrap; }
+  .q-tag-ok{ background:#e3f1d6; color:#2d5214; } .q-tag-aviso{ background:#fdf0d5; color:#7a4b06; }
+  .q-cab{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px 12px; background:var(--white); border-radius:14px; padding:14px; margin-bottom:12px; box-shadow:0 1px 4px rgba(20,33,49,.06); }
+  .q-campo{ display:flex; flex-direction:column; gap:4px; font-size:12px; font-weight:700; color:var(--navy); }
+  .q-campo input, .q-campo select{ height:42px; border:1px solid var(--border-strong); border-radius:10px; padding:0 10px; font:inherit; font-size:14px; font-weight:400; background:var(--white); color:var(--navy); width:100%; }
+  .q-campo input:disabled{ background:var(--cream); color:var(--navy); }
+  .q-campo-largo{ grid-column:1 / -1; }
+  .q-alerta{ background:#fdf0d5; color:#7a4b06; border-radius:10px; padding:10px 12px; font-size:13px; line-height:1.4; margin:0 0 12px; }
+  .q-legenda{ font-size:11px; color:var(--text-muted); margin:4px 0 10px; line-height:1.8; }
+  .q-legenda b{ margin-left:6px; } .q-l-c{ color:#2d5214; } .q-l-nc1{ color:#7a4b06; } .q-l-nc2{ color:#a32d2d; }
+  .q-item{ background:var(--white); border-radius:14px; padding:12px 14px; margin-bottom:10px; box-shadow:0 1px 4px rgba(20,33,49,.06); border-left:4px solid var(--border); display:flex; flex-direction:column; gap:10px; }
+  .q-borda-c{ border-left-color:#5e8a3f; } .q-borda-nc1{ border-left-color:#e2a23a; } .q-borda-nc2{ border-left-color:#d64545; } .q-borda-na{ border-left-color:#9aa3ad; }
+  .q-item-topo{ display:flex; gap:10px; font-size:14px; line-height:1.4; color:var(--navy); }
+  .q-num{ width:26px; height:26px; flex-shrink:0; border-radius:8px; background:var(--cream); font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+  .q-ops{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:6px; }
+  .q-op{ height:42px; border:1px solid var(--border-strong); border-radius:10px; background:var(--white); color:var(--text-muted); font:inherit; font-size:14px; font-weight:600; cursor:pointer; }
+  .q-op:disabled{ cursor:default; opacity:.85; }
+  .q-op.on{ font-weight:800; border-width:2px; }
+  .q-op-c{ background:#e3f1d6; color:#2d5214; border-color:#5e8a3f; } .q-op-nc1{ background:#fdf0d5; color:#7a4b06; border-color:#e2a23a; }
+  .q-op-nc2{ background:#fde2e1; color:#a32d2d; border-color:#d64545; } .q-op-na{ background:#eceee8; color:#33404c; border-color:#9aa3ad; }
+  .q-nc{ background:#fdf6f4; border:1px solid #f3d4cf; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:10px; }
+  .q-nc label{ display:flex; flex-direction:column; gap:4px; font-size:12px; font-weight:700; color:var(--navy); }
+  .q-nc textarea, .q-nc input, .q-nc select{ border:1px solid var(--border-strong); border-radius:10px; padding:9px 10px; font:inherit; font-size:14px; font-weight:400; background:var(--white); color:var(--navy); width:100%; }
+  .q-nc textarea{ resize:vertical; }
+  .q-nc-aviso{ font-size:12px; font-weight:700; color:#a32d2d; }
+  .q-nc-grade{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
+  .q-foto-btn{ height:42px; border:1px dashed #b8d19c; border-radius:10px; background:#f4f9ee; color:#4c7032; font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+  .q-signatarios{ flex-direction:column; gap:10px; background:var(--white); border:2px solid var(--green); border-radius:14px; padding:14px; margin-bottom:14px; }
+  .q-sig-linha{ display:flex; flex-direction:column; font-size:12px; color:var(--text-muted); } .q-sig-linha b{ font-size:14px; color:var(--navy); }
+  .q-sig-botoes{ display:flex; gap:8px; } .q-sig-botoes button{ flex:1; }
+  .q-res{ display:flex; align-items:baseline; flex-wrap:wrap; gap:4px 10px; background:#142131; color:#fff; border-radius:14px; padding:14px 16px; margin-bottom:10px; }
+  .q-res-nota{ font-size:30px; font-weight:800; } .q-res b{ font-size:16px; }
+  .q-res-txt{ width:100%; font-size:12px; color:#c4ccd3; }
+  .q-ass{ background:var(--white); border-radius:14px; padding:12px 14px; margin-bottom:10px; box-shadow:0 1px 4px rgba(20,33,49,.06); display:flex; flex-direction:column; gap:10px; }
+  .q-ass-minha{ border:2px solid var(--green); }
+  .q-ass-topo{ display:flex; gap:10px; align-items:flex-start; }
+  .q-ass-topo > span:first-child{ flex:1; display:flex; flex-direction:column; }
+  .q-ass-topo small{ font-size:10px; font-weight:800; letter-spacing:.5px; color:var(--text-muted); }
+  .q-ass-topo b{ font-size:14px; color:var(--navy); } .q-ass-topo em{ font-style:normal; font-size:12px; color:var(--text-muted); }
+  .q-ass-img{ display:flex; align-items:center; gap:10px; font-size:12px; color:var(--text-muted); }
+  .q-ass-img img{ height:48px; background:#fff; border:1px solid var(--border); border-radius:8px; }
+  .q-pad-caixa{ position:relative; }
+  .q-pad{ width:100%; height:150px; border:1px dashed #b8c2cc; border-radius:12px; background:#fbfbf9; touch-action:none; display:block; }
+  .q-pad-limpar{ position:absolute; top:8px; right:8px; height:30px; padding:0 10px; border:1px solid var(--border-strong); border-radius:8px; background:#fff; font:inherit; font-size:12px; font-weight:700; color:#4b5563; cursor:pointer; }
+  .q-pad-dica{ position:absolute; left:12px; bottom:8px; font-size:11px; color:#6b7280; pointer-events:none; }
+  .q-declara{ display:flex; gap:10px; align-items:flex-start; font-size:13px; line-height:1.4; color:var(--navy); }
+  .q-declara input{ width:20px; height:20px; flex-shrink:0; accent-color:var(--green); }
+  .q-reabrir{ background:none; border:none; color:#a32d2d; font:inherit; font-size:13px; font-weight:700; cursor:pointer; padding:4px 0 12px; }
+  #view-quali-ficha{ padding-bottom:130px; }
+  .q-barra{ position:fixed; left:0; right:0; bottom:58px; z-index:25; background:#142131; color:#fff; padding:10px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 -4px 14px rgba(20,33,49,.18); }
+  .q-barra-nota{ display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
+  #q-nota{ font-size:26px; font-weight:800; }
+  .q-barra-txt{ display:flex; flex-direction:column; min-width:0; } .q-barra-txt b{ font-size:14px; } .q-barra-txt small{ font-size:11px; color:#aab4be; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .q-barra .btn-primary{ width:auto; padding:12px 16px; font-size:14px; white-space:nowrap; }
+  .q-barra .btn-primary:disabled{ opacity:.55; }
+  @media (min-width:1024px){
+    .q-barra{ left:248px; bottom:0; padding:12px 36px; }
+    #q-lista{ display:grid; grid-template-columns:repeat(auto-fill, minmax(340px, 1fr)); gap:14px; align-items:start; }
+    #q-lista .q-card{ margin:0; } #q-lista > .empty-state{ grid-column:1 / -1; }
+    .q-cab{ grid-template-columns:repeat(4, minmax(0,1fr)); }
+    #q-itens{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px; align-items:start; }
+    #q-itens .q-item{ margin:0; }
+    #view-qualimetria, #view-quali-ficha{ max-width:1200px; }
+  }
 </style>
 </head>
 <body>
@@ -1031,9 +1114,43 @@
       <div class="tela-banner">
         <div class="tela-selo">SEGURANÇA</div>
         <p class="tela-titulo">Qualimetria</p>
-        <p class="tela-sub">Avaliações de qualidade em campo.</p>
+        <p class="tela-sub">Avaliação quinzenal por encarregado · PI-FRC 00901</p>
       </div>
-      <div class="placeholder-note">Tela em construção.</div>
+      <div class="q-topo">
+        <select id="q-mes" aria-label="Mês da qualimetria"></select>
+        <button type="button" id="q-btn-nova" class="q-btn-nova" style="display:none;">+ Nova ficha</button>
+      </div>
+      <div class="q-resumo" id="q-resumo"></div>
+      <div id="q-pendentes"></div>
+      <span class="secao-titulo">Fichas do mês</span>
+      <div id="q-lista"></div>
+    </div>
+
+    <!-- Tela: ficha de qualimetria (avaliação + assinaturas) -->
+    <div id="view-quali-ficha" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header">
+          <button id="q-btn-voltar" class="voltar" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button>
+        </div>
+        <div class="tela-selo" id="q-ficha-selo">QUALIMETRIA</div>
+        <p class="tela-titulo" id="q-ficha-titulo">Nova ficha</p>
+      </div>
+      <section class="q-cab" id="q-cab" aria-label="Dados da ficha"></section>
+      <p class="q-alerta" id="q-aviso-enc">Escolha o encarregado/supervisor/líder para começar. As sugestões vêm da aba "Participantes" da planilha.</p>
+      <div id="q-corpo">
+        <div class="toggle-duas-opcoes" id="q-abas">
+          <button type="button" data-q="q1">1ª quinzena</button>
+          <button type="button" data-q="q2">2ª quinzena</button>
+        </div>
+        <div id="q-assinaturas"></div>
+        <div class="q-signatarios" id="q-signatarios" style="display:none;"></div>
+        <p class="q-legenda"><b class="q-l-c">C</b> Conforme <b class="q-l-nc1">NC1</b> Não conforme peso 1 <b class="q-l-nc2">NC2</b> Peso 2 (grave/reincidente) <b class="q-l-na">NA</b> Não aplicável</p>
+        <div id="q-itens"></div>
+      </div>
+      <div class="q-barra" id="q-barra" style="display:none;">
+        <div class="q-barra-nota"><span id="q-nota">—</span><span class="q-barra-txt"><b id="q-mencao"></b><small id="q-detalhe"></small></span></div>
+        <button type="button" class="btn-primary" id="q-btn-enviar">Concluir</button>
+      </div>
     </div>
 
     <!-- Tela: LV (placeholder) -->
@@ -2079,13 +2196,17 @@ document.getElementById('logout-btn').addEventListener('click', () => {
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil'];
+const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha'];
 function irPara(viewId){
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.view === viewId);
   });
   if(viewId === 'view-desvios'){ mostrarListaDesvios(); }
+  if(viewId === 'view-qualimetria' && typeof abrirQualimetria === 'function'){ abrirQualimetria(); }
+  if(viewId === 'view-quali-ficha'){
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'view-qualimetria'));
+  }
   if(viewId === 'view-aprovacoes'){
     if(!ehTST()){ irPara('view-enviados'); return; }
     renderizarAprovacoes();
@@ -2195,6 +2316,7 @@ function mostrarAvisoApp(titulo, texto, abrir){
 function abrirDestinoNotificacao(abrir){
   if(abrir === 'aprovacoes') irPara(ehTST() ? 'view-aprovacoes' : 'view-enviados');
   else if(abrir === 'enviados') irPara('view-enviados');
+  else if(abrir === 'qualimetria') irPara('view-qualimetria');
   else if(abrir) irPara('view-desvios');
 }
 async function salvarTokenPush(){
@@ -4525,6 +4647,640 @@ function renderizarListaDesvios(){
     if(e.key === 'ArrowRight') passo(1);
   });
 })();
+</script>
+<script>
+/* ======================================================================
+   QUALIMETRIA (PI-FRC 00901)
+   ----------------------------------------------------------------------
+   Uma ficha por encarregado por mês, avaliada na 1ª e na 2ª quinzena.
+   Coleção: qualimetrias/{AAAA-MM}_{encarregado}
+     q1 / q2: { itens:{'1':'C'|'NC1'|'NC2'|'NA'}, ncs:{'3':{...}},
+                estado:'rascunho'|'assinando'|'fechada',
+                signatarios:{encarregado, seguranca, meioAmbiente, saude},
+                assinaturas:{ mesma chave: {nome, matricula, email, uid,
+                                            imagem, assinadoEm, aparelho} } }
+   Só TST cria e preenche. As 4 assinaturas fecham a quinzena.
+   Cada não conformidade vira um desvio (origem "Qualimetria").
+   O PDF é gerado pelo Apps Script e vai para Qualimetria/AAAA/MM-AAAA.
+   ====================================================================== */
+const Q_ITENS = [
+  'O TDT está sendo realizado diariamente?',
+  'Todos os integrantes envolvidos na atividade foram treinados na APR, e as mesmas estão disponíveis na frente de serviço?',
+  'Os trabalhadores estão utilizando todos os EPI´s obrigatórios para a atividade?',
+  'Foi realizado a inspeção das ferramentas, máquinas e equipamentos (checklist) antes de iniciar as atividades?',
+  'As máquinas e equipamentos são operadas somente por integrantes autorizados, portando crachá?',
+  'As movimentações de carga estão sendo realizadas conforme procedimento, e os equipamentos e veículos de grande porte que necessitam utilizar a marcha ré são acompanhados por sinaleiro?',
+  'As áreas e atividades que necessitam de sinalização e isolamento estão devidamente isoladas e sinalizadas?',
+  "Os EPC's aplicáveis às tarefas estão disponíveis? (Sinalização, Barreira New Jersey, guarda-corpo, barreira de proteção contra projeção de partículas, iluminação, linha de vida, protetor de vergalhão, etc.)",
+  'Os painéis elétricos de distribuição de energia possuem DR? Estão devidamente protegidos e aterrados?',
+  'Os integrantes estão trabalhando com postura ergonomicamente correta?',
+  'As movimentações manuais de cargas são realizadas de forma correta?',
+  'As listas de pausa e/ou alternâncias posturais estão sendo realizadas de forma correta e assinadas?',
+  'Os atestados de saúde ocupacional (ASO) de todos os integrantes da equipe estão válidos (em dia)?',
+  'Possui área de travessia de pedestres, devidamente isolada e sinalizada?',
+  'Existe extintor de incêndio na frente de serviços?',
+  'As áreas de trabalho estão limpas e organizadas?',
+  'Os banheiros, bebedouros e áreas de vivência encontram-se em bom estado de conservação, ordem e limpeza, atendendo o dimensionamento da frente de trabalho e distância máxima permitida (banheiro 150 m e bebedouro 100 m)?',
+  'Há sinais de contaminação por produtos químicos no piso e/ou solo?',
+  'A área de serviço dispõe de kit de mitigação para conter contaminação por produtos químicos no piso e/ou solo?',
+  'Os resíduos estão sendo segregados e descartados de forma correta?'
+];
+const Q_PAPEIS = [
+  { chave: 'encarregado', rotulo: 'Encarregado / Supervisor / Líder' },
+  { chave: 'seguranca', rotulo: 'Segurança do Trabalho' },
+  { chave: 'meioAmbiente', rotulo: 'Meio Ambiente' },
+  { chave: 'saude', rotulo: 'Saúde Ocupacional' }
+];
+
+let qParticipantes = [];          // aba "Participantes" (via config/participantes)
+let qFichasMes = [];              // fichas do mês escolhido (TST)
+let qMinhasFichas = [];           // fichas em que eu sou signatário
+let qMes = qMesAtual();
+let qFicha = null;                // ficha aberta
+let qQuinzena = 'q1';
+let qSalvarTimer = null;
+let qOuvindo = { mes: null, minhas: false, participantes: false };
+let qCancelarMes = null;
+
+function qMesAtual(){ const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); }
+function qQuinzenaAtual(){ return new Date().getDate() <= 15 ? 'q1' : 'q2'; }
+function qMesRotulo(mes){ const [a, m] = mes.split('-'); return MESES_NOMES()[Number(m) - 1] + '/' + a; }
+function qSlug(t){ return String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+function qMeuEmail(){ return (auth.currentUser && auth.currentUser.email || '').toLowerCase(); }
+function qMeuPerfil(){
+  const pl = (auth.currentUser && lerPerfilLocal(auth.currentUser.uid)) || {};
+  return {
+    nome: pl.nomeCompleto || (auth.currentUser && auth.currentUser.displayName) || qMeuEmail(),
+    matricula: pl.matricula || '', email: qMeuEmail(), uid: auth.currentUser ? auth.currentUser.uid : ''
+  };
+}
+function qClone(v){
+  if(v && typeof v.toDate === 'function') return v;          // data do Firestore: mantém
+  if(Array.isArray(v)) return v.map(qClone);
+  if(v && typeof v === 'object'){ const o = {}; Object.keys(v).forEach(k => o[k] = qClone(v[k])); return o; }
+  return v;
+}
+function qQuinzenaVazia(){ return { itens: {}, ncs: {}, estado: 'rascunho', signatarios: {}, assinaturas: {} }; }
+
+/* ---- nota: 100 − (pesos NC ÷ itens avaliados × 100) ---- */
+function qCalcular(q){
+  const vals = Object.values((q && q.itens) || {});
+  const marcados = vals.filter(Boolean).length;
+  const avaliados = vals.filter(v => v && v !== 'NA').length;
+  const pesos = vals.filter(v => v === 'NC1').length + 2 * vals.filter(v => v === 'NC2').length;
+  const nota = avaliados ? Math.round((100 - (pesos / avaliados) * 100) * 10) / 10 : null;
+  return { marcados, avaliados, pesos, nota, mencao: nota === null ? '' : qMencao(nota) };
+}
+function qMencao(n){
+  if(n >= 100) return 'Excelente';
+  if(n >= 90) return 'Bom';
+  if(n >= 80) return 'Regular';
+  if(n >= 70) return 'Insuficiente';
+  return 'Insatisfatório';
+}
+function qCorMencao(m){
+  return { 'Excelente': '#2d5214', 'Bom': '#3f6b1f', 'Regular': '#7a4b06', 'Insuficiente': '#a1520f', 'Insatisfatório': '#a32d2d' }[m] || 'var(--text-muted)';
+}
+// cores claras pra usar sobre o fundo azul-escuro
+function qCorMencaoEscuro(m){
+  return { 'Excelente': '#cfe3b8', 'Bom': '#cfe3b8', 'Regular': '#f3d38a', 'Insuficiente': '#f7b98a', 'Insatisfatório': '#f7a3a3' }[m] || '#aab4be';
+}
+function qNotaMes(f){
+  const ns = ['q1', 'q2'].map(k => f[k] && qCalcular(f[k])).filter(c => c && c.marcados === 20 && c.nota !== null).map(c => c.nota);
+  if(!ns.length) return null;
+  return Math.round(ns.reduce((a, b) => a + b, 0) / ns.length * 10) / 10;
+}
+function qFmtNota(n){ return n === null || n === undefined ? '—' : String(n).replace('.', ',') + '%'; }
+
+/* ======================= dados (Firestore) ======================= */
+function qIniciarParticipantes(){
+  if(qOuvindo.participantes) return;
+  qOuvindo.participantes = true;
+  db.collection('config').doc('participantes').onSnapshot((snap) => {
+    qParticipantes = (snap.exists && Array.isArray(snap.data().lista)) ? snap.data().lista : [];
+    if(document.getElementById('view-quali-ficha').style.display === 'block') qRenderFicha();
+  }, (e) => console.warn('Participantes:', e));
+}
+function qIniciarMinhas(){
+  if(qOuvindo.minhas || !auth.currentUser) return;
+  qOuvindo.minhas = true;
+  db.collection('qualimetrias').where('participantesEmails', 'array-contains', qMeuEmail()).onSnapshot((snap) => {
+    qMinhasFichas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    qAtualizarAbertos();
+  }, (e) => console.warn('Minhas qualimetrias:', e));
+}
+function qIniciarMes(){
+  if(!ehTST() || qOuvindo.mes === qMes) return;
+  if(qCancelarMes) qCancelarMes();
+  qOuvindo.mes = qMes;
+  qCancelarMes = db.collection('qualimetrias').where('mes', '==', qMes).onSnapshot((snap) => {
+    qFichasMes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    qAtualizarAbertos();
+  }, (e) => console.warn('Qualimetrias do mês:', e));
+}
+function qAtualizarAbertos(){
+  if(document.getElementById('view-qualimetria').style.display === 'block') qRenderLista();
+  if(qFicha && document.getElementById('view-quali-ficha').style.display === 'block'){
+    // outra pessoa assinou: atualiza a ficha aberta (sem perder o que estou editando no rascunho)
+    const nova = qFichasMes.concat(qMinhasFichas).find(f => f.id === qFicha.id);
+    if(!nova) return;
+    let mudou = false;
+    ['q1', 'q2'].forEach(k => {
+      const srv = nova[k]; if(!srv) return;
+      const loc = qFicha[k];
+      const antes = JSON.stringify([loc.estado, Object.keys(loc.assinaturas || {}).sort(), loc.codigo || '']);
+      const depois = JSON.stringify([srv.estado, Object.keys(srv.assinaturas || {}).sort(), srv.codigo || '']);
+      const tsMudou = Object.keys(srv.assinaturas || {}).some(p => srv.assinaturas[p].assinadoEm && !(loc.assinaturas && loc.assinaturas[p] && loc.assinaturas[p].assinadoEm));
+      if(antes !== depois || tsMudou){
+        loc.estado = srv.estado; loc.assinaturas = qClone(srv.assinaturas || {}); loc.signatarios = qClone(srv.signatarios || {});
+        loc.codigo = srv.codigo || ''; mudou = true;
+      }
+    });
+    if(mudou) qRenderFicha();
+  }
+}
+function qSalvar(imediato){
+  if(!qFicha || !qFicha.id || !ehTST()) return;
+  clearTimeout(qSalvarTimer);
+  const gravar = () => {
+    qSalvarTimer = null;
+    const f = qFicha, k = qQuinzena, q = f[k], c = qCalcular(q);
+    const p = {
+      mes: f.mes, encarregado: f.encarregado, area: f.area || '', local: f.local || '', turno: f.turno || '',
+      participantesEmails: f.participantesEmails || [],
+      atualizadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    p[k] = { itens: q.itens, ncs: q.ncs, estado: q.estado, signatarios: q.signatarios || {},
+             nota: c.nota, mencao: c.mencao, avaliados: c.avaliados, pesos: c.pesos };
+    const campos = ['mes', 'encarregado', 'area', 'local', 'turno', 'participantesEmails', 'atualizadoEm']
+      .concat(['itens', 'ncs', 'estado', 'signatarios', 'nota', 'mencao', 'avaliados', 'pesos'].map(x => k + '.' + x));
+    if(f._criar){
+      Object.assign(p, { criadoPor: f.criadoPor, criadoPorEmail: f.criadoPorEmail, criadoPorNome: f.criadoPorNome,
+                         criadoEm: firebase.firestore.FieldValue.serverTimestamp() });
+      campos.push('criadoPor', 'criadoPorEmail', 'criadoPorNome', 'criadoEm');
+      delete f._criar;
+    }
+    // mergeFields: substitui exatamente esses campos (item desmarcado some de verdade)
+    // e nunca toca nas assinaturas, que cada pessoa grava pela própria conta
+    gravarSemEsperar(db.collection('qualimetrias').doc(f.id).set(p, { mergeFields: campos }), 'qualimetria');
+  };
+  if(imediato) gravar(); else qSalvarTimer = setTimeout(gravar, 700);
+}
+
+/* ======================= tela: lista do mês ======================= */
+function abrirQualimetria(){
+  qIniciarParticipantes();
+  qIniciarMinhas();
+  qIniciarMes();
+  qRenderLista();
+}
+function qRenderLista(){
+  const tst = ehTST();
+  document.getElementById('q-btn-nova').style.display = tst ? 'flex' : 'none';
+  const sel = document.getElementById('q-mes');
+  if(!sel.options.length){
+    const d = new Date(); const ops = [];
+    for(let i = 0; i < 13; i++){
+      const x = new Date(d.getFullYear(), d.getMonth() - i, 1);
+      const v = x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0');
+      ops.push(`<option value="${v}">${qMesRotulo(v)}</option>`);
+    }
+    sel.innerHTML = ops.join('');
+    sel.addEventListener('change', () => { qMes = sel.value; qIniciarMes(); qRenderLista(); });
+  }
+  sel.value = qMes;
+
+  // assinaturas pendentes para mim (qualquer perfil)
+  const eu = qMeuEmail();
+  const pend = [];
+  qMinhasFichas.forEach(f => ['q1', 'q2'].forEach(k => {
+    const q = f[k];
+    if(!q || q.estado !== 'assinando') return;
+    Q_PAPEIS.forEach(p => {
+      const s = (q.signatarios || {})[p.chave];
+      if(s && String(s.email || '').toLowerCase() === eu && !(q.assinaturas || {})[p.chave]) pend.push({ f, k, papel: p });
+    });
+  }));
+  const cPend = document.getElementById('q-pendentes');
+  cPend.innerHTML = pend.length ? `
+    <span class="secao-titulo">Assinaturas pendentes para você</span>
+    ${pend.map(x => `<button type="button" class="q-card q-card-pend" data-id="${x.f.id}" data-q="${x.k}">
+      <b>${escaparHtml(x.f.encarregado && x.f.encarregado.nome)}</b>
+      <span>${qMesRotulo(x.f.mes)} · ${x.k === 'q1' ? '1ª' : '2ª'} quinzena · como ${escaparHtml(x.papel.rotulo)}</span>
+      <span class="q-tag q-tag-aviso">Assinar agora</span></button>`).join('')}` : '';
+
+  // fichas
+  const lista = tst ? qFichasMes : qMinhasFichas.filter(f => f.mes === qMes);
+  const notas = lista.map(qNotaMes).filter(n => n !== null);
+  const media = notas.length ? Math.round(notas.reduce((a, b) => a + b, 0) / notas.length * 10) / 10 : null;
+  const faltam = lista.reduce((s, f) => s + ['q1', 'q2'].filter(k => f[k] && f[k].estado === 'assinando').length, 0);
+  document.getElementById('q-resumo').innerHTML = `
+    <div class="q-kpi"><b>${lista.length}</b><span>fichas</span></div>
+    <div class="q-kpi"><b style="color:${media === null ? 'inherit' : qCorMencao(qMencao(media))}">${qFmtNota(media)}</b><span>média${media === null ? '' : ' · ' + qMencao(media)}</span></div>
+    <div class="q-kpi ${faltam ? 'q-kpi-alerta' : ''}"><b>${faltam}</b><span>faltam assinar</span></div>`;
+
+  const estadoTxt = (q) => {
+    if(!q || !Object.keys(q.itens || {}).length) return ['Não iniciada', 'q-q-vazia'];
+    const c = qCalcular(q);
+    if(q.estado === 'fechada') return [`${qFmtNota(c.nota)} · ${c.mencao} · assinada`, 'q-q-ok'];
+    if(q.estado === 'assinando'){
+      const n = Q_PAPEIS.filter(p => !(q.assinaturas || {})[p.chave]).length;
+      return [`${qFmtNota(c.nota)} · falta assinar (${n})`, 'q-q-assinando'];
+    }
+    return [`Em preenchimento · ${c.marcados}/20`, 'q-q-vazia'];
+  };
+  const cLista = document.getElementById('q-lista');
+  if(!lista.length){
+    cLista.innerHTML = `<p class="empty-state">${tst ? 'Nenhuma ficha neste mês. Toque em "Nova ficha" para começar.' : 'Você não participa de nenhuma ficha neste mês.'}</p>`;
+  } else {
+    cLista.innerHTML = lista.slice().sort((a, b) => String(a.encarregado.nome).localeCompare(b.encarregado.nome, 'pt-BR')).map(f => {
+      const [t1, c1] = estadoTxt(f.q1), [t2, c2] = estadoTxt(f.q2);
+      const nm = qNotaMes(f);
+      return `<button type="button" class="q-card" data-id="${f.id}">
+        <span class="q-card-topo"><b>${escaparHtml(f.encarregado.nome)}</b>${nm !== null ? `<span class="q-nota-mes" style="color:${qCorMencao(qMencao(nm))}">${qFmtNota(nm)}</span>` : ''}</span>
+        <span class="q-card-sub">${escaparHtml(f.area || 'Área não informada')}${f.encarregado.matricula ? ' · Mat. ' + escaparHtml(f.encarregado.matricula) : ''}</span>
+        <span class="q-quinzenas">
+          <span class="q-q ${c1}"><small>1ª QUINZENA</small>${t1}</span>
+          <span class="q-q ${c2}"><small>2ª QUINZENA</small>${t2}</span>
+        </span></button>`;
+    }).join('');
+  }
+  document.querySelectorAll('#view-qualimetria .q-card').forEach(b => {
+    b.addEventListener('click', () => qAbrirFicha(b.dataset.id, b.dataset.q));
+  });
+}
+
+/* ======================= abrir / nova ficha ======================= */
+function qAbrirFicha(id, quinzena){
+  const f = qFichasMes.concat(qMinhasFichas).find(x => x.id === id);
+  if(!f) return;
+  qFicha = qClone(f);
+  qFicha.q1 = qFicha.q1 || qQuinzenaVazia();
+  qFicha.q2 = qFicha.q2 || qQuinzenaVazia();
+  qQuinzena = quinzena || (qFicha.q1.estado === 'fechada' ? 'q2' : 'q1');
+  irPara('view-quali-ficha');
+  qRenderFicha();
+}
+function qNovaFicha(){
+  if(!ehTST()) return;
+  qFicha = {
+    id: null, novo: true, mes: qMes, encarregado: { nome: '', matricula: '', email: '' },
+    area: '', local: '', turno: '', q1: qQuinzenaVazia(), q2: qQuinzenaVazia()
+  };
+  qQuinzena = qMes === qMesAtual() ? qQuinzenaAtual() : 'q1';
+  irPara('view-quali-ficha');
+  qRenderFicha();
+}
+/* a ficha só ganha ID quando o encarregado é escolhido (1 ficha por encarregado por mês) */
+function qGarantirId(){
+  if(qFicha.id) return true;
+  const nome = qFicha.encarregado.nome.trim();
+  if(!nome) return false;
+  const id = qFicha.mes + '_' + qSlug(nome);
+  const existente = qFichasMes.find(f => f.id === id);
+  if(existente){
+    mostrarAvisoApp('Ficha já existe', `${nome} já tem ficha em ${qMesRotulo(qFicha.mes)}. Abrindo a ficha existente.`);
+    qAbrirFicha(id, qQuinzena);
+    return false;
+  }
+  const eu = qMeuPerfil();
+  Object.assign(qFicha, {
+    id, _criar: true, criadoPor: eu.uid, criadoPorEmail: eu.email, criadoPorNome: eu.nome, participantesEmails: [eu.email]
+  });
+  delete qFicha.novo;
+  return true;
+}
+
+/* ======================= tela: ficha ======================= */
+function qPodeEditar(){ return ehTST() && qFicha[qQuinzena].estado === 'rascunho'; }
+function qSugestoes(campo){
+  const set = new Set();
+  qFichasMes.concat(qMinhasFichas).forEach(f => { if(f[campo]) set.add(f[campo]); });
+  if(campo === 'area') (LISTAS_INICIAIS.local || []).forEach(v => set.add(v));
+  return Array.from(set).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+}
+function qRenderFicha(){
+  const f = qFicha, q = f[qQuinzena], c = qCalcular(q);
+  const editar = qPodeEditar();
+  const encarregados = qParticipantes.filter(p => /encarregad|supervis|l[ií]der/i.test(p.funcao || ''));
+  document.getElementById('q-ficha-titulo').textContent = f.encarregado.nome || 'Nova ficha';
+  document.getElementById('q-ficha-selo').textContent = 'QUALIMETRIA · ' + qMesRotulo(f.mes).toUpperCase();
+
+  // cabeçalho da ficha (encarregado só pode ser escolhido antes de existir a ficha)
+  document.getElementById('q-cab').innerHTML = `
+    <label class="q-campo q-campo-largo">Encarregado / Supervisor / Líder
+      <input type="text" id="q-enc" list="q-dl-enc" value="${escaparHtml(f.encarregado.nome)}" ${f.id ? 'disabled' : ''} placeholder="Digite o nome">
+      <datalist id="q-dl-enc">${encarregados.map(p => `<option value="${escaparHtml(p.nome)}">${escaparHtml(p.funcao)} · Mat. ${escaparHtml(p.matricula)}</option>`).join('')}</datalist>
+    </label>
+    <label class="q-campo">Matrícula<input type="text" id="q-mat" value="${escaparHtml(f.encarregado.matricula)}" ${editar ? '' : 'disabled'}></label>
+    <label class="q-campo">Turno<input type="text" id="q-turno" list="q-dl-turno" value="${escaparHtml(f.turno)}" ${editar ? '' : 'disabled'}>
+      <datalist id="q-dl-turno"><option value="Diurno"><option value="Noturno"><option value="Administrativo"></datalist></label>
+    <label class="q-campo">Área / Setor<input type="text" id="q-area" list="q-dl-area" value="${escaparHtml(f.area)}" ${editar ? '' : 'disabled'}>
+      <datalist id="q-dl-area">${qSugestoes('area').map(v => `<option value="${escaparHtml(v)}">`).join('')}</datalist></label>
+    <label class="q-campo">Local de trabalho<input type="text" id="q-local" list="q-dl-local" value="${escaparHtml(f.local)}" ${editar ? '' : 'disabled'}>
+      <datalist id="q-dl-local">${qSugestoes('local').map(v => `<option value="${escaparHtml(v)}">`).join('')}</datalist></label>
+    ${f.id && !f.encarregado.email ? `<p class="q-alerta q-campo-largo">${escaparHtml(f.encarregado.nome)} não está na aba "Participantes" da planilha — sem isso ele não consegue assinar.</p>` : ''}`;
+
+  const enc = document.getElementById('q-enc');
+  if(!f.id){
+    enc.addEventListener('change', () => {
+      const nome = enc.value.trim();
+      const p = qParticipantes.find(x => x.nome.toLowerCase() === nome.toLowerCase());
+      f.encarregado = { nome, matricula: p ? String(p.matricula || '') : f.encarregado.matricula, email: p ? p.email : '' };
+      // mês seguinte já vem com a área/local da última ficha desse encarregado
+      const anterior = qFichasMes.concat(qMinhasFichas).filter(x => x.encarregado && x.encarregado.nome === nome).sort((a, b) => b.mes.localeCompare(a.mes))[0];
+      if(anterior){ f.area = f.area || anterior.area || ''; f.local = f.local || anterior.local || ''; f.turno = f.turno || anterior.turno || ''; }
+      if(qGarantirId()){ qSalvar(true); qRenderFicha(); }
+    });
+  }
+  [['q-mat', v => f.encarregado.matricula = v], ['q-turno', v => f.turno = v], ['q-area', v => f.area = v], ['q-local', v => f.local = v]].forEach(([id, set]) => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => { set(el.value.trim()); if(f.id) qSalvar(); });
+  });
+
+  // abas das quinzenas
+  document.querySelectorAll('#q-abas button').forEach(b => {
+    const k = b.dataset.q, cq = qCalcular(f[k]);
+    b.classList.toggle('active', k === qQuinzena);
+    b.textContent = (k === 'q1' ? '1ª quinzena' : '2ª quinzena') + (cq.marcados === 20 ? ' · ' + qFmtNota(cq.nota) : '');
+  });
+
+  const semEnc = !f.id;
+  document.getElementById('q-aviso-enc').style.display = semEnc ? 'block' : 'none';
+  document.getElementById('q-corpo').style.display = semEnc ? 'none' : 'block';
+  if(semEnc){ document.getElementById('q-barra').style.display = 'none'; return; }
+
+  qRenderAssinaturas();
+  qRenderItens(editar);
+
+  // barra da nota
+  document.getElementById('q-barra').style.display = 'flex';
+  document.getElementById('q-nota').textContent = qFmtNota(c.nota);
+  const men = document.getElementById('q-mencao');
+  men.textContent = c.mencao || 'Marque os itens';
+  men.style.color = c.mencao ? qCorMencaoEscuro(c.mencao) : '';
+  const nm = qNotaMes(f);
+  document.getElementById('q-detalhe').textContent =
+    c.marcados < 20 ? `${c.marcados} de 20 marcados` : `${c.avaliados} avaliados · pesos NC ${c.pesos}${nm !== null ? ' · mês ' + qFmtNota(nm) : ''}`;
+  const btn = document.getElementById('q-btn-enviar');
+  btn.style.display = editar ? 'block' : 'none';
+  btn.textContent = c.marcados < 20 ? `Faltam ${20 - c.marcados} itens` : 'Concluir e pedir assinaturas';
+  btn.disabled = c.marcados < 20;
+}
+
+function qRenderItens(editar){
+  const q = qFicha[qQuinzena];
+  const listas = {
+    tipologia: (LISTAS_INICIAIS.tipologia || []),
+    resp: (LISTAS_INICIAIS.responsavelCorrecao || [])
+  };
+  document.getElementById('q-itens').innerHTML = Q_ITENS.map((texto, i) => {
+    const n = String(i + 1), v = q.itens[n] || '';
+    const nc = q.ncs[n] || {};
+    const ehNC = v === 'NC1' || v === 'NC2';
+    const bt = (val, rot) => `<button type="button" class="q-op ${v === val ? 'on q-op-' + val.toLowerCase() : ''}" data-n="${n}" data-v="${val}" ${editar ? '' : 'disabled'}>${rot}</button>`;
+    return `<article class="q-item q-borda-${(v || 'x').toLowerCase()}">
+      <div class="q-item-topo"><span class="q-num">${n}</span><span>${escaparHtml(texto)}</span></div>
+      <div class="q-ops">${bt('C', 'C')}${bt('NC1', 'NC1')}${bt('NC2', 'NC2')}${bt('NA', 'NA')}</div>
+      ${ehNC ? `<div class="q-nc" data-n="${n}">
+        <span class="q-nc-aviso">${nc.desvioId && q.estado !== 'rascunho' ? 'Desvio criado a partir desta não conformidade' : 'Vira desvio quando a avaliação for concluída'}</span>
+        <label>O que foi encontrado<textarea rows="2" data-c="descricao" ${editar ? '' : 'disabled'}>${escaparHtml(nc.descricao || '')}</textarea></label>
+        <label>Medida corretiva / melhoria<textarea rows="2" data-c="medida" ${editar ? '' : 'disabled'}>${escaparHtml(nc.medida || '')}</textarea></label>
+        <div class="q-nc-grade">
+          <label>Tipologia<select data-c="tipologia" ${editar ? '' : 'disabled'}><option value="">Selecione...</option>${listas.tipologia.map(t => `<option ${nc.tipologia === t ? 'selected' : ''}>${escaparHtml(t)}</option>`).join('')}</select></label>
+          <label>Potencial<select data-c="potencial" ${editar ? '' : 'disabled'}>${['Alto', 'Médio', 'Baixo'].map(t => `<option ${(nc.potencial || (v === 'NC2' ? 'Alto' : 'Médio')) === t ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
+          <label>Responsável pela correção<input type="text" list="q-dl-resp" data-c="responsavel" value="${escaparHtml(nc.responsavel || '')}" ${editar ? '' : 'disabled'}></label>
+          <label>Prazo<input type="date" data-c="prazo" value="${escaparHtml(nc.prazo || '')}" ${editar ? '' : 'disabled'}></label>
+        </div>
+        ${editar ? `<button type="button" class="q-foto-btn" data-n="${n}">+ Foto do que foi encontrado${nc.fotos ? ' (' + nc.fotos + ')' : ''}</button>` : (nc.fotos ? `<span class="q-nc-aviso">${nc.fotos} foto(s) anexada(s) ao desvio</span>` : '')}
+      </div>` : ''}
+    </article>`;
+  }).join('') + `<datalist id="q-dl-resp">${listas.resp.map(r => `<option value="${escaparHtml(r)}">`).join('')}</datalist>`;
+
+  if(!editar) return;
+  document.querySelectorAll('#q-itens .q-op').forEach(b => b.addEventListener('click', () => {
+    const n = b.dataset.n, v = b.dataset.v;
+    q.itens[n] = q.itens[n] === v ? null : v;
+    if(!q.itens[n]) delete q.itens[n];
+    if(q.itens[n] === 'NC1' || q.itens[n] === 'NC2'){
+      q.ncs[n] = q.ncs[n] || {};
+      q.ncs[n].potencial = q.ncs[n].potencial || (q.itens[n] === 'NC2' ? 'Alto' : 'Médio');
+    }
+    qSalvar(); qRenderFicha();
+  }));
+  document.querySelectorAll('#q-itens .q-nc [data-c]').forEach(el => {
+    const n = el.closest('.q-nc').dataset.n;
+    el.addEventListener(el.tagName === 'SELECT' || el.type === 'date' ? 'change' : 'input', () => {
+      q.ncs[n] = q.ncs[n] || {};
+      q.ncs[n][el.dataset.c] = el.value.trim();
+      qSalvar();
+    });
+  });
+  document.querySelectorAll('#q-itens .q-foto-btn').forEach(b => b.addEventListener('click', () => {
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true;
+    inp.addEventListener('change', async () => {
+      const n = b.dataset.n;
+      q.ncs[n] = q.ncs[n] || {};
+      // a foto já vai direto para o desvio que esta NC vai virar (ID reservado agora)
+      if(!q.ncs[n].desvioId) q.ncs[n].desvioId = db.collection('desvios').doc().id;
+      for(const file of inp.files){
+        try{ await salvarFotoDesvio(q.ncs[n].desvioId, file); q.ncs[n].fotos = (q.ncs[n].fotos || 0) + 1; }
+        catch(e){ console.warn('Foto da NC:', e); }
+      }
+      qSalvar(); qRenderFicha();
+    });
+    inp.click();
+  }));
+}
+
+/* ======================= concluir → desvios + pedir assinaturas ======================= */
+function qConcluir(){
+  const f = qFicha, q = f[qQuinzena];
+  const c = qCalcular(q);
+  if(c.marcados < 20) return;
+  const faltando = [];
+  if(!f.area) faltando.push('área / setor');
+  if(!f.local) faltando.push('local de trabalho');
+  if(!f.turno) faltando.push('turno');
+  Object.keys(q.itens).forEach(n => {
+    if(q.itens[n] !== 'NC1' && q.itens[n] !== 'NC2') return;
+    const nc = q.ncs[n] || {};
+    ['descricao', 'medida', 'tipologia', 'responsavel', 'prazo'].forEach(k => { if(!nc[k]) faltando.push(`item ${n}: ${{ descricao: 'o que foi encontrado', medida: 'medida corretiva', tipologia: 'tipologia', responsavel: 'responsável', prazo: 'prazo' }[k]}`); });
+  });
+  if(faltando.length){
+    mostrarAvisoApp('Falta preencher', faltando.slice(0, 4).join(' · ') + (faltando.length > 4 ? ' …' : ''));
+    return;
+  }
+  qAbrirEscolhaSignatarios();
+}
+function qAbrirEscolhaSignatarios(){
+  const f = qFicha;
+  const ma = qParticipantes.filter(p => /meio ambiente/i.test(p.funcao || ''));
+  const sa = qParticipantes.filter(p => /sa[uú]de/i.test(p.funcao || ''));
+  const opt = (lista) => '<option value="">Selecione...</option>' + lista.map(p => `<option value="${escaparHtml(p.email)}">${escaparHtml(p.nome)} · Mat. ${escaparHtml(p.matricula)}</option>`).join('');
+  const caixa = document.getElementById('q-signatarios');
+  caixa.innerHTML = `
+    <b>Quem assina esta quinzena</b>
+    <div class="q-sig-linha"><span>Encarregado</span><b>${escaparHtml(f.encarregado.nome)}${f.encarregado.email ? '' : ' <em>(sem cadastro na aba Participantes)</em>'}</b></div>
+    <div class="q-sig-linha"><span>Segurança do Trabalho</span><b>${escaparHtml(qMeuPerfil().nome)} (você)</b></div>
+    <label class="q-campo">Meio Ambiente<select id="q-sel-ma">${opt(ma)}</select></label>
+    <label class="q-campo">Saúde Ocupacional<select id="q-sel-sa">${opt(sa)}</select></label>
+    <p class="q-alerta" style="display:${f.encarregado.email ? 'none' : 'block'}">Cadastre o encarregado na aba "Participantes" (com o e-mail do login dele) para poder pedir a assinatura.</p>
+    <div class="q-sig-botoes">
+      <button type="button" class="btn-cancelar-rej" id="q-sig-cancelar">Voltar</button>
+      <button type="button" class="btn-primary" id="q-sig-confirmar" ${f.encarregado.email ? '' : 'disabled'}>Confirmar e pedir assinaturas</button>
+    </div>`;
+  caixa.style.display = 'flex';
+  caixa.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.getElementById('q-sig-cancelar').addEventListener('click', () => { caixa.style.display = 'none'; });
+  document.getElementById('q-sig-confirmar').addEventListener('click', () => {
+    const emMA = document.getElementById('q-sel-ma').value, emSA = document.getElementById('q-sel-sa').value;
+    if(!emMA || !emSA){ mostrarAvisoApp('Falta escolher', 'Selecione quem assina por Meio Ambiente e por Saúde Ocupacional.'); return; }
+    const pMA = qParticipantes.find(p => p.email === emMA), pSA = qParticipantes.find(p => p.email === emSA);
+    caixa.style.display = 'none';
+    qEnviarParaAssinatura({
+      encarregado: { ...f.encarregado },
+      seguranca: (({ nome, matricula, email }) => ({ nome, matricula, email }))(qMeuPerfil()),
+      meioAmbiente: { nome: pMA.nome, matricula: String(pMA.matricula || ''), email: pMA.email },
+      saude: { nome: pSA.nome, matricula: String(pSA.matricula || ''), email: pSA.email }
+    });
+  });
+}
+function qEnviarParaAssinatura(signatarios){
+  const f = qFicha, q = f[qQuinzena], eu = qMeuPerfil();
+  const quinz = qQuinzena === 'q1' ? '1ª' : '2ª';
+  const [ano, mes] = f.mes.split('-');
+  // 1) cada não conformidade vira um desvio (mesmo formato do registro normal)
+  Object.keys(q.itens).forEach(n => {
+    if(q.itens[n] !== 'NC1' && q.itens[n] !== 'NC2') return;
+    const nc = q.ncs[n];
+    if(nc.desvioCriado) return;
+    const id = nc.desvioId || db.collection('desvios').doc().id;
+    gravarSemEsperar(db.collection('desvios').doc(id).set({
+      numero: null, sincronizado: false,
+      data: new Date().toLocaleDateString('pt-BR'),
+      processo: '', local: f.area,
+      descricao: nc.descricao,
+      tipologia: nc.tipologia, potencial: nc.potencial || (q.itens[n] === 'NC2' ? 'Alto' : 'Médio'),
+      acoesCorrecao: nc.medida,
+      responsavelArea: f.encarregado.nome, inspecionadoPor: eu.nome,
+      prazo: nc.prazo, responsavelCorrecao: nc.responsavel,
+      status: '',
+      observacoes: `Qualimetria ${mes}-${ano} · ${quinz} quinzena · item ${n} (${q.itens[n] === 'NC2' ? 'peso 2' : 'peso 1'}) · ${f.encarregado.nome} · ${f.local}`,
+      origem: 'Qualimetria',
+      criadoPor: eu.uid, criadoPorNome: eu.nome, criadoPorEmail: eu.email,
+      criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+    }), 'desvio da qualimetria');
+    nc.desvioId = id; nc.desvioCriado = true;
+  });
+  // 2) trava a quinzena e pede as assinaturas
+  const c = qCalcular(q);
+  Object.assign(q, { estado: 'assinando', signatarios, assinaturas: {} });
+  const emails = new Set(f.participantesEmails || []);
+  Object.values(signatarios).forEach(s => s.email && emails.add(String(s.email).toLowerCase()));
+  f.participantesEmails = Array.from(emails);
+  qSalvar(true);
+  const extra = {
+    notificarAssinatura: true,
+    emailsParaNotificar: Object.values(signatarios).map(s => String(s.email || '').toLowerCase()).filter(e => e && e !== eu.email),
+    quinzenaParaNotificar: qQuinzena
+  };
+  extra[qQuinzena + '.enviadoEm'] = firebase.firestore.FieldValue.serverTimestamp();
+  extra[qQuinzena + '.enviadoPor'] = eu.email;
+  extra[qQuinzena + '.assinaturas'] = {};
+  gravarSemEsperar(db.collection('qualimetrias').doc(f.id).update(extra), 'pedido de assinaturas');
+  mostrarAvisoApp('Assinaturas pedidas', 'As não conformidades viraram desvios. Os participantes recebem o aviso no app.');
+  qRenderFicha();
+}
+
+/* ======================= assinaturas ======================= */
+function qRenderAssinaturas(){
+  const f = qFicha, q = f[qQuinzena], box = document.getElementById('q-assinaturas');
+  if(q.estado === 'rascunho'){ box.innerHTML = ''; box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  const eu = qMeuEmail();
+  const c = qCalcular(q);
+  const linhas = Q_PAPEIS.map(p => {
+    const s = (q.signatarios || {})[p.chave] || {}, a = (q.assinaturas || {})[p.chave];
+    const minha = !a && String(s.email || '').toLowerCase() === eu && q.estado === 'assinando';
+    const quando = a && a.assinadoEm && a.assinadoEm.toDate ? a.assinadoEm.toDate().toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : (a ? 'enviando…' : '');
+    return `<div class="q-ass ${minha ? 'q-ass-minha' : ''}">
+      <div class="q-ass-topo"><span><small>${escaparHtml(p.rotulo.toUpperCase())}${minha ? ' · VOCÊ' : ''}</small><b>${escaparHtml(s.nome || '—')}</b><em>Mat. ${escaparHtml(s.matricula || '—')}</em></span>
+      <span class="q-tag ${a ? 'q-tag-ok' : 'q-tag-aviso'}">${a ? 'Assinado ✓' : 'Pendente'}</span></div>
+      ${a ? `<div class="q-ass-img"><img src="${a.imagem}" alt="Assinatura de ${escaparHtml(s.nome)}"><span>${escaparHtml(quando)}</span></div>` : ''}
+      ${minha ? `<div class="q-pad-caixa"><canvas class="q-pad" width="600" height="220" aria-label="Área para assinar com o dedo"></canvas>
+          <button type="button" class="q-pad-limpar">Limpar</button><span class="q-pad-dica">Assine com o dedo</span></div>
+        <label class="q-declara"><input type="checkbox" class="q-declara-ok"> Declaro que participei desta avaliação e confirmo as informações registradas.</label>
+        <button type="button" class="btn-primary q-btn-assinar" data-papel="${p.chave}">Assinar como ${escaparHtml(qMeuPerfil().nome.split(' ')[0])} (Mat. ${escaparHtml(qMeuPerfil().matricula || '—')})</button>` : ''}
+    </div>`;
+  }).join('');
+  box.innerHTML = `
+    <div class="q-res">
+      <span class="q-res-nota">${qFmtNota(c.nota)}</span><b style="color:${qCorMencaoEscuro(c.mencao)}">${c.mencao}</b>
+      <span class="q-res-txt">${q.estado === 'fechada' ? `Quinzena fechada${q.codigo ? ' · código ' + escaparHtml(q.codigo) : ' · gerando o PDF'}` : 'Aguardando as assinaturas'}</span>
+    </div>
+    ${linhas}
+    ${ehTST() && q.estado === 'assinando' ? '<button type="button" class="q-reabrir" id="q-reabrir">Reabrir para edição (apaga as assinaturas já feitas)</button>' : ''}`;
+
+  box.querySelectorAll('.q-pad').forEach(qLigarPad);
+  box.querySelectorAll('.q-btn-assinar').forEach(b => b.addEventListener('click', () => qAssinar(b.dataset.papel, b.closest('.q-ass'))));
+  const re = document.getElementById('q-reabrir');
+  if(re) re.addEventListener('click', () => {
+    if(!confirm('Reabrir apaga as assinaturas desta quinzena. Os desvios já criados continuam. Reabrir?')) return;
+    Object.assign(q, { estado: 'rascunho', assinaturas: {} });
+    const upd = {}; upd[qQuinzena + '.estado'] = 'rascunho'; upd[qQuinzena + '.assinaturas'] = {};
+    gravarSemEsperar(db.collection('qualimetrias').doc(f.id).update(upd), 'reabrir quinzena');
+    qRenderFicha();
+  });
+}
+function qLigarPad(canvas){
+  const ctx = canvas.getContext('2d');
+  ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#142131';
+  let desenhando = false;
+  canvas._vazio = true;
+  const pos = (e) => { const r = canvas.getBoundingClientRect(); return [(e.clientX - r.left) * canvas.width / r.width, (e.clientY - r.top) * canvas.height / r.height]; };
+  canvas.addEventListener('pointerdown', (e) => { desenhando = true; canvas.setPointerCapture(e.pointerId); const [x, y] = pos(e); ctx.beginPath(); ctx.moveTo(x, y); });
+  canvas.addEventListener('pointermove', (e) => { if(!desenhando) return; const [x, y] = pos(e); ctx.lineTo(x, y); ctx.stroke(); canvas._vazio = false; });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => canvas.addEventListener(ev, () => { desenhando = false; }));
+  canvas.parentElement.querySelector('.q-pad-limpar').addEventListener('click', () => { ctx.clearRect(0, 0, canvas.width, canvas.height); canvas._vazio = true; });
+}
+function qAssinar(papel, bloco){
+  const f = qFicha, q = f[qQuinzena];
+  const canvas = bloco.querySelector('.q-pad');
+  if(canvas._vazio){ mostrarAvisoApp('Falta a assinatura', 'Assine com o dedo no quadro.'); return; }
+  if(!bloco.querySelector('.q-declara-ok').checked){ mostrarAvisoApp('Falta confirmar', 'Marque a declaração de participação.'); return; }
+  const s = q.signatarios[papel];
+  if(String(s.email || '').toLowerCase() !== qMeuEmail()){ mostrarAvisoApp('Assinatura não permitida', 'Só a própria pessoa, logada na conta dela, pode assinar.'); return; }
+  // imagem reduzida (leve pra caber no documento)
+  const menor = document.createElement('canvas'); menor.width = 300; menor.height = 110;
+  menor.getContext('2d').drawImage(canvas, 0, 0, 300, 110);
+  const eu = qMeuPerfil();
+  const ass = {
+    nome: s.nome || eu.nome, matricula: s.matricula || eu.matricula, email: eu.email, uid: eu.uid,
+    imagem: menor.toDataURL('image/png'),
+    assinadoEm: firebase.firestore.FieldValue.serverTimestamp(),   // horário do servidor
+    aparelho: /iphone|ipad/i.test(navigator.userAgent) ? 'iPhone' : (/android/i.test(navigator.userAgent) ? 'Android' : 'Computador'),
+    declaracao: 'Declaro que participei desta avaliação e confirmo as informações registradas.'
+  };
+  // grava só a MINHA assinatura (não reescreve o resto da ficha)
+  const upd = {};
+  upd[`${qQuinzena}.assinaturas.${papel}`] = ass;
+  upd.pdfPendente = true;
+  gravarSemEsperar(db.collection('qualimetrias').doc(f.id).update(upd), 'assinatura');
+  q.assinaturas = q.assinaturas || {};
+  q.assinaturas[papel] = { ...ass, assinadoEm: null };
+  if(Q_PAPEIS.every(p => q.assinaturas[p.chave])) q.estado = 'fechada';
+  mostrarAvisoApp('Assinatura registrada', Q_PAPEIS.every(p => q.assinaturas[p.chave]) ? 'Todas as assinaturas feitas: o PDF será gerado em alguns minutos.' : 'Obrigado! Os outros participantes ainda vão assinar.');
+  qRenderFicha();
+}
+
+/* ======================= ligações ======================= */
+document.getElementById('q-btn-nova').addEventListener('click', qNovaFicha);
+document.getElementById('q-btn-voltar').addEventListener('click', () => { qSalvar(true); irPara('view-qualimetria'); });
+document.getElementById('q-btn-enviar').addEventListener('click', qConcluir);
+document.querySelectorAll('#q-abas button').forEach(b => b.addEventListener('click', () => { qQuinzena = b.dataset.q; qRenderFicha(); }));
+
 </script>
 </body>
 </html>
