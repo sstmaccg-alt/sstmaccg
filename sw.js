@@ -7,7 +7,57 @@
 // descartar o cache antigo. Mesmo assim, o index.html agora é buscado na
 // rede primeiro (veja abaixo), então atualizações aparecem sozinhas.
 
-const CACHE_NAME = 'sst-ccg-v64';
+// ---------------------------------------------------------------------
+// NOTIFICAÇÕES (Firebase Cloud Messaging): com o app fechado, é este
+// arquivo que recebe o aviso e mostra na barra do celular.
+// Se as bibliotecas não carregarem (sem internet na atualização), o resto
+// do service worker continua funcionando normalmente.
+// ---------------------------------------------------------------------
+try {
+  importScripts(
+    'https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js',
+    'https://www.gstatic.com/firebasejs/10.13.0/firebase-messaging-compat.js'
+  );
+  firebase.initializeApp({
+    apiKey: "AIzaSyB7J_vxFOeZ_cKJ025tqMAT_iG00FTyNIY",
+    authDomain: "app-seguranca-trabalho.firebaseapp.com",
+    projectId: "app-seguranca-trabalho",
+    storageBucket: "app-seguranca-trabalho.firebasestorage.app",
+    messagingSenderId: "165998983951",
+    appId: "1:165998983951:web:62034ac9b422da13b01c7a"
+  });
+  firebase.messaging().onBackgroundMessage((payload) => {
+    const d = payload.data || {};
+    return self.registration.showNotification(d.titulo || 'Segurança do Trabalho CCG', {
+      body: d.corpo || '',
+      icon: './icon-192.png',
+      badge: './icon-192.png',
+      tag: d.tag || undefined,          // mesmo assunto substitui o aviso anterior
+      data: { abrir: d.abrir || '' }
+    });
+  });
+} catch (e) {
+  // sem notificações nesta instalação; tenta de novo na próxima atualização
+}
+
+// tocou na notificação: abre (ou traz pra frente) o app na tela certa
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const abrir = (event.notification.data && event.notification.data.abrir) || '';
+  const base = self.registration.scope;
+  event.waitUntil((async () => {
+    const janelas = await clients.matchAll({ type: 'window', includeUncontrolled: true });
+    const aberta = janelas.find((c) => c.url.startsWith(base));
+    if (aberta) {
+      await aberta.focus();
+      aberta.postMessage({ tipo: 'abrir-notificacao', abrir });
+      return;
+    }
+    await clients.openWindow(base + (abrir ? '?abrir=' + encodeURIComponent(abrir) : ''));
+  })());
+});
+
+const CACHE_NAME = 'sst-ccg-v66';
 const ARQUIVOS_PARA_CACHE = [
   './',
   './index.html',
@@ -21,7 +71,8 @@ const ARQUIVOS_PARA_CACHE = [
 const FIREBASE_SCRIPTS = [
   'https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js',
   'https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js',
-  'https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js'
+  'https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js',
+  'https://www.gstatic.com/firebasejs/10.13.0/firebase-messaging-compat.js'
 ];
 
 // Quanto tempo esperar a rede antes de abrir a cópia guardada (sinal ruim no campo)
