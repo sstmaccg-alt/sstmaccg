@@ -734,11 +734,14 @@
      Fica no FIM do estilo de propósito: assim vence as regras do celular. */
   .sidebar-pc, .so-pc{ display:none; }
   @media (min-width:1024px){
+    /* "clip" em vez de "hidden": corta o que vaza pro lado sem quebrar o
+       topo e a coluna da direita que grudam na tela ao rolar */
+    html, body{ overflow-x:clip; }
     #app-screen.active{ display:grid; grid-template-columns:248px minmax(0,1fr); grid-template-rows:auto 1fr; }
     .so-pc{ display:block; }
     .sidebar-pc{
       display:flex; flex-direction:column; gap:26px; grid-column:1; grid-row:1 / span 2;
-      position:sticky; top:0; height:100vh; box-sizing:border-box; overflow-y:auto;
+      position:fixed; top:0; left:0; bottom:0; width:248px; z-index:40; box-sizing:border-box; overflow-y:auto;
       background:#142131; color:#d7dde2; padding:24px 16px;
     }
     .sb-marca{ display:flex; align-items:center; gap:12px; padding:0 8px; }
@@ -814,18 +817,22 @@
     .pc-filtros{ margin-left:auto; display:flex; gap:8px; flex-wrap:wrap; }
     .pc-filtros button{ height:34px; padding:0 14px; border-radius:17px; border:1px solid var(--border-strong); background:var(--white); color:var(--navy); font:inherit; font-size:13px; font-weight:600; cursor:pointer; }
     .pc-filtros button.ativo{ background:var(--navy); border-color:var(--navy); color:var(--white); font-weight:700; }
-    .pc-tabela-cab, .pc-linha{ display:grid; grid-template-columns:52px minmax(0,2.2fr) minmax(0,1fr) 88px 78px 84px 112px; gap:12px; align-items:center; padding:11px 20px; }
+    .pc-tabela-cab, .pc-linha{ display:grid; grid-template-columns:44px minmax(0,3fr) minmax(0,1fr) 92px 76px 104px; gap:14px; align-items:center; padding:12px 20px; }
+    .pc-linha .prazo small{ display:block; font-size:11px; color:#b42318; }
     .pc-tabela-cab{ background:var(--cream); border-top:1px solid var(--border); border-bottom:1px solid var(--border); font-size:11px; font-weight:800; color:var(--text-muted); letter-spacing:.5px; text-transform:uppercase; }
     .pc-linha{ border-bottom:1px solid var(--border); font-size:13px; color:var(--navy); }
     .pc-linha:hover{ background:var(--cream); }
     .pc-linha .n{ font-weight:800; }
     .pc-linha .desc{ display:flex; flex-direction:column; gap:2px; min-width:0; }
-    .pc-linha .desc b{ font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .pc-linha .desc small{ font-size:12px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .pc-linha .prazo.atrasado{ color:#b42318; font-weight:700; }
-    .pc-selo{ justify-self:start; font-size:11px; font-weight:800; padding:3px 8px; border-radius:8px; }
-    .pc-selo.alto{ background:#fde2e1; color:#a32d2d; } .pc-selo.medio{ background:#fdf0d5; color:#7a4b06; } .pc-selo.baixo{ background:#e3f1d6; color:#2d5214; }
-    .pc-selo.atrasado{ background:#fde2e1; color:#a32d2d; } .pc-selo.noprazo{ background:#e0ecf8; color:#1e4e8c; }
+    .pc-linha .desc b{ font-weight:600; line-height:1.35; overflow-wrap:anywhere; }
+    .pc-linha .desc small{ font-size:12px; color:var(--text-muted); line-height:1.35; }
+    .pc-linha .prazo.atrasado{ color:#b42318; }
+    .pc-selo{ justify-self:start; display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:400; color:var(--navy); }
+    .pc-selo::before{ content:""; width:8px; height:8px; border-radius:50%; flex-shrink:0; background:var(--border-strong); }
+    .pc-selo.alto::before, .pc-selo.atrasado::before{ background:#d64545; }
+    .pc-selo.medio::before{ background:#e2a23a; }
+    .pc-selo.baixo::before{ background:#5e8a3f; }
+    .pc-selo.noprazo::before{ background:#3a7bd5; }
     .pc-linha .btn-resolver, .pc-linha .btn-em-analise, .pc-linha .btn-resolver-feito{ margin:0; width:100%; justify-content:center; font-size:12px; padding:7px 8px; }
     .pc-abertos-rodape{ display:flex; align-items:center; justify-content:space-between; padding:12px 20px; font-size:13px; color:var(--text-muted); }
     .pc-abertos-rodape button{ background:none; border:none; color:var(--green-dark); font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
@@ -1138,7 +1145,7 @@
               <button type="button" data-f="meus">Meus registros</button>
             </div>
           </div>
-          <div class="pc-tabela-cab"><span>Nº</span><span>Descrição</span><span>Resp. correção</span><span>Prazo</span><span>Potencial</span><span>Status</span><span></span></div>
+          <div class="pc-tabela-cab"><span>Nº</span><span>Descrição</span><span>Resp. correção</span><span>Prazo</span><span>Potencial</span><span></span></div>
           <div id="pc-tabela-corpo"></div>
           <div class="pc-abertos-rodape"><span id="pc-contagem"></span><button type="button" id="pc-ver-mais">Ver mais</button></div>
         </section>
@@ -2650,9 +2657,8 @@ function renderizarTabelaPC(){
         <span class="n">${escaparHtml(d.numero)}</span>
         <span class="desc"><b>${escaparHtml(d.descricao || '')}</b><small>${escaparHtml(d.local || '')}${d.tipologia ? ' · ' + escaparHtml(d.tipologia) : ''}</small></span>
         <span>${escaparHtml(d.respCorrecao || '—')}</span>
-        <span class="prazo${atr ? ' atrasado' : ''}">${escaparHtml(formatarDataBR(d.prazo) || '—')}</span>
+        <span class="prazo${atr ? ' atrasado' : ''}">${escaparHtml(formatarDataBR(d.prazo) || '—')}${atr ? '<small>atrasado</small>' : ''}</span>
         <span class="pc-selo ${classePot[d.potencial] || ''}">${escaparHtml(d.potencial || '—')}</span>
-        <span class="pc-selo ${atr ? 'atrasado' : 'noprazo'}">${escaparHtml(d.status || '')}</span>
         <span>${botaoResolverOuSituacao(d.numero, meus.has(String(d.numero)))}</span>
       </div>`;
     }).join('');
