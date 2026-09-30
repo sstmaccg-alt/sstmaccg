@@ -57,7 +57,7 @@ self.addEventListener('notificationclick', (event) => {
   })());
 });
 
-const CACHE_NAME = 'sst-ccg-v67';
+const CACHE_NAME = 'sst-ccg-v69';
 const ARQUIVOS_PARA_CACHE = [
   './',
   './index.html',
