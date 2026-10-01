@@ -879,6 +879,38 @@
   .q-ac-item small{ font-size:12px; color:var(--text-muted); }
   .q-ac-item:hover, .q-ac-item.ativo{ background:var(--green-tint); }
   .q-ac-vazio{ padding:10px 12px; font-size:13px; color:var(--text-muted); }
+  .q-pdf{ display:flex; align-items:center; gap:12px; background:var(--white); border:1px solid var(--border-strong); border-radius:14px; padding:12px 14px; margin:0 0 14px; text-decoration:none; color:var(--navy); box-shadow:0 1px 4px rgba(20,33,49,.07); }
+  .q-pdf-icone{ width:42px; height:42px; border-radius:10px; background:#fde2e1; color:#a32d2d; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .q-pdf-txt{ display:flex; flex-direction:column; min-width:0; }
+  .q-pdf-txt b{ font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .q-pdf-txt small{ font-size:12px; color:var(--text-muted); }
+  #q-btn-nova{ display:none !important; } /* agora fica no menu de cima */
+  .q-busca-box{ margin:0 0 12px; }
+  .q-busca-box input{ width:100%; box-sizing:border-box; height:46px; padding:0 14px; border:1px solid var(--border-strong); border-radius:12px; font:inherit; font-size:15px; background:var(--white); color:var(--navy); }
+  .q-filtro{ display:flex; align-items:center; gap:8px; margin:0 0 12px; font-size:13px; color:var(--navy); }
+  .q-filtro b{ font-weight:700; }
+  .q-filtro button{ border:none; background:var(--border); color:var(--navy); border-radius:14px; padding:5px 10px; font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
+  .q-erro{ background:#fde2e1; color:#8c2f2f; border-radius:12px; padding:10px 14px; font-size:13px; line-height:1.4; margin:0 0 12px; }
+  .q-card-funcao{ font-size:11px; font-weight:700; letter-spacing:.5px; color:var(--green-dark); text-transform:uppercase; }
+  .q-q-rascunho{ background:#e0ecf8; color:#1e4e8c; }
+  .q-q small{ font-weight:700; }
+  .q-q .q-q-det{ font-weight:500; font-size:11px; opacity:.85; }
+  .q-an-card{ background:var(--white); border-radius:14px; padding:14px 16px; box-shadow:0 1px 4px rgba(20,33,49,.07); margin:0 0 14px; }
+  .q-an-card h3{ margin:0 0 10px; font-size:14px; font-weight:800; color:var(--navy); }
+  .q-an-linha{ display:grid; grid-template-columns:minmax(0,1fr) 90px 40px; align-items:center; gap:10px; font-size:13px; padding:5px 0; color:var(--navy); }
+  .q-an-barra{ height:8px; border-radius:4px; background:var(--border); overflow:hidden; }
+  .q-an-barra i{ display:block; height:100%; background:var(--error); border-radius:4px; }
+  .q-an-val{ text-align:right; font-weight:800; }
+  .q-docs{ display:flex; flex-direction:column; gap:8px; margin:0 0 14px; }
+  .q-docs .q-pdf{ margin:0; }
+  .q-pdf-icone.planilha{ background:#e3f1d6; color:#2d5214; }
+  .q-ops.q-ops-3{ grid-template-columns:repeat(3, minmax(0,1fr)) !important; }
+  .q-op.q-op-bloq{ background:#d9dcd6 !important; color:#8a9099 !important; border-color:#cfd3cb !important; cursor:not-allowed; opacity:.75; }
+  html[data-theme="dark"] .q-op.q-op-bloq{ background:#2a323c !important; color:#6b7480 !important; border-color:#333c47 !important; }
+  .q-reinc{ margin:8px 0 0; font-size:12px; line-height:1.4; color:#7a4b06; background:#fdf0d5; border-radius:8px; padding:7px 10px; }
+  .q-nc-origem{ margin:0; font-size:12px; color:var(--text-muted); }
+  .q-foto-botoes{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
+  .q-pdf-aguardando{ background:var(--green-tint); color:var(--green-dark); border-radius:12px; padding:10px 14px; font-size:13px; margin:0 0 14px; }
   .q-btn-nova{ height:44px; padding:0 16px; border:none; border-radius:12px; background:var(--green); color:#fff; font:inherit; font-size:14px; font-weight:800; cursor:pointer; align-items:center; }
   .q-resumo{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px; }
   .q-kpi{ background:var(--white); border-radius:12px; padding:10px 12px; display:flex; flex-direction:column; box-shadow:0 1px 4px rgba(20,33,49,.06); }
@@ -1129,18 +1161,42 @@
 
     <!-- Tela: Qualimetria (placeholder) -->
     <div id="view-qualimetria" style="display:none;">
+      <div class="atalhos-rapidos q-atalhos">
+        <button type="button" class="atalho-item" id="q-at-nova">
+          <div class="atalho-icone"><span class="icone-svg" data-icone="plus"></span></div>
+          <p class="atalho-label">Nova ficha</p>
+        </button>
+        <button type="button" class="atalho-item" id="q-at-buscar">
+          <div class="atalho-icone"><span class="icone-svg" data-icone="search"></span></div>
+          <p class="atalho-label">Buscar</p>
+        </button>
+        <button type="button" class="atalho-item" id="q-at-pend">
+          <div class="atalho-icone"><span class="icone-svg" data-icone="relogio"></span><span class="atalho-badge" id="q-badge-pend" style="display:none;"></span></div>
+          <p class="atalho-label">Pendentes</p>
+        </button>
+        <button type="button" class="atalho-item" id="q-at-analise">
+          <div class="atalho-icone"><span class="icone-svg" data-icone="barchart"></span></div>
+          <p class="atalho-label">Análise</p>
+        </button>
+      </div>
       <div class="tela-banner">
         <div class="tela-selo">SEGURANÇA</div>
         <p class="tela-titulo">Qualimetria</p>
-        <p class="tela-sub">Avaliação quinzenal por encarregado · PI-FRC 00901</p>
+        <p class="tela-sub">Avaliação quinzenal da liderança (encarregado, supervisor ou líder) · PI-FRC 00901</p>
       </div>
       <div class="q-topo">
         <select id="q-mes" aria-label="Mês da qualimetria"></select>
         <button type="button" id="q-btn-nova" class="q-btn-nova" style="display:none;">+ Nova ficha</button>
       </div>
+      <div class="q-busca-box" id="q-busca-box" style="display:none;">
+        <input type="search" id="q-busca" placeholder="Buscar por nome, área ou local..." aria-label="Buscar ficha">
+      </div>
+      <div class="q-filtro" id="q-filtro" style="display:none;"></div>
+      <p class="q-erro" id="q-erro" style="display:none;"></p>
       <div class="q-resumo" id="q-resumo"></div>
+      <div id="q-analise" style="display:none;"></div>
       <div id="q-pendentes"></div>
-      <span class="secao-titulo">Fichas do mês</span>
+      <span class="secao-titulo" id="q-titulo-lista">Fichas do mês</span>
       <div id="q-lista"></div>
     </div>
 
@@ -1153,6 +1209,8 @@
         <div class="tela-selo" id="q-ficha-selo">QUALIMETRIA</div>
         <p class="tela-titulo" id="q-ficha-titulo">Nova ficha</p>
       </div>
+      <div class="q-docs" id="q-docs" style="display:none;"></div>
+      <p class="q-pdf-aguardando" id="q-pdf-aguardando" style="display:none;">Todas as assinaturas feitas. O PDF está sendo gerado e aparece aqui em até 10 minutos.</p>
       <section class="q-cab" id="q-cab" aria-label="Dados da ficha"></section>
       <p class="q-alerta" id="q-aviso-enc">Escolha o encarregado/supervisor/líder para começar. As sugestões vêm da aba "Líderes" da planilha.</p>
       <div id="q-corpo">
@@ -4785,7 +4843,7 @@ function qIniciarMinhas(){
   db.collection('qualimetrias').where('participantesEmails', 'array-contains', qMeuEmail()).onSnapshot((snap) => {
     qMinhasFichas = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     qAtualizarAbertos();
-  }, (e) => console.warn('Minhas qualimetrias:', e));
+  }, (e) => { console.warn('Minhas qualimetrias:', e); qMostrarErro(e); });
 }
 function qIniciarMes(){
   if(!ehTST() || qOuvindo.mes === qMes) return;
@@ -4794,7 +4852,7 @@ function qIniciarMes(){
   qCancelarMes = db.collection('qualimetrias').where('mes', '==', qMes).onSnapshot((snap) => {
     qFichasMes = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     qAtualizarAbertos();
-  }, (e) => console.warn('Qualimetrias do mês:', e));
+  }, (e) => { console.warn('Qualimetrias do mês:', e); qMostrarErro(e); });
 }
 function qAtualizarAbertos(){
   if(document.getElementById('view-qualimetria').style.display === 'block') qRenderLista();
@@ -4846,6 +4904,34 @@ function qSalvar(imediato){
 }
 
 /* ======================= tela: lista do mês ======================= */
+let qFiltro = 'todas';   // 'todas' | 'pendentes' | 'analise'
+let qBusca = '';
+function qMostrarErro(e){
+  const el = document.getElementById('q-erro');
+  if(!el) return;
+  const permissao = e && /permission|insufficient/i.test(String(e.code || e.message || ''));
+  el.textContent = permissao
+    ? 'O banco recusou a leitura das fichas (sem permissão). Confira se o bloco "qualimetrias" foi colado nas Regras do Firestore e publicado.'
+    : 'Não consegui carregar as fichas agora. Confira a internet e abra a tela de novo.';
+  el.style.display = 'block';
+}
+function qFuncaoDe(f){
+  const enc = f.encarregado || {};
+  if(enc.funcao) return enc.funcao;
+  const p = qParticipantes.find(x => String(x.email || '').toLowerCase() === String(enc.email || '').toLowerCase() && enc.email);
+  return p ? p.funcao : 'Liderança';
+}
+function qSituacao(q){
+  // rascunho = TST começou e ainda vai voltar; assinando = concluída, esperando as 4 assinaturas
+  if(!q || !Object.keys(q.itens || {}).length) return { txt: 'Não iniciada', det: '', cls: 'q-q-vazia', pend: false };
+  const c = qCalcular(q);
+  if(q.estado === 'fechada' || q.codigo) return { txt: `${qFmtNota(c.nota)} · ${c.mencao}`, det: 'Assinada pelas 4 · fechada', cls: 'q-q-ok', pend: false };
+  if(q.estado === 'assinando'){
+    const feitas = Q_PAPEIS.filter(p => (q.assinaturas || {})[p.chave]).length;
+    return { txt: `${qFmtNota(c.nota)} · ${c.mencao}`, det: `Aguardando assinaturas · ${feitas} de 4`, cls: 'q-q-assinando', pend: true };
+  }
+  return { txt: 'Rascunho', det: `${c.marcados} de 20 itens marcados`, cls: 'q-q-rascunho', pend: true };
+}
 function abrirQualimetria(){
   qIniciarParticipantes();
   qIniciarMinhas();
@@ -4887,8 +4973,22 @@ function qRenderLista(){
       <span>${qMesRotulo(x.f.mes)} · ${x.k === 'q1' ? '1ª' : '2ª'} quinzena · como ${escaparHtml(x.papel.rotulo)}</span>
       <span class="q-tag q-tag-aviso">Assinar agora</span></button>`).join('')}` : '';
 
-  // fichas
-  const lista = tst ? qFichasMes : qMinhasFichas.filter(f => f.mes === qMes);
+  // fichas (com busca e filtro do menu de cima)
+  const todas = tst ? qFichasMes : qMinhasFichas.filter(f => f.mes === qMes);
+  const termo = qNorm(qBusca.trim());
+  let lista = todas.filter(f => !termo || qNorm([f.encarregado && f.encarregado.nome, f.area, f.local, qFuncaoDe(f)].join(' ')).includes(termo));
+  const pendentes = todas.filter(f => ['q1', 'q2'].some(k => qSituacao(f[k]).pend));
+  if(qFiltro === 'pendentes') lista = lista.filter(f => pendentes.indexOf(f) >= 0);
+  const badge = document.getElementById('q-badge-pend');
+  badge.textContent = pendentes.length; badge.style.display = pendentes.length ? 'flex' : 'none';
+  document.getElementById('q-at-nova').style.display = tst ? '' : 'none';
+  const caixaFiltro = document.getElementById('q-filtro');
+  const rotFiltro = qFiltro === 'pendentes' ? 'rascunhos e fichas esperando assinatura' : (qFiltro === 'analise' ? 'análise do mês' : '');
+  caixaFiltro.style.display = (rotFiltro || termo) ? 'flex' : 'none';
+  caixaFiltro.innerHTML = `<span>Mostrando: <b>${rotFiltro || 'todas as fichas'}</b>${termo ? ` · busca "${escaparHtml(qBusca.trim())}"` : ''}</span><button type="button" id="q-limpar-filtro">Ver todas ✕</button>`;
+  const btLimpar = document.getElementById('q-limpar-filtro');
+  if(btLimpar) btLimpar.addEventListener('click', () => { qFiltro = 'todas'; qBusca = ''; document.getElementById('q-busca').value = ''; document.getElementById('q-busca-box').style.display = 'none'; qRenderLista(); });
+  qRenderAnalise(todas);
   const notas = lista.map(qNotaMes).filter(n => n !== null);
   const media = notas.length ? Math.round(notas.reduce((a, b) => a + b, 0) / notas.length * 10) / 10 : null;
   const faltam = lista.reduce((s, f) => s + ['q1', 'q2'].filter(k => f[k] && f[k].estado === 'assinando').length, 0);
@@ -4909,23 +5009,54 @@ function qRenderLista(){
   };
   const cLista = document.getElementById('q-lista');
   if(!lista.length){
-    cLista.innerHTML = `<p class="empty-state">${tst ? 'Nenhuma ficha neste mês. Toque em "Nova ficha" para começar.' : 'Você não participa de nenhuma ficha neste mês.'}</p>`;
+    cLista.innerHTML = `<p class="empty-state">${qFiltro === 'pendentes' ? 'Nenhuma ficha pendente neste mês. 👏' : (termo ? 'Nenhuma ficha encontrada nessa busca.' : (tst ? 'Nenhuma ficha neste mês. Toque em "Nova ficha" para começar.' : 'Você não participa de nenhuma ficha neste mês.'))}</p>`;
   } else {
     cLista.innerHTML = lista.slice().sort((a, b) => String(a.encarregado.nome).localeCompare(b.encarregado.nome, 'pt-BR')).map(f => {
-      const [t1, c1] = estadoTxt(f.q1), [t2, c2] = estadoTxt(f.q2);
+      const s1 = qSituacao(f.q1), s2 = qSituacao(f.q2);
       const nm = qNotaMes(f);
       return `<button type="button" class="q-card" data-id="${f.id}">
         <span class="q-card-topo"><b>${escaparHtml(f.encarregado.nome)}</b>${nm !== null ? `<span class="q-nota-mes" style="color:${qCorMencao(qMencao(nm))}">${qFmtNota(nm)}</span>` : ''}</span>
-        <span class="q-card-sub">${escaparHtml(f.area || 'Área não informada')}${f.encarregado.matricula ? ' · Mat. ' + escaparHtml(f.encarregado.matricula) : ''}</span>
+        <span class="q-card-funcao">${escaparHtml(qFuncaoDe(f))}</span>
+        <span class="q-card-sub">${escaparHtml(f.area || 'Área não informada')}${f.local ? ' · ' + escaparHtml(f.local) : ''}${f.encarregado.matricula ? ' · Mat. ' + escaparHtml(f.encarregado.matricula) : ''}</span>
         <span class="q-quinzenas">
-          <span class="q-q ${c1}"><small>1ª QUINZENA</small>${t1}</span>
-          <span class="q-q ${c2}"><small>2ª QUINZENA</small>${t2}</span>
+          <span class="q-q ${s1.cls}"><small>1ª QUINZENA</small>${s1.txt}${s1.det ? `<span class="q-q-det">${s1.det}</span>` : ''}</span>
+          <span class="q-q ${s2.cls}"><small>2ª QUINZENA</small>${s2.txt}${s2.det ? `<span class="q-q-det">${s2.det}</span>` : ''}</span>
         </span></button>`;
     }).join('');
   }
   document.querySelectorAll('#view-qualimetria .q-card').forEach(b => {
     b.addEventListener('click', () => qAbrirFicha(b.dataset.id, b.dataset.q));
   });
+}
+
+/* ---- análise do mês: itens que mais falham, notas por liderança e menções ---- */
+function qRenderAnalise(fichas){
+  const caixa = document.getElementById('q-analise');
+  const lista = document.getElementById('q-lista');
+  const ativa = qFiltro === 'analise';
+  caixa.style.display = ativa ? 'block' : 'none';
+  lista.style.display = ativa ? 'none' : '';
+  document.getElementById('q-titulo-lista').style.display = ativa ? 'none' : '';
+  if(!ativa) return;
+  const quinzenas = [];
+  fichas.forEach(f => ['q1', 'q2'].forEach(k => { if(f[k] && (f[k].estado === 'assinando' || f[k].estado === 'fechada' || f[k].codigo)) quinzenas.push({ f, q: f[k] }); }));
+  if(!quinzenas.length){ caixa.innerHTML = '<p class="empty-state">Ainda não há quinzenas concluídas neste mês.</p>'; return; }
+  const ncPorItem = Q_ITENS.map((t, i) => ({ n: i + 1, t, qtd: quinzenas.filter(x => /NC/.test((x.q.itens || {})[i + 1] || '')).length }))
+    .filter(x => x.qtd).sort((a, b) => b.qtd - a.qtd).slice(0, 8);
+  const maxNc = Math.max(1, ...ncPorItem.map(x => x.qtd));
+  const notas = fichas.map(f => ({ nome: f.encarregado.nome, area: f.area, nota: qNotaMes(f) })).filter(x => x.nota !== null).sort((a, b) => a.nota - b.nota);
+  const mencoes = {};
+  notas.forEach(x => { const m = qMencao(x.nota); mencoes[m] = (mencoes[m] || 0) + 1; });
+  caixa.innerHTML = `
+    <section class="q-an-card"><h3>Itens com mais não conformidades</h3>
+      ${ncPorItem.length ? ncPorItem.map(x => `<div class="q-an-linha"><span>${x.n}. ${escaparHtml(x.t)}</span><span class="q-an-barra"><i style="width:${x.qtd / maxNc * 100}%"></i></span><span class="q-an-val">${x.qtd}</span></div>`).join('') : '<p class="empty-state" style="margin:0">Nenhuma não conformidade no mês. 👏</p>'}
+    </section>
+    <section class="q-an-card"><h3>Nota do mês por liderança (menores primeiro)</h3>
+      ${notas.map(x => `<div class="q-an-linha"><span>${escaparHtml(x.nome)}${x.area ? ' · ' + escaparHtml(x.area) : ''}</span><span style="color:${qCorMencao(qMencao(x.nota))}; font-weight:700;">${qMencao(x.nota)}</span><span class="q-an-val">${qFmtNota(x.nota)}</span></div>`).join('')}
+    </section>
+    <section class="q-an-card"><h3>Menções no mês</h3>
+      ${['Excelente', 'Bom', 'Regular', 'Insuficiente', 'Insatisfatório'].map(m => `<div class="q-an-linha"><span style="color:${qCorMencao(m)}; font-weight:700;">${m}</span><span></span><span class="q-an-val">${mencoes[m] || 0}</span></div>`).join('')}
+    </section>`;
 }
 
 /* ======================= abrir / nova ficha ======================= */
@@ -4983,6 +5114,19 @@ function qRenderFicha(){
   const encarregados = qParticipantes.filter(p => /encarregad|supervis|l[ií]der/i.test(p.funcao || ''));
   document.getElementById('q-ficha-titulo').textContent = f.encarregado.nome || 'Nova ficha';
   document.getElementById('q-ficha-selo').textContent = 'QUALIMETRIA · ' + qMesRotulo(f.mes).toUpperCase();
+  // links dos arquivos (o Apps Script grava as URLs quando gera)
+  const qCompleta = ['q1', 'q2'].some(k => f[k] && Q_PAPEIS.every(p => f[k].assinaturas && f[k].assinaturas[p.chave]));
+  const docs = [];
+  if(f.pdfQ1Url) docs.push({ url: f.pdfQ1Url, tag: 'PDF', nome: f.pdfQ1Nome || 'Relatório da 1ª quinzena', sub: 'Só a 1ª quinzena' });
+  if(f.pdfUrl) docs.push({ url: f.pdfUrl, tag: 'PDF', nome: f.pdfNome || 'Relatório completo', sub: 'Versão final · 1ª e 2ª quinzena' });
+  if(f.planilhaUrl) docs.push({ url: f.planilhaUrl, tag: 'XLS', nome: 'Planilha no formato oficial', sub: 'PI-FRC 00901 preenchida · Google Planilhas', planilha: true });
+  const caixaDocs = document.getElementById('q-docs');
+  caixaDocs.style.display = docs.length ? 'flex' : 'none';
+  caixaDocs.innerHTML = docs.map(d => `<a class="q-pdf" href="${escaparHtml(d.url)}" target="_blank" rel="noopener">
+      <span class="q-pdf-icone ${d.planilha ? 'planilha' : ''}">${d.tag}</span>
+      <span class="q-pdf-txt"><b>${escaparHtml(d.nome)}</b><small>${escaparHtml(d.sub)}</small></span></a>`).join('');
+  const temPdf = !!(f.pdfUrl || f.pdfQ1Url);
+  document.getElementById('q-pdf-aguardando').style.display = (qCompleta && f.pdfPendente && !temPdf) ? 'block' : 'none';
 
   // cabeçalho da ficha (encarregado só pode ser escolhido antes de existir a ficha)
   document.getElementById('q-cab').innerHTML = `
@@ -5004,7 +5148,7 @@ function qRenderFicha(){
     enc.addEventListener('change', () => {
       const nome = enc.value.trim();
       const p = qParticipantes.find(x => x.nome.toLowerCase() === nome.toLowerCase());
-      f.encarregado = { nome, matricula: p ? String(p.matricula || '') : f.encarregado.matricula, email: p ? p.email : '' };
+      f.encarregado = { nome, matricula: p ? String(p.matricula || '') : f.encarregado.matricula, email: p ? p.email : '', funcao: p ? (p.funcao || '') : '' };
       // mês seguinte já vem com a área/local da última ficha desse encarregado
       const anterior = qFichasMes.concat(qMinhasFichas).filter(x => x.encarregado && x.encarregado.nome === nome).sort((a, b) => b.mes.localeCompare(a.mes))[0];
       if(anterior){ f.area = f.area || anterior.area || ''; f.local = f.local || anterior.local || ''; f.turno = f.turno || anterior.turno || ''; }
@@ -5048,34 +5192,86 @@ function qRenderFicha(){
   btn.disabled = c.marcados < 20;
 }
 
+/* listas usadas no registro de desvio (processo, local, tipologia...),
+   lidas uma vez do Firestore — funcionam offline pelo cache */
+const Q_CAMPOS_LISTA = ['processo', 'local', 'tipologia', 'responsavelArea', 'inspecionadoPor', 'responsavelCorrecao'];
+let qListas = null, qCarregandoListas = null;
+function qCarregarListas(){
+  if(qListas) return Promise.resolve(qListas);
+  if(qCarregandoListas) return qCarregandoListas;
+  qCarregandoListas = Promise.all(Q_CAMPOS_LISTA.map(async c => {
+    let v = LISTAS_INICIAIS[c] || [];
+    try{
+      const snap = await db.collection('listas').doc(c).get();
+      if(snap.exists && Array.isArray(snap.data().valores) && snap.data().valores.length) v = snap.data().valores;
+    }catch(e){}
+    return [c, v];
+  })).then(pares => {
+    qListas = Object.fromEntries(pares);
+    if(qFicha && document.getElementById('q-itens')) qRenderFicha();
+    return qListas;
+  });
+  return qCarregandoListas;
+}
+const Q_NC_OBRIG = {
+  descricao: 'descrição do desvio', processo: 'processo / atividade', local: 'identificação / local',
+  tipologia: 'tipologia', potencial: 'potencial', medida: 'ações para correção',
+  responsavelArea: 'responsável pela área', inspecionadoPor: 'inspecionado por',
+  responsavel: 'responsável pela correção', prazo: 'prazo'
+};
+
 function qRenderItens(editar){
   const q = qFicha[qQuinzena];
-  const listas = {
-    tipologia: (LISTAS_INICIAIS.tipologia || []),
-    resp: (LISTAS_INICIAIS.responsavelCorrecao || [])
-  };
+  if(!qListas) qCarregarListas();
+  const L = qListas || LISTAS_INICIAIS;
+  const lista = (c) => (L[c] || LISTAS_INICIAIS[c] || []);
+  const ehQ2 = qQuinzena === 'q2';
+  const itensQ1 = (qFicha.q1 && qFicha.q1.itens) || {};
   document.getElementById('q-itens').innerHTML = Q_ITENS.map((texto, i) => {
     const n = String(i + 1), v = q.itens[n] || '';
     const nc = q.ncs[n] || {};
     const ehNC = v === 'NC1' || v === 'NC2';
-    const bt = (val, rot) => `<button type="button" class="q-op ${v === val ? 'on q-op-' + val.toLowerCase() : ''}" data-n="${n}" data-v="${val}" ${editar ? '' : 'disabled'}>${rot}</button>`;
+    // 1ª quinzena: não existe NC2. 2ª quinzena: se o item já teve NC na 1ª,
+    // só pode NC2 (reincidente); se não teve, só pode NC1 (primeira vez).
+    const teveNcQ1 = ehQ2 && (itensQ1[n] === 'NC1' || itensQ1[n] === 'NC2');
+    const bloqueado = (val) => ehQ2 && ((val === 'NC1' && teveNcQ1) || (val === 'NC2' && !teveNcQ1));
+    const bt = (val, rot) => {
+      if(val === 'NC2' && !ehQ2) return '';
+      const bloq = bloqueado(val) && v !== val;
+      const dica = bloq ? (val === 'NC1' ? 'Item já teve NC na 1ª quinzena: use NC2' : 'NC2 só para item que já teve NC na 1ª quinzena') : '';
+      return `<button type="button" class="q-op ${v === val ? 'on q-op-' + val.toLowerCase() : ''} ${bloq ? 'q-op-bloq' : ''}" data-n="${n}" data-v="${val}" ${editar && !bloq ? '' : 'disabled'} ${dica ? `title="${dica}" aria-label="${rot} (indisponível: ${dica})"` : ''}>${rot}</button>`;
+    };
     return `<article class="q-item q-borda-${(v || 'x').toLowerCase()}">
       <div class="q-item-topo"><span class="q-num">${n}</span><span>${escaparHtml(texto)}</span></div>
-      <div class="q-ops">${bt('C', 'C')}${bt('NC1', 'NC1')}${bt('NC2', 'NC2')}${bt('NA', 'NA')}</div>
+      <div class="q-ops ${ehQ2 ? '' : 'q-ops-3'}">${bt('C', 'C')}${bt('NC1', 'NC1')}${bt('NC2', 'NC2')}${bt('NA', 'NA')}</div>
+      ${teveNcQ1 ? `<p class="q-reinc">Na 1ª quinzena este item já teve não conformidade. Se continuar, marque <b>NC2</b> (reincidente).</p>` : ''}
       ${ehNC ? `<div class="q-nc" data-n="${n}">
         <span class="q-nc-aviso">${nc.desvioId && q.estado !== 'rascunho' ? 'Desvio criado a partir desta não conformidade' : 'Vira desvio quando a avaliação for concluída'}</span>
-        <label>O que foi encontrado<textarea rows="2" data-c="descricao" ${editar ? '' : 'disabled'}>${escaparHtml(nc.descricao || '')}</textarea></label>
-        <label>Medida corretiva / melhoria<textarea rows="2" data-c="medida" ${editar ? '' : 'disabled'}>${escaparHtml(nc.medida || '')}</textarea></label>
+        <label>Descrição do desvio (o que foi encontrado) *<textarea rows="2" data-c="descricao" ${editar ? '' : 'disabled'}>${escaparHtml(nc.descricao || '')}</textarea></label>
         <div class="q-nc-grade">
-          <label>Tipologia<select data-c="tipologia" ${editar ? '' : 'disabled'}><option value="">Selecione...</option>${listas.tipologia.map(t => `<option ${nc.tipologia === t ? 'selected' : ''}>${escaparHtml(t)}</option>`).join('')}</select></label>
-          <label>Potencial<select data-c="potencial" ${editar ? '' : 'disabled'}>${['Alto', 'Médio', 'Baixo'].map(t => `<option ${(nc.potencial || (v === 'NC2' ? 'Alto' : 'Médio')) === t ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
-          <label>Responsável pela correção<input type="text" list="q-dl-resp" data-c="responsavel" value="${escaparHtml(nc.responsavel || '')}" ${editar ? '' : 'disabled'}></label>
-          <label>Prazo<input type="date" data-c="prazo" value="${escaparHtml(nc.prazo || '')}" ${editar ? '' : 'disabled'}></label>
+          <label>Processo / Atividade *<input type="text" list="q-dl-processo" data-c="processo" value="${escaparHtml(nc.processo || '')}" ${editar ? '' : 'disabled'}></label>
+          <label>Identificação / Local *<input type="text" list="q-dl-local" data-c="local" value="${escaparHtml(nc.local || '')}" ${editar ? '' : 'disabled'}></label>
+          <label>Tipologia do desvio *<input type="text" list="q-dl-tipologia" data-c="tipologia" value="${escaparHtml(nc.tipologia || '')}" ${editar ? '' : 'disabled'}></label>
+          <label>Potencial *<select data-c="potencial" ${editar ? '' : 'disabled'}>${['Alto', 'Médio', 'Baixo'].map(t => `<option ${(nc.potencial || (v === 'NC2' ? 'Alto' : 'Médio')) === t ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
         </div>
-        ${editar ? `<button type="button" class="q-foto-btn" data-n="${n}">+ Foto do que foi encontrado${nc.fotos ? ' (' + nc.fotos + ')' : ''}</button>` : (nc.fotos ? `<span class="q-nc-aviso">${nc.fotos} foto(s) anexada(s) ao desvio</span>` : '')}
+        <label>Ações para correção *<textarea rows="2" data-c="medida" ${editar ? '' : 'disabled'}>${escaparHtml(nc.medida || '')}</textarea></label>
+        <div class="q-nc-grade">
+          <label>Responsável pela área *<input type="text" list="q-dl-resparea" data-c="responsavelArea" value="${escaparHtml(nc.responsavelArea || '')}" ${editar ? '' : 'disabled'}></label>
+          <label>Inspecionado por *<input type="text" list="q-dl-insp" data-c="inspecionadoPor" value="${escaparHtml(nc.inspecionadoPor || '')}" ${editar ? '' : 'disabled'}></label>
+          <label>Responsável pela correção *<input type="text" list="q-dl-resp" data-c="responsavel" value="${escaparHtml(nc.responsavel || '')}" ${editar ? '' : 'disabled'}></label>
+          <label>Prazo para correção *<input type="date" data-c="prazo" value="${escaparHtml(nc.prazo || '')}" ${editar ? '' : 'disabled'}></label>
+        </div>
+        <label>Observações<textarea rows="2" data-c="observacoes" ${editar ? '' : 'disabled'}>${escaparHtml(nc.observacoes || '')}</textarea></label>
+        <p class="q-nc-origem">Origem: <b>Qualimetria</b></p>
+        ${editar ? `<div class="q-foto-botoes">
+            <button type="button" class="q-foto-btn" data-n="${n}" data-modo="camera">📷 Tirar foto</button>
+            <button type="button" class="q-foto-btn" data-n="${n}" data-modo="galeria">🖼️ Galeria</button>
+          </div>${nc.fotos ? `<span class="q-nc-aviso">${nc.fotos} foto(s) anexada(s)</span>` : ''}` : (nc.fotos ? `<span class="q-nc-aviso">${nc.fotos} foto(s) anexada(s) ao desvio</span>` : '')}
       </div>` : ''}
     </article>`;
-  }).join('') + `<datalist id="q-dl-resp">${listas.resp.map(r => `<option value="${escaparHtml(r)}">`).join('')}</datalist>`;
+  }).join('') + [['q-dl-processo', 'processo'], ['q-dl-local', 'local'], ['q-dl-tipologia', 'tipologia'],
+       ['q-dl-resparea', 'responsavelArea'], ['q-dl-insp', 'inspecionadoPor'], ['q-dl-resp', 'responsavelCorrecao']]
+    .map(([id, c]) => `<datalist id="${id}">${lista(c).map(r => `<option value="${escaparHtml(r)}">`).join('')}</datalist>`).join('');
   qMelhorarSugestoes();
 
   if(!editar) return;
@@ -5084,8 +5280,12 @@ function qRenderItens(editar){
     q.itens[n] = q.itens[n] === v ? null : v;
     if(!q.itens[n]) delete q.itens[n];
     if(q.itens[n] === 'NC1' || q.itens[n] === 'NC2'){
-      q.ncs[n] = q.ncs[n] || {};
-      q.ncs[n].potencial = q.ncs[n].potencial || (q.itens[n] === 'NC2' ? 'Alto' : 'Médio');
+      const nc = q.ncs[n] = q.ncs[n] || {};
+      nc.potencial = nc.potencial || (q.itens[n] === 'NC2' ? 'Alto' : 'Médio');
+      // padrões que o TST pode trocar
+      nc.local = nc.local || qFicha.area || '';
+      nc.responsavelArea = nc.responsavelArea || (qFicha.encarregado && qFicha.encarregado.nome) || '';
+      nc.inspecionadoPor = nc.inspecionadoPor || qMeuPerfil().nome || '';
     }
     qSalvar(); qRenderFicha();
   }));
@@ -5099,7 +5299,9 @@ function qRenderItens(editar){
   });
   document.querySelectorAll('#q-itens .q-foto-btn').forEach(b => b.addEventListener('click', () => {
     const inp = document.createElement('input');
-    inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true;
+    inp.type = 'file'; inp.accept = 'image/*';
+    if(b.dataset.modo === 'camera') inp.setAttribute('capture', 'environment'); // abre a câmera direto
+    else inp.multiple = true;
     inp.addEventListener('change', async () => {
       const n = b.dataset.n;
       q.ncs[n] = q.ncs[n] || {};
@@ -5189,7 +5391,7 @@ function qConcluir(){
   Object.keys(q.itens).forEach(n => {
     if(q.itens[n] !== 'NC1' && q.itens[n] !== 'NC2') return;
     const nc = q.ncs[n] || {};
-    ['descricao', 'medida', 'tipologia', 'responsavel', 'prazo'].forEach(k => { if(!nc[k]) faltando.push(`item ${n}: ${{ descricao: 'o que foi encontrado', medida: 'medida corretiva', tipologia: 'tipologia', responsavel: 'responsável', prazo: 'prazo' }[k]}`); });
+    Object.keys(Q_NC_OBRIG).forEach(k => { if(!String(nc[k] || '').trim()) faltando.push(`item ${n}: ${Q_NC_OBRIG[k]}`); });
   });
   if(faltando.length){
     mostrarAvisoApp('Falta preencher', faltando.slice(0, 4).join(' · ') + (faltando.length > 4 ? ' …' : ''));
@@ -5243,14 +5445,14 @@ function qEnviarParaAssinatura(signatarios){
     gravarSemEsperar(db.collection('desvios').doc(id).set({
       numero: null, sincronizado: false,
       data: new Date().toLocaleDateString('pt-BR'),
-      processo: '', local: f.area,
+      processo: nc.processo || '', local: nc.local || f.area,
       descricao: nc.descricao,
       tipologia: nc.tipologia, potencial: nc.potencial || (q.itens[n] === 'NC2' ? 'Alto' : 'Médio'),
       acoesCorrecao: nc.medida,
-      responsavelArea: f.encarregado.nome, inspecionadoPor: eu.nome,
+      responsavelArea: nc.responsavelArea || f.encarregado.nome, inspecionadoPor: nc.inspecionadoPor || eu.nome,
       prazo: nc.prazo, responsavelCorrecao: nc.responsavel,
       status: '',
-      observacoes: `Qualimetria ${mes}-${ano} · ${quinz} quinzena · item ${n} (${q.itens[n] === 'NC2' ? 'peso 2' : 'peso 1'}) · ${f.encarregado.nome} · ${f.local}`,
+      observacoes: [nc.observacoes, `Qualimetria ${mes}-${ano} · ${quinz} quinzena · item ${n} (${q.itens[n] === 'NC2' ? 'peso 2, reincidente' : 'peso 1'}) · ${f.encarregado.nome}`].filter(Boolean).join(' | '),
       origem: 'Qualimetria',
       criadoPor: eu.uid, criadoPorNome: eu.nome, criadoPorEmail: eu.email,
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
@@ -5360,6 +5562,15 @@ function qAssinar(papel, bloco){
 
 /* ======================= ligações ======================= */
 document.getElementById('q-btn-nova').addEventListener('click', qNovaFicha);
+document.getElementById('q-at-nova').addEventListener('click', qNovaFicha);
+document.getElementById('q-at-buscar').addEventListener('click', () => {
+  const box = document.getElementById('q-busca-box');
+  box.style.display = 'block';
+  document.getElementById('q-busca').focus();
+});
+document.getElementById('q-busca').addEventListener('input', (e) => { qBusca = e.target.value; qRenderLista(); });
+document.getElementById('q-at-pend').addEventListener('click', () => { qFiltro = qFiltro === 'pendentes' ? 'todas' : 'pendentes'; qRenderLista(); });
+document.getElementById('q-at-analise').addEventListener('click', () => { qFiltro = qFiltro === 'analise' ? 'todas' : 'analise'; qRenderLista(); });
 document.getElementById('q-btn-voltar').addEventListener('click', () => { qSalvar(true); irPara('view-qualimetria'); });
 document.getElementById('q-btn-enviar').addEventListener('click', qConcluir);
 document.querySelectorAll('#q-abas button').forEach(b => b.addEventListener('click', () => { qQuinzena = b.dataset.q; qRenderFicha(); }));
