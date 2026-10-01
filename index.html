@@ -901,6 +901,19 @@
   .q-an-barra{ height:8px; border-radius:4px; background:var(--border); overflow:hidden; }
   .q-an-barra i{ display:block; height:100%; background:var(--error); border-radius:4px; }
   .q-an-val{ text-align:right; font-weight:800; }
+  /* "puxar para atualizar" próprio do app: o nativo do Chrome mexia na altura
+     da tela e fazia o rodapé piscar */
+  html, body{ overscroll-behavior-y:none; }
+  #ptr{
+    position:fixed; left:50%; top:calc(8px + env(safe-area-inset-top, 0px)); z-index:9400;
+    width:40px; height:40px; margin-left:-20px; border-radius:50%;
+    background:var(--white); box-shadow:0 4px 14px rgba(20,33,49,.22);
+    display:flex; align-items:center; justify-content:center;
+    transform:translateY(-70px); opacity:0; pointer-events:none;
+  }
+  #ptr svg{ width:20px; height:20px; color:var(--green-dark); }
+  #ptr.girando svg{ animation:ptrGira .7s linear infinite; }
+  @keyframes ptrGira{ to{ transform:rotate(360deg); } }
   .q-hero{ cursor:default; }
   .q-hero-topo{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
   .q-hero-topo .rotulo{ margin:0; }
@@ -4650,6 +4663,44 @@ function renderizarListaDesvios(){
   const btnMenos = document.getElementById('btn-menos-registros');
   if(btnMenos) btnMenos.addEventListener('click', () => { mostrarTodosMeusRegistros = false; renderizarListaDesvios(); });
 }
+</script>
+
+<div id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v5h-5"/></svg></div>
+<script>
+/* Puxar para atualizar: no topo da página, arraste para baixo e solte.
+   Não age com janelas abertas (fotos, apresentação, assinatura) nem fora do topo. */
+(function(){
+  const ind = document.getElementById('ptr');
+  const LIMITE = 80;
+  let inicioY = null, puxado = 0;
+  const bloqueado = () => document.querySelector('.q-modal, .foto-lightbox.aberto, .apresentacao.aberta, .toast-app.segurando');
+  window.addEventListener('touchstart', (e) => {
+    if(e.touches.length !== 1 || window.scrollY > 0 || bloqueado()) { inicioY = null; return; }
+    inicioY = e.touches[0].clientY; puxado = 0;
+  }, { passive: true });
+  window.addEventListener('touchmove', (e) => {
+    if(inicioY === null) return;
+    puxado = Math.max(0, e.touches[0].clientY - inicioY);
+    if(window.scrollY > 0){ inicioY = null; puxado = 0; }
+    const d = Math.min(puxado, 120);
+    ind.style.transition = 'none';
+    ind.style.opacity = d > 10 ? Math.min(1, d / LIMITE) : 0;
+    ind.style.transform = `translateY(${d * 0.7 - 70}px) rotate(${d * 3}deg)`;
+  }, { passive: true });
+  window.addEventListener('touchend', () => {
+    if(inicioY === null) return;
+    inicioY = null;
+    ind.style.transition = 'transform .2s ease, opacity .2s ease';
+    if(puxado >= LIMITE && navigator.onLine !== false){
+      ind.style.transform = 'translateY(20px)'; ind.style.opacity = 1;
+      ind.classList.add('girando');
+      setTimeout(() => location.reload(), 250);
+    } else {
+      ind.style.transform = 'translateY(-70px)'; ind.style.opacity = 0;
+    }
+    puxado = 0;
+  });
+})();
 </script>
 
 <!-- Modo apresentação da Análise geral -->
