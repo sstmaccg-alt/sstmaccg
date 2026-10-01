@@ -901,6 +901,28 @@
   .q-an-barra{ height:8px; border-radius:4px; background:var(--border); overflow:hidden; }
   .q-an-barra i{ display:block; height:100%; background:var(--error); border-radius:4px; }
   .q-an-val{ text-align:right; font-weight:800; }
+  .q-hero{ cursor:default; }
+  .q-hero-topo{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+  .q-hero-topo .rotulo{ margin:0; }
+  .q-hero-topo select{ border:1px solid var(--border-strong); border-radius:8px; padding:6px 8px; font:inherit; font-size:13px; font-weight:700; color:var(--navy); background:var(--white); max-width:55%; }
+  .q-hero .q-resumo{ gap:0; }
+  .q-hero .q-kpi, .q-hero .q-kpi-alerta{ background:none; box-shadow:none; border-radius:0; padding:0 12px; border-left:1px solid var(--border); }
+  .q-hero .q-kpi:first-child{ padding-left:0; border-left:none; }
+  .q-hero .q-kpi b{ font-size:26px; font-weight:700; line-height:1.1; }
+  .q-foto-botoes .q-foto-btn{ width:100%; height:auto; padding:10px 12px; font-size:13px; border:none; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .q-foto-botoes .q-foto-galeria{ background:var(--navy); }
+  .q-foto-botoes .icone-svg svg{ width:16px; height:16px; }
+  .q-btn-outro{ margin-top:10px; width:100%; border:1px solid var(--border-strong); background:var(--white); color:var(--navy); border-radius:10px; padding:10px 12px; font:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+  .q-modal{ position:fixed; inset:0; z-index:9600; background:rgba(20,33,49,.55); display:flex; align-items:flex-end; justify-content:center; }
+  .q-modal-caixa{ background:var(--white); width:min(100%, 520px); max-height:92vh; overflow-y:auto; border-radius:18px 18px 0 0; padding:20px 18px calc(20px + env(safe-area-inset-bottom, 0px)); box-sizing:border-box; }
+  .q-modal-caixa h3{ margin:0 0 4px; font-size:18px; color:var(--navy); }
+  .q-modal-caixa p{ margin:0 0 14px; font-size:13px; color:var(--text-muted); line-height:1.4; }
+  .q-modal-caixa label{ display:flex; flex-direction:column; gap:4px; font-size:12px; font-weight:700; color:var(--navy); margin-bottom:10px; }
+  .q-modal-caixa input[type=email], .q-modal-caixa input[type=password]{ height:46px; border:1px solid var(--border-strong); border-radius:10px; padding:0 12px; font:inherit; font-size:15px; background:var(--white); color:var(--navy); }
+  .q-modal-acoes{ display:flex; gap:8px; margin-top:6px; }
+  .q-modal-acoes button{ flex:1; }
+  .q-modal-cancelar{ border:1px solid var(--border-strong); background:var(--white); color:var(--navy); border-radius:10px; font:inherit; font-weight:700; cursor:pointer; }
+  @media (min-width:1024px){ .q-modal{ align-items:center; } .q-modal-caixa{ border-radius:18px; } }
   .q-docs{ display:flex; flex-direction:column; gap:8px; margin:0 0 14px; }
   .q-docs .q-pdf{ margin:0; }
   .q-pdf-icone.planilha{ background:#e3f1d6; color:#2d5214; }
@@ -1179,21 +1201,19 @@
           <p class="atalho-label">Análise</p>
         </button>
       </div>
-      <div class="tela-banner">
-        <div class="tela-selo">SEGURANÇA</div>
-        <p class="tela-titulo">Qualimetria</p>
-        <p class="tela-sub">Avaliação quinzenal da liderança (encarregado, supervisor ou líder) · PI-FRC 00901</p>
-      </div>
-      <div class="q-topo">
-        <select id="q-mes" aria-label="Mês da qualimetria"></select>
-        <button type="button" id="q-btn-nova" class="q-btn-nova" style="display:none;">+ Nova ficha</button>
+      <div class="hero-flutuante q-hero">
+        <div class="q-hero-topo">
+          <span class="rotulo">QUALIMETRIA · AVALIAÇÃO DA LIDERANÇA</span>
+          <select id="q-mes" aria-label="Mês da qualimetria"></select>
+        </div>
+        <div class="q-resumo" id="q-resumo"></div>
+        <button type="button" id="q-btn-nova" class="q-btn-nova">+ Nova ficha</button>
       </div>
       <div class="q-busca-box" id="q-busca-box" style="display:none;">
         <input type="search" id="q-busca" placeholder="Buscar por nome, área ou local..." aria-label="Buscar ficha">
       </div>
       <div class="q-filtro" id="q-filtro" style="display:none;"></div>
       <p class="q-erro" id="q-erro" style="display:none;"></p>
-      <div class="q-resumo" id="q-resumo"></div>
       <div id="q-analise" style="display:none;"></div>
       <div id="q-pendentes"></div>
       <span class="secao-titulo" id="q-titulo-lista">Fichas do mês</span>
@@ -4880,7 +4900,10 @@ function qSalvar(imediato){
   clearTimeout(qSalvarTimer);
   const gravar = () => {
     qSalvarTimer = null;
-    const f = qFicha, k = qQuinzena, q = f[k], c = qCalcular(q);
+    const f = qFicha, k = qQuinzena, q = f[k];
+    // quinzena já fechada (ou toda assinada): nunca regrava por cima
+    if(!q || q.codigo || q.estado === 'fechada') return;
+    const c = qCalcular(q);
     const p = {
       mes: f.mes, encarregado: f.encarregado, area: f.area || '', local: f.local || '', turno: f.turno || '',
       participantesEmails: f.participantesEmails || [],
@@ -4928,6 +4951,7 @@ function qSituacao(q){
   if(q.estado === 'fechada' || q.codigo) return { txt: `${qFmtNota(c.nota)} · ${c.mencao}`, det: 'Assinada pelas 4 · fechada', cls: 'q-q-ok', pend: false };
   if(q.estado === 'assinando'){
     const feitas = Q_PAPEIS.filter(p => (q.assinaturas || {})[p.chave]).length;
+    if(feitas === Q_PAPEIS.length) return { txt: `${qFmtNota(c.nota)} · ${c.mencao}`, det: 'Assinada pelas 4 · gerando o PDF', cls: 'q-q-ok', pend: false };
     return { txt: `${qFmtNota(c.nota)} · ${c.mencao}`, det: `Aguardando assinaturas · ${feitas} de 4`, cls: 'q-q-assinando', pend: true };
   }
   return { txt: 'Rascunho', det: `${c.marcados} de 20 itens marcados`, cls: 'q-q-rascunho', pend: true };
@@ -4991,7 +5015,7 @@ function qRenderLista(){
   qRenderAnalise(todas);
   const notas = lista.map(qNotaMes).filter(n => n !== null);
   const media = notas.length ? Math.round(notas.reduce((a, b) => a + b, 0) / notas.length * 10) / 10 : null;
-  const faltam = lista.reduce((s, f) => s + ['q1', 'q2'].filter(k => f[k] && f[k].estado === 'assinando').length, 0);
+  const faltam = lista.reduce((s, f) => s + ['q1', 'q2'].filter(k => f[k] && f[k].estado === 'assinando' && Q_PAPEIS.some(p => !(f[k].assinaturas || {})[p.chave])).length, 0);
   document.getElementById('q-resumo').innerHTML = `
     <div class="q-kpi"><b>${lista.length}</b><span>fichas</span></div>
     <div class="q-kpi"><b style="color:${media === null ? 'inherit' : qCorMencao(qMencao(media))}">${qFmtNota(media)}</b><span>média${media === null ? '' : ' · ' + qMencao(media)}</span></div>
@@ -5064,8 +5088,11 @@ function qAbrirFicha(id, quinzena){
   const f = qFichasMes.concat(qMinhasFichas).find(x => x.id === id);
   if(!f) return;
   qFicha = qClone(f);
-  qFicha.q1 = qFicha.q1 || qQuinzenaVazia();
-  qFicha.q2 = qFicha.q2 || qQuinzenaVazia();
+  ['q1', 'q2'].forEach(k => {
+    const q = qFicha[k] = qFicha[k] || qQuinzenaVazia();
+    q.itens = q.itens || {}; q.ncs = q.ncs || {}; q.assinaturas = q.assinaturas || {}; q.signatarios = q.signatarios || {};
+    if(q.codigo) q.estado = 'fechada';
+  });
   qQuinzena = quinzena || (qFicha.q1.estado === 'fechada' ? 'q2' : 'q1');
   irPara('view-quali-ficha');
   qRenderFicha();
@@ -5264,8 +5291,8 @@ function qRenderItens(editar){
         <label>Observações<textarea rows="2" data-c="observacoes" ${editar ? '' : 'disabled'}>${escaparHtml(nc.observacoes || '')}</textarea></label>
         <p class="q-nc-origem">Origem: <b>Qualimetria</b></p>
         ${editar ? `<div class="q-foto-botoes">
-            <button type="button" class="q-foto-btn" data-n="${n}" data-modo="camera">📷 Tirar foto</button>
-            <button type="button" class="q-foto-btn" data-n="${n}" data-modo="galeria">🖼️ Galeria</button>
+            <button type="button" class="btn-primary q-foto-btn" data-n="${n}" data-modo="camera"><span class="icone-svg" data-icone="camera"></span> Tirar foto</button>
+            <button type="button" class="btn-primary q-foto-btn q-foto-galeria" data-n="${n}" data-modo="galeria"><span class="icone-svg" data-icone="imagem"></span> Galeria</button>
           </div>${nc.fotos ? `<span class="q-nc-aviso">${nc.fotos} foto(s) anexada(s)</span>` : ''}` : (nc.fotos ? `<span class="q-nc-aviso">${nc.fotos} foto(s) anexada(s) ao desvio</span>` : '')}
       </div>` : ''}
     </article>`;
@@ -5273,6 +5300,7 @@ function qRenderItens(editar){
        ['q-dl-resparea', 'responsavelArea'], ['q-dl-insp', 'inspecionadoPor'], ['q-dl-resp', 'responsavelCorrecao']]
     .map(([id, c]) => `<datalist id="${id}">${lista(c).map(r => `<option value="${escaparHtml(r)}">`).join('')}</datalist>`).join('');
   qMelhorarSugestoes();
+  document.querySelectorAll('#q-itens .icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
 
   if(!editar) return;
   document.querySelectorAll('#q-itens .q-op').forEach(b => b.addEventListener('click', () => {
@@ -5493,7 +5521,8 @@ function qRenderAssinaturas(){
     return `<div class="q-ass ${minha ? 'q-ass-minha' : ''}">
       <div class="q-ass-topo"><span><small>${escaparHtml(p.rotulo.toUpperCase())}${minha ? ' · VOCÊ' : ''}</small><b>${escaparHtml(s.nome || '—')}</b><em>Mat. ${escaparHtml(s.matricula || '—')}</em></span>
       <span class="q-tag ${a ? 'q-tag-ok' : 'q-tag-aviso'}">${a ? 'Assinado ✓' : 'Pendente'}</span></div>
-      ${a ? `<div class="q-ass-img"><img src="${a.imagem}" alt="Assinatura de ${escaparHtml(s.nome)}"><span>${escaparHtml(quando)}</span></div>` : ''}
+      ${a ? `<div class="q-ass-img"><img src="${a.imagem}" alt="Assinatura de ${escaparHtml(s.nome)}"><span>${escaparHtml(quando)}${a.metodo ? ' · ' + escaparHtml(a.metodo) : ''}</span></div>` : ''}
+      ${!a && !minha && q.estado === 'assinando' && s.email ? `<button type="button" class="q-btn-outro" data-papel="${p.chave}">Assinar neste celular (login de ${escaparHtml((s.nome || '').split(' ')[0] || 'participante')})</button>` : ''}
       ${minha ? `<div class="q-pad-caixa"><canvas class="q-pad" width="600" height="220" aria-label="Área para assinar com o dedo"></canvas>
           <button type="button" class="q-pad-limpar">Limpar</button><span class="q-pad-dica">Assine com o dedo</span></div>
         <label class="q-declara"><input type="checkbox" class="q-declara-ok"> Declaro que participei desta avaliação e confirmo as informações registradas.</label>
@@ -5510,6 +5539,7 @@ function qRenderAssinaturas(){
 
   box.querySelectorAll('.q-pad').forEach(qLigarPad);
   box.querySelectorAll('.q-btn-assinar').forEach(b => b.addEventListener('click', () => qAssinar(b.dataset.papel, b.closest('.q-ass'))));
+  box.querySelectorAll('.q-btn-outro').forEach(b => b.addEventListener('click', () => qAssinarNesteCelular(b.dataset.papel)));
   const re = document.getElementById('q-reabrir');
   if(re) re.addEventListener('click', () => {
     if(!confirm('Reabrir apaga as assinaturas desta quinzena. Os desvios já criados continuam. Reabrir?')) return;
@@ -5560,6 +5590,93 @@ function qAssinar(papel, bloco){
   qRenderFicha();
 }
 
+/* ---- assinar no celular de outra pessoa ----
+   A pessoa entra com o PRÓPRIO e-mail e senha numa sessão separada (um
+   segundo "app" do Firebase só pra isso): assina e sai. A conta de quem
+   emprestou o celular continua logada o tempo todo. Precisa de internet. */
+let qAppAssinante = null;
+function qAssinanteApp(){
+  if(!qAppAssinante){
+    qAppAssinante = firebase.initializeApp(firebaseConfig, 'assinante');
+    qAppAssinante.auth().setPersistence(firebase.auth.Auth.Persistence.NONE).catch(() => {});
+  }
+  return qAppAssinante;
+}
+function qAssinarNesteCelular(papel){
+  const f = qFicha, q = f[qQuinzena], s = q.signatarios[papel];
+  const rot = (Q_PAPEIS.find(p => p.chave === papel) || {}).rotulo || '';
+  if(!navigator.onLine){ mostrarAvisoApp('Sem internet', 'Para assinar com o login de outra pessoa é preciso estar online.'); return; }
+  const modal = document.createElement('div');
+  modal.className = 'q-modal';
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Assinar neste celular">
+      <h3>Assinatura de ${escaparHtml(s.nome || '')}</h3>
+      <p>${escaparHtml(rot)} · ${qQuinzena === 'q1' ? '1ª' : '2ª'} quinzena. ${escaparHtml((s.nome || '').split(' ')[0])} entra com o login dele(a) só para assinar. Depois, o app volta para a sua conta.</p>
+      <div class="q-etapa-login">
+        <label>E-mail<input type="email" class="q-m-email" value="${escaparHtml(s.email || '')}" readonly></label>
+        <label>Senha<input type="password" class="q-m-senha" autocomplete="off" placeholder="Senha de ${escaparHtml((s.nome || '').split(' ')[0])}"></label>
+        <p class="q-m-erro" style="color:#a32d2d; display:none;"></p>
+        <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary q-m-entrar">Entrar</button></div>
+      </div>
+      <div class="q-etapa-assinar" style="display:none;">
+        <div class="q-pad-caixa"><canvas class="q-pad" width="600" height="220" aria-label="Área para assinar com o dedo"></canvas>
+          <button type="button" class="q-pad-limpar">Limpar</button><span class="q-pad-dica">Assine com o dedo</span></div>
+        <label class="q-declara" style="flex-direction:row; font-weight:400;"><input type="checkbox" class="q-declara-ok"> Declaro que participei desta avaliação e confirmo as informações registradas.</label>
+        <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary q-m-assinar">Assinar</button></div>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  let app = null;
+  try{ app = qAssinanteApp(); }catch(e){ console.warn('Sessão de assinatura:', e); }
+  // fecha a janela SEMPRE; depois tenta sair da sessão do assinante
+  const fechar = () => { modal.remove(); try{ app && app.auth().signOut().catch(() => {}); }catch(e){} };
+  modal.querySelectorAll('.q-modal-cancelar').forEach(b => b.addEventListener('click', fechar));
+  const erro = modal.querySelector('.q-m-erro');
+  modal.querySelector('.q-m-senha').focus();
+  modal.querySelector('.q-m-entrar').addEventListener('click', async (ev) => {
+    const bt = ev.currentTarget; bt.disabled = true; erro.style.display = 'none';
+    try{
+      if(!app) throw new Error('não consegui abrir a sessão de assinatura');
+      await app.auth().signInWithEmailAndPassword(s.email, modal.querySelector('.q-m-senha').value);
+      modal.querySelector('.q-etapa-login').style.display = 'none';
+      modal.querySelector('.q-etapa-assinar').style.display = 'block';
+      qLigarPad(modal.querySelector('.q-pad'));
+    }catch(e){
+      erro.textContent = /wrong-password|invalid-credential|invalid-login/i.test(e.code || '') ? 'Senha incorreta.' : 'Não consegui entrar: ' + (e.code || e.message);
+      erro.style.display = 'block'; bt.disabled = false;
+    }
+  });
+  modal.querySelector('.q-m-assinar').addEventListener('click', async (ev) => {
+    const canvas = modal.querySelector('.q-pad');
+    if(canvas._vazio){ mostrarAvisoApp('Falta a assinatura', 'Assine com o dedo no quadro.'); return; }
+    if(!modal.querySelector('.q-declara-ok').checked){ mostrarAvisoApp('Falta confirmar', 'Marque a declaração de participação.'); return; }
+    const user = app.auth().currentUser;
+    if(!user || String(user.email || '').toLowerCase() !== String(s.email || '').toLowerCase()){ mostrarAvisoApp('Login diferente', 'Entre com a conta de ' + s.nome + '.'); return; }
+    const bt = ev.currentTarget; bt.disabled = true;
+    const menor = document.createElement('canvas'); menor.width = 300; menor.height = 110;
+    menor.getContext('2d').drawImage(canvas, 0, 0, 300, 110);
+    const ass = {
+      nome: s.nome || '', matricula: s.matricula || '', email: String(user.email).toLowerCase(), uid: user.uid,
+      imagem: menor.toDataURL('image/png'),
+      assinadoEm: firebase.firestore.FieldValue.serverTimestamp(),
+      aparelho: /iphone|ipad/i.test(navigator.userAgent) ? 'iPhone' : (/android/i.test(navigator.userAgent) ? 'Android' : 'Computador'),
+      metodo: 'login próprio no celular de ' + (qMeuPerfil().nome || 'outro participante'),
+      declaracao: 'Declaro que participei desta avaliação e confirmo as informações registradas.'
+    };
+    const upd = {}; upd[`${qQuinzena}.assinaturas.${papel}`] = ass; upd.pdfPendente = true;
+    try{
+      // grava com a conta de QUEM ASSINOU (as regras do banco conferem isso)
+      await app.firestore().collection('qualimetrias').doc(f.id).update(upd);
+      q.assinaturas = q.assinaturas || {}; q.assinaturas[papel] = { ...ass, assinadoEm: null };
+      fechar();
+      mostrarAvisoApp('Assinatura registrada', s.nome + ' assinou. Você continua na sua conta.');
+      qRenderFicha();
+    }catch(e){
+      bt.disabled = false;
+      mostrarAvisoApp('Não consegui gravar', /permission/i.test(e.code || e.message || '') ? 'O banco recusou: confira as regras do Firestore.' : (e.message || 'Tente de novo.'));
+    }
+  });
+}
+
 /* ======================= ligações ======================= */
 document.getElementById('q-btn-nova').addEventListener('click', qNovaFicha);
 document.getElementById('q-at-nova').addEventListener('click', qNovaFicha);
@@ -5571,7 +5688,10 @@ document.getElementById('q-at-buscar').addEventListener('click', () => {
 document.getElementById('q-busca').addEventListener('input', (e) => { qBusca = e.target.value; qRenderLista(); });
 document.getElementById('q-at-pend').addEventListener('click', () => { qFiltro = qFiltro === 'pendentes' ? 'todas' : 'pendentes'; qRenderLista(); });
 document.getElementById('q-at-analise').addEventListener('click', () => { qFiltro = qFiltro === 'analise' ? 'todas' : 'analise'; qRenderLista(); });
-document.getElementById('q-btn-voltar').addEventListener('click', () => { qSalvar(true); irPara('view-qualimetria'); });
+document.getElementById('q-btn-voltar').addEventListener('click', () => {
+  try{ qSalvar(true); }catch(e){ console.warn('Não salvou ao voltar:', e); }
+  irPara('view-qualimetria');
+});
 document.getElementById('q-btn-enviar').addEventListener('click', qConcluir);
 document.querySelectorAll('#q-abas button').forEach(b => b.addEventListener('click', () => { qQuinzena = b.dataset.q; qRenderFicha(); }));
 
