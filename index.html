@@ -4841,10 +4841,14 @@ function qCorMencao(m){
 function qCorMencaoEscuro(m){
   return { 'Excelente': '#cfe3b8', 'Bom': '#cfe3b8', 'Regular': '#f3d38a', 'Insuficiente': '#f7b98a', 'Insatisfatório': '#f7a3a3' }[m] || '#aab4be';
 }
+/* Nota do mês = mesma conta da planilha "Resumo mensal de qualimetria":
+   100 − (somatória dos pesos NC do mês ÷ nº de requisitos avaliados no mês) × 100
+   (junta as duas quinzenas numa conta só — não é a média das duas notas) */
 function qNotaMes(f){
-  const ns = ['q1', 'q2'].map(k => f[k] && qCalcular(f[k])).filter(c => c && c.marcados === 20 && c.nota !== null).map(c => c.nota);
-  if(!ns.length) return null;
-  return Math.round(ns.reduce((a, b) => a + b, 0) / ns.length * 10) / 10;
+  const cs = ['q1', 'q2'].map(k => f[k] && qCalcular(f[k])).filter(c => c && c.marcados === 20 && c.avaliados);
+  if(!cs.length) return null;
+  const pesos = cs.reduce((a, c) => a + c.pesos, 0), avaliados = cs.reduce((a, c) => a + c.avaliados, 0);
+  return Math.round((100 - (pesos / avaliados) * 100) * 10) / 10;
 }
 function qFmtNota(n){ return n === null || n === undefined ? '—' : String(n).replace('.', ',') + '%'; }
 
@@ -5261,17 +5265,16 @@ function qRenderItens(editar){
     // 1ª quinzena: não existe NC2. 2ª quinzena: se o item já teve NC na 1ª,
     // só pode NC2 (reincidente); se não teve, só pode NC1 (primeira vez).
     const teveNcQ1 = ehQ2 && (itensQ1[n] === 'NC1' || itensQ1[n] === 'NC2');
-    const bloqueado = (val) => ehQ2 && ((val === 'NC1' && teveNcQ1) || (val === 'NC2' && !teveNcQ1));
+    const bloqueado = () => false; // NC1 e NC2 liberados nas duas quinzenas
     const bt = (val, rot) => {
-      if(val === 'NC2' && !ehQ2) return '';
       const bloq = bloqueado(val) && v !== val;
       const dica = bloq ? (val === 'NC1' ? 'Item já teve NC na 1ª quinzena: use NC2' : 'NC2 só para item que já teve NC na 1ª quinzena') : '';
       return `<button type="button" class="q-op ${v === val ? 'on q-op-' + val.toLowerCase() : ''} ${bloq ? 'q-op-bloq' : ''}" data-n="${n}" data-v="${val}" ${editar && !bloq ? '' : 'disabled'} ${dica ? `title="${dica}" aria-label="${rot} (indisponível: ${dica})"` : ''}>${rot}</button>`;
     };
     return `<article class="q-item q-borda-${(v || 'x').toLowerCase()}">
       <div class="q-item-topo"><span class="q-num">${n}</span><span>${escaparHtml(texto)}</span></div>
-      <div class="q-ops ${ehQ2 ? '' : 'q-ops-3'}">${bt('C', 'C')}${bt('NC1', 'NC1')}${bt('NC2', 'NC2')}${bt('NA', 'NA')}</div>
-      ${teveNcQ1 ? `<p class="q-reinc">Na 1ª quinzena este item já teve não conformidade. Se continuar, marque <b>NC2</b> (reincidente).</p>` : ''}
+      <div class="q-ops">${bt('C', 'C')}${bt('NC1', 'NC1')}${bt('NC2', 'NC2')}${bt('NA', 'NA')}</div>
+      ${teveNcQ1 ? `<p class="q-reinc">Na 1ª quinzena este item já teve não conformidade. Se continuar sem solução, o normal é <b>NC2</b> (reincidente).</p>` : ''}
       ${ehNC ? `<div class="q-nc" data-n="${n}">
         <span class="q-nc-aviso">${nc.desvioId && q.estado !== 'rascunho' ? 'Desvio criado a partir desta não conformidade' : 'Vira desvio quando a avaliação for concluída'}</span>
         <label>Descrição do desvio (o que foi encontrado) *<textarea rows="2" data-c="descricao" ${editar ? '' : 'disabled'}>${escaparHtml(nc.descricao || '')}</textarea></label>
@@ -5366,13 +5369,16 @@ function qMelhorarSugestoes(){
     lista.className = 'q-ac-lista';
     lista.setAttribute('role', 'listbox');
     caixa.appendChild(lista);
-    let atual = -1, visiveis = [];
+    let atual = -1, visiveis = [], escolhendo = false;
 
     const escolher = (op) => {
+      escolhendo = true;               // evita que o "input" abaixo reabra a lista
       input.value = op.valor;
       lista.classList.remove('aberta');
       input.dispatchEvent(new Event('input', { bubbles: true }));
       input.dispatchEvent(new Event('change', { bubbles: true }));
+      escolhendo = false;
+      input.blur();                    // fecha o teclado, como no registro de desvio
     };
     const desenhar = () => {
       const termo = qNorm(input.value.trim());
@@ -5394,8 +5400,8 @@ function qMelhorarSugestoes(){
       itens.forEach((el, k) => el.classList.toggle('ativo', k === atual));
       itens[atual].scrollIntoView({ block: 'nearest' });
     };
-    input.addEventListener('focus', desenhar);
-    input.addEventListener('input', () => { if(document.activeElement === input) desenhar(); });
+    input.addEventListener('focus', () => { if(!escolhendo) desenhar(); });
+    input.addEventListener('input', () => { if(!escolhendo && document.activeElement === input) desenhar(); });
     input.addEventListener('blur', () => setTimeout(() => lista.classList.remove('aberta'), 120));
     input.addEventListener('keydown', (e) => {
       if(!lista.classList.contains('aberta')) return;
