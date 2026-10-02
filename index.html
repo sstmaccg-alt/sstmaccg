@@ -910,6 +910,18 @@
   /* só no html (a página): no body, que já é uma "caixa de rolagem" por causa
      do overflow-x:hidden, isso impedia a rolagem de passar para a página */
   html{ overscroll-behavior-y:none; }
+  /* marca d'água: nome, matrícula, data e hora em toda a tela (aparece em qualquer print) */
+  #marca-dagua{ position:fixed; inset:0; z-index:2147483000; pointer-events:none; display:none; background-repeat:repeat; }
+  .termo-caixa{ max-height:42vh; overflow-y:auto; border:1px solid var(--border-strong); border-radius:12px; padding:12px 14px; font-size:13px; line-height:1.5; color:var(--navy); background:var(--cream); margin-bottom:12px; }
+  .termo-caixa h4{ margin:0 0 8px; font-size:14px; }
+  .termo-caixa p{ margin:0 0 8px; }
+  .termo-aceite{ display:flex; gap:8px; align-items:flex-start; font-size:13px; margin:0 0 12px; color:var(--navy); }
+  .ass-cap .q-pad{ width:100%; height:auto; border:1px dashed var(--border-strong); border-radius:12px; background:#fff; touch-action:none; }
+  .ass-cap-passos{ display:flex; gap:6px; margin:0 0 10px; }
+  .ass-cap-passos span{ flex:1; height:5px; border-radius:3px; background:var(--border); }
+  .ass-cap-passos span.feito{ background:var(--green); }
+  .ass-erro{ margin:8px 0 0; padding:9px 12px; border-radius:10px; background:#fde2e1; color:#8c2f2f; font-size:13px; line-height:1.4; }
+  .ass-ref-img{ display:block; max-width:100%; height:110px; object-fit:contain; background:#fff; border:1px solid var(--border); border-radius:10px; margin:0 auto 12px; }
   #ptr{
     position:fixed; left:50%; top:calc(8px + env(safe-area-inset-top, 0px)); z-index:9400;
     width:40px; height:40px; margin-left:-20px; border-radius:50%;
@@ -937,6 +949,7 @@
   .zap-acoes{ display:flex; flex-direction:column; gap:8px; }
   .zap-btn{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; border:none; border-radius:12px; padding:13px; font:inherit; font-size:15px; font-weight:700; cursor:pointer; }
   .zap-btn.principal{ background:#25D366; color:#fff; }
+  .email-linha{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .zap-btn.secundario{ background:var(--white); color:var(--navy); border:1px solid var(--border-strong); }
   .q-hero{ cursor:default; }
   .q-hero-topo{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
@@ -967,6 +980,9 @@
   .q-op.q-op-bloq{ background:#d9dcd6 !important; color:#8a9099 !important; border-color:#cfd3cb !important; cursor:not-allowed; opacity:.75; }
   html[data-theme="dark"] .q-op.q-op-bloq{ background:#2a323c !important; color:#6b7480 !important; border-color:#333c47 !important; }
   .q-reinc{ margin:8px 0 0; font-size:12px; line-height:1.4; color:#7a4b06; background:#fdf0d5; border-radius:8px; padding:7px 10px; }
+  .q-nc > label{ display:flex; flex-direction:column; gap:5px; }
+  .q-nc select, .q-nc input[type=text], .q-nc input[type=date]{ width:100%; box-sizing:border-box; }
+  .q-nc-outro{ margin-top:6px; }
   .q-nc-origem{ margin:0; font-size:12px; color:var(--text-muted); }
   .q-foto-botoes{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
   .q-pdf-aguardando{ background:var(--green-tint); color:var(--green-dark); border-radius:12px; padding:10px 14px; font-size:13px; margin:0 0 14px; }
@@ -1124,6 +1140,15 @@
     </form>
 
     </div>
+
+    <form id="form-termo" style="display:none;">
+      <h2 style="font-size:19px; font-weight:800; color:var(--navy); margin:0 0 4px;">Termo de uso</h2>
+      <p style="font-size:13px; color:var(--text-muted); margin:0 0 12px;">Leia e assine para começar a usar o app.</p>
+      <div class="termo-caixa" id="termo-caixa" tabindex="0"></div>
+      <label class="termo-aceite"><input type="checkbox" id="termo-ok"> Li e aceito os termos acima.</label>
+      <div class="auth-msg" id="termo-msg"></div>
+      <button type="button" class="btn-primary" id="btn-assinar-termo">Cadastrar minha assinatura e aceitar</button>
+    </form>
 
     <!-- Link de autocadastro removido: contas são criadas só pelo administrador -->
 
@@ -1353,7 +1378,7 @@
         </div>
         <div class="pc-col-direita">
         <div class="grupo-titulo" style="margin-top:0;">
-          <span>NÍVEL DE RISCO</span>
+          <span>POTENCIAL DE GRAVIDADE</span>
         </div>
         <div class="risco-tiles">
           <div class="tile alto" data-filtro-campo="potencial" data-filtro-valor="Alto">
@@ -1739,6 +1764,15 @@
         <div class="seta" id="notif-acao" style="font-size:13px; font-weight:700; color:var(--green-dark);">Ativar</div>
       </div>
 
+      <div class="card-action" id="perfil-card-assinatura">
+        <div class="icon"><span class="icone-svg" data-icone="caneta"></span></div>
+        <div class="info">
+          <h3>Minha assinatura</h3>
+          <p id="perfil-assinatura-status">Usada para conferir suas assinaturas no app</p>
+        </div>
+        <div class="seta">›</div>
+      </div>
+
       <div class="card-action" data-goto="view-inspecoes">
         <div class="icon"><span class="icone-svg" data-icone="clipboard"></span></div>
         <div class="info">
@@ -1777,6 +1811,7 @@
    ====================================================================== */
 const ICONES = {
   apresentacao: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18"/><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4"/><path d="M12 16v4"/><path d="M9 20h6"/><path d="M8 12l3-3 2 2 3-3"/></svg>',
+  caneta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
   compartilhar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>',
   capacete: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18"/><path d="M5 16.5a7 7 0 0 1 14 0"/><path d="M12 5.5v3.5"/></svg>',
   clipboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>',
@@ -2088,6 +2123,9 @@ async function verificarLimiteDispositivos(user){
 
 /* ---- mostra o app principal (depois de login + dispositivo + primeiro acesso ok) ---- */
 function mostrarAppPrincipal(user){
+  if(user && !termoAceito(user.uid)){ mostrarTelaTermo(); return; }
+  setTimeout(atualizarMarcaDagua, 50);
+  setTimeout(atualizarStatusAssinaturaPerfil, 100);
   setTimeout(iniciarNotificacoes, 800);
   setTimeout(() => atualizarUsuarioPC(user), 0);
   aplicarPerfilTST();
@@ -2231,8 +2269,10 @@ function salvarPerfilLocal(uid, dados){
       senhaRedefinida: !!dados.senhaRedefinida,
       perfilCompleto: perfilEstaCompleto(dados),
       nomeCompleto: dados.nomeCompleto || '',
-      matricula: dados.matricula || ''
+      matricula: dados.matricula || '',
+      termoVersao: dados.termoVersao || ''
     }));
+    if(dados.assinaturaRef) localStorage.setItem('sst_ref_ass_' + uid, JSON.stringify(dados.assinaturaRef));
   }catch(e){}
 }
 function lerPerfilLocal(uid){
@@ -2324,6 +2364,7 @@ auth.onAuthStateChanged(async (user) => {
     document.getElementById('login-form').style.display = 'block';
     document.getElementById('form-nova-senha').style.display = 'none';
     document.getElementById('form-perfil-nome').style.display = 'none';
+    document.getElementById('form-termo').style.display = 'none';
   }
 });
 
@@ -2750,6 +2791,15 @@ function comprimirImagem(file, maxLargura = 1000, qualidade = 0.6){
 function gravarSemEsperar(promessa, descricao){
   promessa.catch(err => console.warn('Falha ao gravar (' + descricao + '):', err));
 }
+/* roda uma tarefa demorada (comprimir fotos) sem segurar a tela; avisa se o
+   app for fechado no meio */
+let tarefasEmAndamento = 0;
+function emSegundoPlano(fn){
+  tarefasEmAndamento++;
+  Promise.resolve().then(fn).catch(e => console.warn('Tarefa em segundo plano:', e)).finally(() => { tarefasEmAndamento--; });
+}
+window.addEventListener('beforeunload', (e) => { if(tarefasEmAndamento > 0){ e.preventDefault(); e.returnValue = ''; } });
+
 async function salvarFotoDesvio(desvioId, file){
   const base64 = await comprimirImagem(file); // isso é local, pode esperar
   gravarSemEsperar(db.collection('desvios').doc(desvioId).collection('fotos').add({
@@ -2830,9 +2880,9 @@ function cartaoDesvioResolver(d){
         </div>
         <p>${descricaoOrganizada(d)}</p>
         <p class="sub-prazo">Ainda sincronizando com a planilha...</p>
-        <button type="button" class="btn-resolver btn-resolver-pendente" data-id="${d.id}">
+        ${podeFecharProprioDesvio() ? `<button type="button" class="btn-resolver btn-resolver-pendente" data-id="${d.id}">
           <span class="icone-svg" data-icone="check"></span> Resolver
-        </button>
+        </button>` : `<button type="button" class="btn-em-analise" disabled><span class="icone-svg" data-icone="relogio"></span> Aguardando número</button>`}
       </div>
     `;
   }
@@ -2967,7 +3017,8 @@ function abrirResolverDesvio(numero, autoAprovar){
   // se o desvio é da própria pessoa (está em "Meus registros"), a resolução
   // já entra aprovada — vale também quando ela resolve pela busca
   const ehMeu = meusRegistrosCache.some(r => r.numero != null && String(r.numero) === String(numero));
-  resolverAutoAprovar = !!autoAprovar || ehMeu;
+  // só TST e Meio Ambiente fecham sozinhos o que registraram; os demais vão para a análise do TST
+  resolverAutoAprovar = (!!autoAprovar || ehMeu) && podeFecharProprioDesvio();
   document.getElementById('resolver-titulo').textContent = 'Nº ' + numero;
   document.getElementById('resolver-descricao').textContent = d ? d.descricao : '';
   document.getElementById('resolver-form').reset();
@@ -3001,6 +3052,12 @@ document.getElementById('resolver-foto-desvio').addEventListener('click', () => 
 });
 
 function abrirResolverDesvioPendente(docId){
+  // desvio ainda sem número: resolver agora significa fechar sem aprovação,
+  // então só TST e Meio Ambiente podem; os demais esperam o número
+  if(!podeFecharProprioDesvio()){
+    mostrarAvisoApp('Aguarde o número', 'Assim que o desvio receber o número (alguns minutos), envie a resolução para análise.');
+    return;
+  }
   const d = desviosPendentesCache.find(x => x.id === docId);
   desvioEmResolucao = d || { id: docId };
   desvioPendenteEmResolucaoId = docId;
@@ -3075,13 +3132,16 @@ document.getElementById('resolver-form').addEventListener('submit', async (e) =>
         resolvidoObservacao: document.getElementById('resolver-observacao').value.trim(),
         resolvidoEm: firebase.firestore.FieldValue.serverTimestamp()
       }), 'resolução do desvio pendente');
-      for(const file of fotosResolverSelecionadas){
-        const base64 = await comprimirImagem(file);
-        gravarSemEsperar(db.collection('desvios').doc(desvioPendenteEmResolucaoId).collection('fotosResolucao').add({
-          base64, nomeArquivo: file.name,
-          criadoEm: firebase.firestore.FieldValue.serverTimestamp()
-        }), 'foto da resolução');
-      }
+      const idPend = desvioPendenteEmResolucaoId, arquivosPend = fotosResolverSelecionadas.slice();
+      emSegundoPlano(async () => {
+        for(const file of arquivosPend){
+          const base64 = await comprimirImagem(file);
+          gravarSemEsperar(db.collection('desvios').doc(idPend).collection('fotosResolucao').add({
+            base64, nomeArquivo: file.name,
+            criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+          }), 'foto da resolução');
+        }
+      });
     } else {
       const solicitacao = {
         numeroDesvio: desvioEmResolucao.numero,
@@ -3103,13 +3163,14 @@ document.getElementById('resolver-form').addEventListener('submit', async (e) =>
       solicitacoesLocais.push({ id: docRef.id, ...solicitacao, criadoEm: null, _local: true });
       atualizarMapaSolicitacoes();
 
-      for(const file of fotosResolverSelecionadas){
+      const arquivosSol = fotosResolverSelecionadas.slice();
+      emSegundoPlano(async () => { for(const file of arquivosSol){
         const base64 = await comprimirImagem(file);
         gravarSemEsperar(docRef.collection('fotos').add({
           base64, nomeArquivo: file.name,
           criadoEm: firebase.firestore.FieldValue.serverTimestamp()
         }), 'foto da solicitação');
-      }
+      } });
     }
 
     // marca na hora como resolvido (sem esperar a planilha sincronizar) pra já
@@ -3127,6 +3188,9 @@ document.getElementById('resolver-form').addEventListener('submit', async (e) =>
     fotosResolverSelecionadas = [];
     renderizarPreviewFotosResolver();
     irPara('view-desvios');
+    window.scrollTo(0, 0);
+    mostrarAvisoApp(resolverAutoAprovar || desvioPendenteEmResolucaoId ? 'Desvio resolvido' : 'Resolução enviada',
+      resolverAutoAprovar || desvioPendenteEmResolucaoId ? 'Ele fecha na planilha na próxima sincronização.' : 'Um TST vai analisar. Você será avisado do resultado.');
   }catch(err){
     console.error(err);
     msg.textContent = 'Não foi possível enviar. Tente novamente.';
@@ -3149,10 +3213,28 @@ try{
 }catch(e){}
 let carregouListaTST = false;
 
+/* Papel de cada pessoa pelo DOMÍNIO do e-mail de login:
+   @tst.com (ou @tss.com) → TST · @meioambiente.com → Meio Ambiente ·
+   @saudeocupacional.com → Saúde Ocupacional · @encarregado.com, @lider.com,
+   @supervisor.com → liderança · @usuario.com (ou qualquer outro) → usuário.
+   A lista antiga de TSTs (config/tsts) continua valendo junto, por segurança. */
+const PAPEIS_DOMINIO = {
+  'tst.com': 'tst', 'tss.com': 'tst', 'meioambiente.com': 'meioAmbiente', 'saudeocupacional.com': 'saude',
+  'encarregado.com': 'encarregado', 'lider.com': 'lider', 'supervisor.com': 'supervisor', 'usuario.com': 'usuario'
+};
+function papelDoEmail(email){
+  const dom = String(email || '').trim().toLowerCase().split('@')[1] || '';
+  return PAPEIS_DOMINIO[dom] || 'usuario';
+}
+function meuPapel(){ const u = auth.currentUser; return u ? papelDoEmail(u.email) : 'usuario'; }
 function ehTST(){
   const u = auth.currentUser;
-  return !!(u && u.email && emailsTST.has(u.email.trim().toLowerCase()));
+  if(!u || !u.email) return false;
+  return papelDoEmail(u.email) === 'tst' || emailsTST.has(u.email.trim().toLowerCase());
 }
+function ehMeioAmbiente(){ return meuPapel() === 'meioAmbiente'; }
+// quem pode fechar sozinho o desvio que registrou (sem passar pela aprovação)
+function podeFecharProprioDesvio(){ return ehTST() || ehMeioAmbiente(); }
 function aplicarPerfilTST(){
   const tst = ehTST();
   document.getElementById('atalho-aprovacoes-label').textContent = tst ? 'Aprovações' : 'Enviados';
@@ -3718,10 +3800,13 @@ document.getElementById('desvio-form').addEventListener('submit', async (e) => {
 
     // fotos: viram documentos na subcoleção fotos/, comprimidas e em base64.
     // Escreve no Firestore, então funciona offline igual ao resto do formulário.
-    for(const file of fotosSelecionadas){
-      try{ await salvarFotoDesvio(docRef.id, file); }
-      catch(e){ console.warn('Falha ao processar uma foto:', e); }
-    }
+    const arquivosDesvio = fotosSelecionadas.slice();
+    emSegundoPlano(async () => {
+      for(const file of arquivosDesvio){
+        try{ await salvarFotoDesvio(docRef.id, file); }
+        catch(e){ console.warn('Falha ao processar uma foto:', e); }
+      }
+    });
 
     // reset do formulário
     document.getElementById('desvio-form').reset();
@@ -4668,10 +4753,10 @@ function renderizarListaDesvios(){
           </button>`;
       } else {
         tagClasse = 'pendente'; tagTexto = 'Pendente sincronização';
-        botaoHtml = `
+        botaoHtml = podeFecharProprioDesvio() ? `
           <button type="button" class="btn-resolver btn-resolver-pendente" data-id="${d.id}" style="margin-top:8px;">
             <span class="icone-svg" data-icone="check"></span> Resolver
-          </button>`;
+          </button>` : `<button type="button" class="btn-em-analise" disabled style="margin-top:8px;"><span class="icone-svg" data-icone="relogio"></span> Aguardando número</button>`;
       }
     } else if(numerosFechados.has(String(d.numero)) ||
               situacaoResolucao(d.numero) === 'aprovado'){
@@ -4737,6 +4822,7 @@ function renderizarListaDesvios(){
 }
 </script>
 
+<div id="marca-dagua" aria-hidden="true"></div>
 <div id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 4v5h-5"/></svg></div>
 <script>
 /* Puxar para atualizar: no topo da página, arraste para baixo e solte.
@@ -4997,8 +5083,9 @@ function qIniciarMinhas(){
     qAtualizarAbertos();
   }, (e) => { console.warn('Minhas qualimetrias:', e); qMostrarErro(e); });
 }
+function qVeTodasFichas(){ return ehTST() || ehMeioAmbiente(); }
 function qIniciarMes(){
-  if(!ehTST() || qOuvindo.mes === qMes) return;
+  if(!qVeTodasFichas() || qOuvindo.mes === qMes) return;
   if(qCancelarMes) qCancelarMes();
   qOuvindo.mes = qMes;
   qCancelarMes = db.collection('qualimetrias').where('mes', '==', qMes).onSnapshot((snap) => {
@@ -5130,7 +5217,7 @@ function qRenderLista(){
       <span class="q-tag q-tag-aviso">Assinar agora</span></button>`).join('')}` : '';
 
   // fichas (com busca e filtro do menu de cima)
-  const todas = tst ? qFichasMes : qMinhasFichas.filter(f => f.mes === qMes);
+  const todas = qVeTodasFichas() ? qFichasMes : qMinhasFichas.filter(f => f.mes === qMes);
   const termo = qNorm(qBusca.trim());
   let lista = todas.filter(f => !termo || qNorm([f.encarregado && f.encarregado.nome, f.area, f.local, qFuncaoDe(f)].join(' ')).includes(termo));
   const pendentes = todas.filter(f => ['q1', 'q2'].some(k => qSituacao(f[k]).pend));
@@ -5379,6 +5466,21 @@ const Q_NC_OBRIG = {
   responsavel: 'responsável pela correção', prazo: 'prazo'
 };
 
+/* campo de lista igual ao do registro de desvio: abre a lista do celular
+   (sem teclado); "Outro (especificar)" abre um campo para digitar */
+function qCampoLista(rotulo, chave, lista, valor, editar, dica){
+  const L = (qListas && qListas[lista]) || LISTAS_INICIAIS[lista] || [];
+  const opcoes = [...L].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+  const naLista = valor && opcoes.includes(valor);
+  const outro = !!valor && !naLista;
+  return `<label>${rotulo} *<select class="q-nc-sel" data-csel="${chave}" ${editar ? '' : 'disabled'}>
+      <option value="">Selecione...</option>
+      ${opcoes.map(o => `<option value="${escaparHtml(o)}" ${o === valor ? 'selected' : ''}>${escaparHtml(o)}</option>`).join('')}
+      <option value="__outro__" ${outro ? 'selected' : ''}>Outro (especificar)</option>
+    </select>
+    <input type="text" class="q-nc-outro" data-c="${chave}" placeholder="${escaparHtml(dica)}" value="${outro ? escaparHtml(valor) : ''}" style="display:${outro ? 'block' : 'none'};" ${editar ? '' : 'disabled'}></label>`;
+}
+
 function qRenderItens(editar){
   const q = qFicha[qQuinzena];
   if(!qListas) qCarregarListas();
@@ -5393,32 +5495,30 @@ function qRenderItens(editar){
     // 1ª quinzena: não existe NC2. 2ª quinzena: se o item já teve NC na 1ª,
     // só pode NC2 (reincidente); se não teve, só pode NC1 (primeira vez).
     const teveNcQ1 = ehQ2 && (itensQ1[n] === 'NC1' || itensQ1[n] === 'NC2');
-    const bloqueado = () => false; // NC1 e NC2 liberados nas duas quinzenas
+    // 1ª quinzena: só NC1. 2ª: só NC1 se o item não teve NC na 1ª; só NC2 se teve.
+    const bloqueado = (val) => ehQ2 && ((val === 'NC1' && teveNcQ1) || (val === 'NC2' && !teveNcQ1));
     const bt = (val, rot) => {
+      if(val === 'NC2' && !ehQ2) return '';
       const bloq = bloqueado(val) && v !== val;
       const dica = bloq ? (val === 'NC1' ? 'Item já teve NC na 1ª quinzena: use NC2' : 'NC2 só para item que já teve NC na 1ª quinzena') : '';
       return `<button type="button" class="q-op ${v === val ? 'on q-op-' + val.toLowerCase() : ''} ${bloq ? 'q-op-bloq' : ''}" data-n="${n}" data-v="${val}" ${editar && !bloq ? '' : 'disabled'} ${dica ? `title="${dica}" aria-label="${rot} (indisponível: ${dica})"` : ''}>${rot}</button>`;
     };
     return `<article class="q-item q-borda-${(v || 'x').toLowerCase()}">
       <div class="q-item-topo"><span class="q-num">${n}</span><span>${escaparHtml(texto)}</span></div>
-      <div class="q-ops">${bt('C', 'C')}${bt('NC1', 'NC1')}${bt('NC2', 'NC2')}${bt('NA', 'NA')}</div>
-      ${teveNcQ1 ? `<p class="q-reinc">Na 1ª quinzena este item já teve não conformidade. Se continuar sem solução, o normal é <b>NC2</b> (reincidente).</p>` : ''}
+      <div class="q-ops ${ehQ2 ? '' : 'q-ops-3'}">${bt('C', 'C')}${bt('NC1', 'NC1')}${bt('NC2', 'NC2')}${bt('NA', 'NA')}</div>
+      ${teveNcQ1 ? `<p class="q-reinc">Na 1ª quinzena este item já teve não conformidade. Se continuar, marque <b>NC2</b> (reincidente).</p>` : ''}
       ${ehNC ? `<div class="q-nc" data-n="${n}">
         <span class="q-nc-aviso">${nc.desvioId && q.estado !== 'rascunho' ? 'Desvio criado a partir desta não conformidade' : 'Vira desvio quando a avaliação for concluída'}</span>
         <label>Descrição do desvio (o que foi encontrado) *<textarea rows="2" data-c="descricao" ${editar ? '' : 'disabled'}>${escaparHtml(nc.descricao || '')}</textarea></label>
-        <div class="q-nc-grade">
-          <label>Processo / Atividade *<input type="text" list="q-dl-processo" data-c="processo" value="${escaparHtml(nc.processo || '')}" ${editar ? '' : 'disabled'}></label>
-          <label>Identificação / Local *<input type="text" list="q-dl-local" data-c="local" value="${escaparHtml(nc.local || '')}" ${editar ? '' : 'disabled'}></label>
-          <label>Tipologia do desvio *<input type="text" list="q-dl-tipologia" data-c="tipologia" value="${escaparHtml(nc.tipologia || '')}" ${editar ? '' : 'disabled'}></label>
-          <label>Potencial *<select data-c="potencial" ${editar ? '' : 'disabled'}>${['Alto', 'Médio', 'Baixo'].map(t => `<option ${(nc.potencial || (v === 'NC2' ? 'Alto' : 'Médio')) === t ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
-        </div>
+        ${qCampoLista('Processo / Atividade', 'processo', 'processo', nc.processo, editar, 'Descreva o novo processo/atividade')}
+        ${qCampoLista('Identificação / Local', 'local', 'local', nc.local, editar, 'Descreva o novo local')}
+        ${qCampoLista('Tipologia do desvio', 'tipologia', 'tipologia', nc.tipologia, editar, 'Descreva a nova tipologia')}
+        <label>Potencial *<select data-c="potencial" ${editar ? '' : 'disabled'}>${['Alto', 'Médio', 'Baixo'].map(t => `<option ${(nc.potencial || (v === 'NC2' ? 'Alto' : 'Médio')) === t ? 'selected' : ''}>${t}</option>`).join('')}</select></label>
         <label>Ações para correção *<textarea rows="2" data-c="medida" ${editar ? '' : 'disabled'}>${escaparHtml(nc.medida || '')}</textarea></label>
-        <div class="q-nc-grade">
-          <label>Responsável pela área *<input type="text" list="q-dl-resparea" data-c="responsavelArea" value="${escaparHtml(nc.responsavelArea || '')}" ${editar ? '' : 'disabled'}></label>
-          <label>Inspecionado por *<input type="text" list="q-dl-insp" data-c="inspecionadoPor" value="${escaparHtml(nc.inspecionadoPor || '')}" ${editar ? '' : 'disabled'}></label>
-          <label>Responsável pela correção *<input type="text" list="q-dl-resp" data-c="responsavel" value="${escaparHtml(nc.responsavel || '')}" ${editar ? '' : 'disabled'}></label>
-          <label>Prazo para correção *<input type="date" data-c="prazo" value="${escaparHtml(nc.prazo || '')}" ${editar ? '' : 'disabled'}></label>
-        </div>
+        ${qCampoLista('Responsável pela área', 'responsavelArea', 'responsavelArea', nc.responsavelArea, editar, 'Nome do responsável')}
+        ${qCampoLista('Inspecionado por', 'inspecionadoPor', 'inspecionadoPor', nc.inspecionadoPor, editar, 'Nome de quem inspecionou')}
+        ${qCampoLista('Responsável pela correção', 'responsavel', 'responsavelCorrecao', nc.responsavel, editar, 'Nome do responsável')}
+        <label>Prazo para correção *<input type="date" data-c="prazo" value="${escaparHtml(nc.prazo || '')}" ${editar ? '' : 'disabled'}></label>
         <label>Observações<textarea rows="2" data-c="observacoes" ${editar ? '' : 'disabled'}>${escaparHtml(nc.observacoes || '')}</textarea></label>
         <p class="q-nc-origem">Origem: <b>Qualimetria</b></p>
         ${editar ? `<div class="q-foto-botoes">
@@ -5427,9 +5527,7 @@ function qRenderItens(editar){
           </div>${nc.fotos ? `<span class="q-nc-aviso">${nc.fotos} foto(s) anexada(s)</span>` : ''}` : (nc.fotos ? `<span class="q-nc-aviso">${nc.fotos} foto(s) anexada(s) ao desvio</span>` : '')}
       </div>` : ''}
     </article>`;
-  }).join('') + [['q-dl-processo', 'processo'], ['q-dl-local', 'local'], ['q-dl-tipologia', 'tipologia'],
-       ['q-dl-resparea', 'responsavelArea'], ['q-dl-insp', 'inspecionadoPor'], ['q-dl-resp', 'responsavelCorrecao']]
-    .map(([id, c]) => `<datalist id="${id}">${lista(c).map(r => `<option value="${escaparHtml(r)}">`).join('')}</datalist>`).join('');
+  }).join('');
   qMelhorarSugestoes();
   document.querySelectorAll('#q-itens .icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
 
@@ -5443,11 +5541,20 @@ function qRenderItens(editar){
       nc.potencial = nc.potencial || (q.itens[n] === 'NC2' ? 'Alto' : 'Médio');
       // padrões que o TST pode trocar
       nc.local = nc.local || qFicha.area || '';
-      nc.responsavelArea = nc.responsavelArea || (qFicha.encarregado && qFicha.encarregado.nome) || '';
       nc.inspecionadoPor = nc.inspecionadoPor || qMeuPerfil().nome || '';
     }
     qSalvar(); qRenderFicha();
   }));
+  document.querySelectorAll('#q-itens .q-nc .q-nc-sel').forEach(sel => {
+    const n = sel.closest('.q-nc').dataset.n, chave = sel.dataset.csel;
+    const outro = sel.parentElement.querySelector('.q-nc-outro');
+    sel.addEventListener('change', () => {
+      q.ncs[n] = q.ncs[n] || {};
+      if(sel.value === '__outro__'){ outro.style.display = 'block'; outro.focus(); q.ncs[n][chave] = outro.value.trim(); }
+      else { outro.style.display = 'none'; outro.value = ''; q.ncs[n][chave] = sel.value; }
+      qSalvar();
+    });
+  });
   document.querySelectorAll('#q-itens .q-nc [data-c]').forEach(el => {
     const n = el.closest('.q-nc').dataset.n;
     el.addEventListener(el.tagName === 'SELECT' || el.type === 'date' ? 'change' : 'input', () => {
@@ -5614,7 +5721,7 @@ function qEnviarParaAssinatura(signatarios){
       descricao: nc.descricao,
       tipologia: nc.tipologia, potencial: nc.potencial || (q.itens[n] === 'NC2' ? 'Alto' : 'Médio'),
       acoesCorrecao: nc.medida,
-      responsavelArea: nc.responsavelArea || f.encarregado.nome, inspecionadoPor: nc.inspecionadoPor || eu.nome,
+      responsavelArea: nc.responsavelArea || '', inspecionadoPor: nc.inspecionadoPor || eu.nome,
       prazo: nc.prazo, responsavelCorrecao: nc.responsavel,
       status: '',
       observacoes: [nc.observacoes, `Qualimetria ${mes}-${ano} · ${quinz} quinzena · item ${n} (${q.itens[n] === 'NC2' ? 'peso 2, reincidente' : 'peso 1'}) · ${f.encarregado.nome}`].filter(Boolean).join(' | '),
@@ -5676,7 +5783,7 @@ function qRenderAssinaturas(){
     ${ehTST() && q.estado === 'assinando' ? '<button type="button" class="q-reabrir" id="q-reabrir">Reabrir para edição (apaga as assinaturas já feitas)</button>' : ''}`;
 
   box.querySelectorAll('.q-pad').forEach(qLigarPad);
-  box.querySelectorAll('.q-btn-assinar').forEach(b => b.addEventListener('click', () => qAssinar(b.dataset.papel, b.closest('.q-ass'))));
+  box.querySelectorAll('.q-btn-assinar').forEach(b => b.addEventListener('click', () => { qAssinar(b.dataset.papel, b.closest('.q-ass')); }));
   box.querySelectorAll('.q-btn-outro').forEach(b => b.addEventListener('click', () => qAssinarNesteCelular(b.dataset.papel)));
   const re = document.getElementById('q-reabrir');
   if(re) re.addEventListener('click', () => {
@@ -5684,6 +5791,7 @@ function qRenderAssinaturas(){
     Object.assign(q, { estado: 'rascunho', assinaturas: {} });
     const upd = {}; upd[qQuinzena + '.estado'] = 'rascunho'; upd[qQuinzena + '.assinaturas'] = {};
     gravarSemEsperar(db.collection('qualimetrias').doc(f.id).update(upd), 'reabrir quinzena');
+    Q_PAPEIS.forEach(p => gravarSemEsperar(db.collection('qualimetrias').doc(f.id).collection('assinaturas').doc(qQuinzena + '_' + p.chave).delete(), 'apagar assinatura'));
     qRenderFicha();
   });
 }
@@ -5693,40 +5801,317 @@ function qLigarPad(canvas){
   let desenhando = false;
   canvas._vazio = true;
   const pos = (e) => { const r = canvas.getBoundingClientRect(); return [(e.clientX - r.left) * canvas.width / r.width, (e.clientY - r.top) * canvas.height / r.height]; };
-  canvas.addEventListener('pointerdown', (e) => { desenhando = true; canvas.setPointerCapture(e.pointerId); const [x, y] = pos(e); ctx.beginPath(); ctx.moveTo(x, y); });
-  canvas.addEventListener('pointermove', (e) => { if(!desenhando) return; const [x, y] = pos(e); ctx.lineTo(x, y); ctx.stroke(); canvas._vazio = false; });
+  canvas._tracos = [];
+  canvas.addEventListener('pointerdown', (e) => { desenhando = true; canvas.setPointerCapture(e.pointerId); const [x, y] = pos(e); ctx.beginPath(); ctx.moveTo(x, y); canvas._tracos.push([[x, y]]); });
+  canvas.addEventListener('pointermove', (e) => { if(!desenhando) return; const [x, y] = pos(e); ctx.lineTo(x, y); ctx.stroke(); canvas._vazio = false; const t = canvas._tracos[canvas._tracos.length - 1]; if(t) t.push([x, y]); });
   ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => canvas.addEventListener(ev, () => { desenhando = false; }));
-  canvas.parentElement.querySelector('.q-pad-limpar').addEventListener('click', () => { ctx.clearRect(0, 0, canvas.width, canvas.height); canvas._vazio = true; });
+  const limpar = canvas.parentElement.querySelector('.q-pad-limpar');
+  if(limpar) limpar.addEventListener('click', () => { ctx.clearRect(0, 0, canvas.width, canvas.height); canvas._vazio = true; canvas._tracos = []; });
 }
-function qAssinar(papel, bloco){
+async function qAssinar(papel, bloco){
   const f = qFicha, q = f[qQuinzena];
   const canvas = bloco.querySelector('.q-pad');
   if(canvas._vazio){ mostrarAvisoApp('Falta a assinatura', 'Assine com o dedo no quadro.'); return; }
   if(!bloco.querySelector('.q-declara-ok').checked){ mostrarAvisoApp('Falta confirmar', 'Marque a declaração de participação.'); return; }
   const s = q.signatarios[papel];
   if(String(s.email || '').toLowerCase() !== qMeuEmail()){ mostrarAvisoApp('Assinatura não permitida', 'Só a própria pessoa, logada na conta dela, pode assinar.'); return; }
-  // imagem reduzida (leve pra caber no documento)
+  const eu = qMeuPerfil();
+  const bt = bloco.querySelector('.q-btn-assinar'); if(bt) bt.disabled = true;
+  try{
+    const ref = await carregarRefAssinatura(db, eu.uid);
+    if(!ref){ mostrarErroAssinatura(bloco, 'Você ainda não cadastrou sua assinatura.', true); return; }
+    const conf = conferirAssinatura(canvas._tracos, ref);
+    if(!conf.ok){ registrarFalhaAssinatura(bloco, canvas); return; }
+    const ass = montarRegistroAssinatura(canvas, s, eu, conf, '');
+    gravarAssinatura(db, f.id, qQuinzena, papel, ass);
+    aprenderAssinatura(db, eu.uid, ref, canvas._tracos);
+    q.assinaturas = q.assinaturas || {};
+    q.assinaturas[papel] = { ...ass, assinadoEm: null };
+    if(Q_PAPEIS.every(p => q.assinaturas[p.chave])) q.estado = 'fechada';
+    mostrarAvisoApp('Assinatura conferida e registrada', Q_PAPEIS.every(p => q.assinaturas[p.chave]) ? 'Todas as assinaturas feitas: o PDF será gerado em alguns minutos.' : 'Obrigado!');
+    qRenderFicha();
+  } finally { if(bt) bt.disabled = false; }
+}
+
+/* ======================= ASSINATURA CADASTRADA =======================
+   Cada pessoa cadastra a assinatura uma vez (3 amostras), no termo de uso ou
+   em Perfil > Minha assinatura (alterar pede a senha). Na hora de assinar, o
+   app compara o desenho com o cadastrado: aceita as variações normais de
+   quem assina e recusa um desenho diferente. A cada assinatura aceita, ela
+   vira mais uma referência (até 8), então o app vai se acostumando. */
+
+const N_PONTOS = 80;
+function normalizarAssinatura(tracos){
+  const pts = [];
+  tracos.forEach(t => t.forEach(p => pts.push(p)));
+  if(pts.length < 4) return null;
+  // reamostra N pontos igualmente espaçados ao longo do caminho
+  const acum = [0];
+  for(let i = 1; i < pts.length; i++) acum.push(acum[i-1] + Math.hypot(pts[i][0]-pts[i-1][0], pts[i][1]-pts[i-1][1]));
+  const total = acum[acum.length-1] || 1, res = [];
+  for(let k = 0, j = 0; k < N_PONTOS; k++){
+    const alvo = total * k / (N_PONTOS - 1);
+    while(j < acum.length - 2 && acum[j+1] < alvo) j++;
+    const seg = (acum[j+1] - acum[j]) || 1, t = Math.min(1, Math.max(0, (alvo - acum[j]) / seg));
+    res.push([pts[j][0] + (pts[j+1][0]-pts[j][0]) * t, pts[j][1] + (pts[j+1][1]-pts[j][1]) * t]);
+  }
+  const xs = res.map(p => p[0]), ys = res.map(p => p[1]);
+  const mx = xs.reduce((a,b)=>a+b,0)/N_PONTOS, my = ys.reduce((a,b)=>a+b,0)/N_PONTOS;
+  const lx = Math.max(...xs)-Math.min(...xs), ly = Math.max(...ys)-Math.min(...ys), esc = Math.max(lx, ly) || 1;
+  const p = res.map(([x,y]) => [+((x-mx)/esc).toFixed(4), +((y-my)/esc).toFixed(4)]);
+  // direção do traço em cada ponto (para onde a caneta está indo)
+  const dir = p.map((q, i) => { const a = p[Math.max(0, i-1)], b = p[Math.min(p.length-1, i+1)]; const ang = Math.atan2(b[1]-a[1], b[0]-a[0]); return [+Math.cos(ang).toFixed(3), +Math.sin(ang).toFixed(3)]; });
+  return { p, d: dir, proporcao: +(lx/(ly||1)).toFixed(3), tracos: tracos.length };
+}
+const PESO_DIRECAO = 0.12;
+function distanciaAssinaturas(a, b){
+  const n = a.p.length, m = b.p.length, W = 8, INF = 1e9;
+  let ant = new Array(m+1).fill(INF); ant[0] = 0;
+  for(let i = 1; i <= n; i++){
+    const cur = new Array(m+1).fill(INF);
+    for(let j = Math.max(1, i-W); j <= Math.min(m, i+W); j++){
+      const c = Math.hypot(a.p[i-1][0]-b.p[j-1][0], a.p[i-1][1]-b.p[j-1][1])
+              + PESO_DIRECAO * Math.hypot(a.d[i-1][0]-b.d[j-1][0], a.d[i-1][1]-b.d[j-1][1]);
+      cur[j] = c + Math.min(ant[j], cur[j-1], ant[j-1]);
+    }
+    ant = cur;
+  }
+  const dtw = ant[m] / n;
+  const prop = Math.abs(Math.log((a.proporcao||1)/(b.proporcao||1)));   // formato geral (largura × altura)
+  return dtw + 0.06 * Math.max(0, prop - 0.35);
+}
+const FATOR = 1.5, FATOR_MIN = 0.06, FATOR_MAX = 0.15;
+function limiteDaReferencia(amostras){
+  let soma = 0, k = 0;
+  for(let i = 0; i < amostras.length; i++) for(let j = i+1; j < amostras.length; j++){ soma += distanciaAssinaturas(amostras[i], amostras[j]); k++; }
+  const media = k ? soma / k : 0.06;
+  return Math.min(FATOR_MAX, Math.max(FATOR_MIN, media * FATOR));
+}
+function conferirAssinatura(tracos, ref){
+  const nova = normalizarAssinatura(tracos);
+  if(!nova || !ref || !ref.amostras || !ref.amostras.length) return { ok: false, motivo: 'sem-ref' };
+  const d = Math.min(...ref.amostras.map(a => distanciaAssinaturas(nova, a)));
+  const lim = ref.limite || limiteDaReferencia(ref.amostras);
+  return { ok: d <= lim, distancia: +d.toFixed(4), limite: +lim.toFixed(4) };
+}
+
+async function carregarRefAssinatura(fs, uid){
+  if(fs === db && auth.currentUser && auth.currentUser.uid === uid){
+    try{ const local = JSON.parse(localStorage.getItem('sst_ref_ass_' + uid) || 'null'); if(local && local.amostras && local.amostras.length) return local; }catch(e){}
+  }
+  try{
+    const snap = await fs.collection('usuarios').doc(uid).get();
+    const ref = snap.exists ? snap.data().assinaturaRef : null;
+    if(ref && fs === db) localStorage.setItem('sst_ref_ass_' + uid, JSON.stringify(ref));
+    return ref && ref.amostras && ref.amostras.length ? ref : null;
+  }catch(e){ return null; }
+}
+function aprenderAssinatura(fs, uid, ref, tracos){
+  const nova = normalizarAssinatura(tracos); if(!nova) return;
+  const amostras = ref.amostras.concat([nova]).slice(-8);
+  const atual = Object.assign({}, ref, { amostras });
+  if(fs === db) localStorage.setItem('sst_ref_ass_' + uid, JSON.stringify(atual));
+  try{ fs.collection('usuarios').doc(uid).set({ assinaturaRef: { amostras } }, { merge: true }).catch(() => {}); }catch(e){}
+}
+function mostrarErroAssinatura(bloco, texto, comBotao){
+  let el = bloco.querySelector('.ass-erro');
+  if(!el){ el = document.createElement('div'); el.className = 'ass-erro'; bloco.querySelector('.q-pad-caixa').after(el); }
+  el.innerHTML = escaparHtml(texto) + (comBotao ? ' <button type="button" class="q-btn-outro" style="margin-top:8px;">Cadastrar minha assinatura</button>' : '');
+  const b = el.querySelector('button'); if(b) b.addEventListener('click', () => abrirMinhaAssinatura(true));
+}
+function registrarFalhaAssinatura(bloco, canvas){
+  canvas._falhas = (canvas._falhas || 0) + 1;
+  mostrarErroAssinatura(bloco, canvas._falhas >= 3
+    ? 'A assinatura continua não conferindo com a cadastrada. Se você mudou o jeito de assinar, atualize em Perfil > Minha assinatura (pede a sua senha).'
+    : 'A assinatura não confere com a sua assinatura cadastrada. Limpe o quadro e assine de novo, do jeito que você assina normalmente.', canvas._falhas >= 3);
+  canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height); canvas._vazio = true; canvas._tracos = [];
+}
+function montarRegistroAssinatura(canvas, s, eu, conf, metodo){
   const menor = document.createElement('canvas'); menor.width = 300; menor.height = 110;
   menor.getContext('2d').drawImage(canvas, 0, 0, 300, 110);
-  const eu = qMeuPerfil();
-  const ass = {
-    nome: s.nome || eu.nome, matricula: s.matricula || eu.matricula, email: eu.email, uid: eu.uid,
+  return {
+    nome: s.nome || eu.nome, matricula: s.matricula || eu.matricula, email: String(eu.email || '').toLowerCase(), uid: eu.uid,
     imagem: menor.toDataURL('image/png'),
     assinadoEm: firebase.firestore.FieldValue.serverTimestamp(),   // horário do servidor
     aparelho: /iphone|ipad/i.test(navigator.userAgent) ? 'iPhone' : (/android/i.test(navigator.userAgent) ? 'Android' : 'Computador'),
-    declaracao: 'Declaro que participei desta avaliação e confirmo as informações registradas.'
+    declaracao: 'Declaro que participei desta avaliação e confirmo as informações registradas.',
+    conferida: true, conferencia: { distancia: conf.distancia, limite: conf.limite },
+    ...(metodo ? { metodo } : {})
   };
-  // grava só a MINHA assinatura (não reescreve o resto da ficha)
-  const upd = {};
-  upd[`${qQuinzena}.assinaturas.${papel}`] = ass;
-  upd.pdfPendente = true;
-  gravarSemEsperar(db.collection('qualimetrias').doc(f.id).update(upd), 'assinatura');
-  q.assinaturas = q.assinaturas || {};
-  q.assinaturas[papel] = { ...ass, assinadoEm: null };
-  if(Q_PAPEIS.every(p => q.assinaturas[p.chave])) q.estado = 'fechada';
-  mostrarAvisoApp('Assinatura registrada', Q_PAPEIS.every(p => q.assinaturas[p.chave]) ? 'Todas as assinaturas feitas: o PDF será gerado em alguns minutos.' : 'Obrigado! Os outros participantes ainda vão assinar.');
-  qRenderFicha();
 }
+/* grava a assinatura em dois lugares:
+   - na ficha (para a tela mostrar);
+   - num registro próprio em qualimetrias/{id}/assinaturas, criado pela conta
+     de quem assina. As regras do banco só deixam criar se a conta for a da
+     própria pessoa e com o horário do servidor — é esse registro que o
+     Apps Script usa para conferir antes de fechar a quinzena. */
+function gravarAssinatura(fs, fichaId, quinzena, papel, ass){
+  const upd = {}; upd[`${quinzena}.assinaturas.${papel}`] = ass; upd.pdfPendente = true;
+  const ref = fs.collection('qualimetrias').doc(fichaId);
+  const p1 = ref.update(upd);
+  const p2 = ref.collection('assinaturas').doc(quinzena + '_' + papel).set(Object.assign({}, ass, { quinzena, papel }));
+  if(fs === db){ gravarSemEsperar(p1, 'assinatura'); gravarSemEsperar(p2, 'registro da assinatura'); return Promise.resolve(); }
+  return Promise.all([p1, p2]);
+}
+
+/* ---- captura de 3 amostras (cadastro da assinatura) ---- */
+function abrirCapturaAssinatura(opcoes){
+  return new Promise((resolver) => {
+    const modal = document.createElement('div');
+    modal.className = 'q-modal';
+    modal.innerHTML = `<div class="q-modal-caixa ass-cap" role="dialog" aria-modal="true" aria-label="Cadastrar assinatura">
+        <h3>${escaparHtml(opcoes.titulo || 'Cadastre sua assinatura')}</h3>
+        <p>Assine <b>3 vezes</b>, do jeito que você assina normalmente. Ela vai ser usada para conferir as suas assinaturas no app.</p>
+        <div class="ass-cap-passos"><span></span><span></span><span></span></div>
+        <div class="q-pad-caixa"><canvas class="q-pad" width="600" height="220" aria-label="Área para assinar com o dedo"></canvas>
+          <button type="button" class="q-pad-limpar">Limpar</button><span class="q-pad-dica">Assinatura <b class="ass-n">1</b> de 3</span></div>
+        <p class="ass-cap-msg" style="color:#a32d2d; display:none; margin:8px 0 0;"></p>
+        <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary ass-proxima">Próxima</button></div>
+      </div>`;
+    document.body.appendChild(modal);
+    const canvas = modal.querySelector('.q-pad'); qLigarPad(canvas);
+    const amostras = []; let primeiraImagem = '';
+    const msg = modal.querySelector('.ass-cap-msg');
+    const passos = modal.querySelectorAll('.ass-cap-passos span');
+    modal.querySelector('.q-modal-cancelar').addEventListener('click', () => { modal.remove(); resolver(null); });
+    modal.querySelector('.ass-proxima').addEventListener('click', () => {
+      msg.style.display = 'none';
+      const n = normalizarAssinatura(canvas._tracos || []);
+      if(canvas._vazio || !n){ msg.textContent = 'Assine no quadro antes de continuar.'; msg.style.display = 'block'; return; }
+      if(!primeiraImagem){ const m = document.createElement('canvas'); m.width = 300; m.height = 110; m.getContext('2d').drawImage(canvas, 0, 0, 300, 110); primeiraImagem = m.toDataURL('image/png'); }
+      amostras.push(n);
+      passos[amostras.length - 1].classList.add('feito');
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height); canvas._vazio = true; canvas._tracos = [];
+      if(amostras.length < 3){
+        modal.querySelector('.ass-n').textContent = amostras.length + 1;
+        if(amostras.length === 2) modal.querySelector('.ass-proxima').textContent = 'Concluir';
+        return;
+      }
+      // as 3 precisam ser parecidas entre si (senão a referência fica ruim)
+      let pior = 0;
+      for(let i = 0; i < 3; i++) for(let j = i + 1; j < 3; j++) pior = Math.max(pior, distanciaAssinaturas(amostras[i], amostras[j]));
+      if(pior > 0.2){
+        amostras.length = 0; primeiraImagem = '';
+        passos.forEach(p => p.classList.remove('feito'));
+        modal.querySelector('.ass-n').textContent = '1'; modal.querySelector('.ass-proxima').textContent = 'Próxima';
+        msg.textContent = 'As 3 assinaturas ficaram muito diferentes entre si. Vamos de novo, com calma, do jeito que você sempre assina.';
+        msg.style.display = 'block';
+        return;
+      }
+      modal.remove();
+      resolver({ amostras, imagem: primeiraImagem, limite: limiteDaReferencia(amostras) });
+    });
+  });
+}
+
+/* ---- Perfil > Minha assinatura ---- */
+async function abrirMinhaAssinatura(irDireto){
+  const u = auth.currentUser; if(!u) return;
+  const ref = await carregarRefAssinatura(db, u.uid);
+  const salvar = async (nova) => {
+    const dados = { assinaturaRef: Object.assign({}, nova, { criadaEm: firebase.firestore.FieldValue.serverTimestamp() }) };
+    await comTempoLimite(db.collection('usuarios').doc(u.uid).set(dados, { merge: true }), 10000);
+    localStorage.setItem('sst_ref_ass_' + u.uid, JSON.stringify(nova));
+    atualizarStatusAssinaturaPerfil();
+    mostrarAvisoApp('Assinatura cadastrada', 'Ela será usada para conferir as suas assinaturas.');
+  };
+  if(!ref){
+    if(!navigator.onLine){ mostrarAvisoApp('Sem internet', 'Para cadastrar a assinatura é preciso estar online.'); return; }
+    const nova = await abrirCapturaAssinatura({ titulo: 'Cadastre sua assinatura' });
+    if(nova) try{ await salvar(nova); }catch(e){ mostrarAvisoApp('Não consegui salvar', 'Confira a internet e tente de novo.'); }
+    return;
+  }
+  // já tem: mostra e permite alterar com a senha
+  const modal = document.createElement('div');
+  modal.className = 'q-modal';
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Minha assinatura">
+      <h3>Minha assinatura</h3>
+      <p>Esta é a assinatura usada para conferir as suas assinaturas no app. Para trocar, confirme a sua senha.</p>
+      ${ref.imagem ? `<img class="ass-ref-img" src="${ref.imagem}" alt="Assinatura cadastrada">` : ''}
+      <label>Senha<input type="password" class="ass-senha" autocomplete="current-password" placeholder="Sua senha do app"></label>
+      <p class="ass-senha-msg" style="color:#a32d2d; display:none;"></p>
+      <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Fechar</button><button type="button" class="btn-primary ass-alterar">Alterar assinatura</button></div>
+    </div>`;
+  document.body.appendChild(modal);
+  modal.querySelector('.q-modal-cancelar').addEventListener('click', () => modal.remove());
+  modal.querySelector('.ass-alterar').addEventListener('click', async (ev) => {
+    const bt = ev.currentTarget, msg = modal.querySelector('.ass-senha-msg');
+    msg.style.display = 'none'; bt.disabled = true;
+    try{
+      const cred = firebase.auth.EmailAuthProvider.credential(u.email, modal.querySelector('.ass-senha').value);
+      await u.reauthenticateWithCredential(cred);
+      modal.remove();
+      const nova = await abrirCapturaAssinatura({ titulo: 'Nova assinatura' });
+      if(nova) await salvar(nova);
+    }catch(e){
+      bt.disabled = false;
+      msg.textContent = /wrong-password|invalid-credential|invalid-login/i.test(e.code || '') ? 'Senha incorreta.' : 'Não consegui confirmar: ' + (e.code || e.message);
+      msg.style.display = 'block';
+    }
+  });
+}
+function atualizarStatusAssinaturaPerfil(){
+  const u = auth.currentUser, el = document.getElementById('perfil-assinatura-status');
+  if(!u || !el) return;
+  let tem = false; try{ tem = !!JSON.parse(localStorage.getItem('sst_ref_ass_' + u.uid) || 'null'); }catch(e){}
+  el.textContent = tem ? 'Cadastrada · toque para ver ou alterar' : 'Ainda não cadastrada · toque para cadastrar';
+}
+document.getElementById('perfil-card-assinatura').addEventListener('click', () => abrirMinhaAssinatura());
+
+/* ======================= TERMO DE USO (primeiro acesso) ======================= */
+const TERMO_VERSAO = '1.0';
+const TERMO_TITULO = 'Termo de Responsabilidade, Confidencialidade e Uso do App Segurança do Trabalho CCG';
+const TERMO_CLAUSULAS = [
+  ['1. Finalidade', 'Recebi acesso ao App Segurança do Trabalho CCG para uso exclusivo nas atividades de Segurança, Saúde e Meio Ambiente (SSTMA) do Consórcio Construtor Gávea, na obra da Linha 4 – Extensão Gávea.'],
+  ['2. Confidencialidade', 'As informações, fotos, relatórios, fichas e documentos disponíveis no aplicativo são de uso interno. Comprometo-me a não divulgar, copiar, publicar ou repassar esse conteúdo a terceiros — pessoas ou empresas sem relação com a obra, imprensa, redes sociais ou grupos externos — sem autorização da empresa. Os compartilhamentos previstos no próprio aplicativo devem ser feitos apenas com pessoas e grupos autorizados.'],
+  ['3. Acesso pessoal', 'Meu login e minha senha são pessoais e intransferíveis. Não vou compartilhá-los nem permitir que outra pessoa use minha conta, e sou responsável pelos registros feitos com o meu acesso.'],
+  ['4. Veracidade', 'Comprometo-me a registrar informações verdadeiras e fotos reais, sem alterar ou montar imagens.'],
+  ['5. Assinatura eletrônica', 'Reconheço como minha a assinatura que cadastro neste termo e as assinaturas que eu fizer no aplicativo, inclusive na Qualimetria, como assinatura eletrônica simples (Lei nº 14.063/2020), válida para os registros internos da empresa. Sei que cada assinatura é conferida com a assinatura cadastrada e gravada com a minha conta, a data e a hora.'],
+  ['6. Marca d\u2019água e rastreabilidade', 'Sei que as telas do aplicativo exibem meu nome, matrícula, data e hora como marca d\u2019água, e que as ações realizadas ficam registradas (quem fez, quando e em qual aparelho) para fins de segurança e auditoria.'],
+  ['7. Dados pessoais', 'Autorizo o uso dos meus dados de identificação (nome, matrícula, e-mail, assinatura e informações do aparelho) exclusivamente para o funcionamento do aplicativo e para auditorias, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).'],
+  ['8. Descumprimento', 'O uso indevido do aplicativo ou a divulgação não autorizada de informações poderá resultar no bloqueio do acesso e nas medidas previstas nas normas internas da empresa.']
+];
+
+function termoAceito(uid){ const pl = lerPerfilLocal(uid) || {}; return pl.termoVersao === TERMO_VERSAO; }
+async function mostrarTelaTermo(){
+  const u = auth.currentUser;
+  // pode já ter aceitado em outro aparelho: confere no servidor antes
+  try{
+    const snap = await comTempoLimite(db.collection('usuarios').doc(u.uid).get(), 5000);
+    if(snap.exists && snap.data().termoVersao === TERMO_VERSAO){ salvarPerfilLocal(u.uid, Object.assign({ senhaRedefinida: true }, snap.data())); mostrarAppPrincipal(u); return; }
+  }catch(e){}
+  const pl = lerPerfilLocal(u.uid) || {};
+  appScreen.classList.remove('active');
+  authScreen.classList.add('active'); esconderSplash();
+  ['login-form', 'form-nova-senha', 'form-perfil-nome'].forEach(id => { document.getElementById(id).style.display = 'none'; });
+  document.getElementById('form-termo').style.display = 'block';
+  document.getElementById('termo-caixa').innerHTML = `<h4>${escaparHtml(TERMO_TITULO)}</h4>
+    <p>Eu, <b>${escaparHtml(pl.nomeCompleto || u.displayName || '')}</b>, matrícula <b>${escaparHtml(pl.matricula || '—')}</b>, e-mail ${escaparHtml(u.email)}, declaro que:</p>
+    ${TERMO_CLAUSULAS.map(([t, x]) => `<p><b>${escaparHtml(t)}.</b> ${escaparHtml(x)}</p>`).join('')}
+    <p>Ao marcar “Li e aceito” e assinar, confirmo que li e concordo com este termo (versão ${TERMO_VERSAO}).</p>`;
+}
+document.getElementById('btn-assinar-termo').addEventListener('click', async () => {
+  const msg = document.getElementById('termo-msg'); msg.style.display = 'none';
+  if(!document.getElementById('termo-ok').checked){ msg.textContent = 'Marque “Li e aceito os termos acima”.'; msg.style.display = 'block'; return; }
+  if(!navigator.onLine){ msg.textContent = 'É preciso estar com internet para assinar o termo.'; msg.style.display = 'block'; return; }
+  const ref = await abrirCapturaAssinatura({ titulo: 'Assine o termo' });
+  if(!ref) return;
+  const u = auth.currentUser;
+  const dados = {
+    termoVersao: TERMO_VERSAO, termoAceitoEm: firebase.firestore.FieldValue.serverTimestamp(),
+    termoAssinaturaImagem: ref.imagem, termoPdfPendente: true,
+    termoAparelho: /iphone|ipad/i.test(navigator.userAgent) ? 'iPhone' : (/android/i.test(navigator.userAgent) ? 'Android' : 'Computador'),
+    assinaturaRef: Object.assign({}, ref, { criadaEm: firebase.firestore.FieldValue.serverTimestamp() })
+  };
+  try{
+    await comTempoLimite(db.collection('usuarios').doc(u.uid).set(dados, { merge: true }), 10000);
+  }catch(e){ msg.textContent = 'Não consegui registrar o aceite. Confira a internet e tente de novo.'; msg.style.display = 'block'; return; }
+  const pl = lerPerfilLocal(u.uid) || {};
+  salvarPerfilLocal(u.uid, Object.assign({}, pl, { senhaRedefinida: true, perfilCompleto: true, termoVersao: TERMO_VERSAO, assinaturaRef: ref }));
+  document.getElementById('form-termo').style.display = 'none';
+  mostrarAppPrincipal(u);
+  mostrarAvisoApp('Termo aceito', 'Sua assinatura foi cadastrada. Bom trabalho!');
+});
 
 /* ---- assinar no celular de outra pessoa ----
    A pessoa entra com o PRÓPRIO e-mail e senha numa sessão separada (um
@@ -5790,20 +6175,30 @@ function qAssinarNesteCelular(papel){
     const user = app.auth().currentUser;
     if(!user || String(user.email || '').toLowerCase() !== String(s.email || '').toLowerCase()){ mostrarAvisoApp('Login diferente', 'Entre com a conta de ' + s.nome + '.'); return; }
     const bt = ev.currentTarget; bt.disabled = true;
-    const menor = document.createElement('canvas'); menor.width = 300; menor.height = 110;
-    menor.getContext('2d').drawImage(canvas, 0, 0, 300, 110);
-    const ass = {
-      nome: s.nome || '', matricula: s.matricula || '', email: String(user.email).toLowerCase(), uid: user.uid,
-      imagem: menor.toDataURL('image/png'),
-      assinadoEm: firebase.firestore.FieldValue.serverTimestamp(),
-      aparelho: /iphone|ipad/i.test(navigator.userAgent) ? 'iPhone' : (/android/i.test(navigator.userAgent) ? 'Android' : 'Computador'),
-      metodo: 'login próprio no celular de ' + (qMeuPerfil().nome || 'outro participante'),
-      declaracao: 'Declaro que participei desta avaliação e confirmo as informações registradas.'
-    };
-    const upd = {}; upd[`${qQuinzena}.assinaturas.${papel}`] = ass; upd.pdfPendente = true;
+    const fsAssinante = app.firestore();
+    const refAss = await carregarRefAssinatura(fsAssinante, user.uid);
+    const caixaPad = modal.querySelector('.q-etapa-assinar');
+    if(!refAss){
+      bt.disabled = false;
+      mostrarAvisoApp('Assinatura não cadastrada', s.nome + ' ainda não cadastrou a assinatura. Ele(a) precisa entrar no app uma vez e aceitar o termo de uso.');
+      return;
+    }
+    const conf = conferirAssinatura(canvas._tracos, refAss);
+    if(!conf.ok){
+      bt.disabled = false;
+      canvas._falhas = (canvas._falhas || 0) + 1;
+      let el = caixaPad.querySelector('.ass-erro');
+      if(!el){ el = document.createElement('div'); el.className = 'ass-erro'; caixaPad.querySelector('.q-pad-caixa').after(el); }
+      el.textContent = 'A assinatura não confere com a assinatura cadastrada de ' + s.nome + '. Limpe o quadro e assine de novo.';
+      canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height); canvas._vazio = true; canvas._tracos = [];
+      return;
+    }
+    const eu = { nome: s.nome || '', matricula: s.matricula || '', email: String(user.email).toLowerCase(), uid: user.uid };
+    const ass = montarRegistroAssinatura(canvas, s, eu, conf, 'login próprio no celular de ' + (qMeuPerfil().nome || 'outro participante'));
     try{
       // grava com a conta de QUEM ASSINOU (as regras do banco conferem isso)
-      await app.firestore().collection('qualimetrias').doc(f.id).update(upd);
+      await gravarAssinatura(fsAssinante, f.id, qQuinzena, papel, ass);
+      aprenderAssinatura(fsAssinante, user.uid, refAss, canvas._tracos);
       q.assinaturas = q.assinaturas || {}; q.assinaturas[papel] = { ...ass, assinadoEm: null };
       fechar();
       mostrarAvisoApp('Assinatura registrada', s.nome + ' assinou. Você continua na sua conta.');
@@ -5822,6 +6217,33 @@ new MutationObserver(() => {
     if(document.getElementById('view-quali-ficha').style.display === 'block') qRenderFicha();
   }catch(e){}
 }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+/* ---- marca d'água ----
+   Um navegador não consegue saber quando alguém tira um print. Por isso a
+   marca fica SEMPRE sobre o app (bem clarinha), com nome completo, matrícula
+   e a data/hora atual (atualiza a cada 30 s): qualquer print sai identificado. */
+function atualizarMarcaDagua(){
+  const el = document.getElementById('marca-dagua');
+  const u = auth.currentUser;
+  if(!u || !document.getElementById('app-screen').classList.contains('active')){ el.style.display = 'none'; return; }
+  const pl = lerPerfilLocal(u.uid) || {};
+  const nome = pl.nomeCompleto || u.displayName || u.email;
+  const agora = new Date();
+  const quando = agora.toLocaleDateString('pt-BR') + ' ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const linha1 = nome + (pl.matricula ? ' · Mat. ' + pl.matricula : '');
+  const escuro = document.documentElement.getAttribute('data-theme') === 'dark';
+  const cor = escuro ? 'rgba(255,255,255,0.075)' : 'rgba(20,33,49,0.075)';
+  const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="340" height="190"><g transform="rotate(-24 170 95)" fill="${cor}" font-family="Arial, sans-serif" font-weight="700" text-anchor="middle">` +
+    `<text x="170" y="88" font-size="15">${esc(linha1)}</text><text x="170" y="110" font-size="13">${esc(quando)}</text></g></svg>`;
+  el.style.backgroundImage = `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}")`;
+  el.style.display = 'block';
+}
+setInterval(atualizarMarcaDagua, 30000);
+new MutationObserver(atualizarMarcaDagua).observe(document.getElementById('app-screen'), { attributes: true, attributeFilter: ['class'] });
+new MutationObserver(atualizarMarcaDagua).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+window.addEventListener('focus', atualizarMarcaDagua);
+document.addEventListener('visibilitychange', () => { if(!document.hidden) atualizarMarcaDagua(); });
 
 /* ======================= COMPARTILHAR NO WHATSAPP =======================
    Logo depois de registrar (ou pelo botão "Compartilhar" em Meus registros)
@@ -5844,6 +6266,24 @@ function textoCompartilharDesvio(d){
     '',
     `👉 Resolver pelo app: ${linkResolverDesvio(d.id)}`
   ].filter(l => l !== '').join('\n').replace('\n\n👉', '\n\n👉');
+}
+function assuntoEmailDesvio(d){
+  return `Desvio de segurança registrado – ${d.local || 'local não informado'} – Potencial ${d.potencial || 'não informado'}`;
+}
+function textoEmailDesvio(d){
+  const eu = (typeof qMeuPerfil === 'function') ? qMeuPerfil() : {};
+  const quando = d.data ? formatarDataBR(d.data) : new Date().toLocaleDateString('pt-BR');
+  const linhas = [
+    ['Data do registro', quando], ['Local', d.local], ['Processo / Atividade', d.processo],
+    ['Descrição', d.descricao], ['Tipologia', d.tipologia], ['Potencial', d.potencial],
+    ['Ações para correção', d.acoesCorrecao], ['Responsável pela área', d.responsavelArea || d.respArea],
+    ['Responsável pela correção', d.responsavelCorrecao || d.respCorrecao],
+    ['Prazo para correção', d.prazo ? formatarDataBR(d.prazo) : ''], ['Inspecionado por', d.inspecionadoPor], ['Origem', d.origem]
+  ].filter(l => l[1]).map(([r, v]) => `${r}: ${v}`);
+  return ['Prezados,', '', 'Informamos o registro do seguinte desvio de segurança:', '', ...linhas, '',
+    'Para registrar a resolução, acesse o aplicativo pelo link abaixo:', linkResolverDesvio(d.id), '',
+    'A imagem do desvio, com a foto, segue em anexo.', '', 'Atenciosamente,',
+    (eu.nome || '') + (eu.matricula ? ' – Matrícula ' + eu.matricula : ''), 'Segurança do Trabalho – Consórcio Construtor Gávea'].join('\n');
 }
 function carregarImagem(src){
   return new Promise((ok, erro) => { const im = new Image(); im.onload = () => ok(im); im.onerror = erro; im.src = src; });
@@ -5933,6 +6373,10 @@ async function abrirCompartilharDesvio(d, recemCriado){
       <img class="zap-preview" alt="Imagem do desvio para compartilhar" style="display:none;">
       <div class="zap-acoes">
         <button type="button" class="zap-btn principal zap-enviar" disabled>Compartilhar no WhatsApp</button>
+        <div class="email-linha">
+          <button type="button" class="zap-btn secundario email-btn" data-via="outlook" disabled>E-mail · Outlook</button>
+          <button type="button" class="zap-btn secundario email-btn" data-via="gmail" disabled>E-mail · Gmail</button>
+        </div>
         <button type="button" class="zap-btn secundario zap-copiar">Copiar texto com o link</button>
         <button type="button" class="zap-btn secundario zap-fechar">${recemCriado ? 'Agora não' : 'Fechar'}</button>
       </div>
@@ -5952,6 +6396,27 @@ async function abrirCompartilharDesvio(d, recemCriado){
   modal.querySelector('.zap-gerando').style.display = 'none';
   const btEnviar = modal.querySelector('.zap-enviar');
   btEnviar.disabled = false;
+  modal.querySelectorAll('.email-btn').forEach(b => {
+    b.disabled = false;
+    b.addEventListener('click', async () => {
+      const assunto = assuntoEmailDesvio(d), corpo = textoEmailDesvio(d);
+      // celular: o próprio app de e-mail (Outlook/Gmail) recebe a imagem anexada
+      if(arquivo && navigator.canShare && navigator.canShare({ files: [arquivo] }) && /android|iphone|ipad/i.test(navigator.userAgent)){
+        try{ await navigator.share({ files: [arquivo], title: assunto, text: corpo }); fechar(); return; }
+        catch(e){ if(e && e.name === 'AbortError') return; }
+      }
+      // computador: abre o e-mail já escrito e baixa a imagem para anexar
+      if(arquivo){
+        const a = document.createElement('a'); a.href = URL.createObjectURL(arquivo); a.download = arquivo.name;
+        document.body.appendChild(a); a.click(); a.remove();
+      }
+      const url = b.dataset.via === 'gmail'
+        ? 'https://mail.google.com/mail/?view=cm&fs=1&su=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpo)
+        : 'https://outlook.office.com/mail/deeplink/compose?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpo);
+      window.open(url, '_blank');
+      mostrarAvisoApp('E-mail aberto', 'A imagem do desvio foi baixada: anexe no e-mail antes de enviar.');
+    });
+  });
   btEnviar.addEventListener('click', async () => {
     // celular: abre a lista de apps (WhatsApp) com a imagem + o texto
     if(arquivo && navigator.canShare && navigator.canShare({ files: [arquivo] })){
