@@ -920,6 +920,24 @@
   #ptr svg{ width:20px; height:20px; color:var(--green-dark); }
   #ptr.girando svg{ animation:ptrGira .7s linear infinite; }
   @keyframes ptrGira{ to{ transform:rotate(360deg); } }
+  .resolver-foto-desvio{
+    display:flex; align-items:center; gap:14px; width:100%; margin:0 0 16px; padding:10px; cursor:zoom-in;
+    background:var(--white); border:1px solid var(--border-strong); border-radius:14px; text-align:left; font:inherit; color:var(--navy);
+  }
+  .resolver-foto-desvio img{ width:96px; height:72px; object-fit:cover; border-radius:10px; flex-shrink:0; }
+  .resolver-foto-txt{ display:flex; flex-direction:column; gap:2px; }
+  .resolver-foto-txt b{ font-size:14px; } .resolver-foto-txt small{ font-size:12px; color:var(--text-muted); }
+  .btn-compartilhar{
+    margin-top:8px; margin-left:6px; display:inline-flex; align-items:center; gap:6px; vertical-align:top;
+    border:1px solid var(--border-strong); background:var(--white); color:var(--navy);
+    border-radius:10px; padding:8px 12px; font:inherit; font-size:13px; font-weight:700; cursor:pointer;
+  }
+  .btn-compartilhar svg{ width:15px; height:15px; }
+  .zap-preview{ width:100%; border-radius:12px; border:1px solid var(--border); margin:4px 0 12px; display:block; }
+  .zap-acoes{ display:flex; flex-direction:column; gap:8px; }
+  .zap-btn{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; border:none; border-radius:12px; padding:13px; font:inherit; font-size:15px; font-weight:700; cursor:pointer; }
+  .zap-btn.principal{ background:#25D366; color:#fff; }
+  .zap-btn.secundario{ background:var(--white); color:var(--navy); border:1px solid var(--border-strong); }
   .q-hero{ cursor:default; }
   .q-hero-topo{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
   .q-hero-topo .rotulo{ margin:0; }
@@ -1577,6 +1595,11 @@
         <p class="tela-sub" id="resolver-descricao"></p>
       </div>
 
+      <button type="button" class="resolver-foto-desvio" id="resolver-foto-desvio" style="display:none;" aria-label="Ampliar a foto do desvio">
+        <img id="resolver-foto-img" alt="Foto do desvio">
+        <span class="resolver-foto-txt"><b>Foto do desvio</b><small>Toque para ampliar</small></span>
+      </button>
+
       <form id="resolver-form">
         <div class="field-com-icone">
           <div class="campo-icone"><span class="icone-svg" data-icone="message"></span></div>
@@ -1754,6 +1777,7 @@
    ====================================================================== */
 const ICONES = {
   apresentacao: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18"/><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4"/><path d="M12 16v4"/><path d="M9 20h6"/><path d="M8 12l3-3 2 2 3-3"/></svg>',
+  compartilhar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>',
   capacete: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 16.5h18"/><path d="M5 16.5a7 7 0 0 1 14 0"/><path d="M12 5.5v3.5"/></svg>',
   clipboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 10h6"/><path d="M9 14h6"/></svg>',
   'alerta-triangulo': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3Z"/><path d="M12 10v4"/><path d="M12 17h.01"/></svg>',
@@ -2949,8 +2973,32 @@ function abrirResolverDesvio(numero, autoAprovar){
   document.getElementById('resolver-form').reset();
   fotosResolverSelecionadas = [];
   renderizarPreviewFotosResolver();
+  mostrarFotoDoDesvio(null);
+  carregarMiniaturaPorNumero(numero).then(mostrarFotoDoDesvio);
   irPara('view-resolver');
 }
+/* foto do desvio (miniatura gravada no próprio desvio) na tela de resolver */
+function mostrarFotoDoDesvio(src){
+  const caixa = document.getElementById('resolver-foto-desvio');
+  caixa.style.display = src ? 'flex' : 'none';
+  if(src) document.getElementById('resolver-foto-img').src = src;
+}
+async function carregarMiniaturaPorNumero(numero){
+  const local = meusRegistrosCache.find(r => r.numero != null && String(r.numero) === String(numero) && r.miniatura);
+  if(local) return local.miniatura;
+  // o número pode ter sido gravado como número ou como texto: tenta os dois
+  for(const valor of [Number(numero), String(numero)]){
+    try{
+      const snap = await db.collection('desvios').where('numero', '==', valor).limit(1).get();
+      const doc = snap.docs && snap.docs[0];
+      if(doc && doc.data().miniatura) return doc.data().miniatura;
+    }catch(e){}
+  }
+  return null;
+}
+document.getElementById('resolver-foto-desvio').addEventListener('click', () => {
+  abrirVisualizadorFoto([document.getElementById('resolver-foto-img').src], 0);
+});
 
 function abrirResolverDesvioPendente(docId){
   const d = desviosPendentesCache.find(x => x.id === docId);
@@ -2962,6 +3010,7 @@ function abrirResolverDesvioPendente(docId){
   document.getElementById('resolver-form').reset();
   fotosResolverSelecionadas = [];
   renderizarPreviewFotosResolver();
+  mostrarFotoDoDesvio(d && d.miniatura || null);
   irPara('view-resolver');
 }
 document.getElementById('btn-voltar-resolver').addEventListener('click', () => irPara('view-desvios'));
@@ -3659,6 +3708,12 @@ document.getElementById('desvio-form').addEventListener('submit', async (e) => {
     // .add() já gera um ID único na hora, mesmo offline — é o nosso
     // "registro interno" que evita duplicidade antes da sincronização.
     const docRef = db.collection('desvios').doc(); // ID gerado no aparelho, sem precisar de rede
+    // miniatura da 1ª foto dentro do próprio desvio: aparece na tela de
+    // resolver (dá pra ampliar) e no cartão de compartilhar no WhatsApp,
+    // mesmo depois que as fotos originais forem para o Drive
+    if(fotosSelecionadas.length){
+      try{ desvio.miniatura = await comprimirImagem(fotosSelecionadas[0], 720, 0.62); }catch(e){}
+    }
     gravarSemEsperar(docRef.set(desvio), 'desvio');
 
     // fotos: viram documentos na subcoleção fotos/, comprimidas e em base64.
@@ -3675,6 +3730,8 @@ document.getElementById('desvio-form').addEventListener('submit', async (e) => {
     document.querySelectorAll('.dd-outro').forEach(el => el.style.display = 'none');
 
     mostrarListaDesvios();
+    // oferece o cartão pro grupo de SSTMA no WhatsApp
+    abrirCompartilharDesvio(Object.assign({}, desvio, { id: docRef.id }), true);
   }catch(err){
     console.error(err);
     msg.textContent = 'Não foi possível salvar. Tente novamente.';
@@ -4647,6 +4704,7 @@ function renderizarListaDesvios(){
         <p>${d.processo || ''} · ${d.local || ''} · Potencial: ${d.potencial || '-'}</p>
         <p>${(d.descricao || '').slice(0,80)}${(d.descricao||'').length>80?'…':''}</p>
         ${botaoHtml}
+        ${tagClasse !== 'fechado' ? `<button type="button" class="btn-compartilhar" data-id="${escaparHtml(d.id)}"><span class="icone-svg" data-icone="compartilhar"></span> Compartilhar</button>` : ''}
       </div>
     `;
   }).join('');
@@ -4668,6 +4726,14 @@ function renderizarListaDesvios(){
   if(btnVer) btnVer.addEventListener('click', () => { mostrarTodosMeusRegistros = true; renderizarListaDesvios(); });
   const btnMenos = document.getElementById('btn-menos-registros');
   if(btnMenos) btnMenos.addEventListener('click', () => { mostrarTodosMeusRegistros = false; renderizarListaDesvios(); });
+  cont.querySelectorAll('.btn-compartilhar').forEach(b => {
+    b.querySelector('.icone-svg').innerHTML = ICONES.compartilhar || '';
+    b.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const d = meusRegistrosCache.find(x => String(x.id) === b.dataset.id);
+      if(d) abrirCompartilharDesvio(d, false);
+    });
+  });
 }
 </script>
 
@@ -4845,7 +4911,8 @@ const Q_PAPEIS = [
   { chave: 'saude', rotulo: 'Saúde Ocupacional' }
 ];
 
-let qParticipantes = [];          // aba "Líderes" (via config/participantes)
+let qParticipantes = [];
+const qMiniaturasNc = {};          // desvioId -> miniatura da 1ª foto da NC (vai junto quando o desvio é criado)          // aba "Líderes" (via config/participantes)
 let qFichasMes = [];              // fichas do mês escolhido (TST)
 let qMinhasFichas = [];           // fichas em que eu sou signatário
 let qMes = qMesAtual();
@@ -4892,6 +4959,10 @@ function qMencao(n){
   return 'Insatisfatório';
 }
 function qCorMencao(m){
+  // no modo escuro, tons claros (os escuros sumiam no fundo)
+  if(document.documentElement.getAttribute('data-theme') === 'dark'){
+    return { 'Excelente': '#a9d17f', 'Bom': '#a9d17f', 'Regular': '#f3c96b', 'Insuficiente': '#f5a76b', 'Insatisfatório': '#f39a9a' }[m] || 'var(--text-muted)';
+  }
   return { 'Excelente': '#2d5214', 'Bom': '#3f6b1f', 'Regular': '#7a4b06', 'Insuficiente': '#a1520f', 'Insatisfatório': '#a32d2d' }[m] || 'var(--text-muted)';
 }
 // cores claras pra usar sobre o fundo azul-escuro
@@ -5396,7 +5467,10 @@ function qRenderItens(editar){
       // a foto já vai direto para o desvio que esta NC vai virar (ID reservado agora)
       if(!q.ncs[n].desvioId) q.ncs[n].desvioId = db.collection('desvios').doc().id;
       for(const file of inp.files){
-        try{ await salvarFotoDesvio(q.ncs[n].desvioId, file); q.ncs[n].fotos = (q.ncs[n].fotos || 0) + 1; }
+        try{
+          await salvarFotoDesvio(q.ncs[n].desvioId, file); q.ncs[n].fotos = (q.ncs[n].fotos || 0) + 1;
+          if(!qMiniaturasNc[q.ncs[n].desvioId]) qMiniaturasNc[q.ncs[n].desvioId] = await comprimirImagem(file, 720, 0.62);
+        }
         catch(e){ console.warn('Foto da NC:', e); }
       }
       qSalvar(); qRenderFicha();
@@ -5545,6 +5619,7 @@ function qEnviarParaAssinatura(signatarios){
       status: '',
       observacoes: [nc.observacoes, `Qualimetria ${mes}-${ano} · ${quinz} quinzena · item ${n} (${q.itens[n] === 'NC2' ? 'peso 2, reincidente' : 'peso 1'}) · ${f.encarregado.nome}`].filter(Boolean).join(' | '),
       origem: 'Qualimetria',
+      ...(qMiniaturasNc[id] ? { miniatura: qMiniaturasNc[id] } : {}),
       criadoPor: eu.uid, criadoPorNome: eu.nome, criadoPorEmail: eu.email,
       criadoEm: firebase.firestore.FieldValue.serverTimestamp()
     }), 'desvio da qualimetria');
@@ -5738,6 +5813,196 @@ function qAssinarNesteCelular(papel){
       mostrarAvisoApp('Não consegui gravar', /permission/i.test(e.code || e.message || '') ? 'O banco recusou: confira as regras do Firestore.' : (e.message || 'Tente de novo.'));
     }
   });
+}
+
+/* trocou claro/escuro com a Qualimetria aberta: redesenha pra pegar as cores novas */
+new MutationObserver(() => {
+  try{
+    if(document.getElementById('view-qualimetria').style.display === 'block') qRenderLista();
+    if(document.getElementById('view-quali-ficha').style.display === 'block') qRenderFicha();
+  }catch(e){}
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+/* ======================= COMPARTILHAR NO WHATSAPP =======================
+   Logo depois de registrar (ou pelo botão "Compartilhar" em Meus registros)
+   o app monta uma IMAGEM com os dados do desvio e a foto, mais um texto com
+   o link que abre direto o "Resolver" daquele desvio. Não precisa do número:
+   o link usa o código interno do desvio, que existe desde o registro. */
+function linkResolverDesvio(id){
+  return location.origin + location.pathname.replace(/index\.html$/, '') + '?resolver=' + encodeURIComponent(id);
+}
+function textoCompartilharDesvio(d){
+  const prazo = d.prazo ? formatarDataBR(d.prazo) : '';
+  return [
+    '⚠️ *Novo desvio registrado* — SST CCG',
+    `📍 ${[d.local, d.processo].filter(Boolean).join(' · ')}`,
+    `📝 ${d.descricao || ''}`,
+    `⚡ Potencial: ${d.potencial || '—'}${d.tipologia ? ' · ' + d.tipologia : ''}`,
+    d.acoesCorrecao ? `🛠️ Ações para correção: ${d.acoesCorrecao}` : '',
+    `👷 Responsável pela correção: ${d.responsavelCorrecao || d.respCorrecao || '—'}${prazo ? ' · Prazo: ' + prazo : ''}`,
+    `🔎 Inspecionado por: ${d.inspecionadoPor || '—'}`,
+    '',
+    `👉 Resolver pelo app: ${linkResolverDesvio(d.id)}`
+  ].filter(l => l !== '').join('\n').replace('\n\n👉', '\n\n👉');
+}
+function carregarImagem(src){
+  return new Promise((ok, erro) => { const im = new Image(); im.onload = () => ok(im); im.onerror = erro; im.src = src; });
+}
+// quebra texto em linhas que cabem na largura
+function quebrarLinhas(ctx, texto, largura){
+  const palavras = String(texto || '').split(/\s+/); const linhas = []; let atual = '';
+  palavras.forEach(p => { const t = atual ? atual + ' ' + p : p; if(ctx.measureText(t).width > largura && atual){ linhas.push(atual); atual = p; } else atual = t; });
+  if(atual) linhas.push(atual); return linhas;
+}
+async function gerarCartaoDesvio(d){
+  const W = 1080, M = 56, fonte = 'Roboto, Arial, sans-serif';
+  const linhas = [
+    ['Local', d.local], ['Processo / Atividade', d.processo], ['Tipologia', d.tipologia],
+    ['Ações para correção', d.acoesCorrecao], ['Responsável pela área', d.responsavelArea || d.respArea],
+    ['Responsável pela correção', d.responsavelCorrecao || d.respCorrecao],
+    ['Prazo', d.prazo ? formatarDataBR(d.prazo) : ''], ['Inspecionado por', d.inspecionadoPor], ['Origem', d.origem]
+  ].filter(l => l[1]);
+  // mede antes de desenhar (altura variável)
+  const med = document.createElement('canvas').getContext('2d');
+  med.font = `600 40px ${fonte}`;
+  const descLinhas = quebrarLinhas(med, d.descricao || '', W - 2 * M);
+  med.font = `400 32px ${fonte}`;
+  const corpo = linhas.map(([r, v]) => ({ r, v: quebrarLinhas(med, v, W - 2 * M - 400) }));
+  let foto = null;
+  if(d.miniatura){ try{ foto = await carregarImagem(d.miniatura); }catch(e){} }
+  const fotoH = foto ? Math.round(Math.min((W - 2 * M) * foto.height / foto.width, 760)) : 0;
+  const H = 150 + 40 + 60 + descLinhas.length * 52 + 30 + (foto ? fotoH + 40 : 0) + corpo.reduce((a, c) => a + 30 + c.v.length * 42, 0) + 170;
+
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const c = cv.getContext('2d');
+  c.fillStyle = '#ffffff'; c.fillRect(0, 0, W, H);
+  // faixa do topo, com a logo do app
+  c.fillStyle = '#142131'; c.fillRect(0, 0, W, 150);
+  try{
+    const logo = await carregarImagem(document.querySelector('.capacete-img').src);
+    c.fillStyle = '#5e8a3f'; c.beginPath(); c.roundRect ? c.roundRect(M, 32, 86, 86, 20) : c.rect(M, 32, 86, 86); c.fill();
+    c.drawImage(logo, M + 10, 42, 66, 66);
+  }catch(e){}
+  c.fillStyle = '#aab4be'; c.font = `400 28px ${fonte}`; c.fillText('Segurança do Trabalho · CCG', M + 110, 70);
+  c.fillStyle = '#ffffff'; c.font = `700 40px ${fonte}`; c.fillText('Novo desvio registrado', M + 110, 116);
+  // selo do potencial
+  const cores = { 'Alto': ['#fde2e1', '#a32d2d'], 'Médio': ['#fdf0d5', '#7a4b06'], 'Baixo': ['#e3f1d6', '#2d5214'] }[d.potencial] || ['#eceee8', '#33404c'];
+  let y = 190;
+  c.font = `700 28px ${fonte}`;
+  const selo = 'Potencial ' + (d.potencial || '—'); const sw = c.measureText(selo).width + 36;
+  c.fillStyle = cores[0]; c.beginPath(); c.roundRect ? c.roundRect(M, y, sw, 48, 12) : c.rect(M, y, sw, 48); c.fill();
+  c.fillStyle = cores[1]; c.fillText(selo, M + 18, y + 34);
+  const quando = d.data ? formatarDataBR(d.data) : new Date().toLocaleDateString('pt-BR');
+  c.fillStyle = '#5b6570'; c.font = `400 28px ${fonte}`; c.fillText('Registrado em ' + quando, M + sw + 24, y + 34);
+  y += 100;
+  // descrição
+  c.fillStyle = '#142131'; c.font = `600 40px ${fonte}`;
+  descLinhas.forEach(l => { c.fillText(l, M, y); y += 52; });
+  y += 10;
+  // foto
+  if(foto){
+    const fw = W - 2 * M;
+    c.save(); c.beginPath(); c.roundRect ? c.roundRect(M, y, fw, fotoH, 18) : c.rect(M, y, fw, fotoH); c.clip();
+    const escala = Math.max(fw / foto.width, fotoH / foto.height);
+    const dw = foto.width * escala, dh = foto.height * escala;
+    c.drawImage(foto, M + (fw - dw) / 2, y + (fotoH - dh) / 2, dw, dh); c.restore();
+    y += fotoH + 40;
+  }
+  // dados
+  corpo.forEach(({ r, v }) => {
+    c.strokeStyle = '#eceee8'; c.lineWidth = 2; c.beginPath(); c.moveTo(M, y - 6); c.lineTo(W - M, y - 6); c.stroke();
+    c.fillStyle = '#6b7280'; c.font = `400 28px ${fonte}`; c.fillText(r, M, y + 32);
+    c.fillStyle = '#142131'; c.font = `400 32px ${fonte}`;
+    v.forEach((l, i) => c.fillText(l, M + 400, y + 32 + i * 42));
+    y += 30 + v.length * 42;
+  });
+  // rodapé com o chamado para resolver
+  y += 30;
+  c.fillStyle = '#e9f2df'; c.beginPath(); c.roundRect ? c.roundRect(M, y, W - 2 * M, 96, 18) : c.rect(M, y, W - 2 * M, 96); c.fill();
+  c.fillStyle = '#2d5214'; c.font = `700 32px ${fonte}`; c.fillText('Para resolver: abra o link da mensagem', M + 30, y + 45);
+  c.fillStyle = '#4c7032'; c.font = `400 26px ${fonte}`; c.fillText('app-seguranca-trabalho.web.app', M + 30, y + 80);
+  return new Promise(ok => cv.toBlob(b => ok(b), 'image/jpeg', 0.88));
+}
+async function abrirCompartilharDesvio(d, recemCriado){
+  const modal = document.createElement('div');
+  modal.className = 'q-modal';
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Compartilhar desvio">
+      <h3>${recemCriado ? 'Desvio registrado ✓' : 'Compartilhar desvio'}</h3>
+      <p>Mande para o grupo de SSTMA no WhatsApp. Quem tocar no link vai direto para o "Resolver" deste desvio.</p>
+      <div class="zap-gerando" style="text-align:center; padding:30px 0; color:var(--text-muted); font-size:13px;">Montando a imagem...</div>
+      <img class="zap-preview" alt="Imagem do desvio para compartilhar" style="display:none;">
+      <div class="zap-acoes">
+        <button type="button" class="zap-btn principal zap-enviar" disabled>Compartilhar no WhatsApp</button>
+        <button type="button" class="zap-btn secundario zap-copiar">Copiar texto com o link</button>
+        <button type="button" class="zap-btn secundario zap-fechar">${recemCriado ? 'Agora não' : 'Fechar'}</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  const fechar = () => modal.remove();
+  modal.querySelector('.zap-fechar').addEventListener('click', fechar);
+  modal.addEventListener('click', (e) => { if(e.target === modal) fechar(); });
+  const texto = textoCompartilharDesvio(d);
+  let arquivo = null;
+  try{
+    const blob = await gerarCartaoDesvio(d);
+    arquivo = new File([blob], 'desvio-' + new Date().toISOString().slice(0, 10) + '.jpg', { type: 'image/jpeg' });
+    const img = modal.querySelector('.zap-preview');
+    img.src = URL.createObjectURL(blob); img.style.display = 'block';
+  }catch(e){ console.warn('Imagem do desvio:', e); }
+  modal.querySelector('.zap-gerando').style.display = 'none';
+  const btEnviar = modal.querySelector('.zap-enviar');
+  btEnviar.disabled = false;
+  btEnviar.addEventListener('click', async () => {
+    // celular: abre a lista de apps (WhatsApp) com a imagem + o texto
+    if(arquivo && navigator.canShare && navigator.canShare({ files: [arquivo] })){
+      try{ await navigator.share({ files: [arquivo], text: texto }); fechar(); return; }
+      catch(e){ if(e && e.name === 'AbortError') return; }
+    }
+    // computador (ou celular sem esse recurso): baixa a imagem e abre o WhatsApp com o texto
+    if(arquivo){
+      const a = document.createElement('a'); a.href = URL.createObjectURL(arquivo); a.download = arquivo.name;
+      document.body.appendChild(a); a.click(); a.remove();
+    }
+    window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+    mostrarAvisoApp('Imagem baixada', 'No WhatsApp, anexe a imagem baixada junto com o texto.');
+  });
+  modal.querySelector('.zap-copiar').addEventListener('click', async () => {
+    try{ await navigator.clipboard.writeText(texto); mostrarAvisoApp('Texto copiado', 'Cole no grupo do WhatsApp.'); }
+    catch(e){ mostrarAvisoApp('Não consegui copiar', 'Use o botão de compartilhar.'); }
+  });
+}
+
+/* ---- link "?resolver=<id>": abre o Resolver daquele desvio ---- */
+const resolverPeloLink = new URLSearchParams(location.search).get('resolver');
+if(resolverPeloLink) sessionStorage.setItem('sst_resolver_link', resolverPeloLink);
+async function processarLinkResolver(){
+  const id = sessionStorage.getItem('sst_resolver_link');
+  if(!id) return;
+  sessionStorage.removeItem('sst_resolver_link');
+  history.replaceState(null, '', location.pathname);
+  let d = null;
+  try{ const snap = await db.collection('desvios').doc(id).get(); if(snap.exists) d = Object.assign({ id }, snap.data()); }catch(e){}
+  if(!d){ mostrarAvisoApp('Desvio não encontrado', 'Confira a internet e abra o link de novo.'); return; }
+  irPara('view-desvios');
+  if(d.numero == null){
+    if(d.criadoPor === (auth.currentUser && auth.currentUser.uid)){ desviosPendentesCache.some(x => x.id === id) || desviosPendentesCache.push(d); abrirResolverDesvioPendente(id); }
+    else mostrarAvisoApp('Desvio sincronizando', 'Ele ainda está recebendo o número. Abra o link de novo em alguns minutos.');
+    return;
+  }
+  if(desviosConcluidosCache.some(x => String(x.numero) === String(d.numero))){ mostrarAvisoApp('Desvio já fechado', 'O desvio Nº ' + d.numero + ' já foi concluído.'); return; }
+  if(situacaoResolucao(d.numero) === 'pendente'){ mostrarAvisoApp('Já está em análise', 'Alguém já enviou a resolução do Nº ' + d.numero + '.'); return; }
+  if(!desviosAtivosCache.some(x => String(x.numero) === String(d.numero))){
+    desviosAtivosCache.push({ numero: d.numero, descricao: d.descricao, local: d.local, potencial: d.potencial, prazo: d.prazo });
+  }
+  abrirResolverDesvio(d.numero, false);
+}
+{
+  const esperaLink = setInterval(() => {
+    if(document.getElementById('app-screen').classList.contains('active') && auth.currentUser){
+      clearInterval(esperaLink); setTimeout(processarLinkResolver, 600);
+    }
+  }, 400);
+  setTimeout(() => clearInterval(esperaLink), 120000);
 }
 
 /* ======================= ligações ======================= */
