@@ -6241,7 +6241,7 @@ const TERMO_CLAUSULAS = [
   ['3. Acesso pessoal', 'Meu login e minha senha são pessoais e intransferíveis. Não vou compartilhá-los nem permitir que outra pessoa use minha conta, e sou responsável pelos registros feitos com o meu acesso.'],
   ['4. Veracidade', 'Comprometo-me a registrar informações verdadeiras e fotos reais, sem alterar ou montar imagens.'],
   ['5. Assinatura eletrônica', 'Reconheço como minha a assinatura que cadastro neste termo e as assinaturas que eu fizer no aplicativo, inclusive na Qualimetria, como assinatura eletrônica simples (Lei nº 14.063/2020), válida para os registros internos da empresa. Sei que cada assinatura é conferida com a assinatura cadastrada e gravada com a minha conta, a data e a hora.'],
-  ['6. Marca d\u2019água e rastreabilidade', 'Sei que as telas do aplicativo exibem meu nome, matrícula, data e hora como marca d\u2019água, e que as ações realizadas ficam registradas (quem fez, quando e em qual aparelho) para fins de segurança e auditoria.'],
+  ['6. Rastreabilidade', 'Sei que as imagens e os documentos gerados ou compartilhados pelo aplicativo levam meu nome, matrícula, data e hora, e que as ações realizadas ficam registradas (quem fez, quando e em qual aparelho) para fins de segurança e auditoria.'],
   ['7. Dados pessoais', 'Autorizo o uso dos meus dados de identificação (nome, matrícula, e-mail, assinatura e informações do aparelho) exclusivamente para o funcionamento do aplicativo e para auditorias, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).'],
   ['8. Descumprimento', 'O uso indevido do aplicativo ou a divulgação não autorizada de informações poderá resultar no bloqueio do acesso e nas medidas previstas nas normas internas da empresa.']
 ];
@@ -6982,27 +6982,159 @@ function lvRenderResumo(corpo, barra){
       : '<p class="q-pdf-aguardando">LV concluída. O número e o PDF saem na próxima sincronização (até 10 minutos).</p>') : '<p class="lv-sub">LV em andamento, preenchida por ' + escaparHtml(lv.criadoPorNome || '') + '.</p>'}
     ${desvios.length ? `<div class="lv-bloco"><b>Desvio${desvios.length > 1 ? 's' : ''} gerado${desvios.length > 1 ? 's' : ''}</b>${desvios.map(n => `<span class="lv-sub">Item ${n} · ${escaparHtml((lv.ncs[n] || {}).descricao || '')} · prazo ${escaparHtml(formatarDataBR((lv.ncs[n] || {}).prazo))}</span>`).join('')}</div>` : ''}
     ${lv.estado === 'concluida' ? `<span class="secao-titulo" style="margin-top:6px;">Compartilhar</span>
-      <button type="button" class="zap-btn principal" id="lv-zap">Compartilhar no WhatsApp</button>
-      <div class="email-linha"><button type="button" class="zap-btn secundario lv-email" data-via="outlook">E-mail · Outlook</button><button type="button" class="zap-btn secundario lv-email" data-via="gmail">E-mail · Gmail</button></div>` : ''}
+      <button type="button" class="zap-btn principal" id="lv-compartilhar">Compartilhar resultado (WhatsApp ou e-mail)</button>` : ''}
     ${ehTST() ? `<button type="button" class="zap-btn secundario" id="lv-nova-mesmo">Nova LV deste ${lv.forma === 'veiculo' ? 'veículo' : 'item'}</button>` : ''}
   </div>`;
   barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b>${escaparHtml(lv.numero || lv.tipoNome)}</b><small>${escaparHtml(s.txt)}</small></span></div><button type="button" class="btn-primary" id="lv-fechar">Fechar</button>`;
   document.getElementById('lv-fechar').addEventListener('click', () => irPara('view-lv'));
   const novo = document.getElementById('lv-nova-mesmo'); if(novo) novo.addEventListener('click', () => lvNova(lv.tipoId, lv.identificador));
-  const zap = document.getElementById('lv-zap');
-  if(zap) zap.addEventListener('click', async () => {
-    const texto = lvTextoCompartilhar(lv, false);
-    if(navigator.share && /android|iphone|ipad/i.test(navigator.userAgent)){ try{ await navigator.share({ text: texto }); return; }catch(e){ if(e && e.name === 'AbortError') return; } }
-    window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+  const btComp = document.getElementById('lv-compartilhar');
+  if(btComp) btComp.addEventListener('click', () => abrirCompartilharLV(lv));
+}
+
+
+/* ---------- cartão de imagem da LV (mesmo estilo do desvio) ---------- */
+async function gerarCartaoLV(lv){
+  const W = 1080, M = 56, fonte = 'Roboto, Arial, sans-serif';
+  const med = document.createElement('canvas').getContext('2d');
+  const quebra = (t, f, larg) => { med.font = f; return quebrarLinhas(med, t, larg); };
+  const conta = (v) => Object.values(lv.itens || {}).filter(x => x === v).length;
+  const ncs = Object.keys(lv.itens || {}).filter(n => lv.itens[n] === 'NC').sort((a, b) => a - b);
+  const corRes = { 'Liberado': ['#e3f1d6', '#2d5214'], 'Liberado com ressalvas': ['#fdf0d5', '#7a4b06'], 'Não liberado': ['#fde2e1', '#a32d2d'] }[lv.resultado] || ['#eceee8', '#33404c'];
+  const rotIdent = (LV_IDENT[lv.forma] || LV_IDENT.equipamento).rotulo;
+  const linhas = [[rotIdent, lv.identificador], ['Modelo / ano', lvDescEquip(lv)], ['Empresa', lv.empresaNome || lv.empresaTipo],
+    ['Contrato', lv.contrato], ['Processo / atividade', lv.processo], ['Área / setor', lv.area], ['Data', formatarDataBR(lv.data)],
+    ['Tipo de inspeção', lv.tipoInspecao], ['Horímetro / KM', lv.horimetro]].filter(l => l[1]);
+  const fRot = `400 28px ${fonte}`, fVal = `400 32px ${fonte}`;
+  const corpo = linhas.map(([r, v]) => ({ r, v: quebra(v, fVal, W - 2 * M - 360) }));
+  const tituloL = quebra(lv.tipoNome, `700 46px ${fonte}`, W - 2 * M);
+  const obsL = lv.resultadoObs ? quebra(lv.resultadoObs, `400 30px ${fonte}`, W - 2 * M - 48) : [];
+  const pend = ncs.map(n => { const nc = (lv.ncs || {})[n] || {};
+    return { n, desc: quebra('Item ' + n + ' — ' + (nc.descricao || (lv.itensTexto || [])[n - 1] || ''), `600 30px ${fonte}`, W - 2 * M - 48),
+             acao: quebra([nc.medida && 'Ação: ' + nc.medida, nc.responsavel && 'Resp.: ' + nc.responsavel, nc.prazo && 'Prazo: ' + formatarDataBR(nc.prazo)].filter(Boolean).join(' · '), `400 26px ${fonte}`, W - 2 * M - 48) }; });
+  const at = lv.assinaturaTST || {}, ae = lv.assinaturaExterno || {};
+  const ass = [['Inspeção e Segurança do Trabalho', [at.nome, at.matricula ? 'Mat. ' + at.matricula : ''].filter(Boolean).join(' · ')],
+               [lv.respArea ? 'Responsável pela área' : 'Responsável pelo equipamento', [ae.nome, ae.funcao, ae.empresa].filter(Boolean).join(' · ')]].filter(a => a[1]);
+  const H = 150 + 40 + tituloL.length * 56 + 50 + 110 + obsL.length * 40 + 30 + 120 + corpo.reduce((a, c) => a + 30 + c.v.length * 42, 0) + 30
+    + (pend.length ? 70 + pend.reduce((a, p) => a + 36 + p.desc.length * 40 + p.acao.length * 34, 0) : 0)
+    + (ass.length ? 70 + ass.length * 84 : 0) + 230;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const c = cv.getContext('2d');
+  const caixa = (x, y, w, h, r, cor) => { c.fillStyle = cor; c.beginPath(); c.roundRect ? c.roundRect(x, y, w, h, r) : c.rect(x, y, w, h); c.fill(); };
+  c.fillStyle = '#ffffff'; c.fillRect(0, 0, W, H);
+  // faixa do topo
+  c.fillStyle = '#142131'; c.fillRect(0, 0, W, 150);
+  try{ const logo = await carregarImagem(document.querySelector('.capacete-img').src); caixa(M, 32, 86, 86, 20, '#5e8a3f'); c.drawImage(logo, M + 10, 42, 66, 66); }catch(e){}
+  c.fillStyle = '#aab4be'; c.font = `400 28px ${fonte}`; c.fillText('Segurança do Trabalho · CCG', M + 110, 70);
+  c.fillStyle = '#ffffff'; c.font = `700 40px ${fonte}`; c.fillText('Lista de Verificação', M + 110, 116);
+  if(lv.numero){ c.font = `700 34px ${fonte}`; const tw = c.measureText(lv.numero).width; c.fillStyle = '#AEC155'; c.fillText(lv.numero, W - M - tw, 116); }
+  let y = 190;
+  c.fillStyle = '#142131'; c.font = `700 46px ${fonte}`; tituloL.forEach(l => { y += 46; c.fillText(l, M, y); y += 10; });
+  y += 30;
+  // resultado em destaque
+  caixa(M, y, W - 2 * M, 96 + obsL.length * 40, 18, corRes[0]);
+  c.fillStyle = corRes[1]; c.font = `400 26px ${fonte}`; c.fillText('RESULTADO DA INSPEÇÃO', M + 24, y + 38);
+  c.font = `700 40px ${fonte}`; c.fillText(lv.resultado || '—', M + 24, y + 82);
+  c.font = `400 30px ${fonte}`; obsL.forEach((l, i) => c.fillText(l, M + 24, y + 124 + i * 40));
+  y += 96 + obsL.length * 40 + 40;
+  // contagem dos itens
+  const tot = (lv.itensTexto || []).length, blocos = [['itens', tot, '#33404c'], ['conformes', conta('C'), '#2d5214'], ['não conformes', conta('NC'), '#a32d2d'], ['não aplicáveis', conta('NA'), '#5b6570']];
+  const bw = (W - 2 * M - 3 * 14) / 4;
+  blocos.forEach(([r, v, cor], i) => { const x = M + i * (bw + 14); caixa(x, y, bw, 96, 14, '#f4f5f2');
+    c.fillStyle = cor; c.font = `700 40px ${fonte}`; c.fillText(String(v), x + 20, y + 48); c.fillStyle = '#5b6570'; c.font = `400 24px ${fonte}`; c.fillText(r, x + 20, y + 80); });
+  y += 96 + 40;
+  // dados
+  corpo.forEach(({ r, v }) => {
+    c.strokeStyle = '#eceee8'; c.lineWidth = 2; c.beginPath(); c.moveTo(M, y - 6); c.lineTo(W - M, y - 6); c.stroke();
+    c.fillStyle = '#6b7280'; c.font = fRot; c.fillText(r, M, y + 32);
+    c.fillStyle = '#142131'; c.font = fVal; v.forEach((l, i) => c.fillText(l, M + 360, y + 32 + i * 42));
+    y += 30 + v.length * 42;
   });
-  corpo.querySelectorAll('.lv-email').forEach(b => b.addEventListener('click', () => {
-    const assunto = `Lista de Verificação ${lv.numero || ''} – ${lv.tipoNome} ${lv.identificador} – ${lv.resultado || ''}`.replace(/\s+/g, ' ');
-    const corpoEmail = lvTextoCompartilhar(lv, true);
-    const url = b.dataset.via === 'gmail'
-      ? 'https://mail.google.com/mail/?view=cm&fs=1&su=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail)
-      : 'https://outlook.office.com/mail/deeplink/compose?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail);
-    window.open(url, '_blank');
-  }));
+  y += 30;
+  // pendências
+  if(pend.length){
+    c.fillStyle = '#a32d2d'; c.font = `700 30px ${fonte}`; c.fillText('PENDÊNCIAS (viraram desvios)', M, y + 30); y += 60;
+    pend.forEach(p => {
+      const h = 24 + p.desc.length * 40 + p.acao.length * 34;
+      caixa(M, y, W - 2 * M, h, 14, '#fdf6f4');
+      c.fillStyle = '#142131'; c.font = `600 30px ${fonte}`; p.desc.forEach((l, i) => c.fillText(l, M + 24, y + 40 + i * 40));
+      c.fillStyle = '#5b6570'; c.font = `400 26px ${fonte}`; p.acao.forEach((l, i) => c.fillText(l, M + 24, y + 40 + p.desc.length * 40 + i * 34));
+      y += h + 12;
+    });
+    y += 10;
+  }
+  // assinaturas
+  if(ass.length){
+    c.fillStyle = '#4c7032'; c.font = `700 30px ${fonte}`; c.fillText('ASSINATURAS', M, y + 30); y += 60;
+    ass.forEach(([r, v]) => { c.fillStyle = '#6b7280'; c.font = `400 24px ${fonte}`; c.fillText(r, M, y + 26); c.fillStyle = '#142131'; c.font = `600 30px ${fonte}`; c.fillText('✓ ' + v, M, y + 62); y += 84; });
+  }
+  // rodapé
+  y += 20;
+  caixa(M, y, W - 2 * M, 96, 18, '#e9f2df');
+  c.fillStyle = '#2d5214'; c.font = `700 32px ${fonte}`; c.fillText(lv.pdfUrl ? 'PDF completo: link na mensagem' : 'PDF completo disponível no app', M + 30, y + 45);
+  c.fillStyle = '#4c7032'; c.font = `400 26px ${fonte}`; c.fillText('app-seguranca-trabalho.web.app', M + 30, y + 80);
+  c.fillStyle = '#6b7280'; c.font = `400 22px ${fonte}`; c.fillText(textoCompartilhadoPor(), M, y + 140);
+  return new Promise(ok => cv.toBlob(b => ok(b), 'image/jpeg', 0.88));
+}
+async function abrirCompartilharLV(lv){
+  const modal = document.createElement('div');
+  modal.className = 'q-modal';
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Compartilhar resultado da LV">
+      <h3>Compartilhar resultado</h3>
+      <p>Vai a imagem com o resultado, os dados e as pendências${lv.pdfUrl ? ', mais o link do PDF completo' : ''}.</p>
+      <div class="zap-gerando" style="text-align:center; padding:30px 0; color:var(--text-muted); font-size:13px;">Montando a imagem...</div>
+      <img class="zap-preview" alt="Imagem do resultado da LV" style="display:none;">
+      <div class="zap-acoes">
+        <button type="button" class="zap-btn principal zap-enviar" disabled>Compartilhar no WhatsApp</button>
+        <div class="email-linha">
+          <button type="button" class="zap-btn secundario email-btn" data-via="outlook" disabled>E-mail · Outlook</button>
+          <button type="button" class="zap-btn secundario email-btn" data-via="gmail" disabled>E-mail · Gmail</button>
+        </div>
+        <button type="button" class="zap-btn secundario zap-copiar">Copiar texto</button>
+        <button type="button" class="zap-btn secundario zap-fechar">Fechar</button>
+      </div>
+    </div>`;
+  document.body.appendChild(modal);
+  const fechar = () => modal.remove();
+  modal.querySelector('.zap-fechar').addEventListener('click', fechar);
+  modal.addEventListener('click', (e) => { if(e.target === modal) fechar(); });
+  const texto = lvTextoCompartilhar(lv, false);
+  let arquivo = null;
+  try{
+    const blob = await gerarCartaoLV(lv);
+    arquivo = new File([blob], (lv.numero || 'LV') + ' - ' + lv.tipoNome + '.jpg', { type: 'image/jpeg' });
+    const img = modal.querySelector('.zap-preview'); img.src = URL.createObjectURL(blob); img.style.display = 'block';
+  }catch(e){ console.warn('Imagem da LV:', e); }
+  modal.querySelector('.zap-gerando').style.display = 'none';
+  const celular = /android|iphone|ipad/i.test(navigator.userAgent);
+  const baixar = () => { if(!arquivo) return; const a = document.createElement('a'); a.href = URL.createObjectURL(arquivo); a.download = arquivo.name; document.body.appendChild(a); a.click(); a.remove(); };
+  const btZap = modal.querySelector('.zap-enviar'); btZap.disabled = false;
+  btZap.addEventListener('click', async () => {
+    if(arquivo && navigator.canShare && navigator.canShare({ files: [arquivo] })){
+      try{ await navigator.share({ files: [arquivo], text: texto }); fechar(); return; }catch(e){ if(e && e.name === 'AbortError') return; }
+    }
+    baixar(); window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+    mostrarAvisoApp('Imagem baixada', 'No WhatsApp, anexe a imagem baixada junto com o texto.');
+  });
+  modal.querySelectorAll('.email-btn').forEach(b => {
+    b.disabled = false;
+    b.addEventListener('click', async () => {
+      const assunto = `Lista de Verificação ${lv.numero || ''} – ${lv.tipoNome} ${lv.identificador || ''} – ${lv.resultado || ''}`.replace(/\s+/g, ' ').trim();
+      const corpoEmail = lvTextoCompartilhar(lv, true);
+      if(arquivo && celular && navigator.canShare && navigator.canShare({ files: [arquivo] })){
+        try{ await navigator.share({ files: [arquivo], title: assunto, text: corpoEmail }); fechar(); return; }catch(e){ if(e && e.name === 'AbortError') return; }
+      }
+      baixar();
+      window.open(b.dataset.via === 'gmail'
+        ? 'https://mail.google.com/mail/?view=cm&fs=1&su=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail)
+        : 'https://outlook.office.com/mail/deeplink/compose?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail), '_blank');
+      mostrarAvisoApp('E-mail aberto', 'A imagem da LV foi baixada: anexe no e-mail antes de enviar.');
+    });
+  });
+  modal.querySelector('.zap-copiar').addEventListener('click', async () => {
+    try{ await navigator.clipboard.writeText(texto); mostrarAvisoApp('Texto copiado', 'Cole no WhatsApp ou no e-mail.'); }
+    catch(e){ mostrarAvisoApp('Não consegui copiar', 'Use os botões de compartilhar.'); }
+  });
 }
 
 /* ---------- busca e minhas LVs ---------- */
@@ -7068,21 +7200,11 @@ document.getElementById('lv-ficha-voltar').addEventListener('click', () => { try
    marca fica SEMPRE sobre o app (bem clarinha), com nome completo, matrícula
    e a data/hora atual (atualiza a cada 30 s): qualquer print sai identificado. */
 function atualizarMarcaDagua(){
-  const el = document.getElementById('marca-dagua');
-  const u = auth.currentUser;
-  if(!u || !document.getElementById('app-screen').classList.contains('active')){ el.style.display = 'none'; return; }
-  const pl = lerPerfilLocal(u.uid) || {};
-  const nome = pl.nomeCompleto || u.displayName || u.email;
-  const agora = new Date();
-  const quando = agora.toLocaleDateString('pt-BR') + ' ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-  const linha1 = nome + (pl.matricula ? ' · Mat. ' + pl.matricula : '');
-  const escuro = document.documentElement.getAttribute('data-theme') === 'dark';
-  const cor = escuro ? 'rgba(255,255,255,0.075)' : 'rgba(20,33,49,0.075)';
-  const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;');
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="340" height="190"><g transform="rotate(-24 170 95)" fill="${cor}" font-family="Arial, sans-serif" font-weight="700" text-anchor="middle">` +
-    `<text x="170" y="88" font-size="15">${esc(linha1)}</text><text x="170" y="110" font-size="13">${esc(quando)}</text></g></svg>`;
-  el.style.backgroundImage = `url("data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}")`;
-  el.style.display = 'block';
+  // Um app no navegador não consegue saber quando alguém tira print, então a
+  // marca d'água não fica mais nas telas (atrapalhava o uso). A identificação
+  // vai no que SAI do app: as imagens de compartilhar levam
+  // "Compartilhado por nome · matrícula · data e hora" (ver rodapeCompartilhado).
+  const el = document.getElementById('marca-dagua'); if(el) el.style.display = 'none';
 }
 setInterval(atualizarMarcaDagua, 30000);
 new MutationObserver(atualizarMarcaDagua).observe(document.getElementById('app-screen'), { attributes: true, attributeFilter: ['class'] });
@@ -7130,6 +7252,13 @@ function textoEmailDesvio(d){
     'A imagem do desvio, com a foto, segue em anexo.', '', 'Atenciosamente,',
     (eu.nome || '') + (eu.matricula ? ' – Matrícula ' + eu.matricula : ''), 'Segurança do Trabalho – Consórcio Construtor Gávea'].join('\n');
 }
+/* rodapé das imagens de compartilhar: quem compartilhou e quando */
+function textoCompartilhadoPor(){
+  const eu = (typeof qMeuPerfil === 'function') ? qMeuPerfil() : {};
+  const agora = new Date();
+  return 'Compartilhado por ' + (eu.nome || '') + (eu.matricula ? ' · Mat. ' + eu.matricula : '') + ' · ' +
+    agora.toLocaleDateString('pt-BR') + ' ' + agora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) + ' · uso interno CCG';
+}
 function carregarImagem(src){
   return new Promise((ok, erro) => { const im = new Image(); im.onload = () => ok(im); im.onerror = erro; im.src = src; });
 }
@@ -7156,7 +7285,7 @@ async function gerarCartaoDesvio(d){
   let foto = null;
   if(d.miniatura){ try{ foto = await carregarImagem(d.miniatura); }catch(e){} }
   const fotoH = foto ? Math.round(Math.min((W - 2 * M) * foto.height / foto.width, 760)) : 0;
-  const H = 150 + 40 + 60 + descLinhas.length * 52 + 30 + (foto ? fotoH + 40 : 0) + corpo.reduce((a, c) => a + 30 + c.v.length * 42, 0) + 170;
+  const H = 150 + 40 + 60 + descLinhas.length * 52 + 30 + (foto ? fotoH + 40 : 0) + corpo.reduce((a, c) => a + 30 + c.v.length * 42, 0) + 230;
 
   const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const c = cv.getContext('2d');
@@ -7206,6 +7335,7 @@ async function gerarCartaoDesvio(d){
   c.fillStyle = '#e9f2df'; c.beginPath(); c.roundRect ? c.roundRect(M, y, W - 2 * M, 96, 18) : c.rect(M, y, W - 2 * M, 96); c.fill();
   c.fillStyle = '#2d5214'; c.font = `700 32px ${fonte}`; c.fillText('Para resolver: abra o link da mensagem', M + 30, y + 45);
   c.fillStyle = '#4c7032'; c.font = `400 26px ${fonte}`; c.fillText('app-seguranca-trabalho.web.app', M + 30, y + 80);
+  c.fillStyle = '#6b7280'; c.font = `400 22px ${fonte}`; c.fillText(textoCompartilhadoPor(), M, y + 140);
   return new Promise(ok => cv.toBlob(b => ok(b), 'image/jpeg', 0.88));
 }
 async function abrirCompartilharDesvio(d, recemCriado){
