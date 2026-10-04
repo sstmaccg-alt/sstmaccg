@@ -1042,6 +1042,10 @@
   html[data-theme="dark"] .q-nc label, html[data-theme="dark"] .q-nc .q-nc-origem{ color:var(--navy); }
   /* botão "Voltar" da barra de baixo (fundo sempre azul-escuro) */
   .q-btn-sec{ color:#fff !important; }
+  #view-lv-analise .q-an-linha small{ display:block; margin-top:2px; }
+  #view-lv-analise .q-resumo{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); row-gap:12px; }
+  #view-lv-analise .q-resumo .q-kpi:nth-child(3){ padding-left:0; border-left:none; }
+  #view-lv-analise .q-an-card .lv-card{ box-shadow:none; border:1px solid var(--border); }
   html[data-theme="dark"] .q-op.q-op-bloq{ background:#2a323c !important; color:#6b7480 !important; border-color:#333c47 !important; }
   .q-reinc{ margin:8px 0 0; font-size:12px; line-height:1.4; color:#7a4b06; background:#fdf0d5; border-radius:8px; padding:7px 10px; }
   .q-nc > label{ display:flex; flex-direction:column; gap:5px; }
@@ -1382,6 +1386,7 @@
         <button type="button" class="atalho-item" id="lv-at-nova"><div class="atalho-icone"><span class="icone-svg" data-icone="plus"></span></div><p class="atalho-label">Nova LV</p></button>
         <button type="button" class="atalho-item" id="lv-at-buscar"><div class="atalho-icone"><span class="icone-svg" data-icone="search"></span></div><p class="atalho-label">Buscar</p></button>
         <button type="button" class="atalho-item" id="lv-at-minhas"><div class="atalho-icone"><span class="icone-svg" data-icone="clipboard"></span><span class="atalho-badge" id="lv-badge-minhas" style="display:none;"></span></div><p class="atalho-label">Minhas LVs</p></button>
+        <button type="button" class="atalho-item" id="lv-at-analise"><div class="atalho-icone"><span class="icone-svg" data-icone="barchart"></span></div><p class="atalho-label">Análise</p></button>
       </div>
       <div class="hero-flutuante q-hero">
         <div class="q-hero-topo"><span class="rotulo" id="lv-hero-rotulo">LISTAS DE VERIFICAÇÃO</span></div>
@@ -1425,6 +1430,19 @@
       </div>
       <div class="lv-chips" id="lv-minhas-chips"></div>
       <div id="lv-minhas"></div>
+    </div>
+
+    <div id="view-lv-analise" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header"><button type="button" class="voltar lv-volta-inicio" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button></div>
+        <div class="tela-selo">LISTA DE VERIFICAÇÃO</div>
+        <p class="tela-titulo">Análise das LVs</p>
+      </div>
+      <div class="lv-dois" style="margin-bottom:14px;">
+        <select id="lv-an-ano" class="lv-busca" aria-label="Ano" style="margin:0;"></select>
+        <select id="lv-an-mes" class="lv-busca" aria-label="Mês" style="margin:0;"></select>
+      </div>
+      <div id="lv-an-corpo"></div>
     </div>
 
     <div id="view-lv-ficha" style="display:none;">
@@ -2497,7 +2515,7 @@ document.getElementById('logout-btn').addEventListener('click', () => {
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha'];
+const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-lv-analise','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha'];
 function irPara(viewId){
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
   document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -6475,7 +6493,7 @@ function lvAtualizarTelas(){
   const bd = document.getElementById('lv-badge-minhas'); bd.textContent = pend; bd.style.display = pend ? 'flex' : 'none';
   if(lvAtual && vis('view-lv-ficha') && lvPasso === 4){
     const atual = lvMinhasLista.concat(lvRecentes).find(x => x.id === lvAtual.id);
-    if(atual && (atual.pdfUrl !== lvAtual.pdfUrl || atual.numero !== lvAtual.numero)){ Object.assign(lvAtual, { pdfUrl: atual.pdfUrl, pdfNome: atual.pdfNome, numero: atual.numero }); lvRenderFicha(); }
+    if(atual && (atual.pdfUrl !== lvAtual.pdfUrl || atual.numero !== lvAtual.numero)){ Object.assign(lvAtual, { pdfUrl: atual.pdfUrl, pdfPublicoUrl: atual.pdfPublicoUrl, pdfNome: atual.pdfNome, numero: atual.numero }); lvRenderFicha(); }
   }
 }
 function lvRenderInicio(){
@@ -6553,7 +6571,7 @@ function lvAbrir(lv){
 /* ---------- salvar (rascunho no aparelho/banco) ---------- */
 // campos que NUNCA saem da cópia local: assinaturas (gravadas uma vez, com o
 // horário do servidor), datas do servidor e o que o Apps Script preenche
-const LV_NAO_REGRAVAR = ['novo', 'id', 'assinaturaTST', 'assinaturaExterno', 'criadoEm', 'concluidaEm', 'atualizadoEm', 'numero', 'pdfUrl', 'pdfNome', 'codigo', 'pdfPendente'];
+const LV_NAO_REGRAVAR = ['novo', 'id', 'assinaturaTST', 'assinaturaExterno', 'criadoEm', 'concluidaEm', 'atualizadoEm', 'numero', 'pdfUrl', 'pdfPublicoUrl', 'pdfNome', 'codigo', 'pdfPendente', 'fotosNoPdf'];
 function lvDadosParaGravar(){
   const d = Object.assign({}, lvAtual);
   LV_NAO_REGRAVAR.forEach(k => delete d[k]);
@@ -6962,7 +6980,7 @@ function lvTextoCompartilhar(lv, formal){
     `Empresa: ${lv.empresaNome || lv.empresaTipo || '—'}`, `Data: ${formatarDataBR(lv.data)} · Área: ${lv.area || '—'}`,
     `Resultado: ${lv.resultado || '—'}${lv.resultadoObs ? ' – ' + lv.resultadoObs : ''}`,
     pend.length ? 'Pendências:\n' + pend.join('\n') : 'Sem pendências.',
-    lv.pdfUrl ? `PDF: ${lv.pdfUrl}` : 'O PDF fica disponível em instantes no Drive.'
+    (lv.pdfPublicoUrl || lv.pdfUrl) ? `PDF: ${lv.pdfPublicoUrl || lv.pdfUrl}` : 'O PDF fica disponível em instantes no app.'
   ];
   if(!formal) return linhas.join('\n');
   const eu = qMeuPerfil();
@@ -6978,7 +6996,7 @@ function lvRenderResumo(corpo, barra){
       <b>${escaparHtml(lv.estado === 'concluida' ? (lv.resultado || 'Concluída') : s.txt)}</b>
       <small>${escaparHtml([formatarDataBR(lv.data), lv.empresaNome || lv.empresaTipo, lvDescEquip(lv)].filter(Boolean).join(' · '))}</small>
       <small>${(lv.itensTexto || []).length} itens: ${conta('C')} C · ${conta('NC')} NC · ${conta('NA')} NA${lv.numero ? ' · ' + escaparHtml(lv.numero) : ''}</small></div>
-    ${lv.estado === 'concluida' ? (lv.pdfUrl ? `<a class="q-pdf" href="${escaparHtml(lv.pdfUrl)}" target="_blank" rel="noopener"><span class="q-pdf-icone">PDF</span><span class="q-pdf-txt"><b>${escaparHtml(lv.pdfNome || 'LV em PDF')}</b><small>Drive › LV › ano › mês</small></span></a>`
+    ${lv.estado === 'concluida' ? ((ehTST() ? lv.pdfUrl : (lv.pdfPublicoUrl || lv.pdfUrl)) ? `<a class="q-pdf" href="${escaparHtml(ehTST() ? lv.pdfUrl : (lv.pdfPublicoUrl || lv.pdfUrl))}" target="_blank" rel="noopener"><span class="q-pdf-icone">PDF</span><span class="q-pdf-txt"><b>${escaparHtml(lv.pdfNome || 'LV em PDF')}</b><small>${ehTST() ? 'Versão completa (com as fotos) · Drive › LV' : 'Versão para compartilhar'}</small></span></a>`
       : '<p class="q-pdf-aguardando">LV concluída. O número e o PDF saem na próxima sincronização (até 10 minutos).</p>') : '<p class="lv-sub">LV em andamento, preenchida por ' + escaparHtml(lv.criadoPorNome || '') + '.</p>'}
     ${desvios.length ? `<div class="lv-bloco"><b>Desvio${desvios.length > 1 ? 's' : ''} gerado${desvios.length > 1 ? 's' : ''}</b>${desvios.map(n => `<span class="lv-sub">Item ${n} · ${escaparHtml((lv.ncs[n] || {}).descricao || '')} · prazo ${escaparHtml(formatarDataBR((lv.ncs[n] || {}).prazo))}</span>`).join('')}</div>` : ''}
     ${lv.estado === 'concluida' ? `<span class="secao-titulo" style="margin-top:6px;">Compartilhar</span>
@@ -7071,7 +7089,7 @@ async function gerarCartaoLV(lv){
   // rodapé
   y += 20;
   caixa(M, y, W - 2 * M, 96, 18, '#e9f2df');
-  c.fillStyle = '#2d5214'; c.font = `700 32px ${fonte}`; c.fillText(lv.pdfUrl ? 'PDF completo: link na mensagem' : 'PDF completo disponível no app', M + 30, y + 45);
+  c.fillStyle = '#2d5214'; c.font = `700 32px ${fonte}`; c.fillText((lv.pdfPublicoUrl || lv.pdfUrl) ? 'PDF: link na mensagem' : 'PDF disponível no app', M + 30, y + 45);
   c.fillStyle = '#4c7032'; c.font = `400 26px ${fonte}`; c.fillText('app-seguranca-trabalho.web.app', M + 30, y + 80);
   c.fillStyle = '#6b7280'; c.font = `400 22px ${fonte}`; c.fillText(textoCompartilhadoPor(), M, y + 140);
   return new Promise(ok => cv.toBlob(b => ok(b), 'image/jpeg', 0.88));
@@ -7185,7 +7203,89 @@ function lvRenderMinhas(){
   lvLigarCards(caixa);
 }
 
+/* ---------- análise das LVs ----------
+   Busca no banco só as LVs do período escolhido (ano ou mês) quando a tela abre. */
+let lvAnCache = {};
+function lvAbrirAnalise(){
+  irPara('view-lv-analise');
+  const selA = document.getElementById('lv-an-ano'), selM = document.getElementById('lv-an-mes');
+  if(!selA.options.length){
+    const ano = new Date().getFullYear();
+    selA.innerHTML = [ano, ano - 1].map(a => `<option value="${a}">${a}</option>`).join('');
+    selM.innerHTML = '<option value="">Ano todo</option>' + ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']
+      .map((m, i) => `<option value="${String(i + 1).padStart(2, '0')}">${m}</option>`).join('');
+    selM.value = String(new Date().getMonth() + 1).padStart(2, '0');
+    selA.addEventListener('change', lvRenderAnalise); selM.addEventListener('change', lvRenderAnalise);
+  }
+  lvRenderAnalise();
+}
+async function lvRenderAnalise(){
+  const ano = document.getElementById('lv-an-ano').value, mes = document.getElementById('lv-an-mes').value;
+  const ini = mes ? `${ano}-${mes}-01` : `${ano}-01-01`, fim = mes ? `${ano}-${mes}-31` : `${ano}-12-31`;
+  const corpo = document.getElementById('lv-an-corpo');
+  const chave = ini + '|' + fim;
+  if(!lvAnCache[chave]){
+    corpo.innerHTML = '<p class="empty-state">Carregando…</p>';
+    try{
+      const snap = await db.collection('lvs').where('data', '>=', ini).where('data', '<=', fim).get();
+      lvAnCache[chave] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      setTimeout(() => { delete lvAnCache[chave]; }, 5 * 60000);   // recarrega depois de 5 minutos
+    }catch(e){ corpo.innerHTML = '<p class="empty-state">Não consegui carregar as LVs agora. Confira a internet.</p>'; return; }
+    if(document.getElementById('lv-an-ano').value !== ano || document.getElementById('lv-an-mes').value !== mes) return;
+  }
+  const lvs = lvAnCache[chave].filter(l => l.estado === 'concluida');
+  if(!lvs.length){ corpo.innerHTML = '<p class="empty-state">Nenhuma LV concluída neste período.</p>'; return; }
+  const conta = (f) => lvs.filter(f).length, pct = (n) => Math.round(n / lvs.length * 100);
+  const lib = conta(l => l.resultado === 'Liberado'), ress = conta(l => l.resultado === 'Liberado com ressalvas'), nlib = conta(l => l.resultado === 'Não liberado');
+  const agrupa = (fn) => { const m = {}; lvs.forEach(l => { const k = fn(l); if(k) (m[k] = m[k] || []).push(l); }); return m; };
+  const barras = (lista, max, cor) => lista.map(([t, v, extra]) => `<div class="q-an-linha"><span>${escaparHtml(t)}${extra ? `<small class="lv-sub">${escaparHtml(extra)}</small>` : ''}</span><span class="q-an-barra"><i style="width:${Math.max(4, v / max * 100)}%; background:${cor}"></i></span><span class="q-an-val">${v}</span></div>`).join('');
+  // categorias e tipos
+  const porCat = Object.entries(agrupa(l => l.categoria || (lvTipo(l.tipoId) || {}).cat)).map(([k, v]) => [k, v.length, v.filter(l => l.resultado === 'Não liberado').length ? v.filter(l => l.resultado === 'Não liberado').length + ' não liberado(s)' : '']).sort((a, b) => b[1] - a[1]);
+  const porTipo = Object.entries(agrupa(l => l.tipoNome)).map(([k, v]) => [k, v.length]).sort((a, b) => b[1] - a[1]).slice(0, 8);
+  // itens com mais NC (por tipo de LV + texto do item)
+  const ncItem = {};
+  lvs.forEach(l => Object.keys(l.itens || {}).forEach(n => { if(l.itens[n] === 'NC'){ const k = l.tipoNome + ' · ' + ((l.itensTexto || [])[n - 1] || 'item ' + n); ncItem[k] = (ncItem[k] || 0) + 1; } }));
+  const topNc = Object.entries(ncItem).sort((a, b) => b[1] - a[1]).slice(0, 10);
+  // empresas
+  const porEmp = Object.entries(agrupa(l => l.empresaNome || l.empresaTipo)).map(([k, v]) => {
+    const nl = v.filter(l => l.resultado === 'Não liberado').length, nc = v.reduce((a, l) => a + Object.values(l.itens || {}).filter(x => x === 'NC').length, 0);
+    return [k, v.length, `${nc} NC${nl ? ' · ' + nl + ' não liberado(s)' : ''}`, nc];
+  }).sort((a, b) => b[3] - a[3] || b[1] - a[1]).slice(0, 8);
+  // equipamentos com NC repetida no mesmo item
+  const rep = [];
+  Object.values(agrupa(l => l.tipoId + '|' + (l.identificadorNorm || ''))).forEach(g => {
+    if(g.length < 2) return;
+    const cont = {};
+    g.forEach(l => Object.keys(l.itens || {}).forEach(n => { if(l.itens[n] === 'NC') cont[n] = (cont[n] || 0) + 1; }));
+    const itens = Object.keys(cont).filter(n => cont[n] > 1);
+    if(itens.length) rep.push({ l: g[0], itens, n: g.length });
+  });
+  // por TST
+  const porTst = Object.entries(agrupa(l => l.criadoPorNome)).map(([k, v]) => [k, v.length]).sort((a, b) => b[1] - a[1]);
+  const naoLib = lvs.filter(l => l.resultado === 'Não liberado').sort((a, b) => String(b.data).localeCompare(String(a.data)));
+  corpo.innerHTML = `
+    <div class="hero-flutuante q-hero" style="margin-top:0">
+      <div class="q-resumo">
+        <div class="q-kpi"><b>${lvs.length}</b><span>LVs concluídas</span></div>
+        <div class="q-kpi"><b style="color:var(--green-dark)">${pct(lib)}%</b><span>liberados (${lib})</span></div>
+        <div class="q-kpi"><b style="color:#e2a23a">${ress}</b><span>com ressalvas</span></div>
+        <div class="q-kpi"><b style="color:${nlib ? 'var(--error)' : 'inherit'}">${nlib}</b><span>não liberados</span></div>
+      </div>
+    </div>
+    ${naoLib.length ? `<section class="q-an-card"><h3>Não liberados</h3>${naoLib.slice(0, 6).map(l => lvCard(l)).join('')}</section>` : ''}
+    <section class="q-an-card"><h3>LVs por categoria</h3>${barras(porCat, porCat[0][1], 'var(--green)')}</section>
+    <section class="q-an-card"><h3>Tipos mais inspecionados</h3>${barras(porTipo, porTipo[0][1], 'var(--green)')}</section>
+    <section class="q-an-card"><h3>Itens com mais não conformidades</h3>${topNc.length ? barras(topNc, topNc[0][1], 'var(--error)') : '<p class="empty-state" style="margin:0">Nenhuma não conformidade no período. 👏</p>'}</section>
+    <section class="q-an-card"><h3>Empresas (mais NC primeiro)</h3>${barras(porEmp.map(e => [e[0], e[1], e[2]]), Math.max(...porEmp.map(e => e[1])), '#2e6da4')}</section>
+    ${rep.length ? `<section class="q-an-card"><h3>Equipamentos com NC repetida</h3>${rep.map(r => `<div class="q-an-linha" style="grid-template-columns:1fr"><span><b>${escaparHtml(r.l.tipoNome)} · ${escaparHtml(r.l.identificador || '')}</b><small class="lv-sub">${r.n} LVs · NC repetida nos itens ${r.itens.join(', ')}</small></span></div>`).join('')}</section>` : ''}
+    <section class="q-an-card"><h3>LVs por TST</h3>${barras(porTst, porTst[0][1], '#6b7a2f')}</section>`;
+  lvLigarCards(corpo);
+  // os cards abrem a LV mesmo que ela não esteja entre as recentes
+  corpo.querySelectorAll('.lv-card').forEach(b => b.addEventListener('click', () => { const l = lvs.find(x => x.id === b.dataset.id); if(l && !lvRecentes.some(x => x.id === l.id)) lvAbrir(l); }));
+}
+
 /* ---------- ligações ---------- */
+document.getElementById('lv-at-analise').addEventListener('click', lvAbrirAnalise);
 document.getElementById('lv-at-nova').addEventListener('click', () => { lvFiltroCat = 'Todos'; lvAbrirNova(); });
 document.getElementById('lv-at-buscar').addEventListener('click', () => { irPara('view-lv-busca'); document.getElementById('lv-busca').focus(); lvRenderBusca(); });
 document.getElementById('lv-at-minhas').addEventListener('click', () => { irPara('view-lv-minhas'); lvRenderMinhas(); });
