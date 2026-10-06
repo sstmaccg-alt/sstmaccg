@@ -969,7 +969,7 @@
   .lv-chip.on{ background:var(--navy); color:var(--white); border-color:var(--navy); font-weight:700; }
   .lv-passos{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:0 0 14px; }
   .lv-passos span{ height:5px; border-radius:3px; background:var(--border); } .lv-passos span.feito{ background:var(--green); }
-  #lv-ficha-corpo{ padding-bottom:120px; }
+  #lv-ficha-corpo, #tr-ficha-corpo{ padding-bottom:120px; }
   .lv-form{ display:flex; flex-direction:column; gap:13px; }
   .lv-campo, .lv-form label.lv-campo{ display:flex; flex-direction:column; gap:5px; font-size:12.5px; font-weight:700; color:var(--navy); }
   .lv-campo input, .lv-campo textarea{ height:46px; box-sizing:border-box; border:1px solid var(--border-strong); border-radius:11px; padding:0 12px; font:inherit; font-size:15px; font-weight:400; background:var(--white); color:var(--navy); width:100%; }
@@ -1042,6 +1042,56 @@
   html[data-theme="dark"] .q-nc label, html[data-theme="dark"] .q-nc .q-nc-origem{ color:var(--navy); }
   /* botão "Voltar" da barra de baixo (fundo sempre azul-escuro) */
   .q-btn-sec{ color:#fff !important; }
+  /* ---------- Treinamentos ---------- */
+  .tr-cod{ font-size:10.5px; font-weight:800; color:var(--green-dark); background:#e9f2df; border-radius:6px; padding:2px 7px; white-space:nowrap; }
+  html[data-theme="dark"] .tr-cod{ background:#26331d; }
+  .tr-criar{ border:2px dashed var(--border-strong); border-radius:14px; padding:12px 14px; display:flex; flex-direction:column; gap:10px; margin:6px 0 24px; color:var(--navy); }
+  .tr-criar .lv-campo textarea, .lv-form textarea{ height:auto; min-height:70px; box-sizing:border-box; border:1px solid var(--border-strong); border-radius:11px; padding:10px 12px; font:inherit; font-size:15px; font-weight:400; background:var(--white); color:var(--navy); width:100%; }
+  .tr-sel{ display:flex; align-items:center; gap:10px; justify-content:space-between; border:2px solid var(--green); border-radius:11px; padding:10px 12px; background:var(--white); font-size:14.5px; font-weight:400; color:var(--navy); line-height:1.35; }
+  .tr-trocar{ border:none; background:none; color:var(--green-dark); font:inherit; font-size:13px; font-weight:700; cursor:pointer; flex-shrink:0; }
+  .tr-conteudo{ background:#f1f5ea; border:1px solid #d7e5c6; border-radius:13px; padding:12px 14px; display:flex; flex-direction:column; gap:6px; color:#22303d; }
+  .tr-conteudo b{ font-size:12px; letter-spacing:.6px; color:#4c7032; } .tr-conteudo ul{ margin:0; padding-left:18px; font-size:13.5px; line-height:1.5; }
+  html[data-theme="dark"] .tr-conteudo{ background:#1d2a18; border-color:#33452a; color:var(--navy); } html[data-theme="dark"] .tr-conteudo b{ color:#a9d17f; }
+  .lv-form select#tr-carga-h, .lv-form select#tr-carga-m{ height:46px; }
+  .lv-form input[type=date], .lv-form input[type=time]{ height:46px; box-sizing:border-box; border:1px solid var(--border-strong); border-radius:11px; padding:0 12px; font:inherit; font-size:15px; background:var(--white); color:var(--navy); width:100%; }
+  .tr-cam{ position:relative; height:300px; margin:0 -16px 12px; background:#0d1118; overflow:hidden; }
+  .tr-cam video{ width:100%; height:100%; object-fit:cover; display:block; }
+  .tr-mira{ position:absolute; left:50%; top:50%; width:200px; height:200px; margin:-100px 0 0 -100px; border-radius:18px; box-shadow:0 0 0 999px rgba(10,14,20,.42); pointer-events:none; }
+  .tr-mira i{ position:absolute; width:34px; height:34px; border:4px solid #8bc34a; }
+  .tr-mira i:nth-child(1){ left:-2px; top:-2px; border-right:none; border-bottom:none; border-radius:16px 0 0 0; }
+  .tr-mira i:nth-child(2){ right:-2px; top:-2px; border-left:none; border-bottom:none; border-radius:0 16px 0 0; }
+  .tr-mira i:nth-child(3){ left:-2px; bottom:-2px; border-right:none; border-top:none; border-radius:0 0 0 16px; }
+  .tr-mira i:nth-child(4){ right:-2px; bottom:-2px; border-left:none; border-top:none; border-radius:0 0 16px 0; }
+  .tr-mira em{ position:absolute; left:12px; right:12px; top:50%; height:2px; background:#8bc34a; box-shadow:0 0 12px #8bc34a; animation:trVarre 1.8s ease-in-out infinite; }
+  @keyframes trVarre{ 0%,100%{ transform:translateY(-70px); } 50%{ transform:translateY(70px); } }
+  .tr-cam-msg{ position:absolute; left:0; right:0; top:12px; text-align:center; color:#fff; font-size:12.5px; font-weight:700; text-shadow:0 1px 4px rgba(0,0,0,.6); padding:0 16px; }
+  .tr-cam-abrir{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:auto !important; padding:12px 20px !important; display:none; }
+  .tr-cam.tr-cam-off .tr-cam-abrir{ display:block; } .tr-cam.tr-cam-off .tr-mira{ display:none; } .tr-cam.tr-cam-off .tr-cam-msg{ top:auto; bottom:20px; }
+  .tr-toast{ position:absolute; left:14px; right:14px; bottom:12px; background:#fff; border-radius:13px; padding:10px 12px; display:flex; gap:10px; align-items:center; box-shadow:0 6px 18px rgba(0,0,0,.25); color:#142131; }
+  .tr-toast .lv-sub{ color:#5b6570; } .tr-ck{ width:30px; height:30px; border-radius:50%; background:#5e8a3f; color:#fff; font-weight:900; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .tr-toast-txt{ display:flex; flex-direction:column; flex:1; min-width:0; } .tr-toast-txt b{ font-size:13.5px; }
+  .tr-aviso{ background:#fdf6e7; border:1px solid #f1dfb3; color:#7a4b06; border-radius:12px; padding:10px 12px; font-size:13px; margin:0 0 12px; }
+  .tr-aviso-erro{ background:#fde2e1; border-color:#f3c2c0; color:#8c2f2f; }
+  html[data-theme="dark"] .tr-aviso{ background:#3a2f17; border-color:#5c4a22; color:#f3c96b; } html[data-theme="dark"] .tr-aviso-erro{ background:#3a1f22; border-color:#5b3a3d; color:#f39a9a; }
+  .tr-cont-linha{ display:flex; align-items:center; gap:8px; margin:0 0 8px; color:var(--navy); } .tr-cont-linha b{ font-size:15px; } .tr-cont-linha .lv-sub{ margin-left:auto; }
+  .tr-part{ display:flex; align-items:center; gap:10px; padding:10px 0; border-top:1px solid var(--border); }
+  .tr-part:first-of-type{ border-top:none; }
+  .tr-part.tr-novo{ background:#f4f9ee; margin:0 -14px; padding-left:14px; padding-right:14px; border-radius:10px; }
+  html[data-theme="dark"] .tr-part.tr-novo{ background:#1d2a18; }
+  .tr-part-n{ width:26px; font-size:12px; font-weight:800; color:var(--text-muted); text-align:right; flex-shrink:0; }
+  .tr-part-txt{ display:flex; flex-direction:column; min-width:0; flex:1; color:var(--navy); } .tr-part-txt b{ font-size:13.5px; }
+  .tr-gen{ font-size:10.5px; font-weight:800; color:var(--text-muted); background:var(--cream); border-radius:5px; padding:1px 6px; margin-left:6px; }
+  .tr-remover{ width:36px; height:36px; border-radius:50%; border:1px solid var(--border-strong); background:var(--white); color:var(--text-muted); font-size:17px; cursor:pointer; flex-shrink:0; }
+  .tr-fotos{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .tr-foto{ position:relative; aspect-ratio:1; border-radius:12px; overflow:hidden; background:var(--border); }
+  .tr-foto img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .tr-foto span{ position:absolute; left:6px; top:6px; font-size:10px; font-weight:800; background:#5e8a3f; color:#fff; border-radius:6px; padding:2px 6px; }
+  .tr-foto-x{ position:absolute; right:5px; top:5px; width:28px; height:28px; border-radius:50%; border:none; background:rgba(20,33,49,.75); color:#fff; font-size:15px; cursor:pointer; }
+  .tr-kv{ display:grid; grid-template-columns:auto 1fr; gap:6px 14px; font-size:13px; } .tr-kv span{ color:var(--text-muted); } .tr-kv b{ font-weight:600; color:var(--navy); }
+  .tr-versao{ display:flex; align-items:center; gap:8px; text-decoration:none; padding:3px 0; }
+  .lv-tag.rv{ background:#e0ecf8; color:#1e4e8c; }
+  .tr-an-kpis{ display:grid !important; grid-template-columns:repeat(2, minmax(0,1fr)); row-gap:12px; }
+  .tr-an-kpis .q-kpi:nth-child(3){ padding-left:0; border-left:none; }
   #view-lv-analise .q-an-linha small{ display:block; margin-top:2px; }
   #view-lv-analise .q-resumo{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); row-gap:12px; }
   #view-lv-analise .q-resumo .q-kpi:nth-child(3){ padding-left:0; border-left:none; }
@@ -1457,13 +1507,85 @@
     </div>
 
     <!-- Tela: Treinamentos (placeholder) -->
+    <!-- ======================= TREINAMENTOS ======================= -->
     <div id="view-treinamentos" style="display:none;">
-      <div class="tela-banner">
-        <div class="tela-selo">SEGURANÇA</div>
-        <p class="tela-titulo">Treinamentos</p>
-        <p class="tela-sub">Conteúdos e capacitações.</p>
+      <div class="atalhos-rapidos">
+        <button type="button" class="atalho-item" id="tr-at-novo"><div class="atalho-icone"><span class="icone-svg" data-icone="plus"></span></div><p class="atalho-label">Novo</p></button>
+        <button type="button" class="atalho-item" id="tr-at-buscar"><div class="atalho-icone"><span class="icone-svg" data-icone="search"></span></div><p class="atalho-label">Buscar</p></button>
+        <button type="button" class="atalho-item" id="tr-at-meus"><div class="atalho-icone"><span class="icone-svg" data-icone="clipboard"></span><span class="atalho-badge" id="tr-badge-meus" style="display:none;"></span></div><p class="atalho-label">Meus</p></button>
+        <button type="button" class="atalho-item" id="tr-at-analise"><div class="atalho-icone"><span class="icone-svg" data-icone="barchart"></span></div><p class="atalho-label">Análise</p></button>
       </div>
-      <div class="placeholder-note">Tela em construção.</div>
+      <div class="hero-flutuante q-hero">
+        <div class="q-hero-topo"><span class="rotulo" id="tr-hero-rotulo">TREINAMENTOS</span></div>
+        <div class="q-resumo" id="tr-resumo"></div>
+      </div>
+      <p class="q-erro" id="tr-erro" style="display:none;"></p>
+      <span class="secao-titulo">Últimos treinamentos</span>
+      <div id="tr-ultimos"></div>
+    </div>
+
+    <div id="view-tr-escolher" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header"><button type="button" class="voltar tr-volta-inicio" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button></div>
+        <div class="tela-selo">NOVO TREINAMENTO</div>
+        <p class="tela-titulo">Escolher o treinamento</p>
+      </div>
+      <input type="search" id="tr-busca-tema" class="lv-busca" placeholder="Buscar na lista (ex.: altura, PI-PR-C 107)" aria-label="Buscar treinamento">
+      <div class="lv-chips" id="tr-chips"></div>
+      <p class="lv-sub" id="tr-temas-contagem"></p>
+      <div id="tr-temas"></div>
+      <div class="tr-criar">
+        <b>Não está na lista? Criar outro treinamento</b>
+        <label class="lv-campo">Tema *<input type="text" id="tr-novo-tema" placeholder="Ex.: DDS – Uso correto do protetor facial"></label>
+        <label class="lv-campo">Assuntos abordados *<textarea id="tr-novo-assuntos" rows="3" placeholder="Separe os assuntos com ponto e vírgula"></textarea></label>
+        <label class="q-declara"><input type="checkbox" id="tr-novo-incluir" checked> Incluir na LISTA TREINAMENTOS para os próximos</label>
+        <button type="button" class="btn-primary" id="tr-novo-usar" disabled>Usar este treinamento</button>
+      </div>
+    </div>
+
+    <div id="view-tr-busca" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header"><button type="button" class="voltar tr-volta-inicio" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button></div>
+        <div class="tela-selo">TREINAMENTOS</div>
+        <p class="tela-titulo">Buscar</p>
+      </div>
+      <input type="search" id="tr-busca" class="lv-busca" placeholder="Tema, turma, nº, nome ou matrícula" aria-label="Buscar treinamento">
+      <p class="lv-sub">Pela matrícula você vê todos os treinamentos de que a pessoa participou.</p>
+      <div id="tr-busca-res"></div>
+    </div>
+
+    <div id="view-tr-meus" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header"><button type="button" class="voltar tr-volta-inicio" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button></div>
+        <div class="tela-selo">TREINAMENTOS</div>
+        <p class="tela-titulo">Meus treinamentos</p>
+      </div>
+      <div class="lv-chips" id="tr-meus-chips"></div>
+      <div id="tr-meus"></div>
+    </div>
+
+    <div id="view-tr-analise" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header"><button type="button" class="voltar tr-volta-inicio" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button></div>
+        <div class="tela-selo">TREINAMENTOS</div>
+        <p class="tela-titulo">Análise dos treinamentos</p>
+      </div>
+      <div class="lv-dois" style="margin-bottom:14px;">
+        <select id="tr-an-ano" class="lv-busca" aria-label="Ano" style="margin:0;"></select>
+        <select id="tr-an-mes" class="lv-busca" aria-label="Mês" style="margin:0;"></select>
+      </div>
+      <div id="tr-an-corpo"></div>
+    </div>
+
+    <div id="view-tr-ficha" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header"><button type="button" class="voltar" id="tr-ficha-voltar" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button></div>
+        <div class="tela-selo" id="tr-ficha-selo">NOVO TREINAMENTO</div>
+        <p class="tela-titulo" id="tr-ficha-titulo">Dados do treinamento</p>
+      </div>
+      <div class="lv-passos" id="tr-passos"><span></span><span></span><span></span></div>
+      <div id="tr-ficha-corpo"></div>
+      <div class="q-barra" id="tr-barra"></div>
     </div>
 
     <!-- Tela: Desvios -->
@@ -1970,6 +2092,7 @@ const ICONES = {
   casa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/></svg>',
   lua: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>',
   'seta-esquerda': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>',
+  qr: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>',
   plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
   microfone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></svg>',
   sol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>'
@@ -2515,8 +2638,9 @@ document.getElementById('logout-btn').addEventListener('click', () => {
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-lv-analise','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha'];
+const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-tr-escolher','view-tr-busca','view-tr-meus','view-tr-analise','view-tr-ficha','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-lv-analise','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha'];
 function irPara(viewId){
+  if(typeof trFecharCamera === 'function') trFecharCamera();   // a câmera dos crachás nunca fica ligada fora da tela dela
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
   document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.view === viewId);
@@ -2524,6 +2648,11 @@ function irPara(viewId){
   if(viewId === 'view-desvios'){ mostrarListaDesvios(); }
   if(viewId === 'view-qualimetria' && typeof abrirQualimetria === 'function'){ abrirQualimetria(); }
   if(viewId === 'view-lv' && typeof abrirLV === 'function'){ abrirLV(); }
+  if(viewId === 'view-treinamentos' && typeof abrirTreinamentos === 'function'){ abrirTreinamentos(); }
+  if(/^view-tr-/.test(viewId)){
+    if(typeof abrirTreinamentos === 'function' && !trOuvindo) abrirTreinamentos();
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'view-treinamentos'));
+  }
   if(/^view-lv-/.test(viewId)){
     if(typeof abrirLV === 'function' && !lvOuvindo) abrirLV();
     document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'view-lv'));
@@ -2642,6 +2771,7 @@ function abrirDestinoNotificacao(abrir){
   else if(abrir === 'enviados') irPara('view-enviados');
   else if(abrir === 'qualimetria') irPara('view-qualimetria');
   else if(abrir === 'lv') irPara('view-lv');
+  else if(abrir === 'treinamentos') irPara('view-treinamentos');
   else if(abrir) irPara('view-desvios');
 }
 async function salvarTokenPush(){
@@ -7293,6 +7423,684 @@ document.getElementById('lv-busca-tipo').addEventListener('input', lvRenderTipos
 document.getElementById('lv-busca').addEventListener('input', () => { clearTimeout(lvBuscaTimer); lvBuscaTimer = setTimeout(lvRenderBusca, 300); });
 document.querySelectorAll('.lv-volta-inicio').forEach(b => b.addEventListener('click', () => irPara('view-lv')));
 document.getElementById('lv-ficha-voltar').addEventListener('click', () => { try{ lvSalvar(true); }catch(e){} irPara('view-lv'); });
+
+
+/* ======================================================================
+   TREINAMENTOS — lista de presença pelo QR do crachá
+   - tema vem da LISTA TREINAMENTOS (Drive > Treinamentos), que o Apps
+     Script copia para config/treinamentos; aqui fica uma cópia de reserva
+   - só TST registra; 3 etapas: dados → participantes (crachás) → fotos
+   - concluído: o Apps Script numera (TR-AAAA-0001), gera o PDF em
+     Treinamentos › AAAA › MM-AAAA ("DD-MM-AAAA - Tema.pdf") e, a cada
+     "Gerar novo relatório", uma revisão nova ("... - RV2.pdf")
+   - QR do crachá: OEC;matrícula;NOME;CARGO;M/F;;EMPRESA
+   ====================================================================== */
+const TR_CATALOGO_RESERVA = [{"codigo": "PI-PR-C-001", "tema": "Manual do Programa Integrado de Sustentabilidade", "assuntos": "Apresentação do Manual e escopo da obra; Análise SWOT; Partes Interessadas; Liderança e Comprometimento; Responsabilidades e Autoridades; Planejamento; Apoio; Operação; Avaliação de Desempenho; e Melhoria."}, {"codigo": "PI-PR-C-002", "tema": "Identificação de Perigos e Avaliação dos Riscos SST", "assuntos": "Apresentação e Objetivo do PI PR C 002; Processo de Identificação dos Perigos de Segurança e Saúde; Avaliação dos Riscos; Inventário de Riscos; e Definição dos controles e gerenciamento das ações."}, {"codigo": "PI-PR-C-004", "tema": "Objetivos e Planejamento de Ações de Sustentabilidade", "assuntos": "Objetivo do PI PR C 004; Definições e apresentação dos Objetivos; Planejamento das ações; Monitoramento dos objetivos e ações; Reuniões Periódicas e Análise Crítica dos Objetivos."}, {"codigo": "PI-PR-C-005", "tema": "Gestão de Fornecedores e Subcontratados", "assuntos": "Apresentação e Objetivo do PI PR C 005; Gestão de Fornecedores; Gestão de Subcontratados; Requisitos de Sustentabilidade de Fornecedores e de Subcontratados."}, {"codigo": "PI-PR-C-006", "tema": "Competência e Conscientização", "assuntos": "Apresentação e Objetivo do PI PR C 006; Requisitos de Competência SSTMA; Programa e Mecanismo de Treinamentos; Capacitação necessária; Campanhas de SSTMA; Controle efetivo dos treinamentos normativos; Matriz de Competência; Suíte de Segurança do Trabalho – Aplicativos: DDS Eletrônico e Capacitações."}, {"codigo": "PI-PR-C-008", "tema": "Inspeções", "assuntos": "Apresentação e objetivos do PI PR C 008; Sistemática das Inspeções Programadas, Inspeções Eventuais, Inspeções pré-uso; Aplicação de Checklist´s e Lista de Verificações; Tratamento e Monitoramento de Desvios e não Conformidades; Selos de Identificações das Inspeções; Avise ao SSTMA."}, {"codigo": "PI-PR-C-008", "tema": "Check list (PI-FR-C 00804) e LV (PI-FR-C 00805)", "assuntos": "Sistemática e aplicação das Inspeções de Pré-Uso – CheckList e Listas de Verificações; Tratamento e monitoramento dos desvios e não conformidades identificadas; Selos de Identificação das Inspeções."}, {"codigo": "PI-PR-C-009", "tema": "Qualimetria", "assuntos": "Apresentação e Objetivo do PI PR C 009; sistemática das avaliações (frequência, equipe avaliadora, temas, critérios da pontuação); Registros das avaliações; Tratamento e monitoramento de desvios e não conformidades; Metodologia e reconhecimento de divulgação dos resultados."}, {"codigo": "PI-PR-C-010", "tema": "Auditoria de Conformidade - Préver", "assuntos": "Apresentação e Objetivo do PI PR C 010; Planejamento de Auditorias Internas e Externas do Programa Integrado de Sustentabilidade; \nPrograma Préver – Objetivo; Responsabilidades; Processo e metodologia da aplicação; e Monitoramento."}, {"codigo": "PI-PR-C-011", "tema": "Tratamento de Não Conformidade", "assuntos": "Apresentação e Objetivo do PI PR C 011; Identificação de Não Conformidades, Registro, Investigação da Causa Raiz; e Definições de ações Corretivas; Verificação da Eficácia; e Análise Crítica."}, {"codigo": "PI-PR-C-012", "tema": "Investigações de Incidentes", "assuntos": "Apresentação e Objetivo do PI PR C 012; Definição das Ocorrências; Potencial e Magnitude de Perda; Composição da Equipe de Investigação; Gestão dos Incidentes (Classificação, potencial de perda, Coleta de dados, Análise de causa e efeito, determinação de soluções, verificação de eficácia); Controle e Registro das Ocorrências; Comunicação de Ocorrências e Fluxograma de comunicação de Ocorrências Graves."}, {"codigo": "PI-PR-C-040", "tema": "Equipamentos, Máquinas e Ferramentas", "assuntos": "Apresentação e Objetivo do PI PR C 040; Planejamento, Organização e execução das atividades de operação de máquinas e equipamentos; Ações preparatórias e medidas de prevenção de máquinas e equipamentos; Arranjo físico e instalações das máquinas estacionárias; Segurança nas ferramentas manuais e rotativas; Inspeção e Operação segura nas máquinas e equipamentos; Documentação Obrigatória: Plano de Manutenção Preventiva, Manual, Laudo de Conformidade; e autorização, capacitação e treinamentos obrigatórios; procedimento em situação de emergências; sinalização de segurança."}, {"codigo": "PI-PR-C-041", "tema": "Movimentação de Cargas", "assuntos": "Apresentação e Objetivo do PI PR C 041; Planejamento, organização e execução das atividades de operação e movimentação de cargas; Ações preparatórias e medidas de prevenção nas operações de movimentação de cargas; Medidas de Prevenção Ambiental; Inspeção dos equipamentos e das áreas; e Autorização, capacitação e treinamentos obrigatórios."}, {"codigo": "PI-PR-C-042", "tema": "Instalações Elétricas e Serviços em Eletricidade", "assuntos": "Apresentação e Objetivo do PI PR C 042; Planejamento, organização e execução das atividades com instalações elétricas; Ações preparatórias e principais medidas de prevenção e controle nas atividades com instalações elétricas; sistemática de autorização e liberação para atividades com instalações elétricas; Capacitação e treinamentos obrigatórios; Ordem de Serviço; Responsabilidades; Inspeção das ferramentas, dos Equipamentos de Proteção, das áreas e serviços; Sinalização de Segurança nas instalações; Ações de Emergência conforme o PI FR C 1001 - PAE."}, {"codigo": "PI-PR-C-044", "tema": "Transporte de Pessoas e Cargas e Armazenamento de Materiais e Insumos", "assuntos": "Apresentação e Objetivo do PI PR C 044; Planejamento, organização e execução das atividades; Ações preparatórias e medidas de prevenção nas atividades de transporte e armazenamento de materiais e insumos; Inspeção dos equipamentos e das áreas; Medidas de Prevenção Ambiental."}, {"codigo": "PI-PR-C-045", "tema": "Trabalho a Quente", "assuntos": "Apresentação e Objetivo do PI PR C 045; Planejamento, organização e execução das atividades de trabalho a quente; Ações preparatórias e medidas de prevenção e controle nas atividades de trabalho a quente; sistemática de autorização, capacitação e treinamento; Medidas de prevenção ambiental; Inspeção dos equipamentos."}, {"codigo": "PI-PR-C-046", "tema": "Sinalização e Isolamento de Segurança", "assuntos": "Apresentação e Objetivo do PI PR C 046; Orientações gerais quanto as sinalizações; Sinalização de vias e acessos internos e sinalização de vias públicas (externas)."}, {"codigo": "PI-PR-C-048", "tema": "APR – Análise Preliminar de Risco", "assuntos": "Apresentação e Objetivo do PI PR C 048; Orientação das etapas de elaboração da Análise Preliminar de Risco; Composição da equipe para elaboração da APR; Periodicidade das revisões e treinamento nas análises preliminares de risco; Controle de emissão; Orientações gerais quanto a elaboração e arquivo final do documento; Identificação dos riscos, perigos, medidas de controle; e a importância de todos estarem treinados e ciente da APR."}, {"codigo": "PI-PR-C-049", "tema": "PTR – Permissão para Trabalho de Risco", "assuntos": "Apresentação e Objetivo do PI PR C 049; Orientação do processo de emissão da Permissão para Trabalho de Risco; Sistemática de controle da PTR – Emissão, Validade, Execução, Conclusão e/ou Cancelamento da PTR; Orientações gerais quanto a elaboração e arquivo final do documento."}, {"codigo": "PI-PR-C-052", "tema": "Programa de Proteção Respiratória", "assuntos": "Treinamento sobre o Programa de Proteção Respiratória, abordando seu objetivo, identificação dos riscos respiratórios presentes nas frentes de trabalho, seleção dos tipos de proteção respiratória, funcionamento e limitações das proteções respiratórias, uso correto da proteção respiratória; perigos e riscos associados ao uso inadequado dos equipamentos; ações de prevenção, manutenção, inspeção, higienização, conservação, guarda e substituição da proteção do equipamento de proteção respiratória, incluindo a vida útil dos filtros; reconhecimento e utilização de respiradores de situações de urgência e emergência; verificação da vedação e orientações sobre ensaio de vedação; exercícios práticos de colocação e uso dos respiradores."}, {"codigo": "PI-PR-C-101", "tema": "Movimentação de Solo", "assuntos": "Apresentação e Objetivo do PI PR C 101; Planejamento, organização e execução das atividades de escavações e movimentação de solo; Ações preparatórias e medidas de prevenção e controle nos serviços de escavação; Medidas de Prevenção Ambiental; Sistemática de liberação das atividades de escavação e monitoramento."}, {"codigo": "PI-PR-C-102", "tema": "Serviços em Ambientes Confinados", "assuntos": "Apresentação e Objetivo do PI PR C 102; planejamento, organização e execução das atividades em ambientes confinados; ações preparatórias e medidas de prevenção e controle nas atividades; sistemática de autorização, capacitação, treinamentos obrigatórios e avaliação de saúde; responsabilidades e autoridades; controle e monitoramento dos ambientes; utilização e preenchimento da PET; equipamentos de proteção coletiva e individual utilizados; condutas em situações de emergência; noções básicas de resgate e primeiros socorros."}, {"codigo": "PI-PR-C-103", "tema": "Trabalho em Altura", "assuntos": "Apresentação e Objetivo do PI PR C 103; planejamento, organização e execução das atividades em altura; ações preparatórias e medidas de prevenção e controle nas atividades em altura; processo de execução das atividades; sistemática de autorização, capacitação, treinamentos obrigatórios e avaliação de saúde; responsabilidades e autoridades; equipamentos de proteção coletiva e individual utilizados; preenchimento e utilização da PTE e APR; inspeção dos equipamentos e áreas; condutas em situações de emergência; noções básicas de resgate e primeiros socorros."}, {"codigo": "PI-PR-C-107", "tema": "Escavação de Túnel em Solo e em Rocha", "assuntos": "Apresentação e Objetivo do PI PR C 107; planejamento, organização, preparação e execução das etapas da atividade; medidas de segurança e prevenção; sistemática de autorização, capacitação, e treinamentos obrigatórios; responsabilidades e autoridades; inspeção e liberação dos equipamentos e áreas; comunicação; sinalização e isolamento; limpeza e organização."}, {"codigo": "PI-PR-C-112", "tema": "Bloqueio de Energia", "assuntos": "Apresentação e Divulgação do Procedimento de Bloqueio; Tipos de energia existentes na obra (elétrica, mecânica, hidráulica e pneumática); Riscos inerentes do não bloqueio das fontes de energia; Sempre bloquear as fontes de energia em caso de intervenção ou manutenção; Solicitar a presença dos profissionais capacitados para realização do bloqueio; Sempre utilizar a etiqueta de bloqueio, juntamente com o cadeado; Apresentação dos dispositivos de bloqueio (cadeados coloridos, etiqueta e travas de segurança); Demonstração prática do eletricista realizando o bloqueio em um circuito elétrico."}, {"codigo": "PI-PR-C-110", "tema": "Armazenamento e Abastecimento de Combustível", "assuntos": "Apresentação e Objetivo do PI PR C 110; Definições; Responsabilidades; Planejamento, organização e execução da atividade; Medidas de Prevenção; Ações Preparatórias; Perigos; Sistemas de Proteção coletiva e Individual; Condições Impeditivas; Ações de Emergência; Capacitação; e Monitoramento."}, {"codigo": "", "tema": "Proteção auditiva", "assuntos": "- A importância da proteção auditiva; Riscos devido a falta de proteção (EPI); Tipos de protetores auricular; como usar o protetor corretamente; higiene e conservação do protetor auricular."}, {"codigo": "", "tema": "Equipamento de Proteção Individual – EPI - NR 06", "assuntos": "Descrição do equipamento e seus componentes; Risco ocupacional contra o qual o EPI oferece proteção; Restrições e limitações de proteção; Forma adequada de uso e ajuste; Manutenção e substituição; e cuidados de limpeza, higienização, guarda e conservação; Obrigações da Empresa quanto aos EPI’s, conforme NR-6; Obrigações dos Empregados quanto aos EPI’s, conforme NR 6; Utilizá-lo apenas para a finalidade a que se destina; Informar qualquer alteração que o torne impróprio para o uso; Uso do Capacete com jugular; Uso da botina de segurança; Uso de máscara adequada para a atividade; Uso do protetor auricular; Uso dos óculos de segurança; EPI’s necessários para atividades e funções especiais; Uso do cinto de segurança para trabalho em altura; Consciência quanto à utilização dos EPI’s; Compromisso, Disciplina e a Força do Exemplo."}, {"codigo": "", "tema": "Equipamento de Proteção Coletiva – EPC", "assuntos": "O que é EPC; Tipos de EPC e seus componentes; objetivo e a importância do EPC; PI-PR-C 046 Sinalização e Isolamento; Programa de Gerenciamento de Riscos - PGR e Proteções Coletivas; Obrigações da Empresa quanto aos EPC’s; Obrigações dos Empregados quanto aos EPC’s; Manutenção correta dos EPC’s; Conservação dos EPC’s; Informar qualquer alteração que o torne impróprio para o uso; Compromisso, Disciplina e a Força do Exemplo."}, {"codigo": "", "tema": "Equipamento de Proteção Coletiva – EPC – Ordem e limpeza", "assuntos": "A ordem e limpeza são condições primordiais para a prevenção de acidentes e tornam o ambiente de trabalho mais seguro; Os acessos devem permanecer sempre desimpedidos de materiais, ferramentas e outros objetos; Não permita que pontas agudas (vergalhões) fiquem desprotegidas; Sempre destinar o lixo ou entulho acumulado a locais adequados (caçambas); Manter a limpeza e organização depende da ação de todos; Comece por você, dê o exemplo."}, {"codigo": "", "tema": "Comunicação e Prevenção de Acidentes / Percepção de Risco", "assuntos": "A prevenção de acidentes é o conjunto de práticas e medidas para identificar e mitigar riscos no ambiente de trabalho, promovendo segurança para os integrantes. Entre as ações mais comuns, estão treinamentos, uso de Equipamentos de Proteção Individual (EPIs) e cumprimento de normas de segurança. Atitudes que comprometem a percepção de riscos: Ação impulsiva, Foco apenas em riscos recentes, Confiança excessiva, Desatenção, Falta de capacitação adequada. A percepção de risco é uma habilidade essencial para prevenir acidentes e garantir a segurança de todos. Tipos de acidentes; Comunicação de ocorrências e fluxograma de comunicação de ocorrências. É obrigação de todos prevenir e tratar de reduzir ao mínimo o número de incidentes."}, {"codigo": "", "tema": "Proteção dos Olhos", "assuntos": "Proteger os olhos é tarefa primordial no dia a dia; como promover um bom cuidado com os olhos; Uso dos óculos de proteção (EPI)."}, {"codigo": "", "tema": "Proteção das mãos", "assuntos": "- Nossas mãos estão constantemente expostas a riscos no ambiente de trabalho, tais como: Máquinas e equipamentos em operação; Produtos químicos agressivos; Materiais cortantes ou pontiagudos; Temperaturas extremas; impactos e quedas de objetos.\n- A importância de utilizar luvas apropriadas para atividade desenvolvidas; inspeção regular; manuseio das ferramentas corretamente; e atenção aos procedimentos de trabalho seguro.\n- Higiene das mãos."}, {"codigo": "", "tema": "Proteção Solar", "assuntos": "A importância da proteção solar; uso regular do protetor solar e o uso de roupas adequadas e equipamentos de proteção individual (EPI); hidratação constante."}, {"codigo": "", "tema": "Compromisso de Sustentabilidade", "assuntos": "Promover a segurança e saúde nas frentes de trabalhos a fim de prevenir acidentes e doenças, proporcionando o bem-estar dos nossos integrantes; \nIncentivar a prática sustentável, a fim de reduzir o consumo de recursos naturais, incentivar o reuso de recursos hídricos e de resíduos, mitigando impactos ambientais e prevenindo a poluição;\nAtuação ética, integra e transparente;\nGarantir o atendimento a conformidade legal e outros requisitos;\nImplementar medidas de controle de perigos e riscos a fim de reduzir e mitigar possíveis impactos a segurança, saúde e meio ambiente;\nIncentivar a participação dos integrantes nos assuntos relacionados à saúde, à segurança do trabalho, meio ambiente e a responsabilidade social;\nBuscar a melhoria contínua na gestão dos processos operacionais;\nRealizar periodicamente a análise de dados obtidos a partir dos indicadores de desempenho de sustentabilidade."}, {"codigo": "", "tema": "Regras de Tolerância Zero", "assuntos": "As regras de tolerância zero do contrato tem por objetivos estabelecer diretrizes para a gestão e classificação das regras de segurança no trabalho que devem ser seguidas rigorosamente em todas as áreas. Sua inobservância implicará na aplicação de medidas administrativas.\nÉ proibido realizar atividade de carregamento de explosivo sem seguir o Plano de Fogo;\nÉ proibido caminhar ou permanecer sob carga suspensa;\nÉ proibido realizar trabalho em altura sem utilizar o cinto de segurança ancorado;\nÉ proibido realizar escavação acima de 1,25m sem projeto e sem laudo de estabilidade;\nÉ proibido realizar atividade elétrica sem bloqueio e sem os EPIs específicos;\nÉ proibido transitar acima da velocidade permitida;\nÉ proibido realizar atividade sob efeito de álcool e/ou drogas."}, {"codigo": "", "tema": "Brigada Voluntária", "assuntos": "Reforço da obrigatoriedade da utilização de identificação de brigadista - colete nas frentes de trabalho;\nReforço das Orientações contidas no Plano / Procedimento de Atendimento a Emergências - PI PRC 100;\nNR 23 - Proteção Contra Incêndios;\nClasses de Incêndio;\nNoções de Prevenção e Combate a Incêndios;\nMétodos de extinção de fogo;\nAgentes extintores;\nUtilização dos equipamentos de combate ao incêndio;\nDispositivos de comunicação existentes;\nIdentificação das saídas de Emergência e Ponto de Encontro;\nCondutas em situações de emergência, incluindo noções de técnicas de resgate e de primeiros socorros;\nSeja Claro e Conciso: Ao comunicar uma emergência, forneça informações claras e precisas sobre a natureza da emergência, o local e os envolvidos.\nSiga o Plano: Familiarize-se com o procedimento / plano de emergência do Contrato e siga as etapas para cada tipo de emergência.\nLocalização das Saídas: Conheça todas as saídas de emergência e certifique-se de que estão desobstruídas. Dirija se ao ponto de encontro designado após a evacuação e aguarde novas instruções.\nEquipamentos de Segurança: Mantenha os equipamentos de emergência íntegros e prontos para uso.\nCenários de Emergência: Atue conforme o previsto nos treinamentos de cenários de emergência do PAE. Na dúvida busque ajuda e afaste-se da cena.\nBrigada de Emergência: Conheça os integrantes brigadistas da sua área. Eles são o seu primeiro apoio.\n \nA segurança de todos começa com a ação de cada um!"}, {"codigo": "", "tema": "NR 23 – Proteção contra Incêndios", "assuntos": ""}, {"codigo": "", "tema": "Riscos Ambientais", "assuntos": "- Definição de Riscos Ambientais; Antecipação e Reconhecimento dos Riscos; Riscos Químicos; Riscos Físicos; Riscos Biológicos; Riscos Ergonômicos; Riscos de Incidentes; Prevenção e Controle dos Riscos; Medidas de Proteção Coletiva; Medidas de Proteção Individual; Controles Operacionais; Inventário de Riscos; Plano de ação."}, {"codigo": "", "tema": "Segurança em Equipamentos, Máquinas e Ferramentas", "assuntos": "Procure sempre ler os manuais das ferramentas elétricas portáteis e as recomendações de segurança indicadas pelo fabricante;\nAprenda o método de utilização e procure informações sobre a construção da ferramenta elétrica manual para entender sobre os seus riscos e perigos;\nNunca utilize bijuterias, roupas folgadas ou luvas que possam atrapalhar a operação;\nSegure as ferramentas com firmeza pois há possibilidade destas ferramentas escaparem de suas mãos, por trabalharem em alta rotação;\nNão expor as mãos e outros membros a partes móveis da ferramenta / máquina / equipamento;\nNão utilize ferramentas, máquinas, equipamentos sem aplicação de lista de verificação diária;\nNão utilize ferramentas, máquinas, equipamentos improvisados ou defeituosos;\nNão utilize ferramentas, máquinas, equipamentos ter conhecimento e participação na análise de riscos da atividade;\nNão utilize ferramentas, máquinas, equipamentos aos quais não seja capacitado/autorizado;\nAo realizar algum tipo de substituição de componentes da ferramenta (broca, rebolo, etc.), retire o “plug” da tomada de energia;\nNos trabalhos com ferramentas elétricas portáteis em locais úmidos, quando necessário, adote plataformas isolantes, como tapetes de borracha e verifique se o cabo está em perfeitas condições de uso, além de aterradas;"}];
+let trLista = null, trRecentes = [], trMeusLista = [], trOuvindo = false, trFiltroMeus = 'todos', trFiltroTema = 'todos';
+let trAtual = null, trPasso = 1, trSalvarTimer = null, trBuscaTimer = null, trTrocandoTema = false;
+const trFotosNovas = {};          // id da foto -> miniatura (só nesta sessão, até subir)
+
+function trCatalogo(){
+  if(trLista) return trLista;
+  try{ const s = JSON.parse(localStorage.getItem('sst_trein_lista') || 'null'); if(Array.isArray(s) && s.length) return s; }catch(e){}
+  return TR_CATALOGO_RESERVA;
+}
+function trMinutosTexto(min){ min = Number(min) || 0; const h = Math.floor(min / 60), m = min % 60; return (h ? h + 'h' : '') + (h && m ? ' ' : '') + (m || !h ? String(m).padStart(h ? 2 : 1, '0') + 'min' : ''); }
+function trNomeTema(t){ return t ? (t.codigo ? t.codigo + ' – ' : '') + t.tema : ''; }
+function trAssuntos(texto){ return String(texto || '').split(/;|\n/).map(a => a.trim().replace(/\.$/, '')).filter(Boolean).map(a => a[0].toUpperCase() + a.slice(1)); }
+function trSituacao(t){
+  if(t.estado !== 'concluido') return { txt: 'Rascunho', cls: 'rasc' };
+  if(t.relatorioPendente) return { txt: 'Gerando relatório', cls: 'assin' };
+  const rv = (t.versoes || []).length;
+  const novas = (t.fotos || []).filter(f => !f.emRelatorio).length;
+  if(novas) return { txt: novas + ' foto(s) fora do relatório', cls: 'ress' };
+  if(!(t.fotos || []).length) return { txt: 'Sem foto', cls: 'ress' };
+  return { txt: rv > 1 ? 'Relatório RV' + rv : 'Relatório gerado', cls: 'ok' };
+}
+function trCard(t){
+  const s = trSituacao(t), n = (t.participantes || []).length;
+  return `<button type="button" class="lv-card" data-trid="${escaparHtml(t.id)}">
+    <span class="lv-card-topo"><b>${escaparHtml(trNomeTema(t))}</b><span class="lv-tag ${s.cls}">${escaparHtml(s.txt)}</span></span>
+    ${t.turma ? `<span class="lv-sub" style="color:var(--navy)">${escaparHtml(t.turma)}</span>` : ''}
+    <span class="lv-sub">${escaparHtml([t.numero, formatarDataBR(t.data) + (t.hora ? ' ' + t.hora : ''), n + ' participante' + (n === 1 ? '' : 's'), trMinutosTexto(t.cargaMin), t.responsavel && t.responsavel.nome].filter(Boolean).join(' · '))}</span>
+  </button>`;
+}
+function trLigarCards(caixa, lista){
+  caixa.querySelectorAll('.lv-card[data-trid]').forEach(b => b.addEventListener('click', () => {
+    const t = (lista || []).concat(trMeusLista, trRecentes).find(x => x.id === b.dataset.trid);
+    if(t) trAbrir(t);
+  }));
+}
+
+/* ---------- abrir o módulo ---------- */
+function abrirTreinamentos(){
+  if(!qListas) qCarregarListas();
+  if(!trOuvindo && auth.currentUser){
+    trOuvindo = true;
+    db.collection('config').doc('treinamentos').get().then(snap => {
+      const l = snap.exists && snap.data().lista;
+      if(Array.isArray(l) && l.length){ trLista = l; try{ localStorage.setItem('sst_trein_lista', JSON.stringify(l)); }catch(e){} }
+    }).catch(() => {});
+    const d = new Date(), inicioMes = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-01';
+    db.collection('treinamentos').where('data', '>=', inicioMes).onSnapshot((snap) => {
+      trRecentes = snap.docs.map(x => ({ id: x.id, ...x.data() }));
+      trAtualizarTelas();
+    }, (e) => { console.warn('Treinamentos:', e); const el = document.getElementById('tr-erro'); el.textContent = /permission/i.test(e.code || '') ? 'O banco recusou a leitura dos treinamentos. Confira se o bloco "treinamentos" foi colado nas Regras do Firestore.' : 'Não consegui carregar os treinamentos agora.'; el.style.display = 'block'; });
+    db.collection('treinamentos').where('criadoPor', '==', auth.currentUser.uid).onSnapshot((snap) => {
+      trMeusLista = snap.docs.map(x => ({ id: x.id, ...x.data() }));
+      trAtualizarTelas();
+    }, (e) => console.warn('Meus treinamentos:', e));
+  }
+  trRenderInicio();
+}
+function trOrdenar(l){ return l.slice().sort((a, b) => String((b.data || '') + (b.hora || '')).localeCompare(String((a.data || '') + (a.hora || '')))); }
+function trAtualizarTelas(){
+  const vis = (id) => document.getElementById(id).style.display === 'block';
+  if(vis('view-treinamentos')) trRenderInicio();
+  if(vis('view-tr-meus')) trRenderMeus();
+  const rasc = trMeusLista.filter(t => t.estado !== 'concluido').length;
+  const bd = document.getElementById('tr-badge-meus'); bd.textContent = rasc; bd.style.display = rasc ? 'flex' : 'none';
+  // ficha aberta: traz o que o Apps Script preencheu (número, PDF, versões)
+  if(trAtual && vis('view-tr-ficha') && trPasso === 4){
+    const at = trMeusLista.concat(trRecentes).find(x => x.id === trAtual.id);
+    if(at){
+      const chaves = ['numero', 'pdfUrl', 'pdfNome', 'versoes', 'relatorioPendente', 'fotos'];
+      if(chaves.some(k => JSON.stringify(at[k]) !== JSON.stringify(trAtual[k]))){ chaves.forEach(k => { trAtual[k] = at[k]; }); trRenderFicha(); }
+    }
+  }
+}
+function trRenderInicio(){
+  const agora = new Date(), mes = agora.getFullYear() + '-' + String(agora.getMonth() + 1).padStart(2, '0');
+  const todos = trRecentes.concat(trMeusLista.filter(m => !trRecentes.some(r => r.id === m.id)));
+  const doMes = todos.filter(t => t.estado === 'concluido' && String(t.data || '').startsWith(mes));
+  const part = doMes.reduce((a, t) => a + (t.participantes || []).length, 0);
+  const hh = doMes.reduce((a, t) => a + (t.participantes || []).length * (Number(t.cargaMin) || 0), 0) / 60;
+  document.getElementById('tr-hero-rotulo').textContent = 'TREINAMENTOS · ' + agora.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }).toUpperCase();
+  document.getElementById('tr-resumo').innerHTML = `
+    <div class="q-kpi"><b>${doMes.length}</b><span>treinamentos</span></div>
+    <div class="q-kpi"><b>${part}</b><span>participações</span></div>
+    <div class="q-kpi"><b>${hh >= 10 ? Math.round(hh) : String(Math.round(hh * 10) / 10).replace('.', ',')}h</b><span>horas-homem</span></div>`;
+  document.getElementById('tr-at-novo').style.display = ehTST() ? '' : 'none';
+  const ult = document.getElementById('tr-ultimos');
+  const lista = trOrdenar(todos).slice(0, 10);
+  ult.innerHTML = lista.length ? lista.map(trCard).join('') : '<p class="empty-state">Nenhum treinamento registrado neste mês.</p>';
+  trLigarCards(ult, lista);
+}
+
+/* ---------- escolher o tema ---------- */
+function trAbrirEscolher(){
+  if(!ehTST()){ mostrarAvisoApp('Só TST', 'Os treinamentos são registrados pelos TSTs.'); return; }
+  trTrocandoTema = false;
+  irPara('view-tr-escolher');
+  document.getElementById('tr-busca-tema').value = '';
+  ['tr-novo-tema', 'tr-novo-assuntos'].forEach(id => { document.getElementById(id).value = ''; });
+  trAtualizarCriar();
+  trRenderTemas();
+}
+function trUsadosRecentes(){
+  const vistos = new Set(), l = [];
+  trOrdenar(trMeusLista.concat(trRecentes)).forEach(t => { const k = t.tema; if(k && !vistos.has(k)){ vistos.add(k); l.push({ codigo: t.codigo || '', tema: t.tema, assuntos: t.assuntos || '' }); } });
+  return l.slice(0, 12);
+}
+function trRenderTemas(){
+  const termo = qNorm(document.getElementById('tr-busca-tema').value.trim()).replace(/[\s-]/g, '');
+  const cat = trCatalogo(), usados = trUsadosRecentes();
+  const chips = document.getElementById('tr-chips');
+  chips.innerHTML = [['todos', 'Lista da obra · ' + cat.length], ['usados', 'Usados recentemente' + (usados.length ? ' · ' + usados.length : '')]]
+    .map(([k, t]) => `<button type="button" class="lv-chip ${trFiltroTema === k ? 'on' : ''}" data-f="${k}">${t}</button>`).join('');
+  chips.querySelectorAll('.lv-chip').forEach(b => b.addEventListener('click', () => { trFiltroTema = b.dataset.f; trRenderTemas(); }));
+  const base = trFiltroTema === 'usados' ? usados : cat;
+  const lista = base.filter(t => !termo || qNorm(t.codigo + ' ' + t.tema + ' ' + t.assuntos).replace(/[\s-]/g, '').includes(termo));
+  document.getElementById('tr-temas-contagem').textContent = `${lista.length} de ${base.length} treinamento(s)` + (trFiltroTema === 'usados' ? ' usados recentemente' : ' da LISTA TREINAMENTOS');
+  const caixa = document.getElementById('tr-temas');
+  caixa.innerHTML = lista.map((t, i) => `<button type="button" class="lv-card tr-tema" data-i="${i}">
+      <span class="lv-card-topo">${t.codigo ? `<span class="tr-cod">${escaparHtml(t.codigo)}</span>` : ''}<span class="lv-seta" style="margin-left:auto">›</span></span>
+      <b style="font-size:14.5px">${escaparHtml(t.tema)}</b>
+      <span class="lv-sub">${escaparHtml(String(t.assuntos || 'Sem assuntos cadastrados na lista.').slice(0, 110))}${String(t.assuntos || '').length > 110 ? '…' : ''}</span></button>`).join('') || '<p class="empty-state">Nenhum treinamento encontrado. Crie outro logo abaixo.</p>';
+  caixa.querySelectorAll('.tr-tema').forEach(b => b.addEventListener('click', () => trNovo(lista[Number(b.dataset.i)], false)));
+}
+function trAtualizarCriar(){
+  const ok = document.getElementById('tr-novo-tema').value.trim().length >= 3 && document.getElementById('tr-novo-assuntos').value.trim().length >= 3;
+  document.getElementById('tr-novo-usar').disabled = !ok;
+}
+function trNovo(tema, criadoNaHora){
+  // "trocar" na etapa 1: só troca o tema do rascunho atual (não cria outro)
+  if(trTrocandoTema && trAtual && trPodeEditar()){
+    trTrocandoTema = false;
+    Object.assign(trAtual, { codigo: tema.codigo || '', tema: tema.tema, assuntos: tema.assuntos || '', incluirNaLista: !!criadoNaHora && !!tema.incluir, temaCriadoNaHora: !!criadoNaHora });
+    trSalvar(); trPasso = 1; irPara('view-tr-ficha'); trRenderFicha(); window.scrollTo(0, 0); return;
+  }
+  trTrocandoTema = false;
+  const eu = qMeuPerfil(), agora = new Date();
+  trAtual = {
+    id: db.collection('treinamentos').doc().id, novo: true,
+    codigo: tema.codigo || '', tema: tema.tema, assuntos: tema.assuntos || '',
+    incluirNaLista: !!criadoNaHora && !!tema.incluir, temaCriadoNaHora: !!criadoNaHora,
+    turma: '', data: agora.toISOString().slice(0, 10), hora: String(agora.getHours()).padStart(2, '0') + ':' + String(agora.getMinutes()).padStart(2, '0'),
+    cargaMin: 0, local: '', participantes: [], matriculas: [], fotos: [], estado: 'rascunho',
+    responsavel: { nome: eu.nome, matricula: eu.matricula, email: eu.email, uid: eu.uid },
+    criadoPor: eu.uid, criadoPorNome: eu.nome, criadoPorEmail: eu.email
+  };
+  trPasso = 1; irPara('view-tr-ficha'); trRenderFicha(); window.scrollTo(0, 0);
+}
+function trAbrir(t){
+  trAtual = JSON.parse(JSON.stringify(t));
+  trAtual.participantes = trAtual.participantes || []; trAtual.fotos = trAtual.fotos || [];
+  const meu = t.criadoPor === (auth.currentUser && auth.currentUser.uid);
+  trPasso = t.estado === 'concluido' ? 4 : (meu && ehTST() ? 1 : 4);
+  irPara('view-tr-ficha'); trRenderFicha(); window.scrollTo(0, 0);
+}
+
+/* ---------- salvar ---------- */
+const TR_NAO_REGRAVAR = ['novo', 'id', 'criadoEm', 'concluidoEm', 'numero', 'pdfUrl', 'pdfNome', 'versoes', 'relatorioPendente', 'listaIncluida', 'atualizadoEm', 'fotosDrive'];
+function trPodeEditar(){ return !!trAtual && trAtual.estado !== 'concluido' && ehTST() && trAtual.criadoPor === (auth.currentUser && auth.currentUser.uid); }
+function trDados(){ const d = Object.assign({}, trAtual); TR_NAO_REGRAVAR.forEach(k => delete d[k]); d.matriculas = (trAtual.participantes || []).map(p => String(p.matricula)); return d; }
+function trSalvar(imediato){
+  if(!trPodeEditar()) return;
+  clearTimeout(trSalvarTimer);
+  const gravar = () => {
+    const novo = trAtual.novo, d = trDados();
+    d.atualizadoEm = firebase.firestore.FieldValue.serverTimestamp();
+    if(novo){ d.criadoEm = firebase.firestore.FieldValue.serverTimestamp(); trAtual.novo = false; }
+    gravarSemEsperar(db.collection('treinamentos').doc(trAtual.id).set(d, { merge: true }), 'treinamento');
+  };
+  if(imediato) gravar(); else trSalvarTimer = setTimeout(gravar, 700);
+}
+
+/* ---------- ficha ---------- */
+function trRenderFicha(){
+  const t = trAtual, ed = trPodeEditar();
+  if(trPasso !== 2) trFecharCamera();
+  document.getElementById('tr-ficha-selo').textContent = (t.numero ? t.numero + ' · ' : (t.estado === 'concluido' ? '' : 'NOVO TREINAMENTO · ')) + (t.codigo || 'TREINAMENTO');
+  document.getElementById('tr-ficha-titulo').textContent = ['', 'Dados do treinamento', 'Participantes', 'Fotos e conclusão', t.estado === 'concluido' ? 'Concluído' : 'Em andamento'][trPasso];
+  document.querySelectorAll('#tr-passos span').forEach((el, i) => el.classList.toggle('feito', i < Math.min(trPasso, 3)));
+  document.getElementById('tr-passos').style.display = trPasso === 4 ? 'none' : 'grid';
+  const corpo = document.getElementById('tr-ficha-corpo'), barra = document.getElementById('tr-barra');
+  if(trPasso === 1) trRenderDados(corpo, barra, ed);
+  else if(trPasso === 2) trRenderParticipantes(corpo, barra, ed);
+  else if(trPasso === 3) trRenderFotos(corpo, barra, ed);
+  else trRenderConcluido(corpo, barra);
+  corpo.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
+  barra.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
+}
+function trDadosFaltando(){
+  const t = trAtual, f = [];
+  if(!t.data) f.push('data'); if(!t.hora) f.push('horário'); if(!(Number(t.cargaMin) > 0)) f.push('carga horária'); if(!t.local) f.push('local');
+  return f;
+}
+function trRenderDados(corpo, barra, ed){
+  const t = trAtual, h = Math.floor((Number(t.cargaMin) || 0) / 60), m = (Number(t.cargaMin) || 0) % 60;
+  corpo.innerHTML = `<div class="lv-form">
+    <div class="lv-campo">Treinamento *<div class="tr-sel"><span>${t.codigo ? `<span class="tr-cod">${escaparHtml(t.codigo)}</span> ` : ''}<b>${escaparHtml(t.tema)}</b></span>${ed ? '<button type="button" class="tr-trocar" id="tr-trocar">trocar</button>' : ''}</div></div>
+    <div class="tr-conteudo"><b>CONTEÚDO DO TREINAMENTO</b>${trAssuntos(t.assuntos).length ? `<ul>${trAssuntos(t.assuntos).map(a => `<li>${escaparHtml(a)}</li>`).join('')}</ul>` : '<p class="lv-sub" style="margin:0">Este treinamento está sem assuntos na lista.</p>'}</div>
+    <label class="lv-campo">Título da turma (opcional)<input type="text" data-tr="turma" value="${escaparHtml(t.turma || '')}" placeholder="Ex.: Início das atividades de desmonte de rocha"></label>
+    <div class="lv-dois"><label class="lv-campo">Data *<input type="date" data-tr="data" value="${escaparHtml(t.data || '')}"></label><label class="lv-campo">Início *<input type="time" data-tr="hora" value="${escaparHtml(t.hora || '')}"></label></div>
+    <div class="lv-campo">Carga horária *<div class="lv-dois">
+      <select id="tr-carga-h" aria-label="Horas">${Array.from({ length: 9 }, (_, i) => `<option value="${i}" ${i === h ? 'selected' : ''}>${i} h</option>`).join('')}</select>
+      <select id="tr-carga-m" aria-label="Minutos">${[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map(i => `<option value="${i}" ${i === m ? 'selected' : ''}>${String(i).padStart(2, '0')} min</option>`).join('')}</select></div></div>
+    ${qCampoLista('Local', 'local', 'local', t.local, ed, 'Descreva o local')}
+    <label class="lv-campo">Responsável (instrutor)<input type="text" value="${escaparHtml((t.responsavel && t.responsavel.nome) || '')}${t.responsavel && t.responsavel.matricula ? ' · Mat. ' + escaparHtml(t.responsavel.matricula) : ''}" disabled></label>
+  </div>`;
+  barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b>Etapa 1 de 3</b><small>Depois: ler os crachás</small></span></div><button type="button" class="btn-primary" id="tr-ir-2"><span class="icone-svg" data-icone="qr"></span> Ler crachás</button>`;
+  if(!ed){ corpo.querySelectorAll('input,select,textarea,button').forEach(e => e.disabled = true); }
+  corpo.querySelectorAll('[data-tr]').forEach(el => el.addEventListener(el.type === 'date' || el.type === 'time' ? 'change' : 'input', () => { t[el.dataset.tr] = el.value.trim(); trSalvar(); atualizar(); }));
+  ['tr-carga-h', 'tr-carga-m'].forEach(id => document.getElementById(id).addEventListener('change', () => {
+    t.cargaMin = Number(document.getElementById('tr-carga-h').value) * 60 + Number(document.getElementById('tr-carga-m').value); trSalvar(); atualizar();
+  }));
+  lvLigarListas(corpo, (chave, valor) => { t[chave] = valor; trSalvar(); atualizar(); });
+  const tr = document.getElementById('tr-trocar'); if(tr) tr.addEventListener('click', () => { trSalvar(true); trTrocandoTema = true; irPara('view-tr-escolher'); document.getElementById('tr-busca-tema').value = ''; trRenderTemas(); });
+  const bt = document.getElementById('tr-ir-2');
+  function atualizar(){ const f = trDadosFaltando(); bt.disabled = !!f.length || !ed; bt.lastChild.textContent = f.length ? ' Faltam ' + f.length + ' campo' + (f.length > 1 ? 's' : '') : ' Ler crachás'; }
+  atualizar();
+  bt.addEventListener('click', () => { if(trDadosFaltando().length) return; trSalvar(true); trPasso = 2; trRenderFicha(); window.scrollTo(0, 0); });
+}
+
+/* ---------- participantes: leitura do QR do crachá ---------- */
+let trCam = null;          // { stream, video, timer, detector, canvas }
+let trUltimaLeitura = { txt: '', t: 0 }, trUltimoAviso = null, trJsQRCarregando = null;
+function trLerQRTexto(txt){
+  const p = String(txt || '').split(';').map(s => s.trim());
+  if(p.length < 5 || !/^\d{1,8}$/.test(p[1]) || (p[2] || '').length < 3) return null;
+  const g = (p[4] || '').toUpperCase();
+  return { matricula: p[1], nome: p[2].toUpperCase(), cargo: (p[3] || '').toUpperCase(), genero: g === 'F' || g === 'M' ? g : '',
+           empresa: (p[6] || p[p.length - 1] || '').toUpperCase(), qr: String(txt).slice(0, 300) };
+}
+function trBip(ok){
+  try{ navigator.vibrate && navigator.vibrate(ok ? 70 : [60, 60, 60]); }catch(e){}
+  try{
+    const ctx = trBip.ctx = trBip.ctx || new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.frequency.value = ok ? 1200 : 420; g.gain.value = 0.08; o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime + (ok ? 0.09 : 0.25));
+  }catch(e){}
+}
+function trAdicionarParticipante(p, forma){
+  const t = trAtual;
+  const ja = t.participantes.find(x => String(x.matricula) === String(p.matricula));
+  if(ja){ trUltimoAviso = { tipo: 'dup', nome: ja.nome }; trBip(false); trRenderListaParticipantes(); return false; }
+  t.participantes.push(Object.assign({}, p, { forma: forma || 'cracha', lidoEm: new Date().toISOString() }));
+  trUltimoAviso = { tipo: 'ok', p: p, n: t.participantes.length };
+  trBip(true); trSalvar(); trRenderListaParticipantes();
+  return true;
+}
+function trQRLido(txt){
+  const agora = Date.now();
+  if(txt === trUltimaLeitura.txt && agora - trUltimaLeitura.t < 2500) return;   // mesmo crachá parado na frente da câmera
+  trUltimaLeitura = { txt, t: agora };
+  const p = trLerQRTexto(txt);
+  if(!p){ trUltimoAviso = { tipo: 'erro' }; trBip(false); trRenderListaParticipantes(); return; }
+  trAdicionarParticipante(p, 'cracha');
+}
+function trCarregarJsQR(){
+  if(window.jsQR) return Promise.resolve();
+  if(trJsQRCarregando) return trJsQRCarregando;
+  trJsQRCarregando = new Promise((ok, erro) => {
+    const s = document.createElement('script'); s.src = './jsqr.js'; s.onload = ok; s.onerror = () => { trJsQRCarregando = null; erro(new Error('leitor de QR não carregou')); };
+    document.head.appendChild(s);
+  });
+  return trJsQRCarregando;
+}
+async function trAbrirCamera(){
+  const caixa = document.getElementById('tr-cam'); if(!caixa || trCam) return;
+  const msg = document.getElementById('tr-cam-msg');
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ msg.textContent = 'Este navegador não deixa usar a câmera. Use "Digitar a matrícula".'; caixa.classList.add('tr-cam-off'); return; }
+  trCam = { abrindo: true };
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
+    if(!trCam || !document.getElementById('tr-cam')){ stream.getTracks().forEach(x => x.stop()); trCam = null; return; }
+    const video = document.getElementById('tr-video');
+    video.srcObject = stream; video.setAttribute('playsinline', ''); video.muted = true;
+    await video.play().catch(() => {});
+    let detector = null;
+    if('BarcodeDetector' in window){
+      try{ const f = await window.BarcodeDetector.getSupportedFormats(); if(f.includes('qr_code')) detector = new window.BarcodeDetector({ formats: ['qr_code'] }); }catch(e){}
+    }
+    if(!detector) await trCarregarJsQR();
+    trCam = { stream, video, detector, canvas: document.createElement('canvas'), ocupado: false };
+    caixa.classList.remove('tr-cam-off'); msg.textContent = 'Aponte para o QR code do crachá';
+    trCam.timer = setInterval(trLerQuadro, 160);
+  }catch(e){
+    trFecharCamera();
+    caixa.classList.add('tr-cam-off');
+    msg.textContent = /NotAllowed|Permission/i.test(e && e.name || '') ? 'A câmera não foi liberada. Toque em "Abrir câmera" e permita, ou use "Digitar a matrícula".'
+      : (/leitor/.test(e && e.message || '') ? 'Sem internet para baixar o leitor de QR na primeira vez. Use "Digitar a matrícula".' : 'Não consegui abrir a câmera. Use "Digitar a matrícula".');
+  }
+}
+async function trLerQuadro(){
+  const c = trCam; if(!c || !c.video || c.ocupado || c.video.readyState < 2) return;
+  c.ocupado = true;
+  try{
+    let txt = null;
+    if(c.detector){ const r = await c.detector.detect(c.video); txt = r && r[0] && r[0].rawValue; }
+    else if(window.jsQR){
+      const vw = c.video.videoWidth, vh = c.video.videoHeight; if(!vw) return;
+      const esc = Math.min(1, 720 / Math.max(vw, vh)), w = Math.round(vw * esc), h = Math.round(vh * esc);
+      c.canvas.width = w; c.canvas.height = h;
+      const ctx = c.canvas.getContext('2d', { willReadFrequently: true }); ctx.drawImage(c.video, 0, 0, w, h);
+      const r = window.jsQR(ctx.getImageData(0, 0, w, h).data, w, h, { inversionAttempts: 'dontInvert' });
+      txt = r && r.data;
+    }
+    if(txt) trQRLido(txt);
+  }catch(e){ /* quadro ruim: tenta o próximo */ }
+  finally{ if(trCam) trCam.ocupado = false; }
+}
+function trFecharCamera(){
+  if(!trCam) return;
+  clearInterval(trCam.timer);
+  if(trCam.stream) trCam.stream.getTracks().forEach(x => x.stop());
+  if(trCam.video) trCam.video.srcObject = null;
+  trCam = null;
+  const caixa = document.getElementById('tr-cam'); if(caixa){ caixa.classList.add('tr-cam-off'); const m = document.getElementById('tr-cam-msg'); if(m) m.textContent = 'Câmera desligada'; }
+}
+document.addEventListener('visibilitychange', () => { if(document.hidden) trFecharCamera(); });
+function trRenderParticipantes(corpo, barra, ed){
+  corpo.innerHTML = `${ed ? `<div class="tr-cam tr-cam-off" id="tr-cam">
+      <video id="tr-video" playsinline muted></video>
+      <div class="tr-mira"><i></i><i></i><i></i><i></i><em></em></div>
+      <span class="tr-cam-msg" id="tr-cam-msg">Abrindo a câmera…</span>
+      <button type="button" class="btn-primary tr-cam-abrir" id="tr-cam-abrir">Abrir câmera</button>
+      <div class="tr-toast" id="tr-toast" style="display:none;"></div>
+    </div>` : ''}
+    <div id="tr-aviso"></div>
+    <div class="tr-cont-linha"><b id="tr-cont">0 participantes</b><span class="lv-sub" id="tr-cont-gen"></span></div>
+    <div class="lv-bloco" id="tr-part-lista" style="padding-top:4px;padding-bottom:4px;"></div>
+    ${ed ? '<button type="button" class="zap-btn secundario" id="tr-digitar">Crachá esqueceu? Digitar a matrícula</button>' : ''}`;
+  barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b id="tr-barra-n">0 participantes</b><small>Etapa 2 de 3</small></span></div>
+    <button type="button" class="btn-primary q-btn-sec" id="tr-volta-1">Voltar</button><button type="button" class="btn-primary" id="tr-ir-3">Continuar</button>`;
+  document.getElementById('tr-volta-1').addEventListener('click', () => { trPasso = 1; trRenderFicha(); window.scrollTo(0, 0); });
+  document.getElementById('tr-ir-3').addEventListener('click', () => { if(!trAtual.participantes.length) return; trSalvar(true); trPasso = 3; trRenderFicha(); window.scrollTo(0, 0); });
+  trUltimoAviso = null;
+  trRenderListaParticipantes();
+  if(!ed) return;
+  document.getElementById('tr-cam-abrir').addEventListener('click', trAbrirCamera);
+  document.getElementById('tr-digitar').addEventListener('click', trDigitarMatricula);
+  trAbrirCamera();
+}
+function trRenderListaParticipantes(){
+  const t = trAtual, lista = document.getElementById('tr-part-lista'); if(!lista) return;
+  const ed = trPodeEditar(), n = t.participantes.length;
+  const m = t.participantes.filter(p => p.genero === 'M').length, f = t.participantes.filter(p => p.genero === 'F').length;
+  document.getElementById('tr-cont').textContent = n + ' participante' + (n === 1 ? '' : 's');
+  document.getElementById('tr-cont-gen').textContent = n ? `${m} M · ${f} F` : '';
+  const bn = document.getElementById('tr-barra-n'); if(bn) bn.textContent = document.getElementById('tr-cont').textContent;
+  const bt = document.getElementById('tr-ir-3'); if(bt) bt.disabled = !n || !ed;
+  lista.innerHTML = n ? '<span class="lv-sub" style="padding:8px 0 2px">Mais recentes primeiro</span>' + t.participantes.map((p, i) => ({ p, i })).reverse().map(({ p, i }) => `
+    <div class="tr-part ${trUltimoAviso && trUltimoAviso.tipo === 'ok' && i === n - 1 ? 'tr-novo' : ''}"><span class="tr-part-n">${i + 1}</span>
+      <span class="tr-part-txt"><b>${escaparHtml(p.nome)}${p.genero ? `<span class="tr-gen">${p.genero}</span>` : ''}</b><span class="lv-sub">Mat. ${escaparHtml(p.matricula)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}${p.empresa ? ' · ' + escaparHtml(p.empresa) : ''}${p.forma === 'digitado' ? ' · digitado' : ''}</span></span>
+      ${ed ? `<button type="button" class="tr-remover" data-i="${i}" aria-label="Remover ${escaparHtml(p.nome)}">×</button>` : ''}</div>`).join('')
+    : '<p class="empty-state" style="margin:10px 0">Nenhum participante ainda. Leia o QR code do crachá de cada pessoa.</p>';
+  lista.querySelectorAll('.tr-remover').forEach(b => b.addEventListener('click', () => {
+    const p = t.participantes[Number(b.dataset.i)];
+    if(!confirm('Remover ' + p.nome + ' da lista?')) return;
+    t.participantes.splice(Number(b.dataset.i), 1); trUltimoAviso = null; trSalvar(); trRenderListaParticipantes();
+  }));
+  const av = document.getElementById('tr-aviso'), toast = document.getElementById('tr-toast');
+  av.innerHTML = trUltimoAviso && trUltimoAviso.tipo === 'dup' ? `<div class="tr-aviso">Crachá já lido: <b>${escaparHtml(trUltimoAviso.nome)}</b> já está na lista.</div>`
+    : (trUltimoAviso && trUltimoAviso.tipo === 'erro' ? '<div class="tr-aviso tr-aviso-erro">Esse QR code não é de um crachá da obra. Tente de novo ou digite a matrícula.</div>' : '');
+  if(toast){
+    if(trUltimoAviso && trUltimoAviso.tipo === 'ok'){
+      const p = trUltimoAviso.p;
+      toast.innerHTML = `<span class="tr-ck">✓</span><span class="tr-toast-txt"><b>${escaparHtml(p.nome)}</b><span class="lv-sub">Mat. ${escaparHtml(p.matricula)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}</span></span><span class="lv-tag ok">nº ${trUltimoAviso.n}</span>`;
+      toast.style.display = 'flex';
+      clearTimeout(trRenderListaParticipantes.t); trRenderListaParticipantes.t = setTimeout(() => { toast.style.display = 'none'; }, 3500);
+    } else toast.style.display = 'none';
+  }
+}
+function trDigitarMatricula(){
+  const modal = document.createElement('div'); modal.className = 'q-modal';
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Digitar matrícula">
+      <h3>Digitar a matrícula</h3>
+      <p>Se a pessoa já participou de outro treinamento, o app preenche o resto.</p>
+      <label class="lv-campo">Matrícula *<input type="text" inputmode="numeric" id="trd-mat" autocomplete="off"></label>
+      <p class="lv-sub" id="trd-msg" style="min-height:18px;margin:6px 0"></p>
+      <label class="lv-campo">Nome completo *<input type="text" id="trd-nome"></label>
+      <label class="lv-campo">Cargo / função<input type="text" id="trd-cargo"></label>
+      <div class="lv-dois"><label class="lv-campo">Gênero<select id="trd-gen"><option value="">—</option><option value="M">M</option><option value="F">F</option></select></label>
+        <label class="lv-campo">Empresa<input type="text" id="trd-emp" value="CCG"></label></div>
+      <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary" id="trd-ok" disabled>Adicionar</button></div>
+    </div>`;
+  document.body.appendChild(modal);
+  const $ = (id) => modal.querySelector('#' + id), fechar = () => modal.remove();
+  modal.querySelector('.q-modal-cancelar').addEventListener('click', fechar);
+  const validar = () => { $('trd-ok').disabled = !/^\d{1,8}$/.test($('trd-mat').value.trim()) || $('trd-nome').value.trim().length < 3; };
+  ['trd-nome', 'trd-cargo', 'trd-emp'].forEach(id => $(id).addEventListener('input', validar));
+  let buscaT = null;
+  $('trd-mat').addEventListener('input', () => {
+    validar(); clearTimeout(buscaT);
+    const mat = $('trd-mat').value.trim(); $('trd-msg').textContent = '';
+    if(!/^\d{1,8}$/.test(mat)) return;
+    buscaT = setTimeout(async () => {
+      try{
+        const snap = await db.collection('colaboradores').doc(mat).get();
+        if($('trd-mat').value.trim() !== mat) return;
+        if(snap.exists){ const c = snap.data(); $('trd-nome').value = c.nome || ''; $('trd-cargo').value = c.cargo || ''; $('trd-gen').value = c.genero || ''; $('trd-emp').value = c.empresa || 'CCG'; $('trd-msg').textContent = 'Encontrado: dados do último treinamento.'; }
+        else $('trd-msg').textContent = 'Matrícula ainda não vista em treinamentos: preencha os dados.';
+        validar();
+      }catch(e){ $('trd-msg').textContent = 'Sem internet: preencha os dados.'; }
+    }, 450);
+  });
+  $('trd-ok').addEventListener('click', () => {
+    const ok = trAdicionarParticipante({ matricula: $('trd-mat').value.trim(), nome: $('trd-nome').value.trim().toUpperCase(), cargo: $('trd-cargo').value.trim().toUpperCase(),
+      genero: $('trd-gen').value, empresa: ($('trd-emp').value.trim() || 'CCG').toUpperCase(), qr: '' }, 'digitado');
+    if(ok) fechar(); else { $('trd-msg').textContent = 'Essa matrícula já está na lista.'; }
+  });
+  setTimeout(() => $('trd-mat').focus(), 50);
+}
+
+/* ---------- fotos ---------- */
+function trEscolherFotos(modo, aoTerminar){
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
+  if(modo === 'camera') inp.setAttribute('capture', 'environment'); else inp.multiple = true;
+  inp.addEventListener('change', async () => {
+    for(const file of inp.files){
+      try{
+        const grande = await comprimirImagem(file, 1400, 0.72), mini = await comprimirImagem(file, 320, 0.6);
+        const ref = db.collection('treinamentos').doc(trAtual.id).collection('fotos').doc();
+        gravarSemEsperar(ref.set({ base64: grande, criadoEm: firebase.firestore.FieldValue.serverTimestamp(), criadoPorNome: qMeuPerfil().nome }), 'foto do treinamento');
+        trAtual.fotos.push({ id: ref.id, mini, emRelatorio: false, criadaEm: new Date().toISOString() });
+      }catch(e){ console.warn('Foto do treinamento:', e); }
+    }
+    aoTerminar();
+  });
+  inp.click();
+}
+function trFotosHtml(ed, podeRemover){
+  const f = trAtual.fotos || [];
+  return `<div class="tr-fotos">${f.map((x, i) => `<div class="tr-foto ${x.emRelatorio ? '' : 'tr-foto-nova'}"><img src="${x.mini}" alt="Foto ${i + 1} do treinamento">
+      ${!x.emRelatorio && trAtual.estado === 'concluido' ? '<span>nova</span>' : ''}
+      ${podeRemover && !x.emRelatorio ? `<button type="button" class="tr-foto-x" data-i="${i}" aria-label="Remover foto ${i + 1}">×</button>` : ''}</div>`).join('')}
+    ${!f.length ? '<p class="lv-sub" style="grid-column:1/-1;margin:0">Nenhuma foto.</p>' : ''}</div>
+    ${ed ? `<div class="q-foto-botoes"><button type="button" class="btn-primary q-foto-btn tr-foto-btn" data-modo="camera"><span class="icone-svg" data-icone="camera"></span> Tirar foto</button>
+      <button type="button" class="btn-primary q-foto-btn q-foto-galeria tr-foto-btn" data-modo="galeria"><span class="icone-svg" data-icone="imagem"></span> Galeria</button></div>` : ''}`;
+}
+function trLigarFotos(corpo, aoMudar){
+  corpo.querySelectorAll('.tr-foto-btn').forEach(b => b.addEventListener('click', () => trEscolherFotos(b.dataset.modo, aoMudar)));
+  corpo.querySelectorAll('.tr-foto-x').forEach(b => b.addEventListener('click', () => {
+    const f = trAtual.fotos[Number(b.dataset.i)]; if(!f || f.emRelatorio) return;
+    if(!confirm('Remover esta foto?')) return;
+    gravarSemEsperar(db.collection('treinamentos').doc(trAtual.id).collection('fotos').doc(f.id).delete(), 'remover foto');
+    trAtual.fotos.splice(Number(b.dataset.i), 1); aoMudar();
+  }));
+}
+function trRenderFotos(corpo, barra, ed){
+  const t = trAtual, n = t.participantes.length;
+  const m = t.participantes.filter(p => p.genero === 'M').length, f = t.participantes.filter(p => p.genero === 'F').length;
+  corpo.innerHTML = `<div class="lv-form">
+    <b style="font-size:14.5px">Fotos do treinamento <span class="lv-sub" style="display:inline;font-weight:400">(opcional)</span></b>
+    ${trFotosHtml(ed, ed)}
+    <p class="lv-sub" style="margin:0">Esqueceu a foto? Dá para incluir depois, mesmo com o treinamento concluído.</p>
+    <span class="secao-titulo" style="margin-top:4px;">Resumo</span>
+    <div class="lv-bloco"><div class="tr-kv">
+      <span>Treinamento</span><b>${escaparHtml(trNomeTema(t))}</b>
+      ${t.turma ? `<span>Turma</span><b>${escaparHtml(t.turma)}</b>` : ''}
+      <span>Data</span><b>${escaparHtml(formatarDataBR(t.data))} · ${escaparHtml(t.hora || '')}</b>
+      <span>Carga horária</span><b>${escaparHtml(trMinutosTexto(t.cargaMin))}</b><span>Local</span><b>${escaparHtml(t.local || '')}</b>
+      <span>Participantes</span><b>${n} (${m} M · ${f} F)</b><span>Fotos</span><b>${(t.fotos || []).length}</b>
+      <span>Responsável</span><b>${escaparHtml(t.responsavel && t.responsavel.nome || '')}</b></div></div>
+  </div>`;
+  barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b>Pronto para concluir</b><small>O relatório sai em PDF no Drive</small></span></div>
+    <button type="button" class="btn-primary q-btn-sec" id="tr-volta-2">Voltar</button><button type="button" class="btn-primary" id="tr-concluir" ${ed && n ? '' : 'disabled'}>Concluir</button>`;
+  document.getElementById('tr-volta-2').addEventListener('click', () => { trPasso = 2; trRenderFicha(); window.scrollTo(0, 0); });
+  trLigarFotos(corpo, () => { trSalvar(); trRenderFicha(); });
+  document.getElementById('tr-concluir').addEventListener('click', trConcluir);
+}
+function trConcluir(){
+  const t = trAtual;
+  if(!trPodeEditar() || !t.participantes.length || trDadosFaltando().length) return;
+  if(!confirm(`Concluir o treinamento com ${t.participantes.length} participante(s)? Depois de concluído, a lista não muda mais (fotos ainda podem ser incluídas).`)) return;
+  const d = trDados(); d.matriculas = t.participantes.map(p => String(p.matricula));
+  d.estado = 'concluido'; d.relatorioPendente = true;
+  d.concluidoEm = firebase.firestore.FieldValue.serverTimestamp(); d.atualizadoEm = firebase.firestore.FieldValue.serverTimestamp();
+  if(t.novo) d.criadoEm = firebase.firestore.FieldValue.serverTimestamp();
+  gravarSemEsperar(db.collection('treinamentos').doc(t.id).set(d, { merge: true }), 'concluir treinamento');
+  // cadastro rápido dos colaboradores (para "Digitar a matrícula" preencher sozinho da próxima vez)
+  try{
+    const lote = db.batch();
+    t.participantes.slice(0, 450).forEach(p => lote.set(db.collection('colaboradores').doc(String(p.matricula)),
+      { matricula: String(p.matricula), nome: p.nome, cargo: p.cargo || '', genero: p.genero || '', empresa: p.empresa || '', atualizadoEm: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }));
+    gravarSemEsperar(lote.commit(), 'colaboradores');
+  }catch(e){ console.warn('Colaboradores:', e); }
+  Object.assign(t, { estado: 'concluido', relatorioPendente: true, novo: false });
+  trPasso = 4; trRenderFicha(); window.scrollTo(0, 0);
+  mostrarAvisoApp('Treinamento concluído', 'O relatório em PDF sai na próxima sincronização (até 10 minutos).');
+}
+
+/* ---------- concluído ---------- */
+function trRenderConcluido(corpo, barra){
+  const t = trAtual, conc = t.estado === 'concluido', n = (t.participantes || []).length;
+  const tst = ehTST();
+  const versoes = (t.versoes || []).slice().reverse();
+  const novas = (t.fotos || []).filter(f => !f.emRelatorio).length;
+  const proxRv = (t.versoes || []).length + 1;
+  corpo.innerHTML = `<div class="lv-form">
+    <div class="lv-resumo-cab"><span class="rotulo">${escaparHtml([t.codigo, formatarDataBR(t.data) + (t.hora ? ' · ' + t.hora : '')].filter(Boolean).join(' · '))}</span>
+      <b style="font-size:18px">${escaparHtml(t.tema)}</b>
+      <small>${escaparHtml([t.turma, n + ' participante' + (n === 1 ? '' : 's'), trMinutosTexto(t.cargaMin), t.local].filter(Boolean).join(' · '))}</small>
+      ${t.numero ? `<small>${escaparHtml(t.numero)}</small>` : ''}</div>
+    ${!conc ? `<p class="lv-sub">Treinamento em andamento, registrado por ${escaparHtml(t.criadoPorNome || '')}.</p>` : (t.pdfUrl && !t.relatorioPendente ? `<a class="q-pdf" href="${escaparHtml(t.pdfUrl)}" target="_blank" rel="noopener"><span class="q-pdf-icone">PDF</span><span class="q-pdf-txt"><b>${escaparHtml(t.pdfNome || 'Relatório em PDF')}</b><small>Drive › Treinamentos › ano › mês</small></span></a>`
+      : '<p class="q-pdf-aguardando">Gerando o relatório em PDF. Ele aparece aqui na próxima sincronização (até 10 minutos).</p>')}
+    ${versoes.length ? `<div class="lv-bloco"><b>Versões do relatório</b>${versoes.map((v, i) => `<a class="tr-versao" href="${escaparHtml(v.url)}" target="_blank" rel="noopener"><span class="lv-tag ${i === 0 ? 'rv' : 'rasc'}">${v.rv > 1 ? 'RV' + v.rv : 'Original'}</span><span class="lv-sub">${escaparHtml(v.geradoEmTexto || '')} · ${v.fotos || 0} foto(s)${i === 0 ? ' · atual' : ''}</span></a>`).join('')}</div>` : ''}
+    ${conc ? `<span class="secao-titulo" style="margin-top:4px;">Fotos</span>
+      ${trFotosHtml(tst, tst)}
+      ${tst ? `<button type="button" class="btn-primary" id="tr-novo-rel" ${novas && !t.relatorioPendente ? '' : 'disabled'}>${t.relatorioPendente ? 'Gerando relatório…' : 'Gerar novo relatório (RV' + Math.max(2, proxRv) + ')'}</button>
+        <p class="lv-sub" style="text-align:center;margin:0">${novas ? novas + ' foto(s) nova(s) ainda fora do relatório.' : 'Inclua uma foto para gerar um relatório novo.'}${versoes.length ? ' As versões anteriores continuam guardadas.' : ''}</p>` : ''}` : ''}
+    <span class="secao-titulo" style="margin-top:4px;">Participantes</span>
+    <button type="button" class="lv-card" id="tr-ver-part"><span class="lv-card-topo"><b>${n} participante${n === 1 ? '' : 's'}</b><span class="lv-sub" style="display:inline">${(t.participantes || []).filter(p => p.genero === 'M').length} M · ${(t.participantes || []).filter(p => p.genero === 'F').length} F</span><span class="lv-seta" style="margin-left:auto">›</span></span></button>
+    ${conc && t.pdfUrl ? `<span class="secao-titulo" style="margin-top:4px;">Compartilhar</span>
+      <button type="button" class="zap-btn principal" id="tr-zap">Compartilhar no WhatsApp</button>
+      <div class="email-linha"><button type="button" class="zap-btn secundario tr-email" data-via="outlook">E-mail · Outlook</button><button type="button" class="zap-btn secundario tr-email" data-via="gmail">E-mail · Gmail</button></div>` : ''}
+    ${tst ? '<button type="button" class="zap-btn secundario" id="tr-repetir">Novo treinamento com este tema</button>' : ''}
+  </div>`;
+  barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b>${escaparHtml(t.numero || t.codigo || 'Treinamento')}</b><small>${escaparHtml(trSituacao(t).txt)}</small></span></div><button type="button" class="btn-primary" id="tr-fechar">Fechar</button>`;
+  document.getElementById('tr-fechar').addEventListener('click', () => irPara('view-treinamentos'));
+  document.getElementById('tr-ver-part').addEventListener('click', trVerParticipantes);
+  const rep = document.getElementById('tr-repetir'); if(rep) rep.addEventListener('click', () => trNovo({ codigo: t.codigo, tema: t.tema, assuntos: t.assuntos }, false));
+  if(conc && tst){
+    trLigarFotos(corpo, () => {
+      // treinamento já concluído: grava só a lista de fotos (o resto não muda)
+      gravarSemEsperar(db.collection('treinamentos').doc(t.id).update({ fotos: t.fotos, atualizadoEm: firebase.firestore.FieldValue.serverTimestamp() }), 'fotos do treinamento');
+      trRenderFicha();
+    });
+    const nr = document.getElementById('tr-novo-rel');
+    if(nr) nr.addEventListener('click', () => {
+      gravarSemEsperar(db.collection('treinamentos').doc(t.id).update({ relatorioPendente: true, novoRelatorioPedidoPor: qMeuPerfil().nome, atualizadoEm: firebase.firestore.FieldValue.serverTimestamp() }), 'novo relatório');
+      t.relatorioPendente = true; trRenderFicha();
+      mostrarAvisoApp('Novo relatório pedido', 'O RV' + Math.max(2, proxRv) + ' sai na próxima sincronização (até 10 minutos).');
+    });
+  }
+  const texto = () => [`Treinamento ${t.numero || ''} – ${trNomeTema(t)}`.replace(/\s+/g, ' ').trim(), t.turma ? 'Turma: ' + t.turma : '',
+    `Data: ${formatarDataBR(t.data)} ${t.hora || ''} · Carga horária: ${trMinutosTexto(t.cargaMin)} · Local: ${t.local || '—'}`,
+    `Participantes: ${n} · Responsável: ${t.responsavel && t.responsavel.nome || ''}`, `Relatório: ${t.pdfUrl}`].filter(Boolean).join('\n');
+  const zap = document.getElementById('tr-zap');
+  if(zap) zap.addEventListener('click', async () => {
+    if(navigator.share && /android|iphone|ipad/i.test(navigator.userAgent)){ try{ await navigator.share({ text: texto() }); return; }catch(e){ if(e && e.name === 'AbortError') return; } }
+    window.open('https://wa.me/?text=' + encodeURIComponent(texto()), '_blank');
+  });
+  corpo.querySelectorAll('.tr-email').forEach(b => b.addEventListener('click', () => {
+    const eu = qMeuPerfil();
+    const assunto = `Relatório de treinamento ${t.numero || ''} – ${t.tema} – ${formatarDataBR(t.data)}`.replace(/\s+/g, ' ').trim();
+    const corpoEmail = ['Prezados,', '', 'Segue o relatório de presença do treinamento:', '', texto(), '', 'Atenciosamente,', (eu.nome || '') + (eu.matricula ? ' – Matrícula ' + eu.matricula : ''), 'Segurança do Trabalho – Consórcio Construtor Gávea'].join('\n');
+    window.open(b.dataset.via === 'gmail' ? 'https://mail.google.com/mail/?view=cm&fs=1&su=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail)
+      : 'https://outlook.office.com/mail/deeplink/compose?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail), '_blank');
+  }));
+}
+function trVerParticipantes(){
+  const t = trAtual, modal = document.createElement('div'); modal.className = 'q-modal';
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Participantes"><h3>${t.participantes.length} participantes</h3>
+    <div style="max-height:60vh;overflow-y:auto">${t.participantes.map((p, i) => `<div class="tr-part"><span class="tr-part-n">${i + 1}</span><span class="tr-part-txt"><b>${escaparHtml(p.nome)}${p.genero ? `<span class="tr-gen">${p.genero}</span>` : ''}</b><span class="lv-sub">Mat. ${escaparHtml(p.matricula)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}${p.empresa ? ' · ' + escaparHtml(p.empresa) : ''}</span></span></div>`).join('')}</div>
+    <div class="q-modal-acoes"><button type="button" class="btn-primary q-modal-cancelar">Fechar</button></div></div>`;
+  document.body.appendChild(modal);
+  modal.querySelector('.q-modal-cancelar').addEventListener('click', () => modal.remove());
+}
+
+/* ---------- buscar e meus ---------- */
+async function trRenderBusca(){
+  const bruto = document.getElementById('tr-busca').value.trim(), caixa = document.getElementById('tr-busca-res');
+  if(bruto.length < 2){ caixa.innerHTML = ''; return; }
+  const termo = qNorm(bruto);
+  const base = trRecentes.concat(trMeusLista.filter(m => !trRecentes.some(r => r.id === m.id)));
+  let achados = base.filter(t => qNorm([t.numero, t.codigo, t.tema, t.turma, t.local, t.responsavel && t.responsavel.nome].join(' ')).includes(termo)
+    || (t.participantes || []).some(p => qNorm(p.nome).includes(termo) || String(p.matricula) === bruto));
+  let pessoa = null;
+  if(/^\d{1,8}$/.test(bruto)){
+    try{
+      const snap = await db.collection('treinamentos').where('matriculas', 'array-contains', bruto).get();
+      snap.docs.forEach(d => { if(!achados.some(a => a.id === d.id)) achados.push({ id: d.id, ...d.data() }); });
+    }catch(e){}
+    achados.forEach(t => (t.participantes || []).forEach(p => { if(String(p.matricula) === bruto) pessoa = p; }));
+  }
+  const mNum = bruto.toUpperCase().replace(/\s/g, '').match(/^TR-?(\d{4})-?(\d{1,4})$/);
+  if(mNum){
+    try{ const snap = await db.collection('treinamentos').where('numero', '==', 'TR-' + mNum[1] + '-' + mNum[2].padStart(4, '0')).get();
+      snap.docs.forEach(d => { if(!achados.some(a => a.id === d.id)) achados.push({ id: d.id, ...d.data() }); }); }catch(e){}
+  }
+  if(document.getElementById('tr-busca').value.trim() !== bruto) return;
+  achados = trOrdenar(achados);
+  caixa.innerHTML = (pessoa ? `<div class="lv-bloco" style="margin-bottom:10px"><b>${escaparHtml(pessoa.nome)}</b><span class="lv-sub">Mat. ${escaparHtml(pessoa.matricula)}${pessoa.cargo ? ' · ' + escaparHtml(pessoa.cargo) : ''} · ${achados.filter(t => (t.matriculas || []).includes(bruto) || (t.participantes || []).some(p => String(p.matricula) === bruto)).length} treinamento(s)</span></div>` : '')
+    + (achados.length ? achados.map(trCard).join('') : '<p class="empty-state">Nenhum treinamento encontrado.</p>');
+  trLigarCards(caixa, achados);
+}
+function trRenderMeus(){
+  const rasc = trMeusLista.filter(t => t.estado !== 'concluido'), conc = trMeusLista.filter(t => t.estado === 'concluido');
+  const chips = document.getElementById('tr-meus-chips');
+  chips.innerHTML = [['todos', 'Todos · ' + trMeusLista.length], ['rasc', 'Rascunhos · ' + rasc.length], ['conc', 'Concluídos · ' + conc.length]]
+    .map(([k, t]) => `<button type="button" class="lv-chip ${trFiltroMeus === k ? 'on' : ''}" data-f="${k}">${t}</button>`).join('');
+  chips.querySelectorAll('.lv-chip').forEach(b => b.addEventListener('click', () => { trFiltroMeus = b.dataset.f; trRenderMeus(); }));
+  const lista = trOrdenar(trFiltroMeus === 'rasc' ? rasc : (trFiltroMeus === 'conc' ? conc : trMeusLista));
+  const caixa = document.getElementById('tr-meus');
+  caixa.innerHTML = lista.length ? lista.map(trCard).join('') : '<p class="empty-state">Nenhum treinamento aqui.</p>';
+  trLigarCards(caixa, lista);
+}
+
+/* ---------- análise ---------- */
+const trAnCache = {};
+function trAbrirAnalise(){
+  irPara('view-tr-analise');
+  const selA = document.getElementById('tr-an-ano'), selM = document.getElementById('tr-an-mes');
+  if(!selA.options.length){
+    const ano = new Date().getFullYear();
+    selA.innerHTML = [ano, ano - 1].map(a => `<option value="${a}">${a}</option>`).join('');
+    selM.innerHTML = '<option value="">Ano todo</option>' + ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+      .map((m, i) => `<option value="${String(i + 1).padStart(2, '0')}">${m}</option>`).join('');
+    selM.value = String(new Date().getMonth() + 1).padStart(2, '0');
+    selA.addEventListener('change', trRenderAnalise); selM.addEventListener('change', trRenderAnalise);
+  }
+  trRenderAnalise();
+}
+async function trRenderAnalise(){
+  const ano = document.getElementById('tr-an-ano').value, mes = document.getElementById('tr-an-mes').value;
+  const ini = mes ? `${ano}-${mes}-01` : `${ano}-01-01`, fim = mes ? `${ano}-${mes}-31` : `${ano}-12-31`, chave = ini + '|' + fim;
+  const corpo = document.getElementById('tr-an-corpo');
+  if(!trAnCache[chave]){
+    corpo.innerHTML = '<p class="empty-state">Carregando…</p>';
+    try{
+      const snap = await db.collection('treinamentos').where('data', '>=', ini).where('data', '<=', fim).get();
+      trAnCache[chave] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      setTimeout(() => { delete trAnCache[chave]; }, 5 * 60000);
+    }catch(e){ corpo.innerHTML = '<p class="empty-state">Não consegui carregar agora. Confira a internet.</p>'; return; }
+    if(document.getElementById('tr-an-ano').value !== ano || document.getElementById('tr-an-mes').value !== mes) return;
+  }
+  const lista = trAnCache[chave].filter(t => t.estado === 'concluido');
+  if(!lista.length){ corpo.innerHTML = '<p class="empty-state">Nenhum treinamento concluído neste período.</p>'; return; }
+  const part = lista.reduce((a, t) => a + (t.participantes || []).length, 0);
+  const pessoas = new Set(); lista.forEach(t => (t.participantes || []).forEach(p => pessoas.add(String(p.matricula))));
+  const hh = lista.reduce((a, t) => a + (t.participantes || []).length * (Number(t.cargaMin) || 0), 0) / 60;
+  const gen = { M: 0, F: 0 }; lista.forEach(t => (t.participantes || []).forEach(p => { if(gen[p.genero] !== undefined) gen[p.genero]++; }));
+  const agrupa = (fn, peso) => { const m = {}; lista.forEach(t => { const k = fn(t); if(k) m[k] = (m[k] || 0) + (peso ? peso(t) : 1); }); return Object.entries(m).sort((a, b) => b[1] - a[1]); };
+  const barras = (l, cor, fmt) => { const max = l.length ? l[0][1] : 1; return l.map(([k, v]) => `<div class="q-an-linha"><span>${escaparHtml(k)}</span><span class="q-an-barra"><i style="width:${Math.max(4, v / max * 100)}%; background:${cor}"></i></span><span class="q-an-val">${fmt ? fmt(v) : v}</span></div>`).join(''); };
+  const porTema = agrupa(t => trNomeTema(t)).slice(0, 10);
+  const porTemaPart = agrupa(t => trNomeTema(t), t => (t.participantes || []).length).slice(0, 10);
+  const porTst = agrupa(t => t.responsavel && t.responsavel.nome);
+  const porLocal = agrupa(t => t.local).slice(0, 8);
+  const porEmp = {}; lista.forEach(t => (t.participantes || []).forEach(p => { const k = p.empresa || '—'; porEmp[k] = (porEmp[k] || 0) + 1; }));
+  const hhTxt = (v) => (v >= 10 ? Math.round(v) : String(Math.round(v * 10) / 10).replace('.', ',')) + 'h';
+  corpo.innerHTML = `<div class="hero-flutuante q-hero" style="margin-top:0"><div class="q-resumo tr-an-kpis">
+      <div class="q-kpi"><b>${lista.length}</b><span>treinamentos</span></div><div class="q-kpi"><b>${part}</b><span>participações</span></div>
+      <div class="q-kpi"><b>${pessoas.size}</b><span>pessoas diferentes</span></div><div class="q-kpi"><b>${hhTxt(hh)}</b><span>horas-homem</span></div></div>
+      <p class="lv-sub" style="margin:8px 0 0">${gen.M} participações masculinas · ${gen.F} femininas</p></div>
+    <section class="q-an-card"><h3>Treinamentos mais aplicados</h3>${barras(porTema, 'var(--green)')}</section>
+    <section class="q-an-card"><h3>Participações por tema</h3>${barras(porTemaPart, '#2e6da4')}</section>
+    <section class="q-an-card"><h3>Por local</h3>${barras(porLocal, '#6b7a2f')}</section>
+    <section class="q-an-card"><h3>Participações por empresa</h3>${barras(Object.entries(porEmp).sort((a, b) => b[1] - a[1]).slice(0, 8), '#7a4b06')}</section>
+    <section class="q-an-card"><h3>Por TST (instrutor)</h3>${barras(porTst, 'var(--green)')}</section>`;
+}
+
+/* ---------- ligações ---------- */
+document.getElementById('tr-at-novo').addEventListener('click', trAbrirEscolher);
+document.getElementById('tr-at-buscar').addEventListener('click', () => { irPara('view-tr-busca'); document.getElementById('tr-busca').focus(); trRenderBusca(); });
+document.getElementById('tr-at-meus').addEventListener('click', () => { irPara('view-tr-meus'); trRenderMeus(); });
+document.getElementById('tr-at-analise').addEventListener('click', trAbrirAnalise);
+document.getElementById('tr-busca-tema').addEventListener('input', trRenderTemas);
+['tr-novo-tema', 'tr-novo-assuntos'].forEach(id => document.getElementById(id).addEventListener('input', trAtualizarCriar));
+document.getElementById('tr-novo-usar').addEventListener('click', () => trNovo({ codigo: '', tema: document.getElementById('tr-novo-tema').value.trim(),
+  assuntos: document.getElementById('tr-novo-assuntos').value.trim(), incluir: document.getElementById('tr-novo-incluir').checked }, true));
+document.getElementById('tr-busca').addEventListener('input', () => { clearTimeout(trBuscaTimer); trBuscaTimer = setTimeout(trRenderBusca, 300); });
+document.querySelectorAll('.tr-volta-inicio').forEach(b => b.addEventListener('click', () => irPara('view-treinamentos')));
+document.getElementById('tr-ficha-voltar').addEventListener('click', () => { try{ trSalvar(true); }catch(e){} irPara('view-treinamentos'); });
+document.querySelectorAll('#view-tr-escolher .tr-volta-inicio').forEach(b => b.addEventListener('click', () => {
+  // voltou da troca de tema: retorna para o rascunho em vez do início
+  if(trTrocandoTema && trAtual){ trTrocandoTema = false; setTimeout(() => { irPara('view-tr-ficha'); trRenderFicha(); }, 0); }
+}));
 
 
 /* ---- marca d'água ----
