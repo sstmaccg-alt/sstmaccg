@@ -200,6 +200,96 @@
     padding:10px 16px; border-radius:10px; white-space:nowrap;
   }
   .btn-apresentacao svg{ width:16px; height:16px; }
+  .btn-apresentacao.btn-prever{ background:var(--navy); }
+  [data-theme="dark"] .btn-apresentacao.btn-prever{ background:#2c3e52; }
+  .an-barra{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:8px; margin:0 0 10px; }
+  .an-barra select{ width:100%; border:1px solid var(--border-strong); border-radius:10px; background:var(--white); padding:11px 12px; font:inherit; font-size:14px; color:var(--navy); -webkit-appearance:none; appearance:none; }
+  .an-botoes{ display:flex; gap:8px; flex-wrap:wrap; margin:0 0 16px; }
+  .an-botoes .btn-apresentacao{ flex:1 1 auto; justify-content:center; }
+  .an-kpis-3{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+  .an-kpi-peq{ font-size:12px; font-weight:600; color:var(--text-muted); margin:4px 0 0; }
+  .an-kpis-peq .ag-kpi-val{ font-size:22px; }
+  .apr-slide .an-kpis-peq .ag-kpi-val{ font-size:40px; }
+  .apr-slide .an-kpi-peq{ font-size:16px; }
+  .ag-tabela.an-fontes{ min-width:0; }
+  .ag-tabela.an-fontes td{ padding:7px 5px; }
+  @media (max-width:560px){
+    .an-colunas .ag-col{ min-width:26px; }
+    .an-colunas .ag-col-val{ font-size:10.5px; }
+    .an-colunas .ag-col-rot{ font-size:9.5px; padding:0 1px; }
+    .an-colunas .ag-col-area{ padding:0 2px; }
+    .an-colunas .ag-col-barra, .an-colunas .an-pilha{ width:78%; }
+    .an-pilha i{ font-size:9px; }
+  }
+  .qa-hist td.qa-m{ white-space:normal; line-height:1.1; }
+  .qa-tabela td.qa-nome{ position:sticky; left:0; z-index:1; background:var(--white); }
+  .qa-tabela th.qa-nome{ position:sticky; left:0; z-index:2; }
+  @media (max-width:560px){ .qa-tabela .qa-ger{ display:none; } .qa-tabela td.qa-nome{ white-space:normal; min-width:120px; font-size:10.5px; } .qa-tabela{ min-width:0; } }
+  .apr-slide .qa-hist{ font-size:13px; } .apr-slide .qa-hist th{ font-size:11.5px; padding:7px 4px; } .apr-slide .qa-hist td{ padding:5px 4px; }
+  .apr-slide .qa-hist td.qa-m{ font-size:10.5px; } .apr-slide .qa-hist .qa-nome{ white-space:normal; min-width:200px; }
+  .an-kpis-2{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+  .an-col-area{ position:relative; }
+  .an-meta{ position:absolute; left:0; right:0; height:0; border-top:2px dashed #e02424; z-index:2; pointer-events:none; }
+  .an-apagado{ opacity:.35; }
+  .an-legenda{ display:flex; flex-wrap:wrap; gap:14px; align-items:center; font-size:12px; color:var(--text-muted); margin:10px 0 0; }
+  .an-legenda span{ display:inline-flex; align-items:center; gap:6px; }
+  .an-legenda i{ display:inline-block; width:14px; height:10px; border-radius:3px; }
+  .an-legenda-meta{ width:22px !important; height:0 !important; border-top:2px dashed #e02424; border-radius:0 !important; margin-right:6px; }
+  .an-pilha{ width:62%; max-width:68px; display:flex; flex-direction:column-reverse; border-radius:8px 8px 0 0; overflow:hidden; min-height:3px; }
+  .an-pilha i{ display:flex; align-items:center; justify-content:center; font-style:normal; font-size:11px; font-weight:800; color:#fff; min-height:0; overflow:hidden; text-shadow:0 1px 1px rgba(0,0,0,.25); }
+  .an-extra{ display:block; font-size:11px; color:var(--text-muted); margin-top:2px; }
+  .an-nota{ font-size:12px; color:var(--text-muted); line-height:1.45; margin:10px 0 0; }
+  .an-mini{ border:1px solid var(--green); background:var(--white); color:var(--green-dark); border-radius:8px; padding:5px 10px; font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
+  .an-destaque{ display:grid; grid-template-columns:1fr; gap:4px; text-align:center; margin:0 0 18px; }
+  .an-destaque p{ margin:6px 0 0; font-size:14px; font-style:italic; font-weight:700; color:var(--navy); }
+  .an-destaque b{ font-size:34px; font-style:italic; font-weight:800; color:var(--green-dark); }
+  .an-efet-cab, .an-efet-linha{ display:grid; grid-template-columns:minmax(120px, 34%) minmax(0,1fr) 90px; gap:12px; align-items:center; }
+  .an-efet-cab{ font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.3px; padding:0 0 8px; border-bottom:1px solid var(--border); margin-bottom:8px; }
+  .an-efet-cab span:nth-child(3){ text-align:right; }
+  .an-efet-linha{ padding:7px 0; border-bottom:1px solid var(--border); }
+  .an-efet-tip{ font-size:12.5px; color:var(--navy); line-height:1.25; }
+  .an-efet-tip small{ display:block; font-size:11px; color:var(--text-muted); margin-top:2px; }
+  .an-efet-barra{ display:flex; justify-content:center; }
+  .an-efet-barra i{ display:flex; align-items:center; justify-content:center; height:28px; font-style:normal; font-weight:800; font-size:15px; color:#1f1f1f; border:1px solid rgba(0,0,0,.08); }
+  .an-efet-pct{ text-align:right; font-size:16px; font-weight:800; color:var(--navy); }
+  .an-efet-pct.alerta{ color:#e02424; }
+  .qa-tri{ display:grid; grid-template-columns:minmax(0,1fr) 260px; gap:18px; align-items:start; }
+  @media (max-width:760px){ .qa-tri{ grid-template-columns:1fr; } }
+  .qa-tabela{ border-collapse:collapse; width:100%; font-size:11.5px; min-width:520px; }
+  .qa-tabela th{ background:#5b6470; color:#fff; font-weight:700; padding:7px 6px; border:1px solid #fff; font-size:10.5px; text-transform:uppercase; }
+  .qa-tabela td{ padding:5px 6px; border:1px solid #d5d9de; text-align:center; color:var(--navy); white-space:nowrap; }
+  .qa-tabela .qa-nome{ text-align:left; font-weight:600; }
+  .qa-tabela th.qa-fora{ opacity:.55; }
+  .qa-hist td.qa-m{ font-size:10px; }
+  td.qa-m{ font-weight:800; font-size:10.5px; letter-spacing:.2px; }
+  .qa-exc{ background:#16a34a; color:#fff !important; } .qa-bom{ background:#1d6fd8; color:#fff !important; } .qa-reg{ background:#f2d024; color:#3a2f00 !important; }
+  .qa-insu{ background:#f08a24; color:#fff !important; } .qa-insa{ background:#e02424; color:#fff !important; }
+  .qa-na{ background:#eceee8; color:#6b7280 !important; } .qa-ava{ background:#fff; color:#142131 !important; font-style:italic; }
+  .qa-total{ border-collapse:collapse; width:100%; font-size:12px; }
+  .qa-total th{ background:#5b6470; color:#fff; padding:6px; font-size:11px; }
+  .qa-total td{ border:1px solid #d5d9de; padding:5px 8px; text-align:center; }
+  .qa-lema{ text-align:center; border:1px solid var(--border-strong); border-radius:10px; padding:10px; margin:16px 0 0; font-size:13px; color:var(--navy); }
+  .qa-lema b{ color:#16a34a; }
+  .qa-desvios{ margin:0; padding:0; list-style:none; }
+  .qa-desvios li{ position:relative; padding:10px 0 10px 30px; border-bottom:1px solid var(--border); font-size:14px; font-style:italic; color:var(--navy); line-height:1.4; }
+  .qa-desvios li::before{ content:'✓'; position:absolute; left:4px; top:9px; font-style:normal; font-weight:800; color:var(--green-dark); }
+  .qa-desvios small{ display:block; font-style:normal; font-size:11px; color:var(--text-muted); margin-top:2px; }
+  .apr-slide .an-destaque p{ font-size:24px; }
+  .apr-slide .an-destaque b{ font-size:64px; }
+  .apr-slide .an-efet-cab{ font-size:15px; }
+  .apr-slide .an-efet-cab, .apr-slide .an-efet-linha{ grid-template-columns:minmax(260px, 34%) minmax(0,1fr) 140px; }
+  .apr-slide .an-efet-tip{ font-size:18px; } .apr-slide .an-efet-tip small{ font-size:14px; }
+  .apr-slide .an-efet-barra i{ height:44px; font-size:24px; }
+  .apr-slide .an-efet-pct{ font-size:26px; }
+  .apr-slide .an-nota{ font-size:15px; }
+  .apr-slide .an-legenda{ font-size:15px; }
+  .apr-slide .an-pilha{ max-width:110px; } .apr-slide .an-pilha i{ font-size:16px; }
+  .apr-slide .qa-tabela{ font-size:15px; min-width:0; } .apr-slide .qa-tabela th{ font-size:13px; padding:9px 8px; } .apr-slide .qa-tabela td{ padding:7px 8px; }
+  .apr-slide td.qa-m{ font-size:13px; } .apr-slide .qa-hist td.qa-m{ font-size:12px; }
+  .apr-slide .qa-tri{ grid-template-columns:minmax(0,1fr) 320px; } .apr-slide .qa-total{ font-size:15px; } .apr-slide .qa-lema{ font-size:17px; }
+  .apr-slide .qa-desvios li{ font-size:22px; padding:14px 0 14px 40px; } .apr-slide .qa-desvios li::before{ top:13px; font-size:22px; } .apr-slide .qa-desvios small{ font-size:14px; }
+  .apr-slide .an-extra{ font-size:13px; }
+  [data-theme="dark"] .an-mini{ background:transparent; }
   .ag-periodo{ font-size:12px; color:var(--text-muted); margin:0 0 12px; }
   .ag-kpis{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; }
   .ag-kpi{ background:var(--cream); border-radius:12px; padding:14px 16px; }
@@ -1346,6 +1436,7 @@
       <button type="button" class="sb-item" id="sb-novo"><span class="icone-svg" data-icone="plus"></span><span class="sb-rotulo">Novo desvio</span></button>
       <button type="button" class="sb-item" id="sb-aprovacoes"><span class="icone-svg" data-icone="check-circulo"></span><span class="sb-rotulo" id="sb-aprovacoes-label">Enviados</span><span class="sb-badge" id="sb-badge-aprovacoes" style="display:none;"></span></button>
       <button type="button" class="sb-item" id="sb-email" style="display:none;"><span class="icone-svg" data-icone="mail"></span><span class="sb-rotulo">E-mail aos responsáveis</span></button>
+      <button type="button" class="sb-item" data-apr="prever"><span class="icone-svg" data-icone="apresentacao"></span><span class="sb-rotulo">Apresentação Préver</span></button>
       <button type="button" class="sb-item" id="sb-analise"><span class="icone-svg" data-icone="barchart"></span><span class="sb-rotulo">Análise geral</span></button>
     </div>
     <button type="button" class="sb-usuario" id="sb-usuario" aria-label="Abrir perfil">
@@ -1419,6 +1510,21 @@
       <div id="q-pendentes"></div>
       <span class="secao-titulo" id="q-titulo-lista">Fichas do mês</span>
       <div id="q-lista"></div>
+    </div>
+
+    <!-- Tela: análise da Qualimetria -->
+    <div id="view-q-analise" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header"><button type="button" class="voltar" id="q-an-voltar" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button></div>
+        <div class="tela-selo">QUALIMETRIA</div>
+        <p class="tela-titulo">Análise da Qualimetria</p>
+      </div>
+      <div class="an-barra">
+        <select class="an-ano" aria-label="Ano"></select>
+        <button type="button" class="mes-botao an-meses" aria-label="Meses">Todos os meses</button>
+      </div>
+      <div class="an-botoes"><button type="button" class="btn-apresentacao" data-apr="qualimetria"><span class="icone-svg" data-icone="apresentacao"></span> Apresentação</button><button type="button" class="btn-apresentacao btn-prever" data-apr="prever"><span class="icone-svg" data-icone="apresentacao"></span> Apresentação Préver</button></div>
+      <div id="q-an-corpo"></div>
     </div>
 
     <!-- Tela: ficha de qualimetria (avaliação + assinaturas) -->
@@ -1509,10 +1615,11 @@
         <div class="tela-selo">LISTA DE VERIFICAÇÃO</div>
         <p class="tela-titulo">Análise das LVs</p>
       </div>
-      <div class="lv-dois" style="margin-bottom:14px;">
-        <select id="lv-an-ano" class="lv-busca" aria-label="Ano" style="margin:0;"></select>
-        <select id="lv-an-mes" class="lv-busca" aria-label="Mês" style="margin:0;"></select>
+      <div class="an-barra">
+        <select class="an-ano" aria-label="Ano"></select>
+        <button type="button" class="mes-botao an-meses" aria-label="Meses">Todos os meses</button>
       </div>
+      <div class="an-botoes"><button type="button" class="btn-apresentacao" data-apr="lv"><span class="icone-svg" data-icone="apresentacao"></span> Apresentação</button><button type="button" class="btn-apresentacao btn-prever" data-apr="prever"><span class="icone-svg" data-icone="apresentacao"></span> Apresentação Préver</button></div>
       <div id="lv-an-corpo"></div>
     </div>
 
@@ -1591,10 +1698,11 @@
         <div class="tela-selo">TREINAMENTOS</div>
         <p class="tela-titulo">Análise dos treinamentos</p>
       </div>
-      <div class="lv-dois" style="margin-bottom:14px;">
-        <select id="tr-an-ano" class="lv-busca" aria-label="Ano" style="margin:0;"></select>
-        <select id="tr-an-mes" class="lv-busca" aria-label="Mês" style="margin:0;"></select>
+      <div class="an-barra">
+        <select class="an-ano" aria-label="Ano"></select>
+        <button type="button" class="mes-botao an-meses" aria-label="Meses">Todos os meses</button>
       </div>
+      <div class="an-botoes"><button type="button" class="btn-apresentacao" data-apr="treinamentos"><span class="icone-svg" data-icone="apresentacao"></span> Apresentação</button><button type="button" class="btn-apresentacao btn-prever" data-apr="prever"><span class="icone-svg" data-icone="apresentacao"></span> Apresentação Préver</button></div>
       <div id="tr-an-corpo"></div>
     </div>
 
@@ -1981,9 +2089,12 @@
       </div>
       <div class="ag-topo">
         <p class="tela-titulo" style="margin:0;">Análise geral</p>
+        <span class="an-botoes" style="margin:0">
         <button type="button" class="btn-apresentacao" id="btn-apresentacao">
           <span class="icone-svg" data-icone="apresentacao"></span> Apresentação
         </button>
+        <button type="button" class="btn-apresentacao btn-prever" data-apr="prever"><span class="icone-svg" data-icone="apresentacao"></span> Préver</button>
+        </span>
       </div>
 
       <div style="display:flex; gap:8px; margin-bottom:18px;">
@@ -2674,7 +2785,7 @@ document.getElementById('logout-btn').addEventListener('click', () => {
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-tr-escolher','view-tr-busca','view-tr-meus','view-tr-analise','view-tr-ficha','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-lv-analise','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha','view-email-resp'];
+const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-tr-escolher','view-tr-busca','view-tr-meus','view-tr-analise','view-tr-ficha','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-lv-analise','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha','view-email-resp','view-q-analise'];
 function irPara(viewId){
   if(typeof trFecharCamera === 'function') trFecharCamera();   // a câmera dos crachás nunca fica ligada fora da tela dela
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
@@ -2692,6 +2803,10 @@ function irPara(viewId){
   if(/^view-lv-/.test(viewId)){
     if(typeof abrirLV === 'function' && !lvOuvindo) abrirLV();
     document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'view-lv'));
+  }
+  if(viewId === 'view-q-analise'){
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'view-qualimetria'));
+    anRenderPagina('qualimetria', 'q-an-corpo');
   }
   if(viewId === 'view-quali-ficha'){
     document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'view-qualimetria'));
@@ -4592,29 +4707,7 @@ function carregarTodosDesviosParaAnalise(callback){
   });
 }
 
-function popularFiltrosAnalise(){
-  const anos = new Set();
-  todosDesviosAnaliseCache.forEach(d => {
-    const am = extrairAnoMes(d.data);
-    if(am) anos.add(am.ano);
-  });
-  const anosOrdenados = Array.from(anos).sort().reverse();
-  const opcoesAno = '<option value="">Todos os anos</option>' + anosOrdenados.map(a => `<option value="${a}">${a}</option>`).join('');
-  agLigarBotoesMeses();
-  // mesmos filtros na página e na apresentação (sempre sincronizados)
-  [['analise-filtro-ano', opcoesAno], ['apr-filtro-ano', opcoesAno]]
-    .forEach(([id, html]) => {
-      const sel = document.getElementById(id);
-      if(!sel) return;
-      const valor = sel.value;
-      sel.innerHTML = html;
-      sel.value = valor;
-      if(!sel.dataset.ligado){
-        sel.dataset.ligado = '1';
-        sel.addEventListener('change', () => definirFiltroAnalise(id.includes('ano') ? 'ano' : 'mes', sel.value));
-      }
-    });
-}
+function popularFiltrosAnalise(){ anSincronizarAnos(); }
 /* ---- meses da análise: dá para escolher vários (vazio = todos os meses) ---- */
 const agMesesSel = new Set();
 function agMesesOrdenados(){ return Array.from(agMesesSel).sort((a, b) => a - b); }
@@ -4629,9 +4722,7 @@ function agTextoMeses(curto){
   return ms.slice(0, -1).map(nome).join(', ') + ' e ' + nome(ms[ms.length - 1]);
 }
 function agLigarBotoesMeses(){
-  ['analise-filtro-mes', 'apr-filtro-mes'].forEach(id => {
-    const b = document.getElementById(id);
-    if(!b) return;
+  document.querySelectorAll('#analise-filtro-mes, #apr-filtro-mes, .an-meses').forEach(b => {
     b.textContent = agTextoMeses(true);
     b.classList.toggle('mes-ativo', agMesesSel.size > 0);
     if(!b.dataset.ligado){ b.dataset.ligado = '1'; b.addEventListener('click', agEscolherMeses); }
@@ -4669,19 +4760,11 @@ function agEscolherMeses(){
   modal.addEventListener('click', (e) => { if(e.target === modal) fechar(); });
   modal.querySelector('.mes-aplicar').addEventListener('click', () => {
     agMesesSel.clear(); escolha.forEach(m => agMesesSel.add(m)); fechar();
-    agLigarBotoesMeses(); renderizarAnaliseGeral();
-    if(window.atualizarApresentacao) window.atualizarApresentacao();
+    anAoMudar();
   });
   pintar();
 }
-function definirFiltroAnalise(qual, valor){
-  ['analise-filtro-' + qual, 'apr-filtro-' + qual].forEach(id => {
-    const sel = document.getElementById(id);
-    if(sel) sel.value = valor;
-  });
-  renderizarAnaliseGeral();
-  if(window.atualizarApresentacao) window.atualizarApresentacao();
-}
+function definirFiltroAnalise(qual, valor){ if(qual === 'ano'){ agAnoSel = valor || ''; anAoMudar(); } }
 
 function abrirAnaliseGeral(){
   document.getElementById('analise-geral-corpo').innerHTML = '<p class="empty-state">Carregando...</p>';
@@ -4732,13 +4815,11 @@ const agEstado = { tipTodos: false, respTodos: false, mapaTodos: false, busca: '
 const AG_POR_PAGINA_ABERTOS = 5; // linhas da tabela de abertos por tela na apresentação
 
 function textoPeriodoAnalise(){
-  const selAno = document.getElementById('analise-filtro-ano');
-  const ano = selAno && selAno.value ? selAno.value : 'Todos os anos';
-  return ano + ' · ' + agTextoMeses(false);
+  return (agAnoSel || 'Todos os anos') + ' · ' + agTextoMeses(false);
 }
 
 function agDadosFiltrados(){
-  const ano = document.getElementById('analise-filtro-ano').value;
+  const ano = agAnoSel;
   const meses = agMesesSel;
   return (todosDesviosAnaliseCache || []).filter(d => {
     const am = extrairAnoMes(d.data);
@@ -4994,7 +5075,7 @@ function agLigarBotoes(raiz, aoMudar){
 document.addEventListener('DOMContentLoaded', function(){
   const overlay = document.getElementById('apresentacao');
   const palco = document.getElementById('apr-palco');
-  let quadros = [], atual = 0, inicioX = null;
+  let quadros = [], atual = 0, inicioX = null, aprFonte = 'desvios', aprVersao = 0;
 
   function ajustarEscala(){
     const el = palco.querySelector('.apr-slide');
@@ -5009,6 +5090,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const item = quadros[atual];
     palco.innerHTML = `<div class="apr-slide${item.larga ? ' larga' : ''}">${agQuadroHtml(item)}</div>`;
     document.getElementById('apr-secao').textContent = item.titulo;
+    overlay.querySelector('.apr-faixa-titulo').textContent = item.secao || AN_SECOES[aprFonte] || 'Desvios';
     document.getElementById('apr-periodo').textContent = textoPeriodoAnalise();
     document.getElementById('apr-contador').textContent = (atual + 1) + ' / ' + quadros.length;
     document.getElementById('apr-ant').disabled = atual === 0;
@@ -5019,9 +5101,13 @@ document.addEventListener('DOMContentLoaded', function(){
     agLigarBotoes(palco, () => { remontar(); });
     ajustarEscala();
   }
-  function remontar(){
+  async function remontar(){
     const tituloAtual = quadros[atual] && quadros[atual].titulo;
-    quadros = agMontarQuadros('apresentacao');
+    const v = ++aprVersao;
+    await anCarregar(anFontesPara(aprFonte));
+    if(v !== aprVersao || !overlay.classList.contains('aberta')) return;
+    anSincronizarAnos();
+    quadros = anMontar(aprFonte, 'apresentacao');
     // tenta ficar no mesmo quadro depois de trocar filtro / "ver todos"
     const i = quadros.findIndex(q => q.titulo === tituloAtual);
     if(i >= 0) atual = i;
@@ -5034,12 +5120,21 @@ document.addEventListener('DOMContentLoaded', function(){
     if(novo < 0 || novo >= quadros.length) return;
     atual = novo; mostrar();
   }
-  function abrir(){
-    popularFiltrosAnalise();
-    quadros = agMontarQuadros('apresentacao');
-    atual = 0;
+  async function abrir(fonte){
+    aprFonte = typeof fonte === 'string' ? fonte : 'desvios';
+    overlay.setAttribute('aria-label', 'Apresentação ' + (AN_SECOES[aprFonte] || ''));
+    overlay.querySelector('.apr-faixa-titulo').textContent = AN_SECOES[aprFonte] || 'Desvios';
+    document.getElementById('apr-secao').textContent = 'Carregando…';
+    quadros = []; atual = 0;
     overlay.classList.add('aberta');
     document.body.style.overflow = 'hidden';
+    palco.innerHTML = '<p class="empty-state" style="padding-top:80px">Carregando os dados…</p>';
+    const v = ++aprVersao;
+    anSincronizarAnos();
+    await anCarregar(anFontesPara(aprFonte));
+    if(v !== aprVersao || !overlay.classList.contains('aberta')) return;
+    anSincronizarAnos();
+    quadros = anMontar(aprFonte, 'apresentacao');
     mostrar();
     const el = document.documentElement;
     const pedir = el.requestFullscreen || el.webkitRequestFullscreen;
@@ -5055,7 +5150,8 @@ document.addEventListener('DOMContentLoaded', function(){
       try{ const p = sair.call(document); if(p && p.catch) p.catch(() => {}); }catch(e){}
     }
     try{ if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); }catch(e){}
-    renderizarAnaliseGeral(); // a página reflete o filtro escolhido lá dentro
+    aprVersao++;
+    anAoMudarSoPagina(); // a página reflete o filtro escolhido lá dentro
   }
 
   /* ---- Baixar PDF: uma página por quadro, com a data da exportação ---- */
@@ -5089,7 +5185,7 @@ document.addEventListener('DOMContentLoaded', function(){
       const dataArquivo = agora.toISOString().slice(0, 10);
       const periodo = textoPeriodoAnalise();
       const logos = document.querySelector('#apresentacao .apr-logos').src;
-      const lista = agMontarQuadros('apresentacao');
+      const lista = anMontar(aprFonte, 'apresentacao');
 
       palcoExport.className = 'apresentacao apr-export';
       document.body.appendChild(palcoExport);
@@ -5101,7 +5197,7 @@ document.addEventListener('DOMContentLoaded', function(){
         palcoExport.innerHTML = `
           <div class="apr-cabecalho">
             <div class="apr-faixa">
-              <span class="apr-faixa-titulo">Desvios</span>
+              <span class="apr-faixa-titulo">${escaparHtml(item.secao || AN_SECOES[aprFonte] || '')}</span>
               <span class="apr-faixa-sub"><b>${item.titulo}</b><span>${periodo}</span></span>
             </div>
             <img class="apr-logos" alt="" src="${logos}">
@@ -5118,7 +5214,7 @@ document.addEventListener('DOMContentLoaded', function(){
         if(i > 0) pdf.addPage([1600, 900], 'landscape');
         pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 1600, 900);
       }
-      pdf.save(`Desvios_${dataArquivo}.pdf`);
+      pdf.save(`${{ desvios: 'Desvios', qualimetria: 'Qualimetria', lv: 'LV', treinamentos: 'Capacitacao', prever: 'Apresentacao_Prever' }[aprFonte] || 'Apresentacao'}_${dataArquivo}.pdf`);
     }catch(err){
       console.error('Falha ao gerar o PDF', err);
       mostrarAvisoApp('PDF não gerado', 'Confira a internet e tente de novo.');
@@ -5130,7 +5226,9 @@ document.addEventListener('DOMContentLoaded', function(){
   }
   document.getElementById('apr-baixar').addEventListener('click', baixarPdf);
 
-  document.getElementById('btn-apresentacao').addEventListener('click', abrir);
+  window.abrirApresentacao = abrir;
+  document.getElementById('btn-apresentacao').addEventListener('click', () => abrir('desvios'));
+  document.addEventListener('click', (e) => { const b = e.target.closest && e.target.closest('[data-apr]'); if(b) abrir(b.dataset.apr); });
   document.getElementById('apr-fechar').addEventListener('click', fechar);
   document.getElementById('apr-ant').addEventListener('click', () => ir(-1));
   document.getElementById('apr-prox').addEventListener('click', () => ir(1));
@@ -5331,7 +5429,7 @@ function renderizarListaDesvios(){
 </script>
 
 <!-- Modo apresentação da Análise geral -->
-<div class="apresentacao" id="apresentacao" role="dialog" aria-label="Apresentação de desvios">
+<div class="apresentacao" id="apresentacao" role="dialog" aria-label="Apresentação">
   <div class="apr-cabecalho">
     <div class="apr-faixa">
       <span class="apr-faixa-titulo">Desvios</span>
@@ -7504,80 +7602,7 @@ function lvRenderMinhas(){
 let lvAnCache = {};
 function lvAbrirAnalise(){
   irPara('view-lv-analise');
-  const selA = document.getElementById('lv-an-ano'), selM = document.getElementById('lv-an-mes');
-  if(!selA.options.length){
-    const ano = new Date().getFullYear();
-    selA.innerHTML = [ano, ano - 1].map(a => `<option value="${a}">${a}</option>`).join('');
-    selM.innerHTML = '<option value="">Ano todo</option>' + ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']
-      .map((m, i) => `<option value="${String(i + 1).padStart(2, '0')}">${m}</option>`).join('');
-    selM.value = String(new Date().getMonth() + 1).padStart(2, '0');
-    selA.addEventListener('change', lvRenderAnalise); selM.addEventListener('change', lvRenderAnalise);
-  }
-  lvRenderAnalise();
-}
-async function lvRenderAnalise(){
-  const ano = document.getElementById('lv-an-ano').value, mes = document.getElementById('lv-an-mes').value;
-  const ini = mes ? `${ano}-${mes}-01` : `${ano}-01-01`, fim = mes ? `${ano}-${mes}-31` : `${ano}-12-31`;
-  const corpo = document.getElementById('lv-an-corpo');
-  const chave = ini + '|' + fim;
-  if(!lvAnCache[chave]){
-    corpo.innerHTML = '<p class="empty-state">Carregando…</p>';
-    try{
-      const snap = await db.collection('lvs').where('data', '>=', ini).where('data', '<=', fim).get();
-      lvAnCache[chave] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      setTimeout(() => { delete lvAnCache[chave]; }, 5 * 60000);   // recarrega depois de 5 minutos
-    }catch(e){ corpo.innerHTML = '<p class="empty-state">Não consegui carregar as LVs agora. Confira a internet.</p>'; return; }
-    if(document.getElementById('lv-an-ano').value !== ano || document.getElementById('lv-an-mes').value !== mes) return;
-  }
-  const lvs = lvAnCache[chave].filter(l => l.estado === 'concluida');
-  if(!lvs.length){ corpo.innerHTML = '<p class="empty-state">Nenhuma LV concluída neste período.</p>'; return; }
-  const conta = (f) => lvs.filter(f).length, pct = (n) => Math.round(n / lvs.length * 100);
-  const lib = conta(l => l.resultado === 'Liberado'), ress = conta(l => l.resultado === 'Liberado com ressalvas'), nlib = conta(l => l.resultado === 'Não liberado');
-  const agrupa = (fn) => { const m = {}; lvs.forEach(l => { const k = fn(l); if(k) (m[k] = m[k] || []).push(l); }); return m; };
-  const barras = (lista, max, cor) => lista.map(([t, v, extra]) => `<div class="q-an-linha"><span>${escaparHtml(t)}${extra ? `<small class="lv-sub">${escaparHtml(extra)}</small>` : ''}</span><span class="q-an-barra"><i style="width:${Math.max(4, v / max * 100)}%; background:${cor}"></i></span><span class="q-an-val">${v}</span></div>`).join('');
-  // categorias e tipos
-  const porCat = Object.entries(agrupa(l => l.categoria || (lvTipo(l.tipoId) || {}).cat)).map(([k, v]) => [k, v.length, v.filter(l => l.resultado === 'Não liberado').length ? v.filter(l => l.resultado === 'Não liberado').length + ' não liberado(s)' : '']).sort((a, b) => b[1] - a[1]);
-  const porTipo = Object.entries(agrupa(l => l.tipoNome)).map(([k, v]) => [k, v.length]).sort((a, b) => b[1] - a[1]).slice(0, 8);
-  // itens com mais NC (por tipo de LV + texto do item)
-  const ncItem = {};
-  lvs.forEach(l => Object.keys(l.itens || {}).forEach(n => { if(l.itens[n] === 'NC'){ const k = l.tipoNome + ' · ' + ((l.itensTexto || [])[n - 1] || 'item ' + n); ncItem[k] = (ncItem[k] || 0) + 1; } }));
-  const topNc = Object.entries(ncItem).sort((a, b) => b[1] - a[1]).slice(0, 10);
-  // empresas
-  const porEmp = Object.entries(agrupa(l => l.empresaNome || l.empresaTipo)).map(([k, v]) => {
-    const nl = v.filter(l => l.resultado === 'Não liberado').length, nc = v.reduce((a, l) => a + Object.values(l.itens || {}).filter(x => x === 'NC').length, 0);
-    return [k, v.length, `${nc} NC${nl ? ' · ' + nl + ' não liberado(s)' : ''}`, nc];
-  }).sort((a, b) => b[3] - a[3] || b[1] - a[1]).slice(0, 8);
-  // equipamentos com NC repetida no mesmo item
-  const rep = [];
-  Object.values(agrupa(l => l.tipoId + '|' + (l.identificadorNorm || ''))).forEach(g => {
-    if(g.length < 2) return;
-    const cont = {};
-    g.forEach(l => Object.keys(l.itens || {}).forEach(n => { if(l.itens[n] === 'NC') cont[n] = (cont[n] || 0) + 1; }));
-    const itens = Object.keys(cont).filter(n => cont[n] > 1);
-    if(itens.length) rep.push({ l: g[0], itens, n: g.length });
-  });
-  // por TST
-  const porTst = Object.entries(agrupa(l => l.criadoPorNome)).map(([k, v]) => [k, v.length]).sort((a, b) => b[1] - a[1]);
-  const naoLib = lvs.filter(l => l.resultado === 'Não liberado').sort((a, b) => String(b.data).localeCompare(String(a.data)));
-  corpo.innerHTML = `
-    <div class="hero-flutuante q-hero" style="margin-top:0">
-      <div class="q-resumo">
-        <div class="q-kpi"><b>${lvs.length}</b><span>LVs concluídas</span></div>
-        <div class="q-kpi"><b style="color:var(--green-dark)">${pct(lib)}%</b><span>liberados (${lib})</span></div>
-        <div class="q-kpi"><b style="color:#e2a23a">${ress}</b><span>com ressalvas</span></div>
-        <div class="q-kpi"><b style="color:${nlib ? 'var(--error)' : 'inherit'}">${nlib}</b><span>não liberados</span></div>
-      </div>
-    </div>
-    ${naoLib.length ? `<section class="q-an-card"><h3>Não liberados</h3>${naoLib.slice(0, 6).map(l => lvCard(l)).join('')}</section>` : ''}
-    <section class="q-an-card"><h3>LVs por categoria</h3>${barras(porCat, porCat[0][1], 'var(--green)')}</section>
-    <section class="q-an-card"><h3>Tipos mais inspecionados</h3>${barras(porTipo, porTipo[0][1], 'var(--green)')}</section>
-    <section class="q-an-card"><h3>Itens com mais não conformidades</h3>${topNc.length ? barras(topNc, topNc[0][1], 'var(--error)') : '<p class="empty-state" style="margin:0">Nenhuma não conformidade no período. 👏</p>'}</section>
-    <section class="q-an-card"><h3>Empresas (mais NC primeiro)</h3>${barras(porEmp.map(e => [e[0], e[1], e[2]]), Math.max(...porEmp.map(e => e[1])), '#2e6da4')}</section>
-    ${rep.length ? `<section class="q-an-card"><h3>Equipamentos com NC repetida</h3>${rep.map(r => `<div class="q-an-linha" style="grid-template-columns:1fr"><span><b>${escaparHtml(r.l.tipoNome)} · ${escaparHtml(r.l.identificador || '')}</b><small class="lv-sub">${r.n} LVs · NC repetida nos itens ${r.itens.join(', ')}</small></span></div>`).join('')}</section>` : ''}
-    <section class="q-an-card"><h3>LVs por TST</h3>${barras(porTst, porTst[0][1], '#6b7a2f')}</section>`;
-  lvLigarCards(corpo);
-  // os cards abrem a LV mesmo que ela não esteja entre as recentes
-  corpo.querySelectorAll('.lv-card').forEach(b => b.addEventListener('click', () => { const l = lvs.find(x => x.id === b.dataset.id); if(l && !lvRecentes.some(x => x.id === l.id)) lvAbrir(l); }));
+  anRenderPagina('lv', 'lv-an-corpo');
 }
 
 /* ---------- ligações ---------- */
@@ -7733,7 +7758,7 @@ function trNovo(tema, criadoNaHora){
   // "trocar" na etapa 1: só troca o tema do rascunho atual (não cria outro)
   if(trTrocandoTema && trAtual && trPodeEditar()){
     trTrocandoTema = false;
-    Object.assign(trAtual, { codigo: tema.codigo || '', tema: tema.tema, assuntos: tema.assuntos || '', incluirNaLista: !!criadoNaHora && !!tema.incluir, temaCriadoNaHora: !!criadoNaHora });
+    Object.assign(trAtual, { codigo: tema.codigo || '', tema: tema.tema, assuntos: tema.assuntos || '', incluirNaLista: !!criadoNaHora && !!tema.incluir, temaCriadoNaHora: !!criadoNaHora, categoria: trhCategoriaPadrao(tema.tema, tema.codigo) });
     trSalvar(); trPasso = 1; irPara('view-tr-ficha'); trRenderFicha(); window.scrollTo(0, 0); return;
   }
   trTrocandoTema = false;
@@ -7742,6 +7767,7 @@ function trNovo(tema, criadoNaHora){
     id: db.collection('treinamentos').doc().id, novo: true,
     codigo: tema.codigo || '', tema: tema.tema, assuntos: tema.assuntos || '',
     incluirNaLista: !!criadoNaHora && !!tema.incluir, temaCriadoNaHora: !!criadoNaHora,
+    categoria: trhCategoriaPadrao(tema.tema, tema.codigo),
     turma: '', data: agora.toISOString().slice(0, 10), hora: String(agora.getHours()).padStart(2, '0') + ':' + String(agora.getMinutes()).padStart(2, '0'),
     cargaMin: 0, local: '', participantes: [], matriculas: [], fotos: [], estado: 'rascunho',
     responsavel: { nome: eu.nome, matricula: eu.matricula, email: eu.email, uid: eu.uid },
@@ -7805,11 +7831,16 @@ function trRenderDados(corpo, barra, ed){
       <select id="tr-carga-h" aria-label="Horas">${Array.from({ length: 9 }, (_, i) => `<option value="${i}" ${i === h ? 'selected' : ''}>${i} h</option>`).join('')}</select>
       <select id="tr-carga-m" aria-label="Minutos">${[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map(i => `<option value="${i}" ${i === m ? 'selected' : ''}>${String(i).padStart(2, '0')} min</option>`).join('')}</select></div></div>
     ${qCampoLista('Local', 'local', 'local', t.local, ed, 'Descreva o local')}
+    <label class="lv-campo">Categoria no INDICA<select id="tr-categoria">${TRH_CATEGORIAS.map(c => `<option value="${escaparHtml(c)}" ${c === (t.categoria || trhCategoriaPadrao(t.tema, t.codigo)) ? 'selected' : ''}>${escaparHtml(c === 'INTEGRAÇÃO' ? 'Integração' : c === 'TREINAMENTO DIÁRIO DE TRABALHO (TDT)' ? 'Treinamento Diário de Trabalho (TDT)' : c)}</option>`).join('')}</select>
+      <small class="lv-sub" style="font-weight:400">Bloco do relatório INDICA onde as horas deste treinamento entram. Integração e TDT não contam no indicador de capacitação.</small></label>
     <label class="lv-campo">Responsável (instrutor)<input type="text" value="${escaparHtml((t.responsavel && t.responsavel.nome) || '')}${t.responsavel && t.responsavel.matricula ? ' · Mat. ' + escaparHtml(t.responsavel.matricula) : ''}" disabled></label>
   </div>`;
   barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b>Etapa 1 de 3</b><small>Depois: ler os crachás</small></span></div><button type="button" class="btn-primary" id="tr-ir-2"><span class="icone-svg" data-icone="qr"></span> Ler crachás</button>`;
   if(!ed){ corpo.querySelectorAll('input,select,textarea,button').forEach(e => e.disabled = true); }
   corpo.querySelectorAll('[data-tr]').forEach(el => el.addEventListener(el.type === 'date' || el.type === 'time' ? 'change' : 'input', () => { t[el.dataset.tr] = el.value.trim(); trSalvar(); atualizar(); }));
+  const selCat = document.getElementById('tr-categoria');
+  if(!t.categoria) t.categoria = selCat.value;
+  selCat.addEventListener('change', () => { t.categoria = selCat.value; trSalvar(); });
   ['tr-carga-h', 'tr-carga-m'].forEach(id => document.getElementById(id).addEventListener('change', () => {
     t.cargaMin = Number(document.getElementById('tr-carga-h').value) * 60 + Number(document.getElementById('tr-carga-m').value); trSalvar(); atualizar();
   }));
@@ -8223,53 +8254,7 @@ function trRenderMeus(){
 const trAnCache = {};
 function trAbrirAnalise(){
   irPara('view-tr-analise');
-  const selA = document.getElementById('tr-an-ano'), selM = document.getElementById('tr-an-mes');
-  if(!selA.options.length){
-    const ano = new Date().getFullYear();
-    selA.innerHTML = [ano, ano - 1].map(a => `<option value="${a}">${a}</option>`).join('');
-    selM.innerHTML = '<option value="">Ano todo</option>' + ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-      .map((m, i) => `<option value="${String(i + 1).padStart(2, '0')}">${m}</option>`).join('');
-    selM.value = String(new Date().getMonth() + 1).padStart(2, '0');
-    selA.addEventListener('change', trRenderAnalise); selM.addEventListener('change', trRenderAnalise);
-  }
-  trRenderAnalise();
-}
-async function trRenderAnalise(){
-  const ano = document.getElementById('tr-an-ano').value, mes = document.getElementById('tr-an-mes').value;
-  const ini = mes ? `${ano}-${mes}-01` : `${ano}-01-01`, fim = mes ? `${ano}-${mes}-31` : `${ano}-12-31`, chave = ini + '|' + fim;
-  const corpo = document.getElementById('tr-an-corpo');
-  if(!trAnCache[chave]){
-    corpo.innerHTML = '<p class="empty-state">Carregando…</p>';
-    try{
-      const snap = await db.collection('treinamentos').where('data', '>=', ini).where('data', '<=', fim).get();
-      trAnCache[chave] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      setTimeout(() => { delete trAnCache[chave]; }, 5 * 60000);
-    }catch(e){ corpo.innerHTML = '<p class="empty-state">Não consegui carregar agora. Confira a internet.</p>'; return; }
-    if(document.getElementById('tr-an-ano').value !== ano || document.getElementById('tr-an-mes').value !== mes) return;
-  }
-  const lista = trAnCache[chave].filter(t => t.estado === 'concluido');
-  if(!lista.length){ corpo.innerHTML = '<p class="empty-state">Nenhum treinamento concluído neste período.</p>'; return; }
-  const part = lista.reduce((a, t) => a + (t.participantes || []).length, 0);
-  const pessoas = new Set(); lista.forEach(t => (t.participantes || []).forEach(p => pessoas.add(trChave(p))));
-  const hh = lista.reduce((a, t) => a + (t.participantes || []).length * (Number(t.cargaMin) || 0), 0) / 60;
-  const gen = { M: 0, F: 0 }; lista.forEach(t => (t.participantes || []).forEach(p => { if(gen[p.genero] !== undefined) gen[p.genero]++; }));
-  const agrupa = (fn, peso) => { const m = {}; lista.forEach(t => { const k = fn(t); if(k) m[k] = (m[k] || 0) + (peso ? peso(t) : 1); }); return Object.entries(m).sort((a, b) => b[1] - a[1]); };
-  const barras = (l, cor, fmt) => { const max = l.length ? l[0][1] : 1; return l.map(([k, v]) => `<div class="q-an-linha"><span>${escaparHtml(k)}</span><span class="q-an-barra"><i style="width:${Math.max(4, v / max * 100)}%; background:${cor}"></i></span><span class="q-an-val">${fmt ? fmt(v) : v}</span></div>`).join(''); };
-  const porTema = agrupa(t => trNomeTema(t)).slice(0, 10);
-  const porTemaPart = agrupa(t => trNomeTema(t), t => (t.participantes || []).length).slice(0, 10);
-  const porTst = agrupa(t => t.responsavel && t.responsavel.nome);
-  const porLocal = agrupa(t => t.local).slice(0, 8);
-  const porEmp = {}; lista.forEach(t => (t.participantes || []).forEach(p => { const k = p.empresa || '—'; porEmp[k] = (porEmp[k] || 0) + 1; }));
-  const hhTxt = (v) => (v >= 10 ? Math.round(v) : String(Math.round(v * 10) / 10).replace('.', ',')) + 'h';
-  corpo.innerHTML = `<div class="hero-flutuante q-hero" style="margin-top:0"><div class="q-resumo tr-an-kpis">
-      <div class="q-kpi"><b>${lista.length}</b><span>treinamentos</span></div><div class="q-kpi"><b>${part}</b><span>participações</span></div>
-      <div class="q-kpi"><b>${pessoas.size}</b><span>pessoas diferentes</span></div><div class="q-kpi"><b>${hhTxt(hh)}</b><span>horas-homem</span></div></div>
-      <p class="lv-sub" style="margin:8px 0 0">${gen.M} participações masculinas · ${gen.F} femininas</p></div>
-    <section class="q-an-card"><h3>Treinamentos mais aplicados</h3>${barras(porTema, 'var(--green)')}</section>
-    <section class="q-an-card"><h3>Participações por tema</h3>${barras(porTemaPart, '#2e6da4')}</section>
-    <section class="q-an-card"><h3>Por local</h3>${barras(porLocal, '#6b7a2f')}</section>
-    <section class="q-an-card"><h3>Participações por empresa</h3>${barras(Object.entries(porEmp).sort((a, b) => b[1] - a[1]).slice(0, 8), '#7a4b06')}</section>
-    <section class="q-an-card"><h3>Por TST (instrutor)</h3>${barras(porTst, 'var(--green)')}</section>`;
+  anRenderPagina('treinamentos', 'tr-an-corpo');
 }
 
 /* ---------- ligações ---------- */
@@ -8512,6 +8497,642 @@ async function emGerarPdf(g){
   }
   const nomeArq = `${new Date().toISOString().slice(0, 10)} - Desvios em aberto - ${g.nome}.pdf`.replace(/[\\/:*?"<>|]/g, '');
   return new File([pdf.output('blob')], nomeArq, { type: 'application/pdf' });
+}
+
+/* =====================================================================
+   ANÁLISES E APRESENTAÇÕES DE TODAS AS ABAS
+   - Um filtro de período só (ano + meses) vale para Desvios, Qualimetria,
+     LV e Treinamentos, na página e na apresentação.
+   - Cada aba monta seus "quadros" ({ titulo, sub, corpo, larga }) e eles
+     servem tanto para a página de análise quanto para a apresentação.
+   - Apresentação Préver = Capacitação + Desvios + Qualimetria + LV.
+   ===================================================================== */
+let agAnoSel = '';                         // '' = todos os anos
+const anDados = { qualimetria: null, lvs: null, treinos: null, hist: null, erros: {} };
+const AN_CACHE = {};
+const TR_META_HHT = 1.65;                  // meta mensal de capacitação (% das horas trabalhadas)
+const AN_SECOES = { desvios: 'Desvios', qualimetria: 'Qualimetria', lv: 'LV', treinamentos: 'Capacitação', prever: 'Préver' };
+
+function anFmt(v, dec){
+  if(v === null || v === undefined || isNaN(v)) return '—';
+  return Number(v).toLocaleString('pt-BR', { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 });
+}
+function anHoras(v){ return v >= 100 ? anFmt(v) : anFmt(v, v % 1 ? 1 : 0); }
+function anIntervalo(){ return agAnoSel ? [agAnoSel + '-01-01', agAnoSel + '-12-31'] : ['2000-01-01', '2999-12-31']; }
+function anNoPeriodo(dataStr){
+  const am = extrairAnoMes(dataStr);
+  if(!am) return !agAnoSel && !agMesesSel.size;
+  if(agAnoSel && am.ano !== agAnoSel) return false;
+  if(agMesesSel.size && !agMesesSel.has(am.mes)) return false;
+  return true;
+}
+function anPeriodoOk(periodo){ return anNoPeriodo(periodo + '-01'); }
+function anMesCurto(periodo){ const [a, m] = periodo.split('-'); return MESES_NOMES()[Number(m) - 1].slice(0, 3).toLowerCase() + '/' + a.slice(2); }
+function anMesLongo(periodo){ const [a, m] = periodo.split('-'); return MESES_NOMES()[Number(m) - 1].toLowerCase() + ' de ' + a; }
+async function anBuscar(chave, fn){
+  const c = AN_CACHE[chave];
+  if(c && Date.now() - c.em < 5 * 60000) return c.dados;
+  const dados = await fn();
+  AN_CACHE[chave] = { em: Date.now(), dados };
+  return dados;
+}
+function anFontesPara(fonte){
+  return { desvios: ['desvios'], qualimetria: ['qualimetria', 'hist'], lv: ['lv'], treinamentos: ['treinos', 'hist', 'desvios'],
+           prever: ['desvios', 'qualimetria', 'lv', 'treinos', 'hist'] }[fonte] || [];
+}
+async function anCarregar(fontes){
+  const [ini, fim] = anIntervalo(), tarefas = [];
+  const pegar = (nome, chave, fn) => tarefas.push(anBuscar(chave, fn).then(d => { anDados[nome] = d; delete anDados.erros[nome]; })
+    .catch(e => { console.warn('Análise (' + nome + '):', e); anDados[nome] = anDados[nome] || []; anDados.erros[nome] = e; }));
+  if(fontes.includes('desvios')) tarefas.push(new Promise(ok => {
+    let feito = false; const fim = () => { if(!feito){ feito = true; ok(); } };
+    // sem resposta dos concluídos em 8 s (sem internet): segue só com os abertos
+    setTimeout(() => { if(!feito){ todosDesviosAnaliseCache = (desviosAtivosCache || []).concat(desviosConcluidosCache || []); fim(); } }, 8000);
+    try{ carregarTodosDesviosParaAnalise(fim); }catch(e){ fim(); }
+  }));
+  if(fontes.includes('qualimetria')) pegar('qualimetria', 'q|' + agAnoSel, async () =>
+    (await db.collection('qualimetrias').where('mes', '>=', ini.slice(0, 7)).where('mes', '<=', fim.slice(0, 7)).get()).docs.map(d => ({ id: d.id, ...d.data() })));
+  if(fontes.includes('lv')) pegar('lvs', 'lv|' + agAnoSel, async () =>
+    (await db.collection('lvs').where('data', '>=', ini).where('data', '<=', fim).get()).docs.map(d => ({ id: d.id, ...d.data() })));
+  if(fontes.includes('treinos')) pegar('treinos', 'tr|' + agAnoSel, async () =>
+    (await db.collection('treinamentos').where('data', '>=', ini).where('data', '<=', fim).get()).docs.map(d => ({ id: d.id, ...d.data() })));
+  if(fontes.includes('hist')) pegar('hist', 'hist', async () => (await db.collection('trHistorico').get()).docs.map(d => ({ id: d.id, ...d.data() })));
+  await Promise.all(tarefas);
+}
+function anAnosDisponiveis(){
+  const anos = new Set([String(new Date().getFullYear())]);
+  (todosDesviosAnaliseCache || []).forEach(d => { const am = extrairAnoMes(d.data); if(am) anos.add(am.ano); });
+  (anDados.hist || []).forEach(h => { if(h.periodo) anos.add(h.periodo.slice(0, 4)); });
+  return Array.from(anos).sort().reverse();
+}
+// ano dos gráficos mês a mês: o escolhido, ou o mais recente com dados
+function anAnoGrafico(periodos){
+  if(agAnoSel) return agAnoSel;
+  const anos = (periodos || []).map(p => p.slice(0, 4)).sort();
+  return anos.length ? anos[anos.length - 1] : String(new Date().getFullYear());
+}
+function anSincronizarAnos(){
+  const anos = anAnosDisponiveis();
+  const html = '<option value="">Todos os anos</option>' + anos.map(a => `<option value="${a}">${a}</option>`).join('');
+  document.querySelectorAll('#analise-filtro-ano, #apr-filtro-ano, .an-ano').forEach(sel => {
+    if(sel.dataset.opcoes !== html){ sel.innerHTML = html; sel.dataset.opcoes = html; }
+    sel.value = agAnoSel;
+    if(!sel.dataset.ligadoAno){ sel.dataset.ligadoAno = '1'; sel.addEventListener('change', () => { agAnoSel = sel.value; anAoMudar(); }); }
+  });
+  agLigarBotoesMeses();
+}
+// página de análise visível (se houver) → redesenha
+const AN_PAGINAS = { 'view-analise-geral': ['desvios', 'analise-geral-corpo'], 'view-q-analise': ['qualimetria', 'q-an-corpo'],
+                     'view-lv-analise': ['lv', 'lv-an-corpo'], 'view-tr-analise': ['treinamentos', 'tr-an-corpo'] };
+function anPaginaVisivel(){ return Object.keys(AN_PAGINAS).find(id => { const el = document.getElementById(id); return el && el.style.display === 'block'; }); }
+function anAoMudar(){
+  anSincronizarAnos();
+  const v = anPaginaVisivel();
+  if(v === 'view-analise-geral') renderizarAnaliseGeral();
+  else if(v) anRenderPagina(AN_PAGINAS[v][0], AN_PAGINAS[v][1]);
+  if(window.atualizarApresentacao) window.atualizarApresentacao();
+}
+function anMontar(fonte, modo){
+  const mont = { desvios: agMontarQuadros, qualimetria: qaMontarQuadros, lv: lvaMontarQuadros, treinamentos: trhMontarQuadros };
+  const com = (s, lista) => lista.map(q => Object.assign({ secao: AN_SECOES[s] }, q));
+  if(fonte !== 'prever') return com(fonte, mont[fonte](modo));
+  let todos = [anCapaPrever()];
+  ['treinamentos', 'desvios', 'qualimetria', 'lv'].forEach(s => {
+    let qs = [];
+    try{ qs = mont[s](modo); }catch(e){ console.warn('Préver (' + s + '):', e); }
+    todos = todos.concat(com(s, qs));
+  });
+  return todos;
+}
+async function anRenderPagina(fonte, corpoId){
+  const corpo = document.getElementById(corpoId);
+  if(!corpo) return;
+  anSincronizarAnos();
+  if(!corpo.innerHTML.trim()) corpo.innerHTML = '<p class="empty-state">Carregando…</p>';
+  await anCarregar(anFontesPara(fonte));
+  anSincronizarAnos();
+  const pag = Object.keys(AN_PAGINAS).find(id => AN_PAGINAS[id][1] === corpoId);
+  if(anPaginaVisivel() !== pag) return;
+  const qs = anMontar(fonte, 'pagina');
+  corpo.innerHTML = `<p class="ag-periodo">Período: ${escaparHtml(textoPeriodoAnalise())}</p>` + qs.map(agQuadroHtml).join('');
+  agLigarBotoes(corpo, () => anRenderPagina(fonte, corpoId));
+  if(fonte === 'lv' && typeof lvLigarCards === 'function'){
+    lvLigarCards(corpo);
+    corpo.querySelectorAll('.lv-card').forEach(b => b.addEventListener('click', () => {
+      const l = (anDados.lvs || []).find(x => x.id === b.dataset.id); if(l && !lvRecentes.some(x => x.id === l.id)) lvAbrir(l);
+    }));
+  }
+  if(fonte === 'treinamentos') corpo.querySelectorAll('[data-hh]').forEach(b => b.addEventListener('click', () => trhInformarHH(b.dataset.hh)));
+}
+
+/* ---------------- gráficos simples (HTML) ---------------- */
+// colunas com valor em cima; opções: fmt, meta (linha), apagado por item, cor por item
+function anColunasHtml(dados, op){
+  op = op || {};
+  if(!dados.length) return '<p class="empty-state">Sem dados nesse período.</p>';
+  const max = Math.max(op.meta || 0, ...dados.map(d => d.valor || 0)) * 1.08 || 1;
+  const fmt = op.fmt || (v => anFmt(v));
+  return `<div class="ag-colunas an-colunas">${dados.map(d => `
+      <div class="ag-col${d.apagado ? ' an-apagado' : ''}">
+        <div class="ag-col-area an-col-area">
+          ${op.meta ? `<i class="an-meta" style="bottom:calc((100% - 30px) * ${op.meta / max})"></i>` : ''}
+          <span class="ag-col-val">${d.valor === null || d.valor === undefined ? '—' : fmt(d.valor)}</span>
+          <div class="ag-col-barra" style="height:calc((100% - 30px) * ${(d.valor || 0) / max}); background:${d.cor || 'var(--green)'};"></div>
+        </div>
+        <span class="ag-col-rot">${escaparHtml(d.rotulo)}</span>
+      </div>`).join('')}</div>
+    ${op.meta ? `<p class="an-legenda"><i class="an-legenda-meta"></i>${escaparHtml(op.metaRot || 'Meta')}</p>` : ''}`;
+}
+// colunas empilhadas (ex.: menções por mês)
+function anEmpilhadasHtml(meses, series){
+  if(!meses.length) return '<p class="empty-state">Sem dados nesse período.</p>';
+  const max = Math.max(1, ...meses.map(m => series.reduce((a, s) => a + (m.v[s.chave] || 0), 0))) * 1.08;
+  return `<div class="ag-colunas an-colunas">${meses.map(m => {
+      const tot = series.reduce((a, s) => a + (m.v[s.chave] || 0), 0);
+      return `<div class="ag-col"><div class="ag-col-area an-col-area"><span class="ag-col-val">${tot || ''}</span>
+        <div class="an-pilha" style="height:calc((100% - 30px) * ${tot / max})">${series.map(s => m.v[s.chave] ? `<i style="flex:${m.v[s.chave]};background:${s.cor}" title="${s.rot}: ${m.v[s.chave]}">${m.v[s.chave]}</i>` : '').join('')}</div></div>
+        <span class="ag-col-rot">${escaparHtml(m.rotulo)}</span></div>`;
+    }).join('')}</div>
+    <p class="an-legenda">${series.map(s => `<span><i style="background:${s.cor}"></i>${s.rot}</span>`).join('')}</p>`;
+}
+function anBarrasHtml(dados, fmt, cor){
+  if(!dados.length || dados.every(d => !d.valor)) return '<p class="empty-state">Sem dados nesse período.</p>';
+  const max = Math.max(1, ...dados.map(d => d.valor));
+  return dados.map(d => `
+    <div class="ag-hb">
+      <span class="ag-hb-rot">${escaparHtml(d.rotulo)}${d.extra ? `<small class="an-extra">${escaparHtml(d.extra)}</small>` : ''}</span>
+      <div class="ag-hb-trilha"><div class="ag-hb-barra${d.outras ? ' outras' : ''}" style="width:${d.valor / max * 100}%;${d.cor || cor ? ' background:' + (d.cor || cor) + ';' : ''}"></div></div>
+      <span class="ag-hb-val">${fmt ? fmt(d.valor) : d.valor}</span>
+    </div>`).join('');
+}
+function anKpisHtml(kpis, pequeno){
+  return `<div class="ag-kpis an-kpis-${Math.min(4, kpis.length)}${pequeno ? ' an-kpis-peq' : ''}">${kpis.map(k => `<div class="ag-kpi"><p class="ag-kpi-rot">${escaparHtml(k.rot)}</p>
+    <p class="ag-kpi-val"${k.cor ? ` style="color:${k.cor}"` : ''}>${k.val}</p>${k.peq ? `<p class="an-kpi-peq">${escaparHtml(k.peq)}</p>` : ''}</div>`).join('')}</div>`;
+}
+function anVazio(txt){ return `<p class="empty-state">${escaparHtml(txt)}</p>`; }
+
+/* =====================================================================
+   CAPACITAÇÃO (Treinamentos): INDICA (PDFs da pasta) + treinamentos do app
+   ===================================================================== */
+const TRH_CATEGORIAS = ['Outros Temas', 'Ferramentas do Sistema de Gestão (APT, PTR, Inspeções e Qualimetria)', 'Riscos Ambientais', 'Trabalho em Altura',
+  'Máquinas e Equipamentos', 'Riscos Elétricos', 'Combate a Incêndios', 'Equipamento de Proteção Individual (EPI)', 'Identificação de Perigos e Riscos',
+  'Sinalização e Isolamento', 'Proteção das Mãos', 'Transporte de Cargas, Materiais e Insumos', 'Equipamento de Proteção Coletiva (EPC)', 'Organização e Limpeza',
+  'Ambiente Confinado e Trabalhos Subterrâneos', 'Levantamento e Movimentação de Cargas (Guindastes, Pórticos e Outros)',
+  'Operadores de Veículos Pesados e Direção Defensiva', 'INTEGRAÇÃO', 'TREINAMENTO DIÁRIO DE TRABALHO (TDT)'];
+// tipologia do desvio → blocos de treinamento do INDICA que tratam do mesmo assunto
+const TRH_TIPOLOGIA_CATS = {
+  'Equipamento, Máquinas e Ferramentas': ['Máquinas e Equipamentos'],
+  'EPI: Equipamento de Proteção Individual': ['Equipamento de Proteção Individual (EPI)', 'Proteção das Mãos'],
+  'Organização e limpeza': ['Organização e Limpeza'],
+  'Meio Ambiente': ['Riscos Ambientais'],
+  'Sinalização e Isolamento': ['Sinalização e Isolamento'],
+  'Ferramentas de Gestão (APR, PT, TDT, Qualimetria, Capacitação/ Trein. etc)': ['Ferramentas do Sistema de Gestão (APT, PTR, Inspeções e Qualimetria)'],
+  'Instalações Elétricas': ['Riscos Elétricos'],
+  'Andaime, Escadas, Passagens, Rampas e acessos': ['Trabalho em Altura'],
+  'EPC: Equipamento de Proteção Coletiva': ['Equipamento de Proteção Coletiva (EPC)'],
+  'Armazenamento e Manuseio de Materiais': ['Transporte de Cargas, Materiais e Insumos'],
+  'Produtos Químicos': ['Riscos Ambientais'],
+  'Movimentação de Cargas': ['Levantamento e Movimentação de Cargas (Guindastes, Pórticos e Outros)', 'Transporte de Cargas, Materiais e Insumos']
+};
+function trhCatNorm(tema){
+  const t = qNorm(tema).replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+  const achada = TRH_CATEGORIAS.find(c => qNorm(c).replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim() === t);
+  if(achada) return achada;
+  if(/\btdt\b|diario de trabalho/.test(t)) return 'TREINAMENTO DIÁRIO DE TRABALHO (TDT)';
+  if(/integracao/.test(t)) return 'INTEGRAÇÃO';
+  return String(tema || 'Outros Temas').trim();
+}
+// categoria do INDICA sugerida para um treinamento feito no app (dá para trocar na tela)
+function trhCategoriaPadrao(tema, codigo){
+  const t = qNorm((codigo || '') + ' ' + (tema || ''));
+  const regras = [
+    [/integracao/, 'INTEGRAÇÃO'], [/\btdt\b|diario de trabalho/, 'TREINAMENTO DIÁRIO DE TRABALHO (TDT)'],
+    [/altura|andaime/, 'Trabalho em Altura'], [/eletric|bloqueio de energia/, 'Riscos Elétricos'],
+    [/confinad|subterr|tunel|escavacao/, 'Ambiente Confinado e Trabalhos Subterrâneos'],
+    [/incendio|brigada|nr 23|trabalho a quente/, 'Combate a Incêndios'],
+    [/\bepc\b|protecao coletiva/, 'Equipamento de Proteção Coletiva (EPC)'],
+    [/maos/, 'Proteção das Mãos'],
+    [/\bepi\b|protecao individual|protecao auditiva|protecao dos olhos|protecao solar|respirat/, 'Equipamento de Proteção Individual (EPI)'],
+    [/ordem e limpeza|organizacao e limpeza/, 'Organização e Limpeza'],
+    [/sinalizacao|isolamento/, 'Sinalização e Isolamento'],
+    [/movimentacao de cargas|guindaste|icamento|portico/, 'Levantamento e Movimentação de Cargas (Guindastes, Pórticos e Outros)'],
+    [/transporte|armazenamento/, 'Transporte de Cargas, Materiais e Insumos'],
+    [/veiculo|direcao defensiva/, 'Operadores de Veículos Pesados e Direção Defensiva'],
+    [/ambient|combustivel|quimic/, 'Riscos Ambientais'],
+    [/maquina|equipamento|ferramenta|movimentacao de solo/, 'Máquinas e Equipamentos'],
+    [/perigo|riscos sst|percepcao de risco|identificacao de risco/, 'Identificação de Perigos e Riscos'],
+    [/\bapr\b|\bptr\b|\bapt\b|inspec|qualimetria|check ?list|auditoria|nao conformidade|incidente|gestao|manual do programa|objetivos|competencia|fornecedores/, 'Ferramentas do Sistema de Gestão (APT, PTR, Inspeções e Qualimetria)']
+  ];
+  const r = regras.find(([re]) => re.test(t));
+  return r ? r[1] : 'Outros Temas';
+}
+function trhVazio(periodo, origem){
+  return { periodo, origem, horas: 0, part: 0, partM: 0, partF: 0, integ: 0, partInteg: 0, tdt: 0, partTdt: 0, horasTrab: null,
+           cats: {}, catsPart: {}, nivel: { direta: 0, media: 0, alta: 0 }, qualimetria: null, treinamentosApp: 0, arquivo: '', arquivoUrl: '' };
+}
+function trhSoma(a){ return (a || []).reduce((x, y) => x + (Number(y) || 0), 0); }
+// junta mês a mês: o relatório INDICA do mês vale; sem INDICA, entram os treinamentos do app
+function trhMeses(){
+  const m = {};
+  (anDados.hist || []).forEach(h => {
+    if(h.origem !== 'INDICA' || !Array.isArray(h.categorias) || !h.periodo) return;
+    const r = trhVazio(h.periodo, 'INDICA');
+    r.horasTrab = trhSoma(h.horasTrabalhadas) || null; r.arquivo = h.arquivoNome || ''; r.arquivoUrl = h.arquivoUrl || '';
+    h.categorias.forEach(c => {
+      const nome = trhCatNorm(c.tema), hs = trhSoma(c.horas), p = c.participantes || [];
+      const ps = trhSoma(p);
+      if(/TDT/.test(nome)){ r.tdt += hs; r.partTdt += ps; return; }
+      if(nome === 'INTEGRAÇÃO'){ r.integ += hs; r.partInteg += ps; return; }
+      r.horas += hs; r.part += ps; r.partF += (Number(p[0]) || 0) + (Number(p[2]) || 0); r.partM += (Number(p[1]) || 0) + (Number(p[3]) || 0);
+      r.cats[nome] = (r.cats[nome] || 0) + hs; r.catsPart[nome] = (r.catsPart[nome] || 0) + ps;
+    });
+    if(h.nivel) r.nivel = { direta: trhSoma(h.nivel.direta), media: trhSoma(h.nivel.media), alta: trhSoma(h.nivel.alta) };
+    r.qualimetria = h.qualimetria || null;
+    m[h.periodo] = r;
+  });
+  (anDados.treinos || []).filter(t => t.estado === 'concluido' && t.data).forEach(t => {
+    const p = String(t.data).slice(0, 7);
+    if(m[p] && m[p].origem === 'INDICA'){ m[p].appNoMes = (m[p].appNoMes || 0) + 1; return; }
+    const r = m[p] = m[p] || trhVazio(p, 'App');
+    const cat = trhCatNorm(t.categoria || trhCategoriaPadrao(t.tema, t.codigo));
+    const ps = t.participantes || [], n = ps.length, hs = n * (Number(t.cargaMin) || 0) / 60;
+    r.treinamentosApp++;
+    if(/TDT/.test(cat)){ r.tdt += hs; r.partTdt += n; return; }
+    if(cat === 'INTEGRAÇÃO'){ r.integ += hs; r.partInteg += n; return; }
+    r.horas += hs; r.part += n; r.partM += ps.filter(x => x.genero === 'M').length; r.partF += ps.filter(x => x.genero === 'F').length;
+    r.cats[cat] = (r.cats[cat] || 0) + hs; r.catsPart[cat] = (r.catsPart[cat] || 0) + n;
+  });
+  (anDados.hist || []).forEach(h => { if(h.horasTrabalhadasManual && m[h.periodo] && m[h.periodo].origem !== 'INDICA') m[h.periodo].horasTrab = Number(h.horasTrabalhadasManual) || null; });
+  return m;
+}
+function trhIndicador(horas, horasTrab){ return horasTrab ? horas / horasTrab * 100 : null; }
+function trhCorIndicador(v){ return v === null ? 'var(--text-muted)' : (v >= TR_META_HHT ? 'var(--green-dark)' : 'var(--error)'); }
+function trhInformarHH(periodo){
+  const modal = document.createElement('div');
+  modal.className = 'q-modal';
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Horas trabalhadas">
+      <h3>Horas trabalhadas · ${escaparHtml(anMesLongo(periodo))}</h3>
+      <p>Este mês ainda não tem o relatório INDICA na pasta. Informe o total de horas-homem trabalhadas (integrantes + subcontratados) para calcular o indicador. Quando o PDF do INDICA entrar na pasta, ele passa a valer.</p>
+      <label>Horas-homem trabalhadas<input type="number" inputmode="decimal" min="0" step="0.01" id="hh-valor" style="height:46px;border:1px solid var(--border-strong);border-radius:10px;padding:0 12px;font:inherit;font-size:15px"></label>
+      <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary" id="hh-ok">Salvar</button></div>
+    </div>`;
+  document.body.appendChild(modal);
+  const fechar = () => modal.remove();
+  modal.querySelector('.q-modal-cancelar').addEventListener('click', fechar);
+  modal.addEventListener('click', (e) => { if(e.target === modal) fechar(); });
+  modal.querySelector('#hh-ok').addEventListener('click', () => {
+    const v = Number(String(modal.querySelector('#hh-valor').value).replace(',', '.'));
+    if(!(v > 0)){ mostrarAvisoApp('Valor inválido', 'Informe as horas trabalhadas do mês.'); return; }
+    const doc = { periodo, origem: 'manual', horasTrabalhadasManual: v, informadoPor: qMeuPerfil().nome, atualizadoEm: firebase.firestore.FieldValue.serverTimestamp() };
+    gravarSemEsperar(db.collection('trHistorico').doc(periodo).set(doc, { merge: true }), 'horas trabalhadas');
+    const h = (anDados.hist || []).find(x => x.periodo === periodo);
+    if(h) Object.assign(h, doc); else (anDados.hist = anDados.hist || []).push(doc);
+    fechar(); anAoMudar();
+  });
+}
+function trhMontarQuadros(modo){
+  const apr = modo === 'apresentacao';
+  const meses = trhMeses();
+  const periodos = Object.keys(meses).sort();
+  const doPeriodo = periodos.filter(anPeriodoOk).map(p => meses[p]);
+  const q = [];
+  if(!periodos.length){
+    return [{ titulo: 'Capacitação', sub: 'Hora homem treinada', corpo: anVazio('Ainda não há dados de capacitação. Coloque os PDFs do INDICA na pasta "Histórico Treinamentos" do Drive ou registre treinamentos no app.') }];
+  }
+  const ano = anAnoGrafico(periodos);
+  const doAno = periodos.filter(p => p.startsWith(ano + '-'));
+  const ultimoAno = doAno.length ? Number(doAno[doAno.length - 1].slice(5, 7)) : 0;
+  // 1. indicador mês a mês com meta e acumulado
+  const colunas = [];
+  for(let mm = 1; mm <= Math.max(ultimoAno, 1); mm++){
+    const p = ano + '-' + String(mm).padStart(2, '0'), r = meses[p];
+    colunas.push({ rotulo: anMesCurto(p), valor: r ? trhIndicador(r.horas, r.horasTrab) : null, apagado: !anPeriodoOk(p),
+      cor: r && r.horasTrab && trhIndicador(r.horas, r.horasTrab) < TR_META_HHT ? '#d9a53a' : 'var(--green)' });
+  }
+  const acumBase = doAno.filter(anPeriodoOk).map(p => meses[p]).filter(r => r.horasTrab);
+  const acum = trhIndicador(acumBase.reduce((a, r) => a + r.horas, 0), acumBase.reduce((a, r) => a + r.horasTrab, 0));
+  colunas.push({ rotulo: 'Acumulado', valor: acum, cor: '#142131' });
+  q.push({ titulo: 'Hora homem treinada ST – ' + ano, sub: 'Total de hora homem treinada ÷ total de hora homem trabalhada × 100 (sem TDT e Integração)',
+    corpo: anColunasHtml(colunas, { fmt: v => anFmt(v, 2), meta: TR_META_HHT, metaRot: 'Meta mensal ' + anFmt(TR_META_HHT, 2) + '%' }), larga: true });
+  if(!doPeriodo.length){
+    q.push({ titulo: 'Capacitação no período', sub: textoPeriodoAnalise(), corpo: anVazio('Nenhum dado de capacitação nos meses escolhidos.') });
+    return q;
+  }
+  // 2. resumo do período
+  const horas = doPeriodo.reduce((a, r) => a + r.horas, 0), part = doPeriodo.reduce((a, r) => a + r.part, 0);
+  const comHT = doPeriodo.filter(r => r.horasTrab);
+  const ht = comHT.reduce((a, r) => a + r.horasTrab, 0);
+  const ind = comHT.length ? trhIndicador(comHT.reduce((a, r) => a + r.horas, 0), ht) : null;
+  const integ = doPeriodo.reduce((a, r) => a + r.integ, 0), tdt = doPeriodo.reduce((a, r) => a + r.tdt, 0);
+  const umMes = doPeriodo.length === 1;
+  const quando = umMes ? 'no mês de ' + anMesLongo(doPeriodo[0].periodo).replace(/ de \d{4}$/, '') : 'no período';
+  const fontes = [...new Set(doPeriodo.map(r => r.origem))].join(' + ');
+  q.push({ titulo: 'Capacitação ' + (umMes ? 'em ' + anMesLongo(doPeriodo[0].periodo) : 'no período'), sub: 'Fonte: ' + (fontes === 'INDICA' ? 'relatórios INDICA' : fontes === 'App' ? 'treinamentos registrados no app' : 'relatórios INDICA e treinamentos do app'),
+    corpo: `<div class="an-destaque"><p>O Consórcio treinou ${escaparHtml(quando)}:</p><b>${anHoras(horas)} horas</b>
+        ${ind !== null ? `<p>Levando em conta o total de horas-homem trabalhadas, ${ind >= TR_META_HHT ? 'atingiu a meta' : 'ficou abaixo da meta'} ${umMes ? 'mensal ' : ''}de capacitação (${anFmt(TR_META_HHT, 2)}%):</p><b style="color:${trhCorIndicador(ind)}">${anFmt(ind, 2)}%</b>` : '<p>Falta a hora-homem trabalhada para calcular o indicador.</p>'}</div>
+      ${anKpisHtml([{ rot: 'Participações', val: anFmt(part) }, { rot: 'Horas-homem trabalhadas', val: ht ? anFmt(ht) : '—' },
+        { rot: 'Integração (fora do indicador)', val: anHoras(integ) + 'h' }, { rot: 'TDT (fora do indicador)', val: anHoras(tdt) + 'h' }], true)}` });
+  // 3. horas por tema
+  const cats = {};
+  doPeriodo.forEach(r => Object.keys(r.cats).forEach(c => { cats[c] = (cats[c] || 0) + r.cats[c]; }));
+  let porTema = Object.keys(cats).map(c => ({ rotulo: c, valor: cats[c], extra: horas ? anFmt(cats[c] / horas * 100, 0) + '% das horas' : '' })).sort((a, b) => b.valor - a.valor);
+  if(apr) porTema = agAgruparOutras(porTema, 12, 'temas');
+  q.push({ titulo: 'Horas treinadas por tema', sub: `${anHoras(horas)} horas no período (sem TDT e Integração)`, corpo: anBarrasHtml(porTema, v => anHoras(v), '#2e6da4') });
+  // 4. efetividade: tipologia dos desvios em aberto × % de capacitação no tema
+  const abertos = (typeof agDesviosAbertos === 'function' ? agDesviosAbertos() : []);
+  const regPeriodo = (todosDesviosAnaliseCache || []).filter(d => anNoPeriodo(d.data));
+  const porTip = {};
+  abertos.forEach(d => { const k = String(d.tipologia || '').trim(); if(k) porTip[k] = (porTip[k] || 0) + 1; });
+  const linhasEf = Object.keys(porTip).map(tip => {
+    const chave = Object.keys(TRH_TIPOLOGIA_CATS).find(k => qNorm(k) === qNorm(tip)) || Object.keys(TRH_TIPOLOGIA_CATS).find(k => qNorm(tip).startsWith(qNorm(k).slice(0, 12)));
+    const cs = chave ? TRH_TIPOLOGIA_CATS[chave] : [];
+    const h = cs.reduce((a, c) => a + (cats[c] || 0), 0);
+    return { tip, qtd: porTip[tip], pct: horas && cs.length ? h / horas * 100 : null, horas: h, reg: regPeriodo.filter(d => qNorm(d.tipologia) === qNorm(tip)).length };
+  }).sort((a, b) => a.qtd - b.qtd);
+  const maxQ = Math.max(1, ...linhasEf.map(l => l.qtd));
+  const alerta = (l) => l.pct !== null && l.qtd >= Math.max(2, maxQ * 0.5) && l.pct < 5;
+  q.push({ titulo: 'Tipologia dos desvios em aberto × % de capacitação no tema', sub: 'Os treinamentos estão chegando onde os desvios aparecem?',
+    corpo: linhasEf.length ? `<div class="an-efet">
+        <div class="an-efet-cab"><span>Tipologia</span><span>Desvios em aberto</span><span>% da capacitação no tema</span></div>
+        ${linhasEf.map(l => `<div class="an-efet-linha"><span class="an-efet-tip">${escaparHtml(l.tip)}<small>${l.reg} registrado(s) no período${l.horas ? ' · ' + anHoras(l.horas) + 'h treinadas' : ''}</small></span>
+          <span class="an-efet-barra"><i style="width:${Math.max(8, l.qtd / maxQ * 100)}%;background:${l.qtd >= maxQ * 0.8 && maxQ >= 3 ? '#e53935' : (l.qtd >= maxQ * 0.5 && maxQ >= 2 ? '#f59e0b' : '#f6d743')}">${l.qtd}</i></span>
+          <span class="an-efet-pct${alerta(l) ? ' alerta' : ''}">${l.pct === null ? 'sem tema' : anFmt(l.pct, 0) + '%'}${alerta(l) ? '*' : ''}</span></div>`).join('')}
+        <p class="an-nota">* Tipologia com muitos desvios em aberto e pouca capacitação no tema no período: pode ser reorientada como forma de melhoria contínua dos processos e educação pelo trabalho.</p>
+      </div>` : anVazio('Nenhum desvio em aberto no momento.'), larga: true });
+  // 5. horas treinadas por mês
+  q.push({ titulo: 'Horas treinadas por mês – ' + ano, sub: 'Horas-homem treinadas (sem TDT e Integração)',
+    corpo: anColunasHtml(doAno.map(p => ({ rotulo: anMesCurto(p), valor: meses[p].horas, apagado: !anPeriodoOk(p), cor: meses[p].origem === 'App' ? '#2e6da4' : 'var(--green)' })), { fmt: v => anHoras(v) })
+      + (doAno.some(p => meses[p].origem === 'App') ? '<p class="an-legenda"><span><i style="background:var(--green)"></i>INDICA</span><span><i style="background:#2e6da4"></i>App</span></p>' : '') });
+  // 6. por nível de liderança (só INDICA traz)
+  const niv = { direta: 0, media: 0, alta: 0 };
+  doPeriodo.forEach(r => { niv.direta += r.nivel.direta; niv.media += r.nivel.media; niv.alta += r.nivel.alta; });
+  if(niv.direta + niv.media + niv.alta > 0){
+    q.push({ titulo: 'Horas treinadas por nível', sub: 'Mão de obra direta, média e alta liderança (relatórios INDICA)',
+      corpo: anColunasHtml([{ rotulo: 'Mão de obra direta', valor: niv.direta }, { rotulo: 'Média liderança', valor: niv.media, cor: '#2e6da4' }, { rotulo: 'Alta liderança', valor: niv.alta, cor: '#142131' }], { fmt: v => anHoras(v) + 'h' }) });
+  }
+  // 7. treinamentos registrados no app
+  const app = (anDados.treinos || []).filter(t => t.estado === 'concluido' && anNoPeriodo(t.data));
+  if(app.length){
+    const pAp = app.reduce((a, t) => a + (t.participantes || []).length, 0);
+    const pessoas = new Set(); app.forEach(t => (t.participantes || []).forEach(p => pessoas.add(trChave(p))));
+    const hh = app.reduce((a, t) => a + (t.participantes || []).length * (Number(t.cargaMin) || 0), 0) / 60;
+    const agrupa = (fn, peso) => { const mm = {}; app.forEach(t => { const k = fn(t); if(k) mm[k] = (mm[k] || 0) + (peso ? peso(t) : 1); }); return Object.entries(mm).sort((a, b) => b[1] - a[1]).map(([rotulo, valor]) => ({ rotulo, valor })); };
+    q.push({ titulo: 'Treinamentos registrados no app', sub: 'Lista de presença por crachá', corpo: anKpisHtml([{ rot: 'Treinamentos', val: app.length }, { rot: 'Participações', val: pAp },
+      { rot: 'Pessoas diferentes', val: pessoas.size }, { rot: 'Horas-homem', val: anHoras(hh) }]) + `<div style="margin-top:18px">${anBarrasHtml(agrupa(t => trNomeTema(t), t => (t.participantes || []).length).slice(0, apr ? 8 : 10), null, 'var(--green)')}</div>` });
+    if(!apr){
+      const porEmp = {}; app.forEach(t => (t.participantes || []).forEach(p => { const k = p.empresa || '—'; porEmp[k] = (porEmp[k] || 0) + 1; }));
+      q.push({ titulo: 'Participações por empresa', sub: 'Treinamentos do app', corpo: anBarrasHtml(Object.entries(porEmp).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([rotulo, valor]) => ({ rotulo, valor })), null, '#7a4b06') });
+      q.push({ titulo: 'Por TST (instrutor)', sub: 'Treinamentos do app', corpo: anBarrasHtml(agrupa(t => t.responsavel && t.responsavel.nome), null, 'var(--green)') });
+    }
+  }
+  // 8. de onde veio cada mês (só na página)
+  if(!apr){
+    const tst = ehTST();
+    q.push({ titulo: 'Fonte de cada mês', sub: 'Mês com relatório INDICA na pasta usa o INDICA; sem ele, entram os treinamentos do app',
+      corpo: `<div class="ag-tabela-scroll"><table class="ag-tabela an-fontes"><thead><tr><th>Mês</th><th>Fonte</th><th>Horas treinadas</th><th>Horas trabalhadas</th><th>Indicador</th></tr></thead><tbody>
+        ${periodos.slice().reverse().map(p => { const r = meses[p], i2 = trhIndicador(r.horas, r.horasTrab);
+          return `<tr><td>${escaparHtml(anMesCurto(p))}</td><td>${r.origem === 'INDICA' ? (r.arquivoUrl ? `<a href="${escaparHtml(r.arquivoUrl)}" target="_blank" rel="noopener">INDICA</a>` : 'INDICA') + (r.appNoMes ? `<small class="an-extra">${r.appNoMes} treinamento(s) do app já contados no INDICA</small>` : '') : 'App (' + r.treinamentosApp + ')'}</td>
+            <td>${anHoras(r.horas)}</td><td>${r.horasTrab ? anFmt(r.horasTrab) : (tst && r.origem !== 'INDICA' ? `<button type="button" class="an-mini" data-hh="${p}">Informar</button>` : '—')}</td>
+            <td style="color:${trhCorIndicador(i2)};font-weight:700">${i2 === null ? '—' : anFmt(i2, 2) + '%'}</td></tr>`; }).join('')}
+        </tbody></table></div>`, larga: true });
+  }
+  return q;
+}
+
+/* =====================================================================
+   QUALIMETRIA
+   ===================================================================== */
+// histórico antes do app (planilha "Resumo de status mensal" 2026): E Excelente, B Bom, R Regular, I Insuficiente, S Insatisfatório, - Não aplicável
+const QA_HIST_2026 = [
+  ['ALEX DE CARVALHO', 'PRODUÇÃO', '--S-RRRB'], ['ANTONIO MARCOS MELO MEDEIROS', 'PRODUÇÃO', '------BB'], ['ATHOS PAULO MONTEIRO RAMOS', 'PRODUÇÃO', '----BBBR'],
+  ['DAVID ANDRE DA SILVA', 'PRODUÇÃO', 'BBSSSBEB'], ['ELDER VIEIRA MACHADO', 'PRODUÇÃO', '------RR'], ['FERNANDO MARCOS FERREIRA ROCHA', 'PRODUÇÃO', 'RRSSRRRR'],
+  ['HAIRTON OLIVEIRA MACEDO', 'PRODUÇÃO', '-----RBB'], ['IGOR PORTO ESCALANTE', 'PRODUÇÃO', '--SSRB--'], ['JORGE CARLOS RODRIGUES', 'PRODUÇÃO', '--ISRBBB'],
+  ['JOSE AIRTON SIQUEIRA SILVA', 'PRODUÇÃO', 'IIRI----'], ['JOSE IVAMAR FERNANDES', 'PRODUÇÃO', 'BBRSBBBB'], ['NILSON JOSE NUNES DA SILVA', 'PRODUÇÃO', '--ISRIRR'],
+  ['ROGERIO SUKOSKI', 'PRODUÇÃO', '--SS----'], ['ROSANA CASTRO MOTTA DE CNOP', 'ADMINISTRATIVO', '--SEBBEB'], ['SEBASTIAO SABINO BARBOSA', 'PRODUÇÃO', 'RRSSRB--'],
+  ['SERGIO DE SOUZA SILVA', 'PRODUÇÃO', '--SSRBEB'], ['SILVIO RODRIGUES DOS SANTOS', 'PRODUÇÃO', '--ISRI--'], ['VANDERLEI DE CARVALHO LANDIM', 'PRODUÇÃO', '--RIBBBB']
+];
+const QA_MENCOES = ['Excelente', 'Bom', 'Regular', 'Insuficiente', 'Insatisfatório'];
+const QA_CORES = { 'Excelente': '#16a34a', 'Bom': '#1d6fd8', 'Regular': '#f2d024', 'Insuficiente': '#f08a24', 'Insatisfatório': '#e02424' };
+const QA_FRASES = [
+  'Não realização de TDT / DDS por parte de alguns encarregados / membros de suas equipes',
+  'Não participação/treinamento na APR por parte de alguns encarregados / membros de suas equipes, ou APR fora da frente de serviço',
+  'Não uso dos EPIs obrigatórios por parte de alguns encarregados / membros de suas equipes',
+  'Não realização da inspeção das ferramentas, máquinas e equipamentos (checklist) antes de iniciar as atividades',
+  'Máquinas e equipamentos operados por integrantes não autorizados ou sem crachá',
+  'Movimentação de cargas sendo realizada de forma incorreta ou marcha ré sem sinaleiro',
+  'Deficiência na sinalização e isolamento de algumas atividades',
+  'Deficiência na aplicação de alguns equipamentos de proteção coletiva (EPC)',
+  'Painéis elétricos sem DR, sem proteção ou sem aterramento',
+  'Integrantes trabalhando com postura ergonomicamente incorreta',
+  'Movimentação manual de cargas realizada de forma incorreta',
+  'Listas de pausa / alternância postural não realizadas ou não assinadas',
+  'ASO (atestado de saúde ocupacional) vencido de integrantes da equipe',
+  'Travessia de pedestres sem isolamento e sinalização',
+  'Falta de extintor de incêndio na frente de serviço',
+  'Áreas de trabalho sem limpeza e organização',
+  'Banheiros, bebedouros e áreas de vivência sem conservação, ordem e limpeza ou fora do dimensionamento',
+  'Sinais de contaminação por produtos químicos no piso e/ou solo',
+  'Falta de kit de mitigação para conter contaminação por produtos químicos',
+  'Resíduos sem segregação ou descarte correto'
+];
+function qaChaveNome(n){ return qNorm(n).replace(/[^a-z ]+/g, ' ').replace(/\s+/g, ' ').trim(); }
+// liderança × mês → menção (app tem prioridade; antes do app, o histórico da planilha)
+function qaMatriz(){
+  const lideres = {};
+  const pegar = (nome, ger) => { const k = qaChaveNome(nome); return lideres[k] = lideres[k] || { nome: String(nome).toUpperCase(), gerencia: ger || '', meses: {} }; };
+  const L = { E: 'Excelente', B: 'Bom', R: 'Regular', I: 'Insuficiente', S: 'Insatisfatório', '-': 'Não aplicável' };
+  QA_HIST_2026.forEach(([nome, ger, s]) => { const l = pegar(nome, ger); s.split('').forEach((c, i) => { l.meses['2026-' + String(i + 1).padStart(2, '0')] = L[c]; }); });
+  const mesesApp = new Set();
+  (anDados.qualimetria || []).forEach(f => {
+    if(!f.mes || !f.encarregado || !f.encarregado.nome) return;
+    mesesApp.add(f.mes);
+    const l = pegar(f.encarregado.nome, '');
+    if(!l.gerencia) l.gerencia = String(f.area || '').toUpperCase();
+    const n = qNotaMes(f);
+    l.meses[f.mes] = n === null ? 'Em andamento' : qMencao(n);
+  });
+  // nos meses que o app já cobre, quem não tem ficha no app fica "não aplicável"
+  Object.values(lideres).forEach(l => mesesApp.forEach(m => { if(!l.meses[m]) l.meses[m] = 'Não aplicável'; }));
+  return { lideres: Object.values(lideres).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')), mesesApp };
+}
+function qaCelula(m){
+  const cls = { 'Excelente': 'exc', 'Bom': 'bom', 'Regular': 'reg', 'Insuficiente': 'insu', 'Insatisfatório': 'insa', 'Não aplicável': 'na', 'A ser avaliado': 'ava', 'Em andamento': 'ava' }[m] || 'na';
+  return `<td class="qa-m qa-${cls}">${escaparHtml((m || 'Não aplicável').toUpperCase())}</td>`;
+}
+function qaContar(lideres, periodo){
+  const c = {}; QA_MENCOES.forEach(m => c[m] = 0);
+  lideres.forEach(l => { const m = l.meses[periodo]; if(c[m] !== undefined) c[m]++; });
+  return c;
+}
+function qaMontarQuadros(modo){
+  const apr = modo === 'apresentacao';
+  const q = [];
+  if(anDados.erros.qualimetria && !(anDados.qualimetria || []).length){
+    q.push({ titulo: 'Qualimetria', sub: 'Fichas do app', corpo: anVazio('Sem acesso às fichas de Qualimetria com este usuário. Abaixo, o histórico registrado antes do app.') });
+  }
+  const { lideres } = qaMatriz();
+  const hoje = qMesAtual();
+  const todosMeses = new Set();
+  lideres.forEach(l => Object.keys(l.meses).forEach(p => { if(l.meses[p] !== 'Não aplicável') todosMeses.add(p); }));
+  (anDados.hist || []).forEach(h => { if(h.qualimetria && h.qualimetria.equipes) todosMeses.add(h.periodo); });
+  const periodos = Array.from(todosMeses).sort();
+  if(!periodos.length) return q.concat([{ titulo: 'Qualimetria', sub: 'Avaliação da liderança', corpo: anVazio('Ainda não há avaliações registradas.') }]);
+  const noPer = periodos.filter(anPeriodoOk);
+  const ref = noPer.length ? noPer[noPer.length - 1] : periodos[periodos.length - 1];
+  // 1. divulgação do trimestre
+  const [ra, rm] = ref.split('-').map(Number), tri = Math.ceil(rm / 3);
+  const mesesTri = [1, 2, 3].map(i => ra + '-' + String((tri - 1) * 3 + i).padStart(2, '0'));
+  const valorTri = (l, p) => p > hoje ? 'A ser avaliado' : (l.meses[p] || 'Não aplicável');
+  const linhasTri = lideres.filter(l => mesesTri.some(p => l.meses[p] && l.meses[p] !== 'Não aplicável'));
+  const ultimoAvaliado = mesesTri.filter(p => p <= hoje && linhasTri.some(l => QA_MENCOES.includes(l.meses[p]))).pop();
+  const cont = ultimoAvaliado ? qaContar(linhasTri, ultimoAvaliado) : {};
+  q.push({ titulo: `Divulgação dos resultados – ${tri}º trimestre ${ra}`, sub: 'Desempenho da liderança na Qualimetria, mês a mês', larga: true,
+    corpo: linhasTri.length ? `<div class="qa-tri">
+        <div class="ag-tabela-scroll"><table class="qa-tabela"><thead><tr><th class="qa-nome">Supervisor / líder da área</th><th class="qa-ger">Gerência</th>${mesesTri.map(p => `<th>Desempenho em ${escaparHtml(MESES_NOMES()[Number(p.slice(5)) - 1].toLowerCase())}</th>`).join('')}</tr></thead>
+          <tbody>${linhasTri.map(l => `<tr><td class="qa-nome">${escaparHtml(l.nome)}</td><td class="qa-ger">${escaparHtml(l.gerencia || '—')}</td>${mesesTri.map(p => qaCelula(valorTri(l, p))).join('')}</tr>`).join('')}</tbody></table></div>
+        <div class="qa-lado">
+          ${ultimoAvaliado ? `<table class="qa-total"><thead><tr><th>Menção · ${escaparHtml(anMesCurto(ultimoAvaliado))}</th><th>Total</th></tr></thead><tbody>${QA_MENCOES.map(m => `<tr><td class="qa-m qa-${{ 'Excelente': 'exc', 'Bom': 'bom', 'Regular': 'reg', 'Insuficiente': 'insu', 'Insatisfatório': 'insa' }[m]}">${m.toUpperCase()}</td><td><b>${cont[m] || 0}</b></td></tr>`).join('')}</tbody></table>` : ''}
+          <p class="an-nota">Uma não conformidade na 1ª quinzena tem peso 1, o que já impede o desempenho <b>Excelente</b>. Recorrente na 2ª avaliação, tem peso 2. Persistindo na 3ª avaliação consecutiva, a área fica <b style="color:#e02424">Insatisfatório</b>.</p>
+          <p class="an-nota">Menção = 100 − (somatório de pesos NC ÷ itens avaliados × 100).</p>
+        </div></div>
+        <p class="qa-lema">“Influenciar e ser influenciado na busca do que é certo” – Busque a <b>EXCELÊNCIA</b> em SSTMA</p>` : anVazio('Sem avaliações neste trimestre.') });
+  // 2. histórico geral (ano)
+  const ano = anAnoGrafico(periodos);
+  const mesesAno = periodos.filter(p => p.startsWith(ano + '-'));
+  const ultimo = mesesAno.length ? Number(mesesAno[mesesAno.length - 1].slice(5)) : 12;
+  const colsAno = Array.from({ length: ultimo }, (_, i) => ano + '-' + String(i + 1).padStart(2, '0'));
+  const lideresAno = lideres.filter(l => colsAno.some(p => l.meses[p] && l.meses[p] !== 'Não aplicável'));
+  const porPag = apr ? 13 : 999, pags = Math.max(1, Math.ceil(lideresAno.length / porPag));
+  for(let pg = 0; pg < pags; pg++){
+    const fatia = lideresAno.slice(pg * porPag, (pg + 1) * porPag);
+    q.push({ titulo: 'Histórico geral – resumo de status mensal ' + ano + (pags > 1 ? ` (${pg + 1}/${pags})` : ''), sub: 'Menção de cada liderança, mês a mês', larga: true,
+      corpo: fatia.length ? `<div class="ag-tabela-scroll"><table class="qa-tabela qa-hist"><thead><tr><th class="qa-nome">Supervisor / líder da área</th><th class="qa-ger">Gerência</th>${colsAno.map(p => `<th class="${anPeriodoOk(p) ? '' : 'qa-fora'}">${escaparHtml(anMesCurto(p))}</th>`).join('')}</tr></thead>
+        <tbody>${fatia.map(l => `<tr><td class="qa-nome">${escaparHtml(l.nome)}</td><td class="qa-ger">${escaparHtml(l.gerencia || '—')}</td>${colsAno.map(p => qaCelula(l.meses[p] || 'Não aplicável')).join('')}</tr>`).join('')}</tbody></table></div>` : anVazio('Sem avaliações neste ano.') });
+  }
+  // 3. menções por mês (app; senão INDICA; senão histórico)
+  const contMes = colsAno.map(p => {
+    let v = qaContar(lideres, p);
+    const h = (anDados.hist || []).find(x => x.periodo === p && x.qualimetria);
+    const vazio = !QA_MENCOES.some(m => v[m]);
+    if(vazio && h) v = h.qualimetria;
+    return { rotulo: anMesCurto(p), v, periodo: p };
+  }).filter(m => QA_MENCOES.some(k => m.v[k]));
+  q.push({ titulo: 'Menções por mês – ' + ano, sub: 'Quantas lideranças em cada faixa de desempenho',
+    corpo: anEmpilhadasHtml(contMes, QA_MENCOES.map(m => ({ chave: m, rot: m, cor: QA_CORES[m] }))) });
+  // 4. principais desvios e itens (fichas do app no período)
+  const fichas = (anDados.qualimetria || []).filter(f => anPeriodoOk(f.mes));
+  const quinz = [];
+  fichas.forEach(f => ['q1', 'q2'].forEach(k => { if(f[k] && Object.keys(f[k].itens || {}).length) quinz.push(f[k]); }));
+  const ncItem = Q_ITENS.map((t, i) => ({ i, qtd: quinz.filter(x => /NC/.test((x.itens || {})[i + 1] || '')).length })).filter(x => x.qtd).sort((a, b) => b.qtd - a.qtd);
+  q.push({ titulo: 'Principais desvios encontrados', sub: 'Itens da Qualimetria com mais não conformidades no período',
+    corpo: ncItem.length ? `<ul class="qa-desvios">${ncItem.slice(0, 8).map(x => `<li>${escaparHtml(QA_FRASES[x.i])};<small>${x.qtd} apontamento${x.qtd === 1 ? '' : 's'}</small></li>`).join('')}</ul>`
+      : anVazio(fichas.length ? 'Nenhuma não conformidade nas fichas do período.' : 'Os principais desvios saem das fichas preenchidas no app. Ainda não há fichas neste período.') });
+  if(fichas.length){
+    const notas = fichas.map(f => ({ nome: f.encarregado.nome, nota: qNotaMes(f), mes: f.mes })).filter(x => x.nota !== null);
+    const media = notas.length ? notas.reduce((a, x) => a + x.nota, 0) / notas.length : null;
+    const bomMais = notas.filter(x => x.nota >= 90).length;
+    const ncs = quinz.reduce((a, x) => a + Object.values(x.itens || {}).filter(v => /NC/.test(v)).length, 0);
+    q.push({ titulo: 'Resumo da Qualimetria no período', sub: 'Fichas preenchidas no app', corpo: anKpisHtml([
+      { rot: 'Fichas', val: fichas.length }, { rot: 'Nota média', val: media === null ? '—' : anFmt(media, 1) + '%', cor: media === null ? '' : qCorMencao(qMencao(media)), peq: media === null ? '' : qMencao(media) },
+      { rot: 'Bom ou Excelente', val: notas.length ? anFmt(bomMais / notas.length * 100) + '%' : '—', peq: notas.length ? `${bomMais} de ${notas.length}` : '' },
+      { rot: 'Não conformidades', val: ncs, cor: ncs ? 'var(--error)' : '' }]) });
+    q.push({ titulo: 'Itens com mais não conformidades', sub: 'Quantas quinzenas tiveram NC em cada item',
+      corpo: anBarrasHtml(ncItem.slice(0, apr ? 8 : 12).map(x => ({ rotulo: (x.i + 1) + '. ' + Q_ITENS[x.i], valor: x.qtd })), null, 'var(--error)') });
+    const ultMes = fichas.map(f => f.mes).sort().pop();
+    const notasUlt = notas.filter(x => x.mes === ultMes).sort((a, b) => a.nota - b.nota);
+    if(notasUlt.length) q.push({ titulo: 'Nota por liderança – ' + anMesLongo(ultMes), sub: 'Menores notas primeiro',
+      corpo: anBarrasHtml(notasUlt.slice(0, apr ? 12 : 99).map(x => ({ rotulo: x.nome, valor: x.nota, cor: QA_CORES[qMencao(x.nota)], extra: qMencao(x.nota) })), v => anFmt(v, 1) + '%') });
+  }
+  return q;
+}
+
+/* =====================================================================
+   LV (listas de verificação)
+   ===================================================================== */
+function lvaMontarQuadros(modo){
+  const apr = modo === 'apresentacao';
+  const lvs = (anDados.lvs || []).filter(l => l.estado === 'concluida' && anNoPeriodo(l.data));
+  if(!lvs.length) return [{ titulo: 'Listas de verificação', sub: textoPeriodoAnalise(), corpo: anVazio(anDados.erros.lvs ? 'Não consegui carregar as LVs agora. Confira a internet.' : 'Nenhuma LV concluída neste período.') }];
+  const conta = (f) => lvs.filter(f).length, pct = (n) => Math.round(n / lvs.length * 100);
+  const lib = conta(l => l.resultado === 'Liberado'), ress = conta(l => l.resultado === 'Liberado com ressalvas'), nlib = conta(l => l.resultado === 'Não liberado');
+  const ncTot = lvs.reduce((a, l) => a + Object.values(l.itens || {}).filter(x => x === 'NC').length, 0);
+  const agrupa = (fn) => { const m = {}; lvs.forEach(l => { const k = fn(l); if(k) (m[k] = m[k] || []).push(l); }); return m; };
+  const q = [];
+  q.push({ titulo: 'Resumo das LVs', sub: 'Inspeções de máquinas, equipamentos e áreas', corpo: anKpisHtml([
+    { rot: 'LVs concluídas', val: lvs.length }, { rot: 'Liberados', val: pct(lib) + '%', cor: 'var(--green-dark)', peq: String(lib) },
+    { rot: 'Com ressalvas', val: ress, cor: '#c98a1a' }, { rot: 'Não liberados', val: nlib, cor: nlib ? 'var(--error)' : '' }])
+    + `<p class="an-nota" style="margin-top:14px">${ncTot} não conformidade(s) apontada(s) nas LVs do período.</p>` });
+  q.push({ titulo: 'Resultado das inspeções', sub: 'Situação dos equipamentos e áreas inspecionados', corpo: anColunasHtml([
+    { rotulo: 'Liberado', valor: lib, cor: 'var(--green)' }, { rotulo: 'Com ressalvas', valor: ress, cor: '#f0b429' }, { rotulo: 'Não liberado', valor: nlib, cor: 'var(--error)' }]) });
+  const porMes = Object.entries(agrupa(l => String(l.data).slice(0, 7))).sort((a, b) => a[0].localeCompare(b[0]));
+  if(porMes.length > 1) q.push({ titulo: 'LVs por mês', sub: 'Quantidade de inspeções concluídas', corpo: anColunasHtml(porMes.map(([p, v]) => ({ rotulo: anMesCurto(p), valor: v.length }))) });
+  const porCat = Object.entries(agrupa(l => l.categoria || ((typeof lvTipo === 'function' && lvTipo(l.tipoId)) || {}).cat)).map(([k, v]) => {
+    const n = v.filter(l => l.resultado === 'Não liberado').length; return { rotulo: k, valor: v.length, extra: n ? n + ' não liberado(s)' : '' }; }).sort((a, b) => b.valor - a.valor);
+  q.push({ titulo: 'LVs por categoria', sub: 'O que mais foi inspecionado', corpo: anBarrasHtml(porCat, null, 'var(--green)') });
+  const porTipo = Object.entries(agrupa(l => l.tipoNome)).map(([k, v]) => ({ rotulo: k, valor: v.length })).sort((a, b) => b.valor - a.valor);
+  q.push({ titulo: 'Tipos mais inspecionados', sub: apr ? 'Top 10' : 'Todos os tipos', corpo: anBarrasHtml(apr ? agAgruparOutras(porTipo, 10, 'tipos') : porTipo, null, 'var(--green)') });
+  const ncItem = {};
+  lvs.forEach(l => Object.keys(l.itens || {}).forEach(n => { if(l.itens[n] === 'NC'){ const k = l.tipoNome + ' · ' + ((l.itensTexto || [])[n - 1] || 'item ' + n); ncItem[k] = (ncItem[k] || 0) + 1; } }));
+  const topNc = Object.entries(ncItem).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([rotulo, valor]) => ({ rotulo, valor }));
+  q.push({ titulo: 'Itens com mais não conformidades', sub: 'Tipo de LV · item', corpo: topNc.length ? anBarrasHtml(topNc, null, 'var(--error)') : anVazio('Nenhuma não conformidade no período.') });
+  const porEmp = Object.entries(agrupa(l => l.empresaNome || l.empresaTipo)).map(([k, v]) => {
+    const nl = v.filter(l => l.resultado === 'Não liberado').length, nc = v.reduce((a, l) => a + Object.values(l.itens || {}).filter(x => x === 'NC').length, 0);
+    return { rotulo: k, valor: nc, extra: `${v.length} LV(s)${nl ? ' · ' + nl + ' não liberado(s)' : ''}` };
+  }).sort((a, b) => b.valor - a.valor).slice(0, 10);
+  q.push({ titulo: 'Não conformidades por empresa', sub: 'Mais NC primeiro', corpo: anBarrasHtml(porEmp, null, '#2e6da4') });
+  const rep = [];
+  Object.values(agrupa(l => l.tipoId + '|' + (l.identificadorNorm || ''))).forEach(g => {
+    if(g.length < 2) return;
+    const cont = {};
+    g.forEach(l => Object.keys(l.itens || {}).forEach(n => { if(l.itens[n] === 'NC') cont[n] = (cont[n] || 0) + 1; }));
+    const itens = Object.keys(cont).filter(n => cont[n] > 1);
+    if(itens.length) rep.push({ l: g[0], itens, n: g.length });
+  });
+  if(rep.length) q.push({ titulo: 'Equipamentos com NC repetida', sub: 'Mesma não conformidade em mais de uma LV', corpo: `<div class="ag-tabela-scroll"><table class="ag-tabela"><thead><tr><th>Tipo</th><th>Identificação</th><th>LVs</th><th>Itens com NC repetida</th></tr></thead><tbody>
+      ${rep.map(r => `<tr><td>${escaparHtml(r.l.tipoNome)}</td><td>${escaparHtml(r.l.identificador || '—')}</td><td>${r.n}</td><td>${r.itens.join(', ')}</td></tr>`).join('')}</tbody></table></div>` });
+  const naoLib = lvs.filter(l => l.resultado === 'Não liberado').sort((a, b) => String(b.data).localeCompare(String(a.data)));
+  if(naoLib.length){
+    q.push({ titulo: 'Não liberados', sub: 'Equipamentos e áreas que não puderam operar', larga: apr,
+      corpo: apr ? `<div class="ag-tabela-scroll"><table class="ag-tabela"><thead><tr><th>Data</th><th>Tipo</th><th>Identificação</th><th>Empresa</th><th>NC</th><th>TST</th></tr></thead><tbody>
+          ${naoLib.slice(0, 8).map(l => `<tr><td>${escaparHtml(formatarDataBR(l.data))}</td><td>${escaparHtml(l.tipoNome)}</td><td>${escaparHtml(l.identificador || '—')}</td><td>${escaparHtml(l.empresaNome || l.empresaTipo || '—')}</td><td>${Object.values(l.itens || {}).filter(x => x === 'NC').length}</td><td>${escaparHtml(l.criadoPorNome || '')}</td></tr>`).join('')}</tbody></table></div>`
+        : naoLib.slice(0, 8).map(l => lvCard(l)).join('') });
+  }
+  const porTst = Object.entries(agrupa(l => l.criadoPorNome)).map(([k, v]) => ({ rotulo: k, valor: v.length })).sort((a, b) => b.valor - a.valor);
+  q.push({ titulo: 'LVs por TST', sub: 'Quem realizou as inspeções', corpo: anBarrasHtml(porTst, null, '#6b7a2f') });
+  return q;
+}
+
+/* ---------------- capa da apresentação Préver ---------------- */
+function anCapaPrever(){
+  const k = [];
+  try{
+    const meses = trhMeses(), doPer = Object.values(meses).filter(r => anPeriodoOk(r.periodo));
+    const comHT = doPer.filter(r => r.horasTrab), ht = comHT.reduce((a, r) => a + r.horasTrab, 0);
+    const ind = ht ? trhIndicador(comHT.reduce((a, r) => a + r.horas, 0), ht) : null;
+    k.push({ rot: 'Capacitação (meta ' + anFmt(TR_META_HHT, 2) + '%)', val: ind === null ? '—' : anFmt(ind, 2) + '%', cor: trhCorIndicador(ind), peq: anHoras(doPer.reduce((a, r) => a + r.horas, 0)) + 'h' });
+  }catch(e){}
+  try{
+    const ab = agDesviosAbertos(), atr = ab.filter(d => d.status === 'Atrasado').length;
+    k.push({ rot: 'Desvios em aberto', val: ab.length, peq: atr + ' atrasados', cor: atr ? 'var(--error)' : '' });
+  }catch(e){}
+  try{
+    const { lideres } = qaMatriz();
+    const per = new Set(); lideres.forEach(l => Object.keys(l.meses).forEach(p => { if(QA_MENCOES.includes(l.meses[p]) && anPeriodoOk(p)) per.add(p); }));
+    const ult = Array.from(per).sort().pop();
+    if(ult){ const c = qaContar(lideres, ult), tot = QA_MENCOES.reduce((a, m) => a + c[m], 0); k.push({ rot: 'Qualimetria · ' + anMesCurto(ult), val: anFmt((c['Excelente'] + c['Bom']) / tot * 100) + '%', peq: 'Bom ou Excelente' }); }
+  }catch(e){}
+  try{
+    const lvs = (anDados.lvs || []).filter(l => l.estado === 'concluida' && anNoPeriodo(l.data));
+    k.push({ rot: 'LVs no período', val: lvs.length, peq: lvs.filter(l => l.resultado === 'Não liberado').length + ' não liberados' });
+  }catch(e){}
+  return { secao: 'Préver', titulo: 'Apresentação Préver', sub: 'Capacitação, desvios, qualimetria e listas de verificação · ' + textoPeriodoAnalise(),
+    corpo: anKpisHtml(k) + '<p class="an-nota" style="margin-top:18px">Use as setas para passar pelos quadros de cada tema.</p>' };
+}
+
+function anAoMudarSoPagina(){
+  const v = anPaginaVisivel();
+  if(v === 'view-analise-geral') renderizarAnaliseGeral();
+  else if(v) anRenderPagina(AN_PAGINAS[v][0], AN_PAGINAS[v][1]);
 }
 
 /* ---- marca d'água ----
@@ -8788,7 +9409,8 @@ document.getElementById('q-at-buscar').addEventListener('click', () => {
 });
 document.getElementById('q-busca').addEventListener('input', (e) => { qBusca = e.target.value; qRenderLista(); });
 document.getElementById('q-at-pend').addEventListener('click', () => { qFiltro = qFiltro === 'pendentes' ? 'todas' : 'pendentes'; qRenderLista(); });
-document.getElementById('q-at-analise').addEventListener('click', () => { qFiltro = qFiltro === 'analise' ? 'todas' : 'analise'; qRenderLista(); });
+document.getElementById('q-at-analise').addEventListener('click', () => irPara('view-q-analise'));
+document.getElementById('q-an-voltar').addEventListener('click', () => irPara('view-qualimetria'));
 document.getElementById('q-btn-voltar').addEventListener('click', () => {
   try{ qSalvar(true); }catch(e){ console.warn('Não salvou ao voltar:', e); }
   irPara('view-qualimetria');
