@@ -207,6 +207,12 @@
   .an-botoes{ display:flex; gap:8px; flex-wrap:wrap; margin:0 0 16px; }
   .an-botoes .btn-apresentacao{ flex:1 1 auto; justify-content:center; }
   .an-kpis-3{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+  .an-aviso{ margin:12px 0 0; padding:10px 12px; border-radius:10px; background:#fdf3d8; color:#6b4a00; font-size:12.5px; line-height:1.4; }
+  [data-theme="dark"] .an-aviso{ background:#3a3220; color:#f3d38a; }
+  .apr-slide .an-aviso{ font-size:16px; }
+  .tr-acum{ margin:10px 0 0; padding-top:10px; border-top:1px solid var(--border); font-size:12px; color:var(--text-muted); line-height:1.45; }
+  .tr-acum:empty{ display:none; }
+  .tr-acum b{ color:var(--navy); }
   .an-kpi-peq{ font-size:12px; font-weight:600; color:var(--text-muted); margin:4px 0 0; }
   .an-kpis-peq .ag-kpi-val{ font-size:22px; }
   .apr-slide .an-kpis-peq .ag-kpi-val{ font-size:40px; }
@@ -1646,6 +1652,7 @@
       <div class="hero-flutuante q-hero">
         <div class="q-hero-topo"><span class="rotulo" id="tr-hero-rotulo">TREINAMENTOS</span></div>
         <div class="q-resumo" id="tr-resumo"></div>
+        <p class="tr-acum" id="tr-acumulado"></p>
       </div>
       <p class="q-erro" id="tr-erro" style="display:none;"></p>
       <span class="secao-titulo">Últimos treinamentos</span>
@@ -7700,6 +7707,28 @@ function trAtualizarTelas(){
     }
   }
 }
+/* linha do acumulado do ano no card do início (histórico INDICA + treinamentos do app) */
+let trAcumEm = 0;
+async function trRenderAcumulado(){
+  const el = document.getElementById('tr-acumulado');
+  if(!el || typeof trhMeses !== 'function') return;
+  const ano = String(new Date().getFullYear());
+  if(Date.now() - trAcumEm < 3000 && el.innerHTML) return;   // evita buscar várias vezes seguidas
+  trAcumEm = Date.now();
+  try{
+    const [hist, treinos] = await Promise.all([
+      anBuscar('hist', async () => (await db.collection('trHistorico').get()).docs.map(d => ({ id: d.id, ...d.data() }))),
+      anBuscar('trAno|' + ano, async () => (await db.collection('treinamentos').where('data', '>=', ano + '-01-01').where('data', '<=', ano + '-12-31').get()).docs.map(d => ({ id: d.id, ...d.data() })))
+    ]);
+    const meses = Object.values(trhMeses(hist, treinos)).filter(r => r.periodo.startsWith(ano + '-'));
+    if(!meses.length){ el.innerHTML = ''; return; }
+    const horas = meses.reduce((a, r) => a + r.horas, 0), part = meses.reduce((a, r) => a + r.part, 0);
+    const comHT = meses.filter(r => r.horasTrab);
+    const ind = comHT.length ? trhIndicador(comHT.reduce((a, r) => a + r.horas, 0), comHT.reduce((a, r) => a + r.horasTrab, 0)) : null;
+    const nApp = treinos.filter(t => t.estado === 'concluido').length;
+    el.innerHTML = `<b>Acumulado ${ano}:</b> ${anFmt(part)} participações · ${anHoras(horas)}h treinadas${ind !== null ? ` · <span style="color:${trhCorIndicador(ind)};font-weight:700">${anFmt(ind, 2)}%</span> das horas trabalhadas (meta ${anFmt(TR_META_HHT, 2)}%)` : ''}${nApp ? ` · ${nApp} treinamento${nApp === 1 ? '' : 's'} no app` : ''}`;
+  }catch(e){ el.innerHTML = ''; }
+}
 function trRenderInicio(){
   const agora = new Date(), mes = agora.getFullYear() + '-' + String(agora.getMonth() + 1).padStart(2, '0');
   const todos = trRecentes.concat(trMeusLista.filter(m => !trRecentes.some(r => r.id === m.id)));
@@ -7712,6 +7741,7 @@ function trRenderInicio(){
     <div class="q-kpi"><b>${part}</b><span>participações</span></div>
     <div class="q-kpi"><b>${hh >= 10 ? Math.round(hh) : String(Math.round(hh * 10) / 10).replace('.', ',')}h</b><span>horas-homem</span></div>`;
   document.getElementById('tr-at-novo').style.display = ehTST() ? '' : 'none';
+  trRenderAcumulado();
   const ult = document.getElementById('tr-ultimos');
   const lista = trOrdenar(todos).slice(0, 10);
   ult.innerHTML = lista.length ? lista.map(trCard).join('') : '<p class="empty-state">Nenhum treinamento registrado neste mês.</p>';
@@ -8732,9 +8762,10 @@ function trhVazio(periodo, origem){
 }
 function trhSoma(a){ return (a || []).reduce((x, y) => x + (Number(y) || 0), 0); }
 // junta mês a mês: o relatório INDICA do mês vale; sem INDICA, entram os treinamentos do app
-function trhMeses(){
+function trhMeses(histArg, treinosArg){
+  const hist = histArg || anDados.hist || [], treinos = treinosArg || anDados.treinos || [];
   const m = {};
-  (anDados.hist || []).forEach(h => {
+  hist.forEach(h => {
     if(h.origem !== 'INDICA' || !Array.isArray(h.categorias) || !h.periodo) return;
     const r = trhVazio(h.periodo, 'INDICA');
     r.horasTrab = trhSoma(h.horasTrabalhadas) || null; r.arquivo = h.arquivoNome || ''; r.arquivoUrl = h.arquivoUrl || '';
@@ -8750,7 +8781,7 @@ function trhMeses(){
     r.qualimetria = h.qualimetria || null;
     m[h.periodo] = r;
   });
-  (anDados.treinos || []).filter(t => t.estado === 'concluido' && t.data).forEach(t => {
+  treinos.filter(t => t.estado === 'concluido' && t.data).forEach(t => {
     const p = String(t.data).slice(0, 7);
     if(m[p] && m[p].origem === 'INDICA'){ m[p].appNoMes = (m[p].appNoMes || 0) + 1; return; }
     const r = m[p] = m[p] || trhVazio(p, 'App');
@@ -8762,7 +8793,7 @@ function trhMeses(){
     r.horas += hs; r.part += n; r.partM += ps.filter(x => x.genero === 'M').length; r.partF += ps.filter(x => x.genero === 'F').length;
     r.cats[cat] = (r.cats[cat] || 0) + hs; r.catsPart[cat] = (r.catsPart[cat] || 0) + n;
   });
-  (anDados.hist || []).forEach(h => { if(h.horasTrabalhadasManual && m[h.periodo] && m[h.periodo].origem !== 'INDICA') m[h.periodo].horasTrab = Number(h.horasTrabalhadasManual) || null; });
+  hist.forEach(h => { if(h.horasTrabalhadasManual && m[h.periodo] && m[h.periodo].origem !== 'INDICA') m[h.periodo].horasTrab = Number(h.horasTrabalhadasManual) || null; });
   return m;
 }
 function trhIndicador(horas, horasTrab){ return horasTrab ? horas / horasTrab * 100 : null; }
@@ -8812,8 +8843,12 @@ function trhMontarQuadros(modo){
   const acumBase = doAno.filter(anPeriodoOk).map(p => meses[p]).filter(r => r.horasTrab);
   const acum = trhIndicador(acumBase.reduce((a, r) => a + r.horas, 0), acumBase.reduce((a, r) => a + r.horasTrab, 0));
   colunas.push({ rotulo: 'Acumulado', valor: acum, cor: '#142131' });
+  const semHT = doAno.filter(p => !meses[p].horasTrab);
+  const temIndica = periodos.some(p => meses[p].origem === 'INDICA');
+  const avisoHT = (!temIndica ? '<p class="an-aviso">Ainda não há relatórios INDICA lidos. Confira se os PDFs estão na pasta "Histórico Treinamentos" e se o script já rodou (função reprocessarHistoricoTreinamentos).</p>' : '')
+    + (semHT.length ? `<p class="an-aviso">Sem horas trabalhadas em ${semHT.map(anMesCurto).join(', ')}: ${ehTST() ? 'informe na análise de Treinamentos (quadro "Fonte de cada mês") ou coloque o PDF do INDICA na pasta' : 'o mês aparece quando o INDICA for colocado na pasta'}.</p>` : '');
   q.push({ titulo: 'Hora homem treinada ST – ' + ano, sub: 'Total de hora homem treinada ÷ total de hora homem trabalhada × 100 (sem TDT e Integração)',
-    corpo: anColunasHtml(colunas, { fmt: v => anFmt(v, 2), meta: TR_META_HHT, metaRot: 'Meta mensal ' + anFmt(TR_META_HHT, 2) + '%' }), larga: true });
+    corpo: anColunasHtml(colunas, { fmt: v => anFmt(v, 2), meta: TR_META_HHT, metaRot: 'Meta mensal ' + anFmt(TR_META_HHT, 2) + '%' }) + avisoHT, larga: true });
   if(!doPeriodo.length){
     q.push({ titulo: 'Capacitação no período', sub: textoPeriodoAnalise(), corpo: anVazio('Nenhum dado de capacitação nos meses escolhidos.') });
     return q;
