@@ -57,7 +57,7 @@ self.addEventListener('notificationclick', (event) => {
   })());
 });
 
-const CACHE_NAME = 'sst-ccg-v87';
+const CACHE_NAME = 'sst-ccg-v88';
 const ARQUIVOS_PARA_CACHE = [
   './',
   './index.html',
@@ -75,6 +75,11 @@ const FIREBASE_SCRIPTS = [
   'https://www.gstatic.com/firebasejs/10.13.0/firebase-messaging-compat.js'
 ];
 
+// Arquivos extras do app (não travam a instalação se faltarem no servidor):
+// jsqr.js = leitor de QR code dos crachás (Treinamentos), usado quando o
+// celular não tem o leitor nativo (iPhone, por exemplo).
+const ARQUIVOS_OPCIONAIS = ['./jsqr.js'];
+
 // Quanto tempo esperar a rede antes de abrir a cópia guardada (sinal ruim no campo)
 const TEMPO_LIMITE_REDE_MS = 4000;
 
@@ -83,6 +88,9 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME).then(async (cache) => {
       // cache: 'reload' ignora o cache HTTP do navegador e baixa a versão nova de verdade
       await cache.addAll(ARQUIVOS_PARA_CACHE.map((url) => new Request(url, { cache: 'reload' })));
+      await Promise.all(ARQUIVOS_OPCIONAIS.map(async (url) => {
+        try{ const r = await fetch(new Request(url, { cache: 'reload' })); if (r.ok) await cache.put(url, r); }catch(e){}
+      }));
       // Firebase: um por um, sem derrubar a instalação se algum falhar
       await Promise.all(FIREBASE_SCRIPTS.map(async (url) => {
         try{
