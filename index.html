@@ -5688,7 +5688,7 @@ function qRenderFicha(){
   document.getElementById('q-cab').innerHTML = `
     <label class="q-campo q-campo-largo">Encarregado / Supervisor / Líder
       <input type="text" id="q-enc" list="q-dl-enc" value="${escaparHtml(f.encarregado.nome)}" ${f.id ? 'disabled' : ''} placeholder="Digite o nome">
-      <datalist id="q-dl-enc">${encarregados.map(p => `<option value="${escaparHtml(p.nome)}">${escaparHtml(p.funcao)} · Mat. ${escaparHtml(p.matricula)}</option>`).join('')}</datalist>
+      <datalist id="q-dl-enc">${encarregados.map(p => `<option value="${escaparHtml(p.nome)}">${escaparHtml(p.funcao)} · ${trMatTxt(p)}</option>`).join('')}</datalist>
     </label>
     <label class="q-campo">Matrícula<input type="text" id="q-mat" value="${escaparHtml(f.encarregado.matricula)}" ${editar ? '' : 'disabled'}></label>
     <label class="q-campo">Turno<input type="text" id="q-turno" list="q-dl-turno" value="${escaparHtml(f.turno)}" ${editar ? '' : 'disabled'}>
@@ -5985,7 +5985,7 @@ function qAbrirEscolhaSignatarios(){
   const f = qFicha;
   const ma = qParticipantes.filter(p => /meio ambiente/i.test(p.funcao || ''));
   const sa = qParticipantes.filter(p => /sa[uú]de/i.test(p.funcao || ''));
-  const opt = (lista) => '<option value="">Selecione...</option>' + lista.map(p => `<option value="${escaparHtml(p.email)}">${escaparHtml(p.nome)} · Mat. ${escaparHtml(p.matricula)}</option>`).join('');
+  const opt = (lista) => '<option value="">Selecione...</option>' + lista.map(p => `<option value="${escaparHtml(p.email)}">${escaparHtml(p.nome)} · ${trMatTxt(p)}</option>`).join('');
   const caixa = document.getElementById('q-signatarios');
   caixa.innerHTML = `
     <b>Quem assina esta quinzena</b>
@@ -7594,7 +7594,7 @@ function trAbrir(t){
 /* ---------- salvar ---------- */
 const TR_NAO_REGRAVAR = ['novo', 'id', 'criadoEm', 'concluidoEm', 'numero', 'pdfUrl', 'pdfNome', 'versoes', 'relatorioPendente', 'listaIncluida', 'atualizadoEm', 'fotosDrive'];
 function trPodeEditar(){ return !!trAtual && trAtual.estado !== 'concluido' && ehTST() && trAtual.criadoPor === (auth.currentUser && auth.currentUser.uid); }
-function trDados(){ const d = Object.assign({}, trAtual); TR_NAO_REGRAVAR.forEach(k => delete d[k]); d.matriculas = (trAtual.participantes || []).map(p => String(p.matricula)); return d; }
+function trDados(){ const d = Object.assign({}, trAtual); TR_NAO_REGRAVAR.forEach(k => delete d[k]); d.matriculas = (trAtual.participantes || []).filter(trMatNum).map(p => String(p.matricula)); return d; }
 function trSalvar(imediato){
   if(!trPodeEditar()) return;
   clearTimeout(trSalvarTimer);
@@ -7660,11 +7660,16 @@ let trCam = null;          // { stream, video, timer, detector, canvas }
 let trUltimaLeitura = { txt: '', t: 0 }, trUltimoAviso = null, trJsQRCarregando = null;
 function trLerQRTexto(txt){
   const p = String(txt || '').split(';').map(s => s.trim());
-  if(p.length < 5 || !/^\d{1,8}$/.test(p[1]) || (p[2] || '').length < 3) return null;
+  // Formato do crachá: EMPRESA;MATRÍCULA;NOME;CARGO;GÊNERO;;OBRA — alguns crachás vêm sem matrícula (ex.: "OEC;OEC;NOME;...")
+  if(p.length < 4 || (p[2] || '').replace(/[^A-Za-zÀ-ú]/g, '').length < 3) return null;
   const g = (p[4] || '').toUpperCase();
-  return { matricula: p[1], nome: p[2].toUpperCase(), cargo: (p[3] || '').toUpperCase(), genero: g === 'F' || g === 'M' ? g : '',
+  const mat = (p[1] || '').toUpperCase().slice(0, 20);
+  return { matricula: mat, nome: p[2].replace(/\s+/g, ' ').toUpperCase(), cargo: (p[3] || '').toUpperCase(), genero: g === 'F' || g === 'M' ? g : '',
            empresa: (p[6] || p[p.length - 1] || '').toUpperCase(), qr: String(txt).slice(0, 300) };
 }
+function trMatNum(p){ return /^\d{1,10}$/.test(String(p.matricula || '')); }
+function trChave(p){ return trMatNum(p) ? String(p.matricula) : 'N:' + qNorm(p.nome || ''); }
+function trMatTxt(p){ return p.matricula ? 'Mat. ' + escaparHtml(p.matricula) : 'Sem matrícula'; }
 function trBip(ok){
   try{ navigator.vibrate && navigator.vibrate(ok ? 70 : [60, 60, 60]); }catch(e){}
   try{
@@ -7676,7 +7681,7 @@ function trBip(ok){
 }
 function trAdicionarParticipante(p, forma){
   const t = trAtual;
-  const ja = t.participantes.find(x => String(x.matricula) === String(p.matricula));
+  const ja = t.participantes.find(x => trChave(x) === trChave(p));
   if(ja){ trUltimoAviso = { tipo: 'dup', nome: ja.nome }; trBip(false); trRenderListaParticipantes(); return false; }
   t.participantes.push(Object.assign({}, p, { forma: forma || 'cracha', lidoEm: new Date().toISOString() }));
   trUltimoAviso = { tipo: 'ok', p: p, n: t.participantes.length };
@@ -7786,7 +7791,7 @@ function trRenderListaParticipantes(){
   const bt = document.getElementById('tr-ir-3'); if(bt) bt.disabled = !n || !ed;
   lista.innerHTML = n ? '<span class="lv-sub" style="padding:8px 0 2px">Mais recentes primeiro</span>' + t.participantes.map((p, i) => ({ p, i })).reverse().map(({ p, i }) => `
     <div class="tr-part ${trUltimoAviso && trUltimoAviso.tipo === 'ok' && i === n - 1 ? 'tr-novo' : ''}"><span class="tr-part-n">${i + 1}</span>
-      <span class="tr-part-txt"><b>${escaparHtml(p.nome)}${p.genero ? `<span class="tr-gen">${p.genero}</span>` : ''}</b><span class="lv-sub">Mat. ${escaparHtml(p.matricula)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}${p.empresa ? ' · ' + escaparHtml(p.empresa) : ''}${p.forma === 'digitado' ? ' · digitado' : ''}</span></span>
+      <span class="tr-part-txt"><b>${escaparHtml(p.nome)}${p.genero ? `<span class="tr-gen">${p.genero}</span>` : ''}</b><span class="lv-sub">${trMatTxt(p)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}${p.empresa ? ' · ' + escaparHtml(p.empresa) : ''}${p.forma === 'digitado' ? ' · digitado' : ''}</span></span>
       ${ed ? `<button type="button" class="tr-remover" data-i="${i}" aria-label="Remover ${escaparHtml(p.nome)}">×</button>` : ''}</div>`).join('')
     : '<p class="empty-state" style="margin:10px 0">Nenhum participante ainda. Leia o QR code do crachá de cada pessoa.</p>';
   lista.querySelectorAll('.tr-remover').forEach(b => b.addEventListener('click', () => {
@@ -7800,7 +7805,7 @@ function trRenderListaParticipantes(){
   if(toast){
     if(trUltimoAviso && trUltimoAviso.tipo === 'ok'){
       const p = trUltimoAviso.p;
-      toast.innerHTML = `<span class="tr-ck">✓</span><span class="tr-toast-txt"><b>${escaparHtml(p.nome)}</b><span class="lv-sub">Mat. ${escaparHtml(p.matricula)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}</span></span><span class="lv-tag ok">nº ${trUltimoAviso.n}</span>`;
+      toast.innerHTML = `<span class="tr-ck">✓</span><span class="tr-toast-txt"><b>${escaparHtml(p.nome)}</b><span class="lv-sub">${trMatTxt(p)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}</span></span><span class="lv-tag ok">nº ${trUltimoAviso.n}</span>`;
       toast.style.display = 'flex';
       clearTimeout(trRenderListaParticipantes.t); trRenderListaParticipantes.t = setTimeout(() => { toast.style.display = 'none'; }, 3500);
     } else toast.style.display = 'none';
@@ -7908,7 +7913,7 @@ function trConcluir(){
   const t = trAtual;
   if(!trPodeEditar() || !t.participantes.length || trDadosFaltando().length) return;
   if(!confirm(`Concluir o treinamento com ${t.participantes.length} participante(s)? Depois de concluído, a lista não muda mais (fotos ainda podem ser incluídas).`)) return;
-  const d = trDados(); d.matriculas = t.participantes.map(p => String(p.matricula));
+  const d = trDados(); d.matriculas = t.participantes.filter(trMatNum).map(p => String(p.matricula));
   d.estado = 'concluido'; d.relatorioPendente = true;
   d.concluidoEm = firebase.firestore.FieldValue.serverTimestamp(); d.atualizadoEm = firebase.firestore.FieldValue.serverTimestamp();
   if(t.novo) d.criadoEm = firebase.firestore.FieldValue.serverTimestamp();
@@ -7916,7 +7921,7 @@ function trConcluir(){
   // cadastro rápido dos colaboradores (para "Digitar a matrícula" preencher sozinho da próxima vez)
   try{
     const lote = db.batch();
-    t.participantes.slice(0, 450).forEach(p => lote.set(db.collection('colaboradores').doc(String(p.matricula)),
+    t.participantes.filter(trMatNum).slice(0, 450).forEach(p => lote.set(db.collection('colaboradores').doc(String(p.matricula)),
       { matricula: String(p.matricula), nome: p.nome, cargo: p.cargo || '', genero: p.genero || '', empresa: p.empresa || '', atualizadoEm: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }));
     gravarSemEsperar(lote.commit(), 'colaboradores');
   }catch(e){ console.warn('Colaboradores:', e); }
@@ -7987,7 +7992,7 @@ function trRenderConcluido(corpo, barra){
 function trVerParticipantes(){
   const t = trAtual, modal = document.createElement('div'); modal.className = 'q-modal';
   modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Participantes"><h3>${t.participantes.length} participantes</h3>
-    <div style="max-height:60vh;overflow-y:auto">${t.participantes.map((p, i) => `<div class="tr-part"><span class="tr-part-n">${i + 1}</span><span class="tr-part-txt"><b>${escaparHtml(p.nome)}${p.genero ? `<span class="tr-gen">${p.genero}</span>` : ''}</b><span class="lv-sub">Mat. ${escaparHtml(p.matricula)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}${p.empresa ? ' · ' + escaparHtml(p.empresa) : ''}</span></span></div>`).join('')}</div>
+    <div style="max-height:60vh;overflow-y:auto">${t.participantes.map((p, i) => `<div class="tr-part"><span class="tr-part-n">${i + 1}</span><span class="tr-part-txt"><b>${escaparHtml(p.nome)}${p.genero ? `<span class="tr-gen">${p.genero}</span>` : ''}</b><span class="lv-sub">${trMatTxt(p)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}${p.empresa ? ' · ' + escaparHtml(p.empresa) : ''}</span></span></div>`).join('')}</div>
     <div class="q-modal-acoes"><button type="button" class="btn-primary q-modal-cancelar">Fechar</button></div></div>`;
   document.body.appendChild(modal);
   modal.querySelector('.q-modal-cancelar').addEventListener('click', () => modal.remove());
@@ -8016,7 +8021,7 @@ async function trRenderBusca(){
   }
   if(document.getElementById('tr-busca').value.trim() !== bruto) return;
   achados = trOrdenar(achados);
-  caixa.innerHTML = (pessoa ? `<div class="lv-bloco" style="margin-bottom:10px"><b>${escaparHtml(pessoa.nome)}</b><span class="lv-sub">Mat. ${escaparHtml(pessoa.matricula)}${pessoa.cargo ? ' · ' + escaparHtml(pessoa.cargo) : ''} · ${achados.filter(t => (t.matriculas || []).includes(bruto) || (t.participantes || []).some(p => String(p.matricula) === bruto)).length} treinamento(s)</span></div>` : '')
+  caixa.innerHTML = (pessoa ? `<div class="lv-bloco" style="margin-bottom:10px"><b>${escaparHtml(pessoa.nome)}</b><span class="lv-sub">${trMatTxt(pessoa)}${pessoa.cargo ? ' · ' + escaparHtml(pessoa.cargo) : ''} · ${achados.filter(t => (t.matriculas || []).includes(bruto) || (t.participantes || []).some(p => String(p.matricula) === bruto)).length} treinamento(s)</span></div>` : '')
     + (achados.length ? achados.map(trCard).join('') : '<p class="empty-state">Nenhum treinamento encontrado.</p>');
   trLigarCards(caixa, achados);
 }
@@ -8063,7 +8068,7 @@ async function trRenderAnalise(){
   const lista = trAnCache[chave].filter(t => t.estado === 'concluido');
   if(!lista.length){ corpo.innerHTML = '<p class="empty-state">Nenhum treinamento concluído neste período.</p>'; return; }
   const part = lista.reduce((a, t) => a + (t.participantes || []).length, 0);
-  const pessoas = new Set(); lista.forEach(t => (t.participantes || []).forEach(p => pessoas.add(String(p.matricula))));
+  const pessoas = new Set(); lista.forEach(t => (t.participantes || []).forEach(p => pessoas.add(trChave(p))));
   const hh = lista.reduce((a, t) => a + (t.participantes || []).length * (Number(t.cargaMin) || 0), 0) / 60;
   const gen = { M: 0, F: 0 }; lista.forEach(t => (t.participantes || []).forEach(p => { if(gen[p.genero] !== undefined) gen[p.genero]++; }));
   const agrupa = (fn, peso) => { const m = {}; lista.forEach(t => { const k = fn(t); if(k) m[k] = (m[k] || 0) + (peso ? peso(t) : 1); }); return Object.entries(m).sort((a, b) => b[1] - a[1]); };
