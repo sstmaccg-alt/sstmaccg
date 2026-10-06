@@ -7665,7 +7665,7 @@ function trLerQRTexto(txt){
   const g = (p[4] || '').toUpperCase();
   const mat = (p[1] || '').toUpperCase().slice(0, 20);
   return { matricula: mat, nome: p[2].replace(/\s+/g, ' ').toUpperCase(), cargo: (p[3] || '').toUpperCase(), genero: g === 'F' || g === 'M' ? g : '',
-           empresa: (p[6] || p[p.length - 1] || '').toUpperCase(), qr: String(txt).slice(0, 300) };
+           empresa: (p[0] || p[6] || '').toUpperCase().slice(0, 40), obra: (p[6] || '').toUpperCase(), qr: String(txt).slice(0, 300) };
 }
 function trMatNum(p){ return /^\d{1,10}$/.test(String(p.matricula || '')); }
 function trChave(p){ return trMatNum(p) ? String(p.matricula) : 'N:' + qNorm(p.nome || ''); }
