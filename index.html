@@ -311,6 +311,7 @@
     border:1px solid var(--border-strong); background:var(--white); color:var(--navy);
     border-radius:10px; padding:9px 12px; font:inherit; font-size:13px; max-width:170px;
   }
+  .apr-filtros .mes-botao{ border-radius:10px; padding:9px 12px; font-size:13px; max-width:200px; min-height:0; }
   .apr-direita{ display:flex; align-items:center; gap:12px; flex:1; justify-content:flex-end; }
   .apr-contador{ font-size:13px; font-weight:700; color:var(--text-muted); }
   .apr-baixar{
@@ -424,6 +425,12 @@
     transition:opacity .25s ease, transform .25s ease;
   }
   .toast-app b{ display:block; font-size:14px; margin-bottom:2px; }
+  *{ -webkit-tap-highlight-color:transparent; }
+  button, .nav-btn, .lv-card, .card-action{ -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
+  button:focus:not(:focus-visible), a:focus:not(:focus-visible), [tabindex]:focus:not(:focus-visible){ outline:none; }
+  .app-confirma .q-modal-acoes button{ height:50px; margin:0; padding:0 12px; font-size:15px; box-sizing:border-box; }
+  .app-confirma .q-modal-caixa p{ font-size:14px; color:var(--navy); opacity:.8; }
+  .ac-perigo{ background:var(--error) !important; border-color:var(--error) !important; color:#fff !important; }
   .toast-app.saindo{ opacity:0; transform:translate(-50%, -10px); }
   .sino{ position:relative; }
   .sino .ponto-notif{ position:absolute; top:-2px; right:-2px; width:8px; height:8px; border-radius:50%; background:var(--error); display:none; }
@@ -966,6 +973,19 @@
   .lv-busca{ width:100%; box-sizing:border-box; height:48px; padding:0 14px; border:1px solid var(--border-strong); border-radius:13px; font:inherit; font-size:15px; background:var(--white); color:var(--navy); margin:0 0 10px; }
   .lv-chips{ display:flex; gap:7px; overflow-x:auto; padding-bottom:4px; margin:0 0 10px; }
   .lv-chip{ height:34px; padding:0 13px; border-radius:17px; border:1px solid var(--border-strong); background:var(--white); color:var(--navy); font:inherit; font-size:13px; white-space:nowrap; cursor:pointer; flex-shrink:0; }
+  .mes-botao{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:8px; border:1px solid var(--border-strong); border-radius:10px; background:var(--white); padding:11px 12px; font:inherit; font-size:14px; color:var(--navy); cursor:pointer; text-align:left; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .mes-botao::after{ content:''; width:7px; height:7px; border-right:2px solid currentColor; border-bottom:2px solid currentColor; transform:rotate(45deg) translateY(-2px); flex-shrink:0; opacity:.7; }
+  .mes-botao.mes-ativo{ border-color:var(--green); box-shadow:inset 0 0 0 1px var(--green); font-weight:700; }
+  .mes-grade{ display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:8px; margin:4px 0 12px; }
+  .mes-chip{ height:44px; border-radius:11px; border:1px solid var(--border-strong); background:var(--white); color:var(--navy); font:inherit; font-size:14px; font-weight:600; cursor:pointer; }
+  .mes-chip.on{ background:var(--green); border-color:var(--green); color:#fff; font-weight:700; }
+  .mes-atalhos{ display:flex; gap:7px; flex-wrap:wrap; margin:0 0 14px; }
+  .em-tabela .ag-tabela-scroll{ overflow-x:auto; border:1px solid var(--border); border-radius:12px; }
+  .em-tabela .ag-tabela{ min-width:900px; }
+  #email-resp-corpo{ padding-bottom:40px; }
+  .em-resp{ width:100%; text-align:left; margin-bottom:8px; }
+  .lv-tag.em-tag-atraso{ background:#fde2e1; color:#a32d2d; }
+  .lv-tag.em-tag-ok{ background:#e3f1d6; color:#2d5214; }
   .lv-chip.on{ background:var(--navy); color:var(--white); border-color:var(--navy); font-weight:700; }
   .lv-passos{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:0 0 14px; }
   .lv-passos span{ height:5px; border-radius:3px; background:var(--border); } .lv-passos span.feito{ background:var(--green); }
@@ -1325,6 +1345,7 @@
       <span class="sb-titulo">SEGURANÇA</span>
       <button type="button" class="sb-item" id="sb-novo"><span class="icone-svg" data-icone="plus"></span><span class="sb-rotulo">Novo desvio</span></button>
       <button type="button" class="sb-item" id="sb-aprovacoes"><span class="icone-svg" data-icone="check-circulo"></span><span class="sb-rotulo" id="sb-aprovacoes-label">Enviados</span><span class="sb-badge" id="sb-badge-aprovacoes" style="display:none;"></span></button>
+      <button type="button" class="sb-item" id="sb-email" style="display:none;"><span class="icone-svg" data-icone="mail"></span><span class="sb-rotulo">E-mail aos responsáveis</span></button>
       <button type="button" class="sb-item" id="sb-analise"><span class="icone-svg" data-icone="barchart"></span><span class="sb-rotulo">Análise geral</span></button>
     </div>
     <button type="button" class="sb-usuario" id="sb-usuario" aria-label="Abrir perfil">
@@ -1605,6 +1626,10 @@
           <button type="button" class="atalho-item" id="atalho-aprovacoes">
             <div class="atalho-icone"><span class="icone-svg" data-icone="check-circulo"></span><span class="atalho-badge" id="badge-aprovacoes" style="display:none;"></span></div>
             <p class="atalho-label" id="atalho-aprovacoes-label">Enviados</p>
+          </button>
+          <button type="button" class="atalho-item" id="atalho-email" style="display:none;">
+            <div class="atalho-icone"><span class="icone-svg" data-icone="mail"></span></div>
+            <p class="atalho-label">E-mail</p>
           </button>
           <button type="button" class="atalho-item" id="atalho-analise">
             <div class="atalho-icone"><span class="icone-svg" data-icone="barchart"></span></div>
@@ -1939,6 +1964,16 @@
       <div id="detalhe-responsavel-conteudo"></div>
     </div>
 
+    <!-- Tela: e-mail aos responsáveis pela área (só TST) -->
+    <div id="view-email-resp" style="display:none;">
+      <div class="tela-header">
+        <button id="btn-voltar-email" class="voltar" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button>
+      </div>
+      <p class="tela-titulo">E-mail aos responsáveis</p>
+      <p class="lv-sub" id="email-resp-sub" style="margin:-4px 0 14px"></p>
+      <div id="email-resp-corpo"></div>
+    </div>
+
     <!-- Tela: Análise geral (usada nas reuniões) -->
     <div id="view-analise-geral" style="display:none;">
       <div class="tela-header">
@@ -1956,7 +1991,7 @@
           <select id="analise-filtro-ano" class="dd-select"></select>
         </div>
         <div class="field" style="flex:1; margin-bottom:0;">
-          <select id="analise-filtro-mes" class="dd-select"></select>
+          <button type="button" id="analise-filtro-mes" class="mes-botao">Todos os meses</button>
         </div>
       </div>
 
@@ -2093,6 +2128,7 @@ const ICONES = {
   lua: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/></svg>',
   'seta-esquerda': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M11 18l-6-6 6-6"/></svg>',
   qr: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>',
+  mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
   plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
   microfone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z"/><path d="M19 11a7 7 0 0 1-14 0"/><path d="M12 18v3"/></svg>',
   sol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>'
@@ -2141,7 +2177,7 @@ function configurarDitado(idTextarea, idBotao){
     reconhecimento.onerror = (event) => {
       console.warn('Erro no ditado:', event.error);
       if(event.error === 'not-allowed' || event.error === 'service-not-allowed'){
-        alert('Pra usar o ditado, permita o acesso ao microfone nas configurações do navegador/app.');
+        mostrarAvisoApp('Microfone bloqueado', 'Para usar o ditado, permita o acesso ao microfone nas configurações do navegador.');
         gravando = false;
       }
     };
@@ -2638,7 +2674,7 @@ document.getElementById('logout-btn').addEventListener('click', () => {
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-tr-escolher','view-tr-busca','view-tr-meus','view-tr-analise','view-tr-ficha','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-lv-analise','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha'];
+const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-tr-escolher','view-tr-busca','view-tr-meus','view-tr-analise','view-tr-ficha','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-lv-analise','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha','view-email-resp'];
 function irPara(viewId){
   if(typeof trFecharCamera === 'function') trFecharCamera();   // a câmera dos crachás nunca fica ligada fora da tela dela
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
@@ -2666,6 +2702,10 @@ function irPara(viewId){
   }
   if(viewId === 'view-enviados'){ renderizarEnviados(); }
   if(viewId === 'view-analise-geral'){ abrirAnaliseGeral(); }
+  if(viewId === 'view-email-resp'){
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'view-desvios'));
+    abrirEmailResp();
+  }
 }
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => irPara(btn.dataset.view));
@@ -2680,6 +2720,11 @@ document.getElementById('sb-logo').src = document.querySelector('.capacete-img')
 document.getElementById('sb-novo').addEventListener('click', () => { irPara('view-desvios'); mostrarFormularioDesvio(); });
 document.getElementById('sb-aprovacoes').addEventListener('click', () => document.getElementById('atalho-aprovacoes').click());
 document.getElementById('sb-analise').addEventListener('click', () => irPara('view-analise-geral'));
+document.getElementById('sb-email').addEventListener('click', () => irPara('view-email-resp'));
+document.getElementById('atalho-email').addEventListener('click', () => irPara('view-email-resp'));
+document.getElementById('btn-voltar-email').addEventListener('click', () => {
+  if(emSel){ emSel = null; emRender(); window.scrollTo(0, 0); } else irPara('view-desvios');
+});
 document.getElementById('sb-usuario').addEventListener('click', () => irPara('view-perfil'));
 function atualizarUsuarioPC(user){
   const pl = (user && lerPerfilLocal(user.uid)) || {};
@@ -2766,6 +2811,61 @@ function mostrarAvisoApp(titulo, texto, abrir){
   t.addEventListener('click', () => { if(abrir) abrirDestinoNotificacao(abrir); sair(); });
   setTimeout(sair, 6000);
 }
+/* ---- confirmação no visual do app (no lugar do confirm() do navegador) ---- */
+function confirmarApp(titulo, texto, rotuloOk, perigo){
+  return new Promise(resolver => {
+    const modal = document.createElement('div');
+    modal.className = 'q-modal app-confirma';
+    modal.innerHTML = `<div class="q-modal-caixa" role="alertdialog" aria-modal="true" aria-label="${escaparHtml(titulo)}">
+        <h3>${escaparHtml(titulo)}</h3>${texto ? `<p>${escaparHtml(texto)}</p>` : ''}
+        <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar ac-nao">Cancelar</button>
+        <button type="button" class="btn-primary ac-sim${perigo ? ' ac-perigo' : ''}">${escaparHtml(rotuloOk || 'Confirmar')}</button></div></div>`;
+    document.body.appendChild(modal);
+    const fim = (v) => { modal.remove(); resolver(v); };
+    modal.querySelector('.ac-nao').addEventListener('click', () => fim(false));
+    modal.querySelector('.ac-sim').addEventListener('click', () => fim(true));
+    modal.addEventListener('click', (e) => { if(e.target === modal) fim(false); });
+    setTimeout(() => modal.querySelector('.ac-sim').focus(), 30);
+  });
+}
+
+/* ---- botão "voltar" do celular: volta uma tela dentro do app em vez de sair ----
+   O app guarda uma entrada extra no histórico. Quando o voltar do celular é usado,
+   fecha a janela aberta, ou toca na seta "voltar" da tela, ou vai para Desvios.
+   Na tela inicial, pede um segundo toque para sair. */
+(function(){
+  let pediuSair = 0;
+  const visivel = el => !!(el && el.offsetParent !== null);
+  function armar(){ try{ if(!(history.state && history.state.sstGuarda)) history.pushState({ sstGuarda: 1 }, ''); }catch(e){} }
+  function voltarNoApp(){
+    const modais = document.querySelectorAll('.q-modal');
+    if(modais.length){
+      const topo = modais[modais.length - 1];
+      const b = topo.querySelector('.ac-nao, .zap-fechar, .q-modal-cancelar, [data-fechar]')
+        || [...topo.querySelectorAll('button')].find(x => /^(cancelar|fechar|agora não|voltar)$/i.test(x.textContent.trim()));
+      if(b) b.click();
+      return true;   // janela sem botão de fechar (ex.: termo de uso) fica aberta
+    }
+    for(const id of ['lb-fechar', 'apr-fechar']){ const b = document.getElementById(id); if(visivel(b)){ b.click(); return true; } }
+    const vista = (typeof views !== 'undefined' ? views : []).map(v => document.getElementById(v)).find(visivel);
+    if(!vista) return false;
+    const seta = [...vista.querySelectorAll('.voltar')].find(visivel);
+    if(seta){ seta.click(); return true; }
+    if(vista.id !== 'view-desvios'){ irPara('view-desvios'); return true; }
+    return false;
+  }
+  window.addEventListener('popstate', () => {
+    if(!(typeof auth !== 'undefined' && auth.currentUser)) return;   // tela de login: comportamento normal
+    if(voltarNoApp()){ armar(); return; }
+    if(Date.now() - pediuSair < 2500){ history.back(); return; }
+    pediuSair = Date.now(); armar();
+    mostrarAvisoApp('Sair do app?', 'Toque em voltar de novo para sair.');
+  });
+  // o Chrome só respeita a entrada extra depois de um toque na tela
+  document.addEventListener('click', armar, true);
+  document.addEventListener('touchend', armar, true);
+})();
+
 function abrirDestinoNotificacao(abrir){
   if(abrir === 'aprovacoes') irPara(ehTST() ? 'view-aprovacoes' : 'view-enviados');
   else if(abrir === 'enviados') irPara('view-enviados');
@@ -3528,6 +3628,8 @@ function aplicarPerfilTST(){
   document.getElementById('sb-aprovacoes-label').textContent = tst ? 'Aprovações' : 'Enviados';
   if(auth.currentUser) atualizarUsuarioPC(auth.currentUser);
   document.getElementById('perfil-card-aprovacoes').style.display = tst ? 'flex' : 'none';
+  document.getElementById('atalho-email').style.display = tst ? '' : 'none';
+  document.getElementById('sb-email').style.display = tst ? '' : 'none';
   document.getElementById('meus-envios-secao').style.display = tst ? 'none' : 'block';
   renderizarMeusEnvios();
   atualizarBadgeAprovacoes();
@@ -4498,9 +4600,9 @@ function popularFiltrosAnalise(){
   });
   const anosOrdenados = Array.from(anos).sort().reverse();
   const opcoesAno = '<option value="">Todos os anos</option>' + anosOrdenados.map(a => `<option value="${a}">${a}</option>`).join('');
-  const opcoesMes = '<option value="">Todos os meses</option>' + MESES_NOMES().map((m,i) => `<option value="${i+1}">${m}</option>`).join('');
+  agLigarBotoesMeses();
   // mesmos filtros na página e na apresentação (sempre sincronizados)
-  [['analise-filtro-ano', opcoesAno], ['apr-filtro-ano', opcoesAno], ['analise-filtro-mes', opcoesMes], ['apr-filtro-mes', opcoesMes]]
+  [['analise-filtro-ano', opcoesAno], ['apr-filtro-ano', opcoesAno]]
     .forEach(([id, html]) => {
       const sel = document.getElementById(id);
       if(!sel) return;
@@ -4512,6 +4614,65 @@ function popularFiltrosAnalise(){
         sel.addEventListener('change', () => definirFiltroAnalise(id.includes('ano') ? 'ano' : 'mes', sel.value));
       }
     });
+}
+/* ---- meses da análise: dá para escolher vários (vazio = todos os meses) ---- */
+const agMesesSel = new Set();
+function agMesesOrdenados(){ return Array.from(agMesesSel).sort((a, b) => a - b); }
+function agMesesSequencia(ms){ return ms.length > 1 && ms.every((m, i) => i === 0 || m === ms[i - 1] + 1); }
+function agTextoMeses(curto){
+  const ms = agMesesOrdenados(), N = MESES_NOMES();
+  if(!ms.length) return curto ? 'Todos os meses' : 'todos os meses';
+  const nome = m => curto ? N[m - 1].slice(0, 3) : N[m - 1];
+  if(ms.length === 1) return N[ms[0] - 1];
+  if(agMesesSequencia(ms)) return nome(ms[0]) + ' a ' + nome(ms[ms.length - 1]);
+  if(curto) return ms.length <= 3 ? ms.map(nome).join(', ') : ms.length + ' meses';
+  return ms.slice(0, -1).map(nome).join(', ') + ' e ' + nome(ms[ms.length - 1]);
+}
+function agLigarBotoesMeses(){
+  ['analise-filtro-mes', 'apr-filtro-mes'].forEach(id => {
+    const b = document.getElementById(id);
+    if(!b) return;
+    b.textContent = agTextoMeses(true);
+    b.classList.toggle('mes-ativo', agMesesSel.size > 0);
+    if(!b.dataset.ligado){ b.dataset.ligado = '1'; b.addEventListener('click', agEscolherMeses); }
+  });
+}
+function agEscolherMeses(){
+  const escolha = new Set(agMesesSel);
+  const modal = document.createElement('div');
+  modal.className = 'q-modal';
+  const N = MESES_NOMES();
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Meses da análise">
+      <h3>Meses da análise</h3><p>Toque nos meses que entram na análise. Sem nenhum marcado, vale o ano inteiro.</p>
+      <div class="mes-grade">${N.map((m, i) => `<button type="button" class="mes-chip" data-m="${i + 1}" aria-pressed="false">${m.slice(0, 3)}</button>`).join('')}</div>
+      <div class="mes-atalhos"><button type="button" class="lv-chip" data-atalho="todos">Todos os meses</button><button type="button" class="lv-chip" data-atalho="tri">Últimos 3 meses</button><button type="button" class="lv-chip" data-atalho="sem">Últimos 6 meses</button></div>
+      <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary mes-aplicar">Aplicar</button></div>
+    </div>`;
+  document.body.appendChild(modal);
+  const pintar = () => {
+    modal.querySelectorAll('.mes-chip').forEach(c => { const on = escolha.has(Number(c.dataset.m)); c.classList.toggle('on', on); c.setAttribute('aria-pressed', on); });
+    const ap = modal.querySelector('.mes-aplicar');
+    ap.textContent = escolha.size ? `Aplicar (${escolha.size} ${escolha.size === 1 ? 'mês' : 'meses'})` : 'Aplicar (todos)';
+  };
+  modal.querySelectorAll('.mes-chip').forEach(c => c.addEventListener('click', () => { const m = Number(c.dataset.m); escolha.has(m) ? escolha.delete(m) : escolha.add(m); pintar(); }));
+  modal.querySelectorAll('[data-atalho]').forEach(b => b.addEventListener('click', () => {
+    escolha.clear();
+    const qtd = { tri: 3, sem: 6 }[b.dataset.atalho];
+    if(qtd){
+      const atual = new Date().getMonth() + 1;
+      for(let i = 0; i < qtd; i++){ const m = ((atual - 1 - i) % 12 + 12) % 12 + 1; escolha.add(m); }
+    }
+    pintar();
+  }));
+  const fechar = () => modal.remove();
+  modal.querySelector('.q-modal-cancelar').addEventListener('click', fechar);
+  modal.addEventListener('click', (e) => { if(e.target === modal) fechar(); });
+  modal.querySelector('.mes-aplicar').addEventListener('click', () => {
+    agMesesSel.clear(); escolha.forEach(m => agMesesSel.add(m)); fechar();
+    agLigarBotoesMeses(); renderizarAnaliseGeral();
+    if(window.atualizarApresentacao) window.atualizarApresentacao();
+  });
+  pintar();
 }
 function definirFiltroAnalise(qual, valor){
   ['analise-filtro-' + qual, 'apr-filtro-' + qual].forEach(id => {
@@ -4572,20 +4733,18 @@ const AG_POR_PAGINA_ABERTOS = 5; // linhas da tabela de abertos por tela na apre
 
 function textoPeriodoAnalise(){
   const selAno = document.getElementById('analise-filtro-ano');
-  const selMes = document.getElementById('analise-filtro-mes');
   const ano = selAno && selAno.value ? selAno.value : 'Todos os anos';
-  const mes = selMes && selMes.value ? selMes.options[selMes.selectedIndex].text : 'todos os meses';
-  return ano + ' · ' + mes;
+  return ano + ' · ' + agTextoMeses(false);
 }
 
 function agDadosFiltrados(){
   const ano = document.getElementById('analise-filtro-ano').value;
-  const mes = document.getElementById('analise-filtro-mes').value;
+  const meses = agMesesSel;
   return (todosDesviosAnaliseCache || []).filter(d => {
     const am = extrairAnoMes(d.data);
-    if(!am) return !ano && !mes; // sem data reconhecível: só entra se não tiver filtro nenhum
+    if(!am) return !ano && !meses.size; // sem data reconhecível: só entra se não tiver filtro nenhum
     if(ano && am.ano !== ano) return false;
-    if(mes && String(am.mes) !== mes) return false;
+    if(meses.size && !meses.has(am.mes)) return false;
     return true;
   });
 }
@@ -4910,7 +5069,7 @@ document.addEventListener('DOMContentLoaded', function(){
   }
   async function baixarPdf(){
     if(!navigator.onLine){
-      alert('Para gerar o PDF é preciso estar com internet.');
+      mostrarAvisoApp('Sem internet', 'Para gerar o PDF é preciso estar com internet.');
       return;
     }
     const botao = document.getElementById('apr-baixar');
@@ -4962,7 +5121,7 @@ document.addEventListener('DOMContentLoaded', function(){
       pdf.save(`Desvios_${dataArquivo}.pdf`);
     }catch(err){
       console.error('Falha ao gerar o PDF', err);
-      alert('Não consegui gerar o PDF. Confira a internet e tente de novo.');
+      mostrarAvisoApp('PDF não gerado', 'Confira a internet e tente de novo.');
     }finally{
       palcoExport.remove();
       aviso.remove();
@@ -5184,7 +5343,7 @@ function renderizarListaDesvios(){
   <div class="apr-rodape">
     <div class="apr-filtros">
       <select id="apr-filtro-ano" aria-label="Ano"></select>
-      <select id="apr-filtro-mes" aria-label="Mês"></select>
+      <button type="button" id="apr-filtro-mes" class="mes-botao apr-mes" aria-label="Meses">Todos os meses</button>
     </div>
     <div class="apr-nav">
       <button type="button" id="apr-ant" aria-label="Gráfico anterior">‹</button>
@@ -6096,8 +6255,8 @@ function qRenderAssinaturas(){
   box.querySelectorAll('.q-btn-assinar').forEach(b => b.addEventListener('click', () => { qAssinar(b.dataset.papel, b.closest('.q-ass')); }));
   box.querySelectorAll('.q-btn-outro').forEach(b => b.addEventListener('click', () => qAssinarNesteCelular(b.dataset.papel)));
   const re = document.getElementById('q-reabrir');
-  if(re) re.addEventListener('click', () => {
-    if(!confirm('Reabrir apaga as assinaturas desta quinzena. Os desvios já criados continuam. Reabrir?')) return;
+  if(re) re.addEventListener('click', async () => {
+    if(!(await confirmarApp('Reabrir a ficha?', 'As assinaturas desta quinzena serão apagadas. Os desvios já criados continuam.', 'Reabrir', true))) return;
     Object.assign(q, { estado: 'rascunho', assinaturas: {} });
     const upd = {}; upd[qQuinzena + '.estado'] = 'rascunho'; upd[qQuinzena + '.assinaturas'] = {};
     gravarSemEsperar(db.collection('qualimetrias').doc(f.id).update(upd), 'reabrir quinzena');
@@ -7104,18 +7263,25 @@ function lvConcluir(){
 /* ---------- resumo / concluída + compartilhar ---------- */
 function lvTextoCompartilhar(lv, formal){
   const pend = Object.keys(lv.itens || {}).filter(n => lv.itens[n] === 'NC').map(n => `- Item ${n}: ${(lv.ncs[n] || {}).descricao || (lv.itensTexto || [])[n - 1] || ''}`);
-  const linhas = [
-    `${formal ? 'Lista de Verificação' : 'LV'} ${lv.numero || ''} – ${lv.tipoNome}`.replace('  ', ' '),
-    `Identificação: ${lv.identificador}${lvDescEquip(lv) ? ' (' + lvDescEquip(lv) + ')' : ''}`,
-    `Empresa: ${lv.empresaNome || lv.empresaTipo || '—'}`, `Data: ${formatarDataBR(lv.data)} · Área: ${lv.area || '—'}`,
-    `Resultado: ${lv.resultado || '—'}${lv.resultadoObs ? ' – ' + lv.resultadoObs : ''}`,
-    pend.length ? 'Pendências:\n' + pend.join('\n') : 'Sem pendências.',
-    (lv.pdfPublicoUrl || lv.pdfUrl) ? `PDF: ${lv.pdfPublicoUrl || lv.pdfUrl}` : 'O PDF fica disponível em instantes no app.'
-  ];
-  if(!formal) return linhas.join('\n');
-  const eu = qMeuPerfil();
-  return ['Prezados,', '', 'Segue o resultado da lista de verificação:', '', ...linhas, '', 'Atenciosamente,',
-    (eu.nome || '') + (eu.matricula ? ' – Matrícula ' + eu.matricula : ''), 'Segurança do Trabalho – Consórcio Construtor Gávea'].join('\n');
+  const pdf = lv.pdfPublicoUrl || lv.pdfUrl;
+  const dados = [['Identificação', (lv.identificador || '') + (lvDescEquip(lv) ? ' (' + lvDescEquip(lv) + ')' : '')],
+    ['Empresa', lv.empresaNome || lv.empresaTipo || '—'], ['Data', formatarDataBR(lv.data)], ['Área', lv.area],
+    ['Resultado', (lv.resultado || '—') + (lv.resultadoObs ? ' – ' + lv.resultadoObs : '')]];
+  if(!formal) return msgBlocos([
+    [`*LISTA DE VERIFICAÇÃO – ${String(lv.tipoNome || '').toUpperCase()}*`, lv.numero || ''].filter(Boolean),
+    msgCampos(dados, true),
+    pend.length ? ['*Pendências:*', ...pend] : ['*Pendências:* nenhuma.'],
+    pdf ? ['*Relatório (PDF):*', pdf] : ['O PDF fica disponível em instantes no app.']
+  ]);
+  return msgBlocos([
+    ['Prezados,'],
+    ['Segue o resultado da lista de verificação realizada, conforme os dados abaixo.'],
+    msgSecaoEmail('Lista de verificação', [['Registro', lv.numero], ['Tipo', lv.tipoNome], ...dados]),
+    pend.length ? ['PENDÊNCIAS', ...pend] : ['PENDÊNCIAS', 'Nenhuma pendência registrada.'],
+    pdf ? ['RELATÓRIO (PDF)', pdf] : ['O relatório em PDF fica disponível em instantes no aplicativo.'],
+    ['A imagem com o resumo da lista de verificação segue em anexo.'],
+    msgAssinaturaEmail()
+  ]);
 }
 function lvRenderResumo(corpo, barra){
   const lv = lvAtual, s = lvSituacao(lv);
@@ -7708,7 +7874,7 @@ function trCarregarJsQR(){
 async function trAbrirCamera(){
   const caixa = document.getElementById('tr-cam'); if(!caixa || trCam) return;
   const msg = document.getElementById('tr-cam-msg');
-  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ msg.textContent = 'Este navegador não deixa usar a câmera. Use "Digitar a matrícula".'; caixa.classList.add('tr-cam-off'); return; }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ msg.textContent = 'Este navegador não deixa usar a câmera. Abra o app pelo Chrome ou Safari atualizado.'; caixa.classList.add('tr-cam-off'); return; }
   trCam = { abrindo: true };
   try{
     const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
@@ -7727,8 +7893,8 @@ async function trAbrirCamera(){
   }catch(e){
     trFecharCamera();
     caixa.classList.add('tr-cam-off');
-    msg.textContent = /NotAllowed|Permission/i.test(e && e.name || '') ? 'A câmera não foi liberada. Toque em "Abrir câmera" e permita, ou use "Digitar a matrícula".'
-      : (/leitor/.test(e && e.message || '') ? 'Sem internet para baixar o leitor de QR na primeira vez. Use "Digitar a matrícula".' : 'Não consegui abrir a câmera. Use "Digitar a matrícula".');
+    msg.textContent = /NotAllowed|Permission/i.test(e && e.name || '') ? 'A câmera não foi liberada. Toque em "Abrir câmera" e permita o acesso.'
+      : (/leitor/.test(e && e.message || '') ? 'Sem internet para baixar o leitor de QR na primeira vez. Conecte e tente de novo.' : 'Não consegui abrir a câmera. Feche outros apps que usam a câmera e tente de novo.');
   }
 }
 async function trLerQuadro(){
@@ -7769,7 +7935,7 @@ function trRenderParticipantes(corpo, barra, ed){
     <div id="tr-aviso"></div>
     <div class="tr-cont-linha"><b id="tr-cont">0 participantes</b><span class="lv-sub" id="tr-cont-gen"></span></div>
     <div class="lv-bloco" id="tr-part-lista" style="padding-top:4px;padding-bottom:4px;"></div>
-    ${ed ? '<button type="button" class="zap-btn secundario" id="tr-digitar">Crachá esqueceu? Digitar a matrícula</button>' : ''}`;
+    ${ed && TR_DIGITAR ? '<button type="button" class="zap-btn secundario" id="tr-digitar">Crachá esqueceu? Digitar a matrícula</button>' : ''}`;
   barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b id="tr-barra-n">0 participantes</b><small>Etapa 2 de 3</small></span></div>
     <button type="button" class="btn-primary q-btn-sec" id="tr-volta-1">Voltar</button><button type="button" class="btn-primary" id="tr-ir-3">Continuar</button>`;
   document.getElementById('tr-volta-1').addEventListener('click', () => { trPasso = 1; trRenderFicha(); window.scrollTo(0, 0); });
@@ -7778,7 +7944,7 @@ function trRenderParticipantes(corpo, barra, ed){
   trRenderListaParticipantes();
   if(!ed) return;
   document.getElementById('tr-cam-abrir').addEventListener('click', trAbrirCamera);
-  document.getElementById('tr-digitar').addEventListener('click', trDigitarMatricula);
+  const dg = document.getElementById('tr-digitar'); if(dg) dg.addEventListener('click', trDigitarMatricula);
   trAbrirCamera();
 }
 function trRenderListaParticipantes(){
@@ -7794,14 +7960,14 @@ function trRenderListaParticipantes(){
       <span class="tr-part-txt"><b>${escaparHtml(p.nome)}${p.genero ? `<span class="tr-gen">${p.genero}</span>` : ''}</b><span class="lv-sub">${trMatTxt(p)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}${p.empresa ? ' · ' + escaparHtml(p.empresa) : ''}${p.forma === 'digitado' ? ' · digitado' : ''}</span></span>
       ${ed ? `<button type="button" class="tr-remover" data-i="${i}" aria-label="Remover ${escaparHtml(p.nome)}">×</button>` : ''}</div>`).join('')
     : '<p class="empty-state" style="margin:10px 0">Nenhum participante ainda. Leia o QR code do crachá de cada pessoa.</p>';
-  lista.querySelectorAll('.tr-remover').forEach(b => b.addEventListener('click', () => {
+  lista.querySelectorAll('.tr-remover').forEach(b => b.addEventListener('click', async () => {
     const p = t.participantes[Number(b.dataset.i)];
-    if(!confirm('Remover ' + p.nome + ' da lista?')) return;
+    if(!(await confirmarApp('Remover participante?', p.nome + ' sai da lista deste treinamento.', 'Remover', true))) return;
     t.participantes.splice(Number(b.dataset.i), 1); trUltimoAviso = null; trSalvar(); trRenderListaParticipantes();
   }));
   const av = document.getElementById('tr-aviso'), toast = document.getElementById('tr-toast');
   av.innerHTML = trUltimoAviso && trUltimoAviso.tipo === 'dup' ? `<div class="tr-aviso">Crachá já lido: <b>${escaparHtml(trUltimoAviso.nome)}</b> já está na lista.</div>`
-    : (trUltimoAviso && trUltimoAviso.tipo === 'erro' ? '<div class="tr-aviso tr-aviso-erro">Esse QR code não é de um crachá da obra. Tente de novo ou digite a matrícula.</div>' : '');
+    : (trUltimoAviso && trUltimoAviso.tipo === 'erro' ? '<div class="tr-aviso tr-aviso-erro">Esse QR code não é de um crachá da obra. Aponte para o crachá e tente de novo.</div>' : '');
   if(toast){
     if(trUltimoAviso && trUltimoAviso.tipo === 'ok'){
       const p = trUltimoAviso.p;
@@ -7811,6 +7977,8 @@ function trRenderListaParticipantes(){
     } else toast.style.display = 'none';
   }
 }
+// "Digitar a matrícula" fica desligado até existir o arquivo com todas as matrículas
+const TR_DIGITAR = false;
 function trDigitarMatricula(){
   const modal = document.createElement('div'); modal.className = 'q-modal';
   modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Digitar matrícula">
@@ -7880,9 +8048,9 @@ function trFotosHtml(ed, podeRemover){
 }
 function trLigarFotos(corpo, aoMudar){
   corpo.querySelectorAll('.tr-foto-btn').forEach(b => b.addEventListener('click', () => trEscolherFotos(b.dataset.modo, aoMudar)));
-  corpo.querySelectorAll('.tr-foto-x').forEach(b => b.addEventListener('click', () => {
+  corpo.querySelectorAll('.tr-foto-x').forEach(b => b.addEventListener('click', async () => {
     const f = trAtual.fotos[Number(b.dataset.i)]; if(!f || f.emRelatorio) return;
-    if(!confirm('Remover esta foto?')) return;
+    if(!(await confirmarApp('Remover esta foto?', 'Ela sai do treinamento e não entra no relatório.', 'Remover', true))) return;
     gravarSemEsperar(db.collection('treinamentos').doc(trAtual.id).collection('fotos').doc(f.id).delete(), 'remover foto');
     trAtual.fotos.splice(Number(b.dataset.i), 1); aoMudar();
   }));
@@ -7909,10 +8077,11 @@ function trRenderFotos(corpo, barra, ed){
   trLigarFotos(corpo, () => { trSalvar(); trRenderFicha(); });
   document.getElementById('tr-concluir').addEventListener('click', trConcluir);
 }
-function trConcluir(){
+async function trConcluir(){
   const t = trAtual;
   if(!trPodeEditar() || !t.participantes.length || trDadosFaltando().length) return;
-  if(!confirm(`Concluir o treinamento com ${t.participantes.length} participante(s)? Depois de concluído, a lista não muda mais (fotos ainda podem ser incluídas).`)) return;
+  const np = t.participantes.length;
+  if(!(await confirmarApp('Concluir o treinamento?', `${np} participante${np === 1 ? '' : 's'} na lista. Depois de concluído, a lista de presença não pode mais ser alterada. Fotos ainda podem ser incluídas.`, 'Concluir'))) return;
   const d = trDados(); d.matriculas = t.participantes.filter(trMatNum).map(p => String(p.matricula));
   d.estado = 'concluido'; d.relatorioPendente = true;
   d.concluidoEm = firebase.firestore.FieldValue.serverTimestamp(); d.atualizadoEm = firebase.firestore.FieldValue.serverTimestamp();
@@ -7973,18 +8142,31 @@ function trRenderConcluido(corpo, barra){
       mostrarAvisoApp('Novo relatório pedido', 'O RV' + Math.max(2, proxRv) + ' sai na próxima sincronização (até 10 minutos).');
     });
   }
-  const texto = () => [`Treinamento ${t.numero || ''} – ${trNomeTema(t)}`.replace(/\s+/g, ' ').trim(), t.turma ? 'Turma: ' + t.turma : '',
-    `Data: ${formatarDataBR(t.data)} ${t.hora || ''} · Carga horária: ${trMinutosTexto(t.cargaMin)} · Local: ${t.local || '—'}`,
-    `Participantes: ${n} · Responsável: ${t.responsavel && t.responsavel.nome || ''}`, `Relatório: ${t.pdfUrl}`].filter(Boolean).join('\n');
+  const nM = (t.participantes || []).filter(p => p.genero === 'M').length, nF = (t.participantes || []).filter(p => p.genero === 'F').length;
+  const quando = formatarDataBR(t.data) + (t.hora ? ', às ' + t.hora : '');
+  const resp = msgNomeProprio(t.responsavel && t.responsavel.nome);
+  const texto = () => msgBlocos([
+    ['*REGISTRO DE TREINAMENTO*', t.numero || ''].filter(Boolean),
+    msgCampos([['Treinamento', trNomeTema(t)], ['Turma', t.turma], ['Data', quando], ['Carga horária', trMinutosTexto(t.cargaMin)],
+      ['Local', t.local], ['Participantes', n + (nM || nF ? ` (${nM} M · ${nF} F)` : '')], ['Responsável', resp]], true),
+    ['*Lista de presença (PDF):*', t.pdfUrl]
+  ]);
   const zap = document.getElementById('tr-zap');
   if(zap) zap.addEventListener('click', async () => {
     if(navigator.share && /android|iphone|ipad/i.test(navigator.userAgent)){ try{ await navigator.share({ text: texto() }); return; }catch(e){ if(e && e.name === 'AbortError') return; } }
     window.open('https://wa.me/?text=' + encodeURIComponent(texto()), '_blank');
   });
   corpo.querySelectorAll('.tr-email').forEach(b => b.addEventListener('click', () => {
-    const eu = qMeuPerfil();
-    const assunto = `Relatório de treinamento ${t.numero || ''} – ${t.tema} – ${formatarDataBR(t.data)}`.replace(/\s+/g, ' ').trim();
-    const corpoEmail = ['Prezados,', '', 'Segue o relatório de presença do treinamento:', '', texto(), '', 'Atenciosamente,', (eu.nome || '') + (eu.matricula ? ' – Matrícula ' + eu.matricula : ''), 'Segurança do Trabalho – Consórcio Construtor Gávea'].join('\n');
+    const assunto = ['Registro de treinamento', t.tema, formatarDataBR(t.data), t.numero].filter(Boolean).join(' – ');
+    const corpoEmail = msgBlocos([
+      ['Prezados,'],
+      ['Segue o registro do treinamento realizado, com a lista de presença, o conteúdo ministrado e a evidência fotográfica no relatório em PDF.'],
+      msgSecaoEmail('Dados do treinamento', [['Registro', t.numero], ['Treinamento', trNomeTema(t)], ['Turma', t.turma], ['Data', quando],
+        ['Carga horária', trMinutosTexto(t.cargaMin)], ['Local', t.local], ['Responsável', resp]]),
+      ['PARTICIPAÇÃO', 'Total de participantes: ' + n].concat(nM || nF ? ['Masculino: ' + nM + ' | Feminino: ' + nF] : []),
+      ['RELATÓRIO (PDF)', t.pdfUrl],
+      msgAssinaturaEmail()
+    ]);
     window.open(b.dataset.via === 'gmail' ? 'https://mail.google.com/mail/?view=cm&fs=1&su=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail)
       : 'https://outlook.office.com/mail/deeplink/compose?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail), '_blank');
   }));
@@ -8108,6 +8290,230 @@ document.querySelectorAll('#view-tr-escolher .tr-volta-inicio').forEach(b => b.a
 }));
 
 
+/* =====================================================================
+   E-MAIL AOS RESPONSÁVEIS PELA ÁREA (só TST)
+   Lista quem tem desvio em aberto; ao escolher um, mostra a tabela (igual
+   à da reunião) e monta o e-mail com os desvios dele + o PDF da tabela.
+   O e-mail de cada responsável fica guardado em contatosResponsaveis/{chave}.
+   ===================================================================== */
+let emSel = null, emBusca = '', emContatos = {}, emContatosCarregados = false;
+function emChave(nome){ return qNorm(nome).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80) || 'sem-nome'; }
+function emGrupos(){
+  const g = {};
+  agDesviosAbertos().forEach(d => {
+    const nome = String(d.respArea || d.responsavelArea || '').trim() || 'Sem responsável informado';
+    const k = emChave(nome);
+    (g[k] = g[k] || { chave: k, nome, lista: [] }).lista.push(d);
+  });
+  return Object.values(g).map(x => Object.assign(x, {
+    atrasados: x.lista.filter(d => d.status === 'Atrasado').length,
+    altos: x.lista.filter(d => d.potencial === 'Alto').length
+  })).sort((a, b) => b.atrasados - a.atrasados || b.lista.length - a.lista.length || a.nome.localeCompare(b.nome));
+}
+async function emCarregarContatos(){
+  if(emContatosCarregados) return;
+  try{
+    const snap = await db.collection('contatosResponsaveis').get();
+    snap.forEach(doc => { const d = doc.data() || {}; if(d.email) emContatos[doc.id] = d.email; });
+    emContatosCarregados = true;
+  }catch(e){ console.warn('contatos:', e); }
+}
+function abrirEmailResp(){
+  if(!ehTST()){ irPara('view-desvios'); return; }
+  emSel = null; emRender();
+  emCarregarContatos().then(() => { if(document.getElementById('view-email-resp').style.display !== 'none') emRender(); });
+}
+function emRender(){
+  const corpo = document.getElementById('email-resp-corpo');
+  const sub = document.getElementById('email-resp-sub');
+  if(!corpo) return;
+  if(emSel){ emRenderDetalhe(corpo, sub); return; }
+  sub.textContent = 'Escolha o responsável pela área para enviar a relação dos desvios em aberto.';
+  const grupos = emGrupos();
+  const termo = qNorm(emBusca.trim());
+  const vis = termo ? grupos.filter(g => qNorm(g.nome).includes(termo)) : grupos;
+  corpo.innerHTML = `
+    <div class="field" style="margin-bottom:12px"><input type="search" id="em-busca" placeholder="Buscar responsável" value="${escaparHtml(emBusca)}"></div>
+    ${!grupos.length ? '<p class="empty-state">Nenhum desvio em aberto no momento.</p>'
+      : (vis.length ? vis.map(g => `<button type="button" class="lv-card em-resp" data-k="${g.chave}">
+          <span class="lv-card-topo"><b>${escaparHtml(g.nome)}</b>${g.atrasados ? `<span class="lv-tag em-tag-atraso">${g.atrasados} atrasado${g.atrasados === 1 ? '' : 's'}</span>` : '<span class="lv-tag em-tag-ok">No prazo</span>'}</span>
+          <span class="lv-sub">${g.lista.length} desvio${g.lista.length === 1 ? '' : 's'} em aberto${g.altos ? ' · ' + g.altos + ' de potencial alto' : ''}${emContatos[g.chave] ? ' · ' + escaparHtml(emContatos[g.chave]) : ''}</span>
+        </button>`).join('') : '<p class="empty-state">Ninguém encontrado com esse nome.</p>')}`;
+  const b = document.getElementById('em-busca');
+  b.addEventListener('input', () => { emBusca = b.value; const pos = b.selectionStart; emRender(); const n = document.getElementById('em-busca'); n.focus(); try{ n.setSelectionRange(pos, pos); }catch(e){} });
+  corpo.querySelectorAll('.em-resp').forEach(x => x.addEventListener('click', () => { emSel = x.dataset.k; emRender(); window.scrollTo(0, 0); }));
+}
+function emGrupoAtual(){ return emGrupos().find(g => g.chave === emSel); }
+function emResumoTexto(g){
+  const np = g.lista.length - g.atrasados;
+  return `${g.lista.length} desvio${g.lista.length === 1 ? '' : 's'} em aberto` +
+    (g.atrasados ? ` (${g.atrasados} atrasado${g.atrasados === 1 ? '' : 's'}${np ? ', ' + np + ' no prazo' : ''})` : ' (todos no prazo)');
+}
+function emRenderDetalhe(corpo, sub){
+  const g = emGrupoAtual();
+  if(!g){ emSel = null; emRender(); return; }
+  sub.textContent = 'Confira a lista, informe o e-mail e escolha como enviar.';
+  corpo.innerHTML = `
+    <div class="lv-resumo-cab"><span class="rotulo">RESPONSÁVEL PELA ÁREA</span><b style="font-size:18px">${escaparHtml(g.nome)}</b>
+      <small>${escaparHtml(emResumoTexto(g))}</small></div>
+    <div class="field" style="margin:14px 0 4px"><label for="em-para" style="font-size:12px;font-weight:700;color:var(--navy)">E-mail do responsável</label>
+      <input type="email" id="em-para" inputmode="email" autocomplete="off" placeholder="nome@empresa.com.br" value="${escaparHtml(emContatos[g.chave] || '')}"></div>
+    <p class="lv-sub" style="margin:0 0 14px">Fica guardado para os próximos envios (visível só para os TSTs).</p>
+    <span class="secao-titulo">Desvios em aberto</span>
+    <div class="em-tabela">${agTabelaAbertosHtml(g.lista)}</div>
+    <div class="zap-acoes" style="margin-top:16px">
+      <div class="email-linha"><button type="button" class="zap-btn principal em-enviar" data-via="outlook" style="background:var(--navy)">E-mail · Outlook</button>
+        <button type="button" class="zap-btn principal em-enviar" data-via="gmail" style="background:var(--navy)">E-mail · Gmail</button></div>
+      <button type="button" class="zap-btn secundario" id="em-copiar">Copiar e-mail com a tabela formatada</button>
+      <button type="button" class="zap-btn secundario" id="em-pdf">Baixar PDF da tabela</button>
+    </div>
+    <p class="lv-sub" style="margin:10px 0 0">No computador, o PDF é baixado para você anexar. Para colar a tabela já formatada no corpo do e-mail, use “Copiar e-mail com a tabela formatada” e cole no Outlook.</p>`;
+  const para = document.getElementById('em-para');
+  const guardar = () => {
+    const v = para.value.trim().toLowerCase();
+    if(v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return false;
+    if((emContatos[g.chave] || '') !== v){
+      emContatos[g.chave] = v;
+      gravarSemEsperar(db.collection('contatosResponsaveis').doc(g.chave).set({ nome: g.nome, email: v, atualizadoPor: qMeuPerfil().nome, atualizadoEm: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }), 'e-mail do responsável');
+    }
+    return true;
+  };
+  para.addEventListener('change', () => { if(!guardar()) mostrarAvisoApp('E-mail inválido', 'Confira o endereço digitado.'); });
+  corpo.querySelectorAll('.em-enviar').forEach(b => b.addEventListener('click', async () => {
+    if(!guardar()){ mostrarAvisoApp('E-mail inválido', 'Confira o endereço digitado.'); para.focus(); return; }
+    const assunto = emAssunto(g), texto = emTextoEmail(g), dest = para.value.trim();
+    const celular = /android|iphone|ipad/i.test(navigator.userAgent);
+    let arquivo = null;
+    try{ arquivo = await emGerarPdf(g); }catch(e){ console.warn('PDF:', e); }
+    if(celular && arquivo && navigator.canShare && navigator.canShare({ files: [arquivo] })){
+      if(dest){ try{ await navigator.clipboard.writeText(dest); }catch(e){} }
+      try{
+        await navigator.share({ files: [arquivo], title: assunto, text: texto });
+        if(dest) mostrarAvisoApp('Destinatário copiado', 'Cole ' + dest + ' no campo "Para" do e-mail.');
+        return;
+      }catch(e){ if(e && e.name === 'AbortError') return; }
+    }
+    if(arquivo) emBaixar(arquivo);
+    const url = b.dataset.via === 'gmail'
+      ? 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(dest) + '&su=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(texto)
+      : 'https://outlook.office.com/mail/deeplink/compose?to=' + encodeURIComponent(dest) + '&subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(texto);
+    window.open(url, '_blank');
+    mostrarAvisoApp('E-mail aberto', arquivo ? 'O PDF da tabela foi baixado: anexe no e-mail antes de enviar.' : 'Confira o texto antes de enviar.');
+  }));
+  document.getElementById('em-copiar').addEventListener('click', async () => {
+    const html = emHtmlEmail(g), txt = emTextoEmail(g);
+    try{
+      if(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
+        await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([txt], { type: 'text/plain' }) })]);
+      } else await navigator.clipboard.writeText(txt);
+      mostrarAvisoApp('E-mail copiado', 'Abra um e-mail novo e cole no corpo da mensagem.');
+    }catch(e){ mostrarAvisoApp('Não consegui copiar', 'Use os botões do Outlook ou do Gmail.'); }
+  });
+  document.getElementById('em-pdf').addEventListener('click', async (ev) => {
+    const bt = ev.currentTarget; bt.disabled = true; const r = bt.textContent; bt.textContent = 'Gerando PDF...';
+    try{ emBaixar(await emGerarPdf(g)); }
+    catch(e){ mostrarAvisoApp('PDF não gerado', navigator.onLine ? 'Tente de novo.' : 'Para gerar o PDF é preciso estar com internet na primeira vez.'); }
+    bt.disabled = false; bt.textContent = r;
+  });
+}
+function emBaixar(arquivo){ const a = document.createElement('a'); a.href = URL.createObjectURL(arquivo); a.download = arquivo.name; document.body.appendChild(a); a.click(); a.remove(); }
+function emHoje(){ const d = new Date(); return d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); }
+function emAssunto(g){ return `Desvios de segurança em aberto – ${g.nome} – ${new Date().toLocaleDateString('pt-BR')}`; }
+function emPrazoTxt(d){ return formatarDataBR(d.prazo) || String(d.prazo || '') || '—'; }
+function emTextoEmail(g){
+  const eu = (typeof qMeuPerfil === 'function') ? qMeuPerfil() : {};
+  const blocos = g.lista.map(d => [
+    `DESVIO Nº ${d.numero || '—'} – ${String(d.status || '').toUpperCase()}`,
+    ...msgCampos([['Data', formatarDataBR(d.data)], ['Potencial', d.potencial], ['Local', d.local], ['Processo / Atividade', d.processo],
+      ['Descrição', d.descricao], ['Ações para correção', d.acoesCorrecao], ['Prazo', emPrazoTxt(d)], ['Origem', d.origem],
+      ['Registrar a resolução', d.id ? linkResolverDesvio(d.id) : '']], false)
+  ]);
+  let txt = msgBlocos([
+    [g.nome.startsWith('Sem responsável') ? 'Prezados,' : `Prezado(a) ${msgNomeProprio(g.nome)},`],
+    [`Segue a relação dos desvios de segurança em aberto sob sua responsabilidade, atualizada em ${emHoje()}.`, `Total: ${emResumoTexto(g)}.`],
+    ...blocos,
+    ['Solicitamos a regularização dos itens dentro dos prazos indicados, com prioridade para os desvios atrasados e de potencial alto. A resolução de cada desvio pode ser registrada pelo aplicativo, no link indicado em cada item.'],
+    ['A tabela completa segue em anexo (PDF).'],
+    msgAssinaturaEmail()
+  ]);
+  // links longos demais quebram o e-mail aberto pelo navegador: versão resumida (a tabela completa vai no PDF)
+  if(encodeURIComponent(txt).length > 7000){
+    txt = msgBlocos([
+      [g.nome.startsWith('Sem responsável') ? 'Prezados,' : `Prezado(a) ${msgNomeProprio(g.nome)},`],
+      [`Segue a relação dos desvios de segurança em aberto sob sua responsabilidade, atualizada em ${emHoje()}.`, `Total: ${emResumoTexto(g)}.`],
+      g.lista.map(d => `- Nº ${d.numero || '—'} | ${d.status} | ${d.potencial || '—'} | ${d.local || '—'} | Prazo: ${emPrazoTxt(d)}`),
+      ['A descrição e as ações de correção de cada desvio estão na tabela em anexo (PDF). A resolução pode ser registrada pelo aplicativo: ' + location.origin + '/'],
+      msgAssinaturaEmail()
+    ]);
+  }
+  return txt;
+}
+function emHtmlEmail(g){
+  const e = escaparHtml, eu = (typeof qMeuPerfil === 'function') ? qMeuPerfil() : {};
+  const cor = { 'Alto': '#d64545', 'Médio': '#e8c25a', 'Baixo': '#7fae5a' };
+  const th = 'style="background:#8a95a3;color:#fff;font-weight:700;padding:6px 8px;border:1px solid #c9ced6;font-size:12px;text-align:center"';
+  const td = 'style="padding:6px 8px;border:1px solid #c9ced6;font-size:12px;vertical-align:middle;text-align:center"';
+  const tdL = 'style="padding:6px 8px;border:1px solid #c9ced6;font-size:12px;vertical-align:middle"';
+  const linhas = g.lista.map(d => `<tr><td ${td}><b>${e(d.numero)}</b></td><td ${td}>${e(formatarDataBR(d.data))}</td><td ${td}>${e(d.processo)}</td><td ${td}>${e(d.local)}</td>
+    <td ${tdL}>${e(d.descricao)}</td><td style="padding:6px 8px;border:1px solid #c9ced6;font-size:12px;text-align:center;font-weight:700;background:${cor[d.potencial] || '#eee'};color:${d.potencial === 'Médio' ? '#3d2c00' : '#fff'}">${e(d.potencial)}</td>
+    <td ${tdL}>${e(d.acoesCorrecao || '—')}</td><td ${td}>${e(emPrazoTxt(d))}</td>
+    <td style="padding:6px 8px;border:1px solid #c9ced6;font-size:12px;text-align:center;font-weight:700;color:${d.status === 'Atrasado' ? '#c62828' : '#2d5214'}">${e(d.status)}</td>
+    <td ${td}>${d.id ? `<a href="${e(linkResolverDesvio(d.id))}">Resolver</a>` : '—'}</td></tr>`).join('');
+  return `<div style="font-family:Segoe UI,Arial,sans-serif;font-size:14px;color:#142131">
+    <p>${g.nome.startsWith('Sem responsável') ? 'Prezados,' : 'Prezado(a) ' + e(msgNomeProprio(g.nome)) + ','}</p>
+    <p>Segue a relação dos desvios de segurança em aberto sob sua responsabilidade, atualizada em ${e(emHoje())}.<br><b>Total: ${e(emResumoTexto(g))}.</b></p>
+    <table style="border-collapse:collapse;width:100%"><thead><tr><th ${th}>Nº</th><th ${th}>Data</th><th ${th}>Processo / Atividade</th><th ${th}>Local</th><th ${th}>Descrição do desvio</th><th ${th}>Potencial</th><th ${th}>Ações para correção</th><th ${th}>Prazo</th><th ${th}>Status</th><th ${th}>Resolução</th></tr></thead><tbody>${linhas}</tbody></table>
+    <p>Solicitamos a regularização dos itens dentro dos prazos indicados, com prioridade para os desvios atrasados e de potencial alto. A resolução de cada desvio pode ser registrada pelo aplicativo, no link "Resolver" da tabela.</p>
+    <p>Atenciosamente,<br><br><b>${e(msgNomeProprio(eu.nome))}</b>${eu.matricula ? '<br>Matrícula ' + e(eu.matricula) : ''}<br>Segurança do Trabalho<br>Consórcio Construtor Gávea</p></div>`;
+}
+function emCarregarScript(urls){
+  return urls.reduce((p, url) => p.catch(() => new Promise((ok, erro) => {
+    const sc = document.createElement('script'); sc.src = url; sc.onload = ok; sc.onerror = () => { sc.remove(); erro(new Error(url)); }; document.head.appendChild(sc);
+  })), Promise.reject());
+}
+async function emGerarPdf(g){
+  if(!(window.jspdf && window.jspdf.jsPDF)) await emCarregarScript(['https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js']);
+  const { jsPDF } = window.jspdf;
+  if(!jsPDF.API.autoTable) await emCarregarScript(['https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js', 'https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js']);
+  const t = (s) => String(s == null ? '' : s).replace(/[–—]/g, '-').replace(/[“”]/g, '"').replace(/ · /g, '  |  ');
+  const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+  const W = pdf.internal.pageSize.getWidth(), H = pdf.internal.pageSize.getHeight();
+  const eu = (typeof qMeuPerfil === 'function') ? qMeuPerfil() : {};
+  const cab = () => {
+    pdf.setFillColor(20, 33, 49); pdf.rect(0, 0, W, 22, 'F');
+    pdf.setTextColor(255); pdf.setFont('helvetica', 'bold'); pdf.setFontSize(15); pdf.text(t('Desvios em aberto - ' + g.nome), 12, 11);
+    pdf.setFont('helvetica', 'normal'); pdf.setFontSize(9); pdf.setTextColor(200, 208, 216);
+    pdf.text(t('Segurança do Trabalho · Consórcio Construtor Gávea · Atualizado em ' + emHoje()), 12, 17);
+  };
+  cab();
+  pdf.setTextColor(20, 33, 49); pdf.setFontSize(10); pdf.setFont('helvetica', 'bold');
+  pdf.text(t('Responsável pela área: ' + g.nome + '   |   ' + emResumoTexto(g)), 12, 30);
+  const cores = { 'Alto': [214, 69, 69], 'Médio': [232, 194, 90], 'Baixo': [127, 174, 90] };
+  pdf.autoTable({
+    startY: 34, margin: { left: 10, right: 10, top: 28, bottom: 14 },
+    head: [['Nº', 'Data', 'Processo / Atividade', 'Local', 'Descrição do desvio', 'Potencial', 'Ações para correção', 'Prazo', 'Status', 'Origem']],
+    body: g.lista.map(d => [d.numero || '-', formatarDataBR(d.data), d.processo, d.local, d.descricao, d.potencial, d.acoesCorrecao || '-', emPrazoTxt(d), d.status, d.origem || '-'].map(t)),
+    styles: { font: 'helvetica', fontSize: 8, cellPadding: 2, valign: 'middle', halign: 'center', lineColor: [201, 206, 214], lineWidth: 0.2, textColor: [20, 33, 49] },
+    headStyles: { fillColor: [138, 149, 163], textColor: 255, fontStyle: 'bold' },
+    columnStyles: { 0: { cellWidth: 12, fontStyle: 'bold' }, 1: { cellWidth: 19 }, 2: { cellWidth: 28 }, 3: { cellWidth: 24 }, 4: { cellWidth: 'auto', halign: 'left' },
+      5: { cellWidth: 18, fontStyle: 'bold' }, 6: { cellWidth: 52, halign: 'left' }, 7: { cellWidth: 19 }, 8: { cellWidth: 18, fontStyle: 'bold' }, 9: { cellWidth: 22 } },
+    didParseCell: (c) => {
+      if(c.section !== 'body') return;
+      if(c.column.index === 5 && cores[g.lista[c.row.index].potencial]){ c.cell.styles.fillColor = cores[g.lista[c.row.index].potencial]; c.cell.styles.textColor = g.lista[c.row.index].potencial === 'Médio' ? [61, 44, 0] : 255; }
+      if(c.column.index === 8) c.cell.styles.textColor = g.lista[c.row.index].status === 'Atrasado' ? [198, 40, 40] : [45, 82, 20];
+    },
+    didDrawPage: () => { if(pdf.internal.getCurrentPageInfo().pageNumber > 1) cab(); }
+  });
+  const n = pdf.internal.getNumberOfPages();
+  for(let i = 1; i <= n; i++){
+    pdf.setPage(i); pdf.setFontSize(8); pdf.setFont('helvetica', 'normal'); pdf.setTextColor(107, 114, 128);
+    pdf.text(t('Gerado pelo app Segurança do Trabalho por ' + msgNomeProprio(eu.nome) + (eu.matricula ? ' (Mat. ' + eu.matricula + ')' : '')), 10, H - 6);
+    pdf.text('Página ' + i + ' de ' + n, W - 10, H - 6, { align: 'right' });
+  }
+  const nomeArq = `${new Date().toISOString().slice(0, 10)} - Desvios em aberto - ${g.nome}.pdf`.replace(/[\\/:*?"<>|]/g, '');
+  return new File([pdf.output('blob')], nomeArq, { type: 'application/pdf' });
+}
+
 /* ---- marca d'água ----
    Um navegador não consegue saber quando alguém tira um print. Por isso a
    marca fica SEMPRE sobre o app (bem clarinha), com nome completo, matrícula
@@ -8133,37 +8539,51 @@ document.addEventListener('visibilitychange', () => { if(!document.hidden) atual
 function linkResolverDesvio(id){
   return location.origin + location.pathname.replace(/index\.html$/, '') + '?resolver=' + encodeURIComponent(id);
 }
+/* ---- textos de compartilhar: um padrão só, sem emoji ----
+   WhatsApp: título em negrito (*...*), rótulos em negrito, blocos separados por linha em branco.
+   E-mail: texto corrido formal, seções em maiúsculas e assinatura completa. */
+function msgNomeProprio(n){
+  return String(n || '').trim().toLowerCase().replace(/(^|[\s-])(\S)/g, (m, a, b) => a + b.toUpperCase())
+    .replace(/\s(Da|De|Do|Das|Dos|E)(?=\s)/g, m => m.toLowerCase());
+}
+function msgCampos(pares, zap){
+  return pares.filter(p => p[1] !== undefined && p[1] !== null && String(p[1]).trim() !== '')
+    .map(([r, v]) => zap ? `*${r}:* ${String(v).trim()}` : `${r}: ${String(v).trim()}`);
+}
+// junta blocos (arrays de linhas), pulando os vazios, com uma linha em branco entre eles
+function msgBlocos(blocos){ return blocos.filter(b => b && b.length).map(b => b.join('\n')).join('\n\n'); }
+function msgSecaoEmail(titulo, pares){ const l = msgCampos(pares, false); return l.length ? [titulo.toUpperCase(), ...l] : null; }
+function msgAssinaturaEmail(){
+  const eu = (typeof qMeuPerfil === 'function') ? qMeuPerfil() : {};
+  return ['Atenciosamente,', '', msgNomeProprio(eu.nome), eu.matricula ? 'Matrícula ' + eu.matricula : '', 'Segurança do Trabalho', 'Consórcio Construtor Gávea'].filter((l, i) => i < 2 || l);
+}
 function textoCompartilharDesvio(d){
-  const prazo = d.prazo ? formatarDataBR(d.prazo) : '';
-  return [
-    '⚠️ *Novo desvio registrado* — SST CCG',
-    `📍 ${[d.local, d.processo].filter(Boolean).join(' · ')}`,
-    `📝 ${d.descricao || ''}`,
-    `⚡ Potencial: ${d.potencial || '—'}${d.tipologia ? ' · ' + d.tipologia : ''}`,
-    d.acoesCorrecao ? `🛠️ Ações para correção: ${d.acoesCorrecao}` : '',
-    `👷 Responsável pela correção: ${d.responsavelCorrecao || d.respCorrecao || '—'}${prazo ? ' · Prazo: ' + prazo : ''}`,
-    `🔎 Inspecionado por: ${d.inspecionadoPor || '—'}`,
-    '',
-    `👉 Resolver pelo app: ${linkResolverDesvio(d.id)}`
-  ].filter(l => l !== '').join('\n').replace('\n\n👉', '\n\n👉');
+  return msgBlocos([
+    ['*DESVIO DE SEGURANÇA REGISTRADO*', 'Segurança do Trabalho · Consórcio Construtor Gávea'],
+    msgCampos([['Local', d.local], ['Processo/Atividade', d.processo], ['Descrição', d.descricao],
+      ['Potencial', d.potencial || '—'], ['Tipologia', d.tipologia]], true),
+    msgCampos([['Ações para correção', d.acoesCorrecao], ['Responsável pela correção', d.responsavelCorrecao || d.respCorrecao || '—'],
+      ['Prazo', d.prazo ? formatarDataBR(d.prazo) : ''], ['Inspecionado por', d.inspecionadoPor]], true),
+    ['Registre a resolução pelo app:', linkResolverDesvio(d.id)]
+  ]);
 }
 function assuntoEmailDesvio(d){
   return `Desvio de segurança registrado – ${d.local || 'local não informado'} – Potencial ${d.potencial || 'não informado'}`;
 }
 function textoEmailDesvio(d){
-  const eu = (typeof qMeuPerfil === 'function') ? qMeuPerfil() : {};
   const quando = d.data ? formatarDataBR(d.data) : new Date().toLocaleDateString('pt-BR');
-  const linhas = [
-    ['Data do registro', quando], ['Local', d.local], ['Processo / Atividade', d.processo],
-    ['Descrição', d.descricao], ['Tipologia', d.tipologia], ['Potencial', d.potencial],
-    ['Ações para correção', d.acoesCorrecao], ['Responsável pela área', d.responsavelArea || d.respArea],
-    ['Responsável pela correção', d.responsavelCorrecao || d.respCorrecao],
-    ['Prazo para correção', d.prazo ? formatarDataBR(d.prazo) : ''], ['Inspecionado por', d.inspecionadoPor], ['Origem', d.origem]
-  ].filter(l => l[1]).map(([r, v]) => `${r}: ${v}`);
-  return ['Prezados,', '', 'Informamos o registro do seguinte desvio de segurança:', '', ...linhas, '',
-    'Para registrar a resolução, acesse o aplicativo pelo link abaixo:', linkResolverDesvio(d.id), '',
-    'A imagem do desvio, com a foto, segue em anexo.', '', 'Atenciosamente,',
-    (eu.nome || '') + (eu.matricula ? ' – Matrícula ' + eu.matricula : ''), 'Segurança do Trabalho – Consórcio Construtor Gávea'].join('\n');
+  return msgBlocos([
+    ['Prezados,'],
+    ['Informamos o registro de um desvio de segurança, conforme os dados abaixo.'],
+    msgSecaoEmail('Identificação', [['Data do registro', quando], ['Local', d.local], ['Processo / Atividade', d.processo], ['Origem', d.origem]]),
+    msgSecaoEmail('Desvio', [['Descrição', d.descricao], ['Tipologia', d.tipologia], ['Potencial', d.potencial]]),
+    msgSecaoEmail('Tratativa', [['Ações para correção', d.acoesCorrecao], ['Responsável pela área', d.responsavelArea || d.respArea],
+      ['Responsável pela correção', d.responsavelCorrecao || d.respCorrecao], ['Prazo para correção', d.prazo ? formatarDataBR(d.prazo) : ''],
+      ['Inspecionado por', d.inspecionadoPor]]),
+    ['Para registrar a resolução, acesse o aplicativo pelo link:', linkResolverDesvio(d.id)],
+    ['A imagem do desvio, com o registro fotográfico, segue em anexo.'],
+    msgAssinaturaEmail()
+  ]);
 }
 /* rodapé das imagens de compartilhar: quem compartilhou e quando */
 function textoCompartilhadoPor(){
