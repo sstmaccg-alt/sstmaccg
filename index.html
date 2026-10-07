@@ -1206,6 +1206,11 @@
   .tr-toast .lv-sub{ color:#5b6570; } .tr-ck{ width:30px; height:30px; border-radius:50%; background:#5e8a3f; color:#fff; font-weight:900; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .tr-toast-txt{ display:flex; flex-direction:column; flex:1; min-width:0; } .tr-toast-txt b{ font-size:13.5px; }
   .tr-aviso{ background:#fdf6e7; border:1px solid #f1dfb3; color:#7a4b06; border-radius:12px; padding:10px 12px; font-size:13px; margin:0 0 12px; }
+  .tr-manual .lv-campo select{ height:46px; box-sizing:border-box; border:1px solid var(--border-strong); border-radius:11px; padding:0 10px; font:inherit; font-size:15px; font-weight:400; background:var(--white); color:var(--navy); width:100%; }
+  .tr-manual #trd-msg:empty{ display:none; }
+  .tr-qr-bruto{ background:var(--bg, #f4f5f2); border:1px dashed var(--border-strong); border-radius:10px; padding:8px 10px; margin:0 0 12px; display:flex; flex-direction:column; gap:2px; }
+  .tr-qr-bruto span{ font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.04em; }
+  .tr-qr-bruto code{ font-size:12px; color:var(--navy); word-break:break-all; white-space:pre-wrap; }
   .tr-aviso-erro{ background:#fde2e1; border-color:#f3c2c0; color:#8c2f2f; }
   html[data-theme="dark"] .tr-aviso{ background:#3a2f17; border-color:#5c4a22; color:#f3c96b; } html[data-theme="dark"] .tr-aviso-erro{ background:#3a1f22; border-color:#5b3a3d; color:#f39a9a; }
   .tr-cont-linha{ display:flex; align-items:center; gap:8px; margin:0 0 8px; color:var(--navy); } .tr-cont-linha b{ font-size:15px; } .tr-cont-linha .lv-sub{ margin-left:auto; }
@@ -8019,14 +8024,72 @@ function trRenderDados(corpo, barra, ed){
 /* ---------- participantes: leitura do QR do crachá ---------- */
 let trCam = null;          // { stream, video, timer, detector, canvas }
 let trUltimaLeitura = { txt: '', t: 0 }, trUltimoAviso = null, trJsQRCarregando = null;
+// Formato padrão do crachá: EMPRESA;MATRÍCULA;NOME;CARGO;GÊNERO;;OBRA
+// (alguns vêm sem matrícula, ex.: "OEC;OEC;NOME;..."). Esse formato entra direto na lista.
 function trLerQRTexto(txt){
   const p = String(txt || '').split(';').map(s => s.trim());
-  // Formato do crachá: EMPRESA;MATRÍCULA;NOME;CARGO;GÊNERO;;OBRA — alguns crachás vêm sem matrícula (ex.: "OEC;OEC;NOME;...")
-  if(p.length < 4 || (p[2] || '').replace(/[^A-Za-zÀ-ú]/g, '').length < 3) return null;
+  if(p.length < 4 || !trPareceNome(p[2])) return null;
   const g = (p[4] || '').toUpperCase();
   const mat = (p[1] || '').toUpperCase().slice(0, 20);
   return { matricula: mat, nome: p[2].replace(/\s+/g, ' ').toUpperCase(), cargo: (p[3] || '').toUpperCase(), genero: g === 'F' || g === 'M' ? g : '',
            empresa: (p[0] || p[6] || '').toUpperCase().slice(0, 40), obra: (p[6] || '').toUpperCase(), qr: String(txt).slice(0, 300) };
+}
+function trPareceNome(v){ v = String(v || '').trim(); return /^[A-Za-zÀ-ÿ'´`.\s-]+$/.test(v) && v.replace(/[^A-Za-zÀ-ÿ]/g, '').length >= 3; }
+// Qualquer outro formato: o app tenta adivinhar os campos e pede para o TST conferir.
+const TR_EMPRESAS_CONHECIDAS = ['OEC', 'ODEBRECHT', 'CARIOCA', 'CCG', 'CONSÓRCIO CONSTRUTOR GÁVEA'];
+function trPalpiteQR(txt){
+  const bruto = String(txt || '').trim(), pal = { matricula: '', nome: '', cargo: '', genero: '', empresa: '', obra: '', qr: bruto.slice(0, 300) };
+  if(!bruto) return pal;
+  try{   // QR em JSON: {"nome": "...", "matricula": "..."}
+    const o = JSON.parse(bruto);
+    if(o && typeof o === 'object'){
+      const k = (...nomes) => { for(const n of Object.keys(o)) if(nomes.includes(qNorm(n))) return String(o[n] || '').trim(); return ''; };
+      Object.assign(pal, { nome: k('nome', 'name', 'nomecompleto'), matricula: k('matricula', 'mat', 'registro', 're', 'id', 'chapa'), cargo: k('cargo', 'funcao'), empresa: k('empresa', 'company') });
+      return trLimparPalpite(pal);
+    }
+  }catch(e){}
+  // "NOME: FULANO" / "MATRÍCULA=123" em linhas ou separados
+  const pares = bruto.split(/[\n;|]/).map(x => x.match(/^\s*([A-Za-zÀ-ÿ. ]{2,20})\s*[:=]\s*(.+)$/)).filter(Boolean);
+  if(pares.length >= 2){
+    pares.forEach(([, k, v]) => { k = qNorm(k); v = v.trim();
+      if(/nome/.test(k)) pal.nome = v; else if(/matr|registro|chapa|^re$|^id$/.test(k)) pal.matricula = v;
+      else if(/cargo|func/.test(k)) pal.cargo = v; else if(/empresa/.test(k)) pal.empresa = v; else if(/sexo|genero/.test(k)) pal.genero = v; });
+    return trLimparPalpite(pal);
+  }
+  // campos separados por ; | tab , ou quebra de linha: escolhe o separador que dá mais campos
+  const sep = [';', '|', '\t', '\n', ','].map(c => [c, bruto.split(c).length]).sort((a, b) => b[1] - a[1])[0];
+  const campos = sep[1] > 1 ? bruto.split(sep[0]).map(x => x.trim()).filter(Boolean) : [bruto];
+  const usados = new Set();
+  const pegar = (teste) => { const i = campos.findIndex((c, n) => !usados.has(n) && teste(c)); if(i < 0) return ''; usados.add(i); return campos[i]; };
+  pal.empresa = pegar(c => TR_EMPRESAS_CONHECIDAS.includes(c.toUpperCase()));
+  pal.matricula = pegar(c => /^\d{1,10}$/.test(c));
+  pal.genero = pegar(c => /^[MF]$/i.test(c));
+  // nome: o campo só de letras com mais palavras (pelo menos duas)
+  const cand = campos.map((c, n) => ({ c, n })).filter(x => !usados.has(x.n) && trPareceNome(x.c) && x.c.trim().split(/\s+/).length >= 2)
+    .sort((a, b) => b.c.split(/\s+/).length - a.c.split(/\s+/).length);
+  if(cand.length){ pal.nome = cand[0].c; usados.add(cand[0].n); }
+  if(pal.nome) pal.cargo = pegar(c => trPareceNome(c) || /^[A-Za-zÀ-ÿ0-9 .\/-]{3,40}$/.test(c));
+  return trLimparPalpite(pal);
+}
+function trLimparPalpite(pal){
+  const g = String(pal.genero || '').trim().toUpperCase();
+  pal.genero = /^(M|MASC)/.test(g) ? 'M' : /^(F|FEM)/.test(g) ? 'F' : '';
+  pal.nome = String(pal.nome || '').replace(/\s+/g, ' ').trim().toUpperCase().slice(0, 80);
+  pal.matricula = String(pal.matricula || '').trim().toUpperCase().slice(0, 20);
+  pal.cargo = String(pal.cargo || '').trim().toUpperCase().slice(0, 60);
+  pal.empresa = String(pal.empresa || '').trim().toUpperCase().slice(0, 40);
+  return pal;
+}
+// guarda no Firebase o texto de QR que o app não reconheceu, para ajustar o leitor depois
+const trQRRegistrados = new Set();
+function trRegistrarQRDesconhecido(txt, palpite){
+  const texto = String(txt || '').slice(0, 500); if(!texto || trQRRegistrados.has(texto)) return;
+  trQRRegistrados.add(texto);
+  try{
+    db.collection('qrDesconhecidos').add({ texto, palpite: { nome: palpite.nome, matricula: palpite.matricula, empresa: palpite.empresa },
+      treinamento: (trAtual && trAtual.id) || '', por: ((auth.currentUser && auth.currentUser.email) || '').toLowerCase(),
+      em: firebase.firestore.FieldValue.serverTimestamp() }).catch(() => {});
+  }catch(e){}
 }
 function trMatNum(p){ return /^\d{1,10}$/.test(String(p.matricula || '')); }
 function trChave(p){ return trMatNum(p) ? String(p.matricula) : 'N:' + qNorm(p.nome || ''); }
@@ -8049,13 +8112,29 @@ function trAdicionarParticipante(p, forma){
   trBip(true); trSalvar(); trRenderListaParticipantes();
   return true;
 }
+// Alguns crachás gravam o QR com acentos em Latin-1 (ex.: "CONSÓRCIO CONSTRUTOR GÁVEA").
+// O jsQR só entende UTF-8 e devolve texto vazio; aqui os bytes são lidos de novo nos dois formatos.
+function trTextoQR(r){
+  if(!r) return null;
+  if(r.data) return r.data;
+  const b = r.binaryData && new Uint8Array(r.binaryData); if(!b || !b.length) return null;
+  try{ return new TextDecoder('utf-8', { fatal: true }).decode(b); }catch(e){}
+  try{ return new TextDecoder('windows-1252').decode(b); }catch(e){}
+  return String.fromCharCode.apply(null, b);
+}
 function trQRLido(txt){
   const agora = Date.now();
   if(txt === trUltimaLeitura.txt && agora - trUltimaLeitura.t < 2500) return;   // mesmo crachá parado na frente da câmera
   trUltimaLeitura = { txt, t: agora };
   const p = trLerQRTexto(txt);
-  if(!p){ trUltimoAviso = { tipo: 'erro' }; trBip(false); trRenderListaParticipantes(); return; }
-  trAdicionarParticipante(p, 'cracha');
+  if(p){ trAdicionarParticipante(p, 'cracha'); return; }
+  if(trCam && trCam.pausado) return;
+  const jaConferido = trAtual.participantes.find(x => x.qr && x.qr === String(txt).slice(0, 300));
+  if(jaConferido){ trUltimoAviso = { tipo: 'dup', nome: jaConferido.nome }; trBip(false); trRenderListaParticipantes(); return; }
+  const pal = trPalpiteQR(txt);
+  trRegistrarQRDesconhecido(txt, pal);
+  trBip(false);
+  trAdicionarManual(pal, txt);
 }
 function trCarregarJsQR(){
   if(window.jsQR) return Promise.resolve();
@@ -8095,7 +8174,7 @@ async function trAbrirCamera(){
   }
 }
 async function trLerQuadro(){
-  const c = trCam; if(!c || !c.video || c.ocupado || c.video.readyState < 2) return;
+  const c = trCam; if(!c || !c.video || c.ocupado || c.pausado || c.video.readyState < 2) return;
   c.ocupado = true;
   try{
     let txt = null;
@@ -8103,7 +8182,9 @@ async function trLerQuadro(){
     // com os dois leitores disponíveis, alterna entre eles (um quadro cada)
     const usarDetector = c.detector && (!window.jsQR || c.tique % 2 === 0);
     if(usarDetector){
-      try{ const r = await c.detector.detect(c.video); txt = r && r[0] && r[0].rawValue; c.falhasDet = 0; }
+      try{ const r = await c.detector.detect(c.video); txt = r && r[0] && r[0].rawValue; c.falhasDet = 0;
+        if(txt && txt.includes('\uFFFD')) txt = null;   // acento ilegível: deixa o jsqr ler os bytes no próximo quadro
+      }
       catch(e){ if(++c.falhasDet >= 3) c.detector = null; }   // leitor do Android falhando (ex.: offline): fica só o jsqr
     }
     else if(window.jsQR){
@@ -8112,7 +8193,7 @@ async function trLerQuadro(){
       c.canvas.width = w; c.canvas.height = h;
       const ctx = c.canvas.getContext('2d', { willReadFrequently: true }); ctx.drawImage(c.video, 0, 0, w, h);
       const r = window.jsQR(ctx.getImageData(0, 0, w, h).data, w, h, { inversionAttempts: 'dontInvert' });
-      txt = r && r.data;
+      txt = trTextoQR(r);
     }
     if(txt) trQRLido(txt);
   }catch(e){ /* quadro ruim: tenta o próximo */ }
@@ -8138,7 +8219,7 @@ function trRenderParticipantes(corpo, barra, ed){
     <div id="tr-aviso"></div>
     <div class="tr-cont-linha"><b id="tr-cont">0 participantes</b><span class="lv-sub" id="tr-cont-gen"></span></div>
     <div class="lv-bloco" id="tr-part-lista" style="padding-top:4px;padding-bottom:4px;"></div>
-    ${ed && TR_DIGITAR ? '<button type="button" class="zap-btn secundario" id="tr-digitar">Crachá esqueceu? Digitar a matrícula</button>' : ''}`;
+    ${ed ? '<button type="button" class="zap-btn secundario" id="tr-digitar">Sem crachá? Adicionar pelo nome</button>' : ''}`;
   barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b id="tr-barra-n">0 participantes</b><small>Etapa 2 de 3</small></span></div>
     <button type="button" class="btn-primary q-btn-sec" id="tr-volta-1">Voltar</button><button type="button" class="btn-primary" id="tr-ir-3">Continuar</button>`;
   document.getElementById('tr-volta-1').addEventListener('click', () => { trPasso = 1; trRenderFicha(); window.scrollTo(0, 0); });
@@ -8147,7 +8228,7 @@ function trRenderParticipantes(corpo, barra, ed){
   trRenderListaParticipantes();
   if(!ed) return;
   document.getElementById('tr-cam-abrir').addEventListener('click', trAbrirCamera);
-  const dg = document.getElementById('tr-digitar'); if(dg) dg.addEventListener('click', trDigitarMatricula);
+  const dg = document.getElementById('tr-digitar'); if(dg) dg.addEventListener('click', () => trAdicionarManual(null, ''));
   trAbrirCamera();
 }
 function trRenderListaParticipantes(){
@@ -8160,7 +8241,7 @@ function trRenderListaParticipantes(){
   const bt = document.getElementById('tr-ir-3'); if(bt) bt.disabled = !n || !ed;
   lista.innerHTML = n ? '<span class="lv-sub" style="padding:8px 0 2px">Mais recentes primeiro</span>' + t.participantes.map((p, i) => ({ p, i })).reverse().map(({ p, i }) => `
     <div class="tr-part ${trUltimoAviso && trUltimoAviso.tipo === 'ok' && i === n - 1 ? 'tr-novo' : ''}"><span class="tr-part-n">${i + 1}</span>
-      <span class="tr-part-txt"><b>${escaparHtml(p.nome)}${p.genero ? `<span class="tr-gen">${p.genero}</span>` : ''}</b><span class="lv-sub">${trMatTxt(p)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}${p.empresa ? ' · ' + escaparHtml(p.empresa) : ''}${p.forma === 'digitado' ? ' · digitado' : ''}</span></span>
+      <span class="tr-part-txt"><b>${escaparHtml(p.nome)}${p.genero ? `<span class="tr-gen">${p.genero}</span>` : ''}</b><span class="lv-sub">${trMatTxt(p)}${p.cargo ? ' · ' + escaparHtml(p.cargo) : ''}${p.empresa ? ' · ' + escaparHtml(p.empresa) : ''}${p.forma === 'digitado' ? ' · digitado' : p.forma === 'qr-conferido' ? ' · QR conferido' : ''}</span></span>
       ${ed ? `<button type="button" class="tr-remover" data-i="${i}" aria-label="Remover ${escaparHtml(p.nome)}">×</button>` : ''}</div>`).join('')
     : '<p class="empty-state" style="margin:10px 0">Nenhum participante ainda. Leia o QR code do crachá de cada pessoa.</p>';
   lista.querySelectorAll('.tr-remover').forEach(b => b.addEventListener('click', async () => {
@@ -8180,47 +8261,56 @@ function trRenderListaParticipantes(){
     } else toast.style.display = 'none';
   }
 }
-// "Digitar a matrícula" fica desligado até existir o arquivo com todas as matrículas
-const TR_DIGITAR = false;
-function trDigitarMatricula(){
-  const modal = document.createElement('div'); modal.className = 'q-modal';
-  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Digitar matrícula">
-      <h3>Digitar a matrícula</h3>
-      <p>Se a pessoa já participou de outro treinamento, o app preenche o resto.</p>
-      <label class="lv-campo">Matrícula *<input type="text" inputmode="numeric" id="trd-mat" autocomplete="off"></label>
-      <p class="lv-sub" id="trd-msg" style="min-height:18px;margin:6px 0"></p>
-      <label class="lv-campo">Nome completo *<input type="text" id="trd-nome"></label>
-      <label class="lv-campo">Cargo / função<input type="text" id="trd-cargo"></label>
-      <div class="lv-dois"><label class="lv-campo">Gênero<select id="trd-gen"><option value="">—</option><option value="M">M</option><option value="F">F</option></select></label>
-        <label class="lv-campo">Empresa<input type="text" id="trd-emp" value="CCG"></label></div>
+// Adicionar participante sem crachá, ou conferir um QR em formato desconhecido.
+// palpite = campos que o app conseguiu adivinhar do QR (ou null); qrTexto = texto lido (ou '').
+function trAdicionarManual(palpite, qrTexto){
+  if(document.querySelector('.tr-manual')) return;
+  const pal = palpite || {}, deQR = !!qrTexto;
+  if(trCam) trCam.pausado = true;
+  const modal = document.createElement('div'); modal.className = 'q-modal tr-manual';
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="${deQR ? 'Crachá não reconhecido' : 'Adicionar sem crachá'}">
+      <h3>${deQR ? 'Crachá não reconhecido' : 'Adicionar sem crachá'}</h3>
+      <p>${deQR ? (pal.nome ? 'O QR está em um formato diferente. Confira os dados que o app encontrou e corrija se precisar.' : 'O app leu o QR, mas não achou o nome nele. Preencha os dados da pessoa.')
+        : 'Para quem esqueceu o crachá ou tem crachá sem QR. Se a pessoa já participou de outro treinamento, digite a matrícula que o app preenche o resto.'}</p>
+      ${deQR ? `<div class="tr-qr-bruto"><span>Texto do QR</span><code>${escaparHtml(String(qrTexto).slice(0, 300))}</code></div>` : ''}
+      <label class="lv-campo">Nome completo *<input type="text" id="trd-nome" autocomplete="off" value="${escaparHtml(pal.nome || '')}"></label>
+      <div class="lv-dois"><label class="lv-campo">Matrícula<input type="text" id="trd-mat" autocomplete="off" value="${escaparHtml(pal.matricula || '')}" placeholder="Opcional"></label>
+        <label class="lv-campo">Empresa<input type="text" id="trd-emp" value="${escaparHtml(pal.empresa || 'CCG')}"></label></div>
+      <p class="lv-sub" id="trd-msg" style="min-height:18px;margin:2px 0 6px"></p>
+      <div class="lv-dois"><label class="lv-campo">Cargo / função<input type="text" id="trd-cargo" value="${escaparHtml(pal.cargo || '')}"></label>
+        <label class="lv-campo">Gênero<select id="trd-gen"><option value="">—</option><option value="M" ${pal.genero === 'M' ? 'selected' : ''}>M</option><option value="F" ${pal.genero === 'F' ? 'selected' : ''}>F</option></select></label></div>
       <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary" id="trd-ok" disabled>Adicionar</button></div>
     </div>`;
   document.body.appendChild(modal);
-  const $ = (id) => modal.querySelector('#' + id), fechar = () => modal.remove();
+  const $ = (id) => modal.querySelector('#' + id);
+  const fechar = () => { modal.remove(); trUltimaLeitura = { txt: qrTexto || trUltimaLeitura.txt, t: Date.now() + 4000 }; if(trCam) trCam.pausado = false; };
   modal.querySelector('.q-modal-cancelar').addEventListener('click', fechar);
-  const validar = () => { $('trd-ok').disabled = !/^\d{1,8}$/.test($('trd-mat').value.trim()) || $('trd-nome').value.trim().length < 3; };
+  const validar = () => { $('trd-ok').disabled = $('trd-nome').value.trim().replace(/[^A-Za-zÀ-ÿ]/g, '').length < 3; };
   ['trd-nome', 'trd-cargo', 'trd-emp'].forEach(id => $(id).addEventListener('input', validar));
   let buscaT = null;
   $('trd-mat').addEventListener('input', () => {
-    validar(); clearTimeout(buscaT);
-    const mat = $('trd-mat').value.trim(); $('trd-msg').textContent = '';
-    if(!/^\d{1,8}$/.test(mat)) return;
+    clearTimeout(buscaT); $('trd-msg').textContent = '';
+    const mat = $('trd-mat').value.trim(); if(!/^\d{1,10}$/.test(mat)) return;
     buscaT = setTimeout(async () => {
       try{
         const snap = await db.collection('colaboradores').doc(mat).get();
         if($('trd-mat').value.trim() !== mat) return;
-        if(snap.exists){ const c = snap.data(); $('trd-nome').value = c.nome || ''; $('trd-cargo').value = c.cargo || ''; $('trd-gen').value = c.genero || ''; $('trd-emp').value = c.empresa || 'CCG'; $('trd-msg').textContent = 'Encontrado: dados do último treinamento.'; }
-        else $('trd-msg').textContent = 'Matrícula ainda não vista em treinamentos: preencha os dados.';
-        validar();
-      }catch(e){ $('trd-msg').textContent = 'Sem internet: preencha os dados.'; }
+        if(snap.exists){ const c = snap.data();
+          if(!$('trd-nome').value.trim()) $('trd-nome').value = c.nome || '';
+          if(!$('trd-cargo').value.trim()) $('trd-cargo').value = c.cargo || '';
+          if(!$('trd-gen').value) $('trd-gen').value = c.genero || '';
+          $('trd-msg').textContent = 'Encontrado: ' + (c.nome || '') + ' (último treinamento).'; validar(); }
+      }catch(e){}
     }, 450);
   });
   $('trd-ok').addEventListener('click', () => {
-    const ok = trAdicionarParticipante({ matricula: $('trd-mat').value.trim(), nome: $('trd-nome').value.trim().toUpperCase(), cargo: $('trd-cargo').value.trim().toUpperCase(),
-      genero: $('trd-gen').value, empresa: ($('trd-emp').value.trim() || 'CCG').toUpperCase(), qr: '' }, 'digitado');
-    if(ok) fechar(); else { $('trd-msg').textContent = 'Essa matrícula já está na lista.'; }
+    const p = { matricula: $('trd-mat').value.trim().toUpperCase().slice(0, 20), nome: $('trd-nome').value.replace(/\s+/g, ' ').trim().toUpperCase(), cargo: $('trd-cargo').value.trim().toUpperCase(),
+      genero: $('trd-gen').value, empresa: ($('trd-emp').value.trim() || 'CCG').toUpperCase(), obra: pal.obra || '', qr: deQR ? String(qrTexto).slice(0, 300) : '' };
+    const ok = trAdicionarParticipante(p, deQR ? 'qr-conferido' : 'digitado');
+    if(ok) fechar(); else { $('trd-msg').textContent = 'Essa pessoa já está na lista.'; trUltimoAviso = null; trRenderListaParticipantes(); }
   });
-  setTimeout(() => $('trd-mat').focus(), 50);
+  validar();
+  setTimeout(() => $(deQR && pal.nome ? 'trd-nome' : 'trd-nome').focus({ preventScroll: true }), 60);
 }
 
 /* ---------- fotos ---------- */
