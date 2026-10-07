@@ -57,7 +57,7 @@ self.addEventListener('notificationclick', (event) => {
   })());
 });
 
-const CACHE_NAME = 'sst-ccg-v93';
+const CACHE_NAME = 'sst-ccg-v97';
 const ARQUIVOS_PARA_CACHE = [
   './',
   './index.html',
@@ -184,8 +184,12 @@ self.addEventListener('fetch', (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copia));
         }
         return respostaRede;
-      }).catch(() => caches.match('./index.html'));
+      }).catch(async () => {
+        // sem internet e sem cópia: só páginas recebem o index.html; scripts e imagens recebem erro
+        // (antes um script que faltava recebia o index.html e o app achava que tinha carregado)
+        if (event.request.destination === 'script' || /\.js$/.test(url.pathname)) return Response.error();
+        return (await caches.match('./index.html')) || Response.error();
+      });
     })
   );
 });
-
