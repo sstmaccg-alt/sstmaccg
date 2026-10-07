@@ -8814,6 +8814,7 @@ async function anCarregar(fontes){
   }));
   if(fontes.includes('qualimetria')) pegar('qualimetria', 'q|' + agAnoSel, async () =>
     (await db.collection('qualimetrias').where('mes', '>=', ini.slice(0, 7)).where('mes', '<=', fim.slice(0, 7)).get()).docs.map(d => ({ id: d.id, ...d.data() })));
+  if(fontes.includes('qualimetria')) pegar('qaPlanilha', 'qap', async () => { const d = await db.collection('config').doc('qualimetriaPlanilha').get(); return d.exists ? d.data() : null; });
   if(fontes.includes('lv')) pegar('lvs', 'lv|' + agAnoSel, async () =>
     (await db.collection('lvs').where('data', '>=', ini).where('data', '<=', fim).get()).docs.map(d => ({ id: d.id, ...d.data() })));
   if(fontes.includes('treinos')) pegar('treinos', 'tr|' + agAnoSel, async () =>
@@ -9203,24 +9204,58 @@ const QA_FRASES = [
   'Resíduos sem segregação ou descarte correto'
 ];
 function qaChaveNome(n){ return qNorm(n).replace(/[^a-z ]+/g, ' ').replace(/\s+/g, ' ').trim(); }
-// liderança × mês → menção (app tem prioridade; antes do app, o histórico da planilha)
+// Base da apresentação: planilha "Resumo mensal da qualimetria" (PI-FR-C 00902), que o
+// Apps Script preenche com as fichas do app e publica em config/qualimetriaPlanilha.
+// Correção feita à mão na planilha vale. O app só completa o que a planilha ainda não tem
+// (ex.: quinzena fechada há poucos minutos). Sem a planilha publicada, usa o histórico fixo.
+function qaPlanilha(){ const p = anDados.qaPlanilha; return p && !Array.isArray(p) && Array.isArray(p.lideres) ? p : null; }
+const QA_TXT_PLANILHA = { 'EXCELENTE': 'Excelente', 'BOM': 'Bom', 'REGULAR': 'Regular', 'INSUFICIENTE': 'Insuficiente', 'INSATISFATORIO': 'Insatisfatório',
+  'NAO APLICAVEL': 'Não aplicável', 'EM ANDAMENTO': 'Em andamento', 'A SER AVALIADO': 'A ser avaliado' };
+function qaMencaoPlanilha(v){ return QA_TXT_PLANILHA[qNorm(v).toUpperCase()] || ''; }
 function qaMatriz(){
   const lideres = {};
   const pegar = (nome, ger) => { const k = qaChaveNome(nome); return lideres[k] = lideres[k] || { nome: String(nome).toUpperCase(), gerencia: ger || '', meses: {} }; };
-  const L = { E: 'Excelente', B: 'Bom', R: 'Regular', I: 'Insuficiente', S: 'Insatisfatório', '-': 'Não aplicável' };
-  QA_HIST_2026.forEach(([nome, ger, s]) => { const l = pegar(nome, ger); s.split('').forEach((c, i) => { l.meses['2026-' + String(i + 1).padStart(2, '0')] = L[c]; }); });
+  const pl = qaPlanilha();
+  if(pl){
+    pl.lideres.forEach(x => { const l = pegar(x.nome, x.gerencia); if(x.gerencia) l.gerencia = x.gerencia;
+      Object.keys(x.meses || {}).forEach(p => { const m = qaMencaoPlanilha(x.meses[p]); if(m) l.meses[p] = m; }); });
+  } else {
+    const L = { E: 'Excelente', B: 'Bom', R: 'Regular', I: 'Insuficiente', S: 'Insatisfatório', '-': 'Não aplicável' };
+    QA_HIST_2026.forEach(([nome, ger, s]) => { const l = pegar(nome, ger); s.split('').forEach((c, i) => { l.meses['2026-' + String(i + 1).padStart(2, '0')] = L[c]; }); });
+  }
   const mesesApp = new Set();
   (anDados.qualimetria || []).forEach(f => {
     if(!f.mes || !f.encarregado || !f.encarregado.nome) return;
     mesesApp.add(f.mes);
     const l = pegar(f.encarregado.nome, '');
     if(!l.gerencia) l.gerencia = String(f.area || '').toUpperCase();
+    if(l.meses[f.mes] && l.meses[f.mes] !== 'Não aplicável') return;   // a planilha já tem: vale a planilha
     const n = qNotaMes(f);
     l.meses[f.mes] = n === null ? 'Em andamento' : qMencao(n);
   });
   // nos meses que o app já cobre, quem não tem ficha no app fica "não aplicável"
   Object.values(lideres).forEach(l => mesesApp.forEach(m => { if(!l.meses[m]) l.meses[m] = 'Não aplicável'; }));
   return { lideres: Object.values(lideres).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR')), mesesApp };
+}
+// números de cada liderança em cada mês do período (pesos de NC por item): planilha, completada pelo app
+function qaDaFicha(f){
+  const qs = ['q1', 'q2'].map(k => f[k]).filter(q => q && qCalcular(q).marcados === 20);
+  if(!qs.length) return null;
+  const itens = Array(20).fill(0); let avaliados = 0;
+  qs.forEach(q => Object.keys(q.itens || {}).forEach(n => { const v = q.itens[n], i = Number(n) - 1; if(i < 0 || i > 19 || !v) return;
+    if(v !== 'NA') avaliados++; if(v === 'NC1') itens[i] += 1; else if(v === 'NC2') itens[i] += 2; }));
+  const nota = qNotaMes(f);
+  return nota === null ? null : { nome: String(f.encarregado.nome).toUpperCase(), mes: f.mes, itens, avaliados, pesos: itens.reduce((a, b) => a + b, 0), nota };
+}
+function qaDetalhes(){
+  const pl = qaPlanilha(), out = [], tem = new Set();
+  if(pl) Object.keys(pl.meses || {}).filter(anPeriodoOk).forEach(p => (pl.meses[p] || []).forEach(x => {
+    out.push({ nome: x.nome, mes: p, itens: x.itens || [], avaliados: x.avaliados, pesos: x.pesos, nota: x.nota }); tem.add(p + '|' + qaChaveNome(x.nome)); }));
+  (anDados.qualimetria || []).filter(f => anPeriodoOk(f.mes) && f.encarregado && f.encarregado.nome).forEach(f => {
+    if(tem.has(f.mes + '|' + qaChaveNome(f.encarregado.nome))) return;
+    const d = qaDaFicha(f); if(d) out.push(d);
+  });
+  return out;
 }
 function qaCelula(m){
   const cls = { 'Excelente': 'exc', 'Bom': 'bom', 'Regular': 'reg', 'Insuficiente': 'insu', 'Insatisfatório': 'insa', 'Não aplicável': 'na', 'A ser avaliado': 'ava', 'Em andamento': 'ava' }[m] || 'na';
@@ -9286,30 +9321,30 @@ function qaMontarQuadros(modo){
   }).filter(m => QA_MENCOES.some(k => m.v[k]));
   q.push({ titulo: 'Menções por mês – ' + ano, sub: 'Quantas lideranças em cada faixa de desempenho',
     corpo: anEmpilhadasHtml(contMes, QA_MENCOES.map(m => ({ chave: m, rot: m, cor: QA_CORES[m] }))) });
-  // 4. principais desvios e itens (fichas do app no período)
-  const fichas = (anDados.qualimetria || []).filter(f => anPeriodoOk(f.mes));
-  const quinz = [];
-  fichas.forEach(f => ['q1', 'q2'].forEach(k => { if(f[k] && Object.keys(f[k].itens || {}).length) quinz.push(f[k]); }));
-  const ncItem = Q_ITENS.map((t, i) => ({ i, qtd: quinz.filter(x => /NC/.test((x.itens || {})[i + 1] || '')).length })).filter(x => x.qtd).sort((a, b) => b.qtd - a.qtd);
+  // 4. principais desvios e itens (planilha do resumo mensal + fichas do app no período)
+  const det = qaDetalhes();
+  const ncItem = Q_ITENS.map((t, i) => ({ i, qtd: det.reduce((a, d) => a + (Number(d.itens[i]) || 0), 0) })).filter(x => x.qtd).sort((a, b) => b.qtd - a.qtd);
+  const fonteTxt = qaPlanilha() ? 'Resumo mensal da qualimetria' : 'Fichas preenchidas no app';
   q.push({ titulo: 'Principais desvios encontrados', sub: 'Itens da Qualimetria com mais não conformidades no período',
-    corpo: ncItem.length ? `<ul class="qa-desvios">${ncItem.slice(0, 8).map(x => `<li>${escaparHtml(QA_FRASES[x.i])};<small>${x.qtd} apontamento${x.qtd === 1 ? '' : 's'}</small></li>`).join('')}</ul>`
-      : anVazio(fichas.length ? 'Nenhuma não conformidade nas fichas do período.' : 'Os principais desvios saem das fichas preenchidas no app. Ainda não há fichas neste período.') });
-  if(fichas.length){
-    const notas = fichas.map(f => ({ nome: f.encarregado.nome, nota: qNotaMes(f), mes: f.mes })).filter(x => x.nota !== null);
-    const media = notas.length ? notas.reduce((a, x) => a + x.nota, 0) / notas.length : null;
-    const bomMais = notas.filter(x => x.nota >= 90).length;
-    const ncs = quinz.reduce((a, x) => a + Object.values(x.itens || {}).filter(v => /NC/.test(v)).length, 0);
-    q.push({ titulo: 'Resumo da Qualimetria no período', sub: 'Fichas preenchidas no app', corpo: anKpisHtml([
-      { rot: 'Fichas', val: fichas.length }, { rot: 'Nota média', val: media === null ? '—' : anFmt(media, 1) + '%', cor: media === null ? '' : qCorMencao(qMencao(media)), peq: media === null ? '' : qMencao(media) },
-      { rot: 'Bom ou Excelente', val: notas.length ? anFmt(bomMais / notas.length * 100) + '%' : '—', peq: notas.length ? `${bomMais} de ${notas.length}` : '' },
-      { rot: 'Não conformidades', val: ncs, cor: ncs ? 'var(--error)' : '' }]) });
-    q.push({ titulo: 'Itens com mais não conformidades', sub: 'Quantas quinzenas tiveram NC em cada item',
+    corpo: ncItem.length ? `<ul class="qa-desvios">${ncItem.slice(0, 8).map(x => `<li>${escaparHtml(QA_FRASES[x.i])};<small>peso ${x.qtd} no período</small></li>`).join('')}</ul>`
+      : anVazio(det.length ? 'Nenhuma não conformidade nas avaliações do período.' : 'Ainda não há avaliações neste período.') });
+  if(det.length){
+    const media = det.reduce((a, x) => a + x.nota, 0) / det.length;
+    const bomMais = det.filter(x => x.nota >= 90).length;
+    const ncs = det.reduce((a, x) => a + (Number(x.pesos) || 0), 0);
+    q.push({ titulo: 'Resumo da Qualimetria no período', sub: fonteTxt, corpo: anKpisHtml([
+      { rot: 'Avaliações', val: det.length, peq: 'liderança × mês' }, { rot: 'Nota média', val: anFmt(media, 1) + '%', cor: qCorMencao(qMencao(media)), peq: qMencao(media) },
+      { rot: 'Bom ou Excelente', val: anFmt(bomMais / det.length * 100) + '%', peq: `${bomMais} de ${det.length}` },
+      { rot: 'Pesos de NC', val: ncs, cor: ncs ? 'var(--error)' : '', peq: 'NC1 = 1 · NC2 = 2' }]) });
+    q.push({ titulo: 'Itens com mais não conformidades', sub: 'Soma dos pesos de NC de cada item no período',
       corpo: anBarrasHtml(ncItem.slice(0, apr ? 8 : 12).map(x => ({ rotulo: (x.i + 1) + '. ' + Q_ITENS[x.i], valor: x.qtd })), null, 'var(--error)') });
-    const ultMes = fichas.map(f => f.mes).sort().pop();
-    const notasUlt = notas.filter(x => x.mes === ultMes).sort((a, b) => a.nota - b.nota);
+    const ultMes = det.map(x => x.mes).sort().pop();
+    const notasUlt = det.filter(x => x.mes === ultMes).sort((a, b) => a.nota - b.nota);
     if(notasUlt.length) q.push({ titulo: 'Nota por liderança – ' + anMesLongo(ultMes), sub: 'Menores notas primeiro',
       corpo: anBarrasHtml(notasUlt.slice(0, apr ? 12 : 99).map(x => ({ rotulo: x.nome, valor: x.nota, cor: QA_CORES[qMencao(x.nota)], extra: qMencao(x.nota) })), v => anFmt(v, 1) + '%') });
   }
+  const pl = qaPlanilha();
+  if(pl && !apr && pl.url) q.push({ titulo: 'Fonte dos dados', sub: 'Planilha oficial PI-FR-C 00902', corpo: `<p class="an-nota">A apresentação usa a planilha <a href="${escaparHtml(pl.url)}" target="_blank" rel="noopener">${escaparHtml(pl.arquivo || 'Resumo mensal da qualimetria')}</a>, atualizada automaticamente a cada fechamento de quinzena${pl.atualizadoEm ? ' (última leitura: ' + escaparHtml(new Date(pl.atualizadoEm).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })) + ')' : ''}. Correções feitas à mão na planilha aparecem aqui.</p>` });
   return q;
 }
 
