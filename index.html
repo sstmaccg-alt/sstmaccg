@@ -524,7 +524,7 @@
   *{ -webkit-tap-highlight-color:transparent; }
   button, .nav-btn, .lv-card, .card-action{ -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; }
   button:focus:not(:focus-visible), a:focus:not(:focus-visible), [tabindex]:focus:not(:focus-visible){ outline:none; }
-  .app-confirma .q-modal-acoes button{ height:50px; margin:0; padding:0 12px; font-size:15px; box-sizing:border-box; }
+  .app-confirma .q-modal-acoes button, .roda-modal .q-modal-acoes button{ height:50px; margin:0; padding:0 12px; font-size:15px; box-sizing:border-box; }
   .app-confirma .q-modal-caixa p{ font-size:14px; color:var(--navy); opacity:.8; }
   .ac-perigo{ background:var(--error) !important; border-color:var(--error) !important; color:#fff !important; }
   .toast-app.saindo{ opacity:0; transform:translate(-50%, -10px); }
@@ -1144,6 +1144,26 @@
   .q-modal-cancelar{ border:1px solid var(--border-strong); background:var(--white); color:var(--navy); border-radius:10px; font:inherit; font-weight:700; cursor:pointer; }
   @media (min-width:1024px){ .q-modal{ align-items:center; } .q-modal-caixa{ border-radius:18px; } }
   .q-docs{ display:flex; flex-direction:column; gap:8px; margin:0 0 14px; }
+  /* seletor rolável estilo despertador */
+  .roda-caixa h3{ text-align:center; margin-bottom:10px; }
+  .roda-area{ position:relative; display:flex; justify-content:center; align-items:center; gap:6px; height:260px; margin:0 0 14px; user-select:none; -webkit-user-select:none; }
+  .roda-faixa{ position:absolute; left:8%; right:8%; top:50%; height:52px; transform:translateY(-50%); border-top:1px solid var(--border-strong); border-bottom:1px solid var(--border-strong); background:rgba(94,138,63,.07); border-radius:10px; pointer-events:none; }
+  .roda-col-caixa{ position:relative; display:flex; align-items:center; }
+  .roda-col{ height:260px; width:92px; overflow-y:scroll; scroll-snap-type:y mandatory; scrollbar-width:none; -webkit-overflow-scrolling:touch; outline:none; overscroll-behavior:contain;
+    -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 32%, #000 68%, transparent 100%); mask-image:linear-gradient(to bottom, transparent 0, #000 32%, #000 68%, transparent 100%); }
+  .roda-col::-webkit-scrollbar{ display:none; }
+  .roda-pad{ height:104px; }
+  .roda-item{ height:52px; line-height:52px; text-align:center; scroll-snap-align:center; font-size:26px; font-weight:500; color:var(--text-muted); opacity:.45; cursor:pointer; font-variant-numeric:tabular-nums; transition:font-size .12s, opacity .12s; }
+  .roda-item.roda-perto{ opacity:.7; font-size:28px; }
+  .roda-item.roda-atual{ opacity:1; font-size:40px; font-weight:700; color:var(--navy); }
+  .roda-sep{ font-size:36px; font-weight:700; color:var(--navy); margin-top:-4px; }
+  .roda-suf{ position:absolute; right:-24px; font-size:13px; font-weight:700; color:var(--text-muted); }
+  .roda-col-caixa + .roda-col-caixa{ margin-left:30px; }
+  .roda-col:focus-visible{ box-shadow:0 0 0 2px var(--green-dark) inset; border-radius:10px; }
+  .campo-roda{ height:46px; width:100%; display:flex; align-items:center; justify-content:space-between; gap:8px; border:1px solid var(--border-strong); border-radius:10px; padding:0 12px; background:var(--white); color:var(--navy); font:inherit; font-size:15px; font-weight:400; cursor:pointer; box-sizing:border-box; text-align:left; }
+  .campo-roda .icone-svg{ width:18px; height:18px; color:var(--text-muted); }
+  .campo-roda.vazio span:first-child{ color:var(--text-muted); }
+  .campo-roda:disabled{ opacity:.6; cursor:default; }
   .q-docs .q-pdf{ margin:0; }
   .q-pdf-icone.planilha{ background:#e3f1d6; color:#2d5214; }
   .q-ops.q-ops-3{ grid-template-columns:repeat(3, minmax(0,1fr)) !important; }
@@ -1168,7 +1188,6 @@
   .tr-conteudo{ background:#f1f5ea; border:1px solid #d7e5c6; border-radius:13px; padding:12px 14px; display:flex; flex-direction:column; gap:6px; color:#22303d; }
   .tr-conteudo b{ font-size:12px; letter-spacing:.6px; color:#4c7032; } .tr-conteudo ul{ margin:0; padding-left:18px; font-size:13.5px; line-height:1.5; }
   html[data-theme="dark"] .tr-conteudo{ background:#1d2a18; border-color:#33452a; color:var(--navy); } html[data-theme="dark"] .tr-conteudo b{ color:#a9d17f; }
-  .lv-form select#tr-carga-h, .lv-form select#tr-carga-m{ height:46px; }
   .lv-form input[type=date], .lv-form input[type=time]{ height:46px; box-sizing:border-box; border:1px solid var(--border-strong); border-radius:11px; padding:0 12px; font:inherit; font-size:15px; background:var(--white); color:var(--navy); width:100%; }
   .tr-cam{ position:relative; height:300px; margin:0 -16px 12px; background:#0d1118; overflow:hidden; }
   .tr-cam video{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -1444,6 +1463,7 @@
       <button type="button" class="sb-item" id="sb-email" style="display:none;"><span class="icone-svg" data-icone="mail"></span><span class="sb-rotulo">E-mail aos responsáveis</span></button>
       <button type="button" class="sb-item" data-apr="prever"><span class="icone-svg" data-icone="apresentacao"></span><span class="sb-rotulo">Apresentação Préver</span></button>
       <button type="button" class="sb-item" id="sb-analise"><span class="icone-svg" data-icone="barchart"></span><span class="sb-rotulo">Análise geral</span></button>
+      <button type="button" class="sb-item" id="sb-instalar" style="display:none;"><span class="icone-svg" data-icone="instalar"></span><span class="sb-rotulo">Instalar no computador</span></button>
     </div>
     <button type="button" class="sb-usuario" id="sb-usuario" aria-label="Abrir perfil">
       <span class="sb-avatar" id="sb-avatar"></span>
@@ -2192,6 +2212,15 @@
         <div class="seta">›</div>
       </div>
 
+      <div class="card-action" id="perfil-card-instalar" style="display:none;">
+        <div class="icon"><span class="icone-svg" data-icone="instalar"></span></div>
+        <div class="info">
+          <h3>Instalar o app</h3>
+          <p>Abre em janela própria, com ícone no computador ou no celular</p>
+        </div>
+        <div class="seta">›</div>
+      </div>
+
       <button class="btn-primary" id="logout-btn" style="margin-top:16px;">Sair</button>
       <p style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:8px;">
         Depois de sair, só dá pra entrar de novo com internet. Se você só fechar o app, ele continua abrindo sem sinal.
@@ -2220,6 +2249,7 @@
    ÍCONES — SVG de linha, monocromáticos (usam currentColor, sem emoji)
    ====================================================================== */
 const ICONES = {
+  instalar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8"/><path d="M12 16v4"/><path d="M12 7v5"/><path d="m9.5 9.5 2.5 2.5 2.5-2.5"/></svg>',
   apresentacao: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18"/><path d="M4 4v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4"/><path d="M12 16v4"/><path d="M9 20h6"/><path d="M8 12l3-3 2 2 3-3"/></svg>',
   caneta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
   compartilhar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/></svg>',
@@ -2819,7 +2849,7 @@ function irPara(viewId){
     document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'view-qualimetria'));
   }
   if(viewId === 'view-aprovacoes'){
-    if(!ehTST()){ irPara('view-enviados'); return; }
+    if(!ehSSTMA()){ irPara('view-enviados'); return; }
     renderizarAprovacoes();
   }
   if(viewId === 'view-enviados'){ renderizarEnviados(); }
@@ -2843,6 +2873,8 @@ document.getElementById('sb-novo').addEventListener('click', () => { irPara('vie
 document.getElementById('sb-aprovacoes').addEventListener('click', () => document.getElementById('atalho-aprovacoes').click());
 document.getElementById('sb-analise').addEventListener('click', () => irPara('view-analise-geral'));
 document.getElementById('sb-email').addEventListener('click', () => irPara('view-email-resp'));
+document.getElementById('sb-instalar').addEventListener('click', () => instalarApp());
+document.getElementById('perfil-card-instalar').addEventListener('click', () => instalarApp());
 document.getElementById('atalho-email').addEventListener('click', () => irPara('view-email-resp'));
 document.getElementById('btn-voltar-email').addEventListener('click', () => {
   if(emSel){ emSel = null; emRender(); window.scrollTo(0, 0); } else irPara('view-desvios');
@@ -2854,7 +2886,7 @@ function atualizarUsuarioPC(user){
   const partes = nome.trim().split(/\s+/).filter(Boolean);
   document.getElementById('sb-avatar').textContent = ((partes[0] || '?')[0] + (partes.length > 1 ? partes[partes.length - 1][0] : '')).toUpperCase();
   document.getElementById('sb-nome').textContent = partes.length > 1 ? partes[0] + ' ' + partes[partes.length - 1] : nome;
-  document.getElementById('sb-info').textContent = (ehTST() ? 'TST' : 'Usuário') + (pl.matricula ? ' · Matrícula ' + pl.matricula : '');
+  document.getElementById('sb-info').textContent = (ehTST() ? 'TST' : (ehMeioAmbiente() ? 'Meio Ambiente' : 'Usuário')) + (pl.matricula ? ' · Matrícula ' + pl.matricula : '');
   const hora = new Date().getHours();
   const cumprimento = hora < 12 ? 'Bom dia' : (hora < 18 ? 'Boa tarde' : 'Boa noite');
   document.getElementById('pc-saudacao').textContent = partes.length ? `${cumprimento}, ${partes[0]}` : cumprimento;
@@ -2951,6 +2983,90 @@ function confirmarApp(titulo, texto, rotuloOk, perigo){
   });
 }
 
+/* ---- seletor rolável (estilo despertador) ----
+   abrirRoda({ titulo, colunas:[{ valores:[...], rotulo:v=>'08', sel:valor, sufixo:'h' }], separador:':' })
+   devolve uma Promise com a lista dos valores escolhidos, ou null se cancelar. */
+const RODA_ALT = 52;
+function abrirRoda(op){
+  return new Promise(resolver => {
+    const modal = document.createElement('div');
+    modal.className = 'q-modal roda-modal';
+    const cols = op.colunas.map((c, ci) => `${ci && op.separador ? `<div class="roda-sep">${escaparHtml(op.separador)}</div>` : ''}
+      <div class="roda-col-caixa"><div class="roda-col" tabindex="0" data-col="${ci}" role="listbox" aria-label="${escaparHtml(c.nome || '')}">
+        <div class="roda-pad"></div>${c.valores.map((v, i) => `<div class="roda-item" data-i="${i}">${escaparHtml(c.rotulo ? c.rotulo(v) : String(v))}</div>`).join('')}<div class="roda-pad"></div>
+      </div>${c.sufixo ? `<span class="roda-suf">${escaparHtml(c.sufixo)}</span>` : ''}</div>`).join('');
+    modal.innerHTML = `<div class="q-modal-caixa roda-caixa" role="dialog" aria-modal="true" aria-label="${escaparHtml(op.titulo || '')}">
+        <h3>${escaparHtml(op.titulo || '')}</h3>
+        <div class="roda-area"><div class="roda-faixa"></div>${cols}</div>
+        <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar roda-cancelar">Cancelar</button><button type="button" class="btn-primary roda-salvar">Salvar</button></div></div>`;
+    document.body.appendChild(modal);
+    const colEls = [...modal.querySelectorAll('.roda-col')];
+    const idx = colEls.map((el, ci) => { const c = op.colunas[ci]; const i = c.valores.indexOf(c.sel); return i < 0 ? 0 : i; });
+    function pintar(ci){ colEls[ci].querySelectorAll('.roda-item').forEach((it, i) => { const d = Math.abs(i - idx[ci]); it.className = 'roda-item' + (d === 0 ? ' roda-atual' : d === 1 ? ' roda-perto' : ''); }); }
+    colEls.forEach((el, ci) => {
+      el.scrollTop = idx[ci] * RODA_ALT; pintar(ci);
+      let fimRolagem = null;
+      el.addEventListener('scroll', () => {
+        const n = Math.max(0, Math.min(op.colunas[ci].valores.length - 1, Math.round(el.scrollTop / RODA_ALT)));
+        if(n !== idx[ci]){ idx[ci] = n; pintar(ci); }
+        clearTimeout(fimRolagem); fimRolagem = setTimeout(() => { if(Math.abs(el.scrollTop - idx[ci] * RODA_ALT) > 1) el.scrollTo({ top: idx[ci] * RODA_ALT, behavior: 'smooth' }); }, 140);
+      }, { passive: true });
+      el.addEventListener('click', (e) => { const it = e.target.closest('.roda-item'); if(it) el.scrollTo({ top: Number(it.dataset.i) * RODA_ALT, behavior: 'smooth' }); });
+      el.addEventListener('keydown', (e) => {
+        const passo = e.key === 'ArrowDown' ? 1 : e.key === 'ArrowUp' ? -1 : 0; if(!passo) return;
+        e.preventDefault(); const n = Math.max(0, Math.min(op.colunas[ci].valores.length - 1, idx[ci] + passo)); el.scrollTo({ top: n * RODA_ALT, behavior: 'smooth' });
+      });
+    });
+    const fim = (v) => { modal.remove(); resolver(v); };
+    modal.querySelector('.roda-cancelar').addEventListener('click', () => fim(null));
+    modal.querySelector('.roda-salvar').addEventListener('click', () => fim(colEls.map((el, ci) => op.colunas[ci].valores[Math.round(el.scrollTop / RODA_ALT)] ?? op.colunas[ci].valores[idx[ci]])));
+    modal.addEventListener('click', (e) => { if(e.target === modal) fim(null); });
+    setTimeout(() => colEls[0] && colEls[0].focus({ preventScroll: true }), 40);
+  });
+}
+const doisDig = n => String(n).padStart(2, '0');
+function rodaHora(titulo, valor){
+  const p = String(valor || '').split(':'), agora = new Date();
+  const h = p.length === 2 ? Number(p[0]) : agora.getHours(), m = p.length === 2 ? Number(p[1]) : agora.getMinutes();
+  return abrirRoda({ titulo, separador: ':', colunas: [
+    { nome: 'Hora', valores: Array.from({ length: 24 }, (_, i) => i), rotulo: doisDig, sel: h },
+    { nome: 'Minuto', valores: Array.from({ length: 60 }, (_, i) => i), rotulo: doisDig, sel: m }
+  ] }).then(r => r ? doisDig(r[0]) + ':' + doisDig(r[1]) : null);
+}
+function rodaDuracao(titulo, minutos, maxHoras, passoMin){
+  const tot = Number(minutos) || 0, passo = passoMin || 5;
+  return abrirRoda({ titulo, colunas: [
+    { nome: 'Horas', valores: Array.from({ length: (maxHoras || 8) + 1 }, (_, i) => i), rotulo: String, sel: Math.floor(tot / 60), sufixo: 'h' },
+    { nome: 'Minutos', valores: Array.from({ length: 60 / passo }, (_, i) => i * passo), rotulo: doisDig, sel: Math.round((tot % 60) / passo) * passo, sufixo: 'min' }
+  ] }).then(r => r ? r[0] * 60 + r[1] : null);
+}
+function textoDuracao(min){ min = Number(min) || 0; const h = Math.floor(min / 60), m = min % 60; return min ? (h ? h + ' h' : '') + (h && m ? ' ' : '') + (m ? doisDig(m) + ' min' : '') : ''; }
+
+/* ---- instalar o app (computador e Android) ---- */
+let promptInstalar = null;
+function appInstalado(){ return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+function atualizarBotaoInstalar(){
+  const mostrar = !appInstalado();
+  ['sb-instalar', 'perfil-card-instalar'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = mostrar ? '' : 'none'; });
+}
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); promptInstalar = e; atualizarBotaoInstalar(); });
+window.addEventListener('appinstalled', () => { promptInstalar = null; atualizarBotaoInstalar(); });
+async function instalarApp(){
+  if(promptInstalar){
+    promptInstalar.prompt();
+    try{ await promptInstalar.userChoice; }catch(e){}
+    promptInstalar = null; atualizarBotaoInstalar(); return;
+  }
+  const ua = navigator.userAgent, ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  const passos = ios
+    ? 'No Safari, toque em Compartilhar (o quadrado com a seta para cima) e depois em "Adicionar à Tela de Início".'
+    : /Android/.test(ua)
+      ? 'No Chrome, toque no menu (os três pontinhos) e depois em "Instalar app" ou "Adicionar à tela inicial".'
+      : 'No Chrome ou no Edge, clique no ícone de instalar no fim da barra de endereço (um monitor com uma seta) e confirme em "Instalar". Se o ícone não aparecer, abra o menu do navegador (os três pontinhos) e procure "Instalar Segurança do Trabalho" ou "Aplicativos > Instalar este site como aplicativo". No Firefox não dá para instalar: use o Chrome ou o Edge.';
+  await confirmarApp('Instalar o app', passos + ' Depois de instalado, o app abre em janela própria e fica no menu Iniciar e na área de trabalho.', 'Entendi');
+}
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', atualizarBotaoInstalar); else atualizarBotaoInstalar();
+
 /* ---- botão "voltar" do celular: volta uma tela dentro do app em vez de sair ----
    O app guarda uma entrada extra no histórico. Quando o voltar do celular é usado,
    fecha a janela aberta, ou toca na seta "voltar" da tela, ou vai para Desvios.
@@ -2989,7 +3105,7 @@ function confirmarApp(titulo, texto, rotuloOk, perigo){
 })();
 
 function abrirDestinoNotificacao(abrir){
-  if(abrir === 'aprovacoes') irPara(ehTST() ? 'view-aprovacoes' : 'view-enviados');
+  if(abrir === 'aprovacoes') irPara(ehSSTMA() ? 'view-aprovacoes' : 'view-enviados');
   else if(abrir === 'enviados') irPara('view-enviados');
   else if(abrir === 'qualimetria') irPara('view-qualimetria');
   else if(abrir === 'lv') irPara('view-lv');
@@ -3208,7 +3324,7 @@ document.getElementById('atalho-buscar').addEventListener('click', () => {
   document.getElementById('busca-desvio').focus();
 });
 document.getElementById('atalho-aprovacoes').addEventListener('click', () => {
-  irPara(ehTST() ? 'view-aprovacoes' : 'view-enviados');
+  irPara(ehSSTMA() ? 'view-aprovacoes' : 'view-enviados');
 });
 document.getElementById('btn-voltar-aprovacoes').addEventListener('click', () => irPara('view-desvios'));
 document.getElementById('btn-voltar-enviados').addEventListener('click', () => irPara('view-desvios'));
@@ -3742,10 +3858,14 @@ function ehTST(){
   return papelDoEmail(u.email) === 'tst' || emailsTST.has(u.email.trim().toLowerCase());
 }
 function ehMeioAmbiente(){ return meuPapel() === 'meioAmbiente'; }
+// SSTMA = TST ou Meio Ambiente: as mesmas permissões em todo o app (só a assinatura é de cada papel)
+function ehSSTMA(){ return ehTST() || ehMeioAmbiente(); }
+// área de quem inspeciona/aplica (vai nas assinaturas e nos PDFs)
+function minhaAreaSSTMA(){ return ehMeioAmbiente() && !ehTST() ? 'Meio Ambiente' : 'Segurança do Trabalho'; }
 // quem pode fechar sozinho o desvio que registrou (sem passar pela aprovação)
 function podeFecharProprioDesvio(){ return ehTST() || ehMeioAmbiente(); }
 function aplicarPerfilTST(){
-  const tst = ehTST();
+  const tst = ehSSTMA();
   document.getElementById('atalho-aprovacoes-label').textContent = tst ? 'Aprovações' : 'Enviados';
   document.getElementById('sb-aprovacoes-label').textContent = tst ? 'Aprovações' : 'Enviados';
   if(auth.currentUser) atualizarUsuarioPC(auth.currentUser);
@@ -3767,8 +3887,8 @@ function iniciarListaTST(){
     // se estava numa das duas telas, troca pra certa
     const vAp = document.getElementById('view-aprovacoes').style.display === 'block';
     const vEn = document.getElementById('view-enviados').style.display === 'block';
-    if(vAp && !ehTST()) irPara('view-enviados');
-    if(vEn && ehTST()) irPara('view-aprovacoes');
+    if(vAp && !ehSSTMA()) irPara('view-enviados');
+    if(vEn && ehSSTMA()) irPara('view-aprovacoes');
   }, (err) => console.warn('Falha ao ler lista de TSTs:', err));
 }
 
@@ -3857,7 +3977,7 @@ function rejeicoesNaoVistas(){
 function atualizarBadgeAprovacoes(){
   const badge = document.getElementById('badge-aprovacoes');
   if(!badge) return;
-  const qtd = ehTST()
+  const qtd = ehSSTMA()
     ? solicitacoesAbertasCache.filter(x => x.status === 'pendente').length
     : rejeicoesNaoVistas().length;
   badge.textContent = qtd > 99 ? '99+' : String(qtd);
@@ -4119,7 +4239,7 @@ function renderizarAprovacoes(){
    um card por desvio mostrando a tentativa mais recente ---- */
 function renderizarMeusEnvios(){
   const cont = document.getElementById('meus-envios-lista');
-  if(!cont || ehTST()) return;
+  if(!cont || ehSSTMA()) return;
   const ultimas = Object.values(minhaUltimaSolicitacaoPorNumero)
     .sort((a, b) => msDe(b.criadoEm) - msDe(a.criadoEm));
   if(!ultimas.length){
@@ -5657,7 +5777,7 @@ function qIniciarMinhas(){
     qAtualizarAbertos();
   }, (e) => { console.warn('Minhas qualimetrias:', e); qMostrarErro(e); });
 }
-function qVeTodasFichas(){ return ehTST() || ehMeioAmbiente() || meuPapel() === 'gerencia'; }
+function qVeTodasFichas(){ return ehSSTMA() || ehMeioAmbiente() || meuPapel() === 'gerencia'; }
 function qIniciarMes(){
   if(!qVeTodasFichas() || qOuvindo.mes === qMes) return;
   if(qCancelarMes) qCancelarMes();
@@ -5689,7 +5809,7 @@ function qAtualizarAbertos(){
   }
 }
 function qSalvar(imediato){
-  if(!qFicha || !qFicha.id || !ehTST()) return;
+  if(!qFicha || !qFicha.id || !ehSSTMA()) return;
   clearTimeout(qSalvarTimer);
   const gravar = () => {
     qSalvarTimer = null;
@@ -5756,7 +5876,7 @@ function abrirQualimetria(){
   qRenderLista();
 }
 function qRenderLista(){
-  const tst = ehTST();
+  const tst = ehSSTMA();
   document.getElementById('q-btn-nova').style.display = tst ? 'flex' : 'none';
   const sel = document.getElementById('q-mes');
   if(!sel.options.length){
@@ -5891,7 +6011,7 @@ function qAbrirFicha(id, quinzena){
   qRenderFicha();
 }
 function qNovaFicha(){
-  if(!ehTST()) return;
+  if(!ehSSTMA()) return;
   qFicha = {
     id: null, novo: true, mes: qMes, encarregado: { nome: '', matricula: '', email: '' },
     area: '', local: '', turno: '', q1: qQuinzenaVazia(), q2: qQuinzenaVazia()
@@ -5921,7 +6041,7 @@ function qGarantirId(){
 }
 
 /* ======================= tela: ficha ======================= */
-function qPodeEditar(){ return ehTST() && qFicha[qQuinzena].estado === 'rascunho'; }
+function qPodeEditar(){ return ehSSTMA() && qFicha[qQuinzena].estado === 'rascunho'; }
 function qSugestoes(campo){
   const set = new Set();
   qFichasMes.concat(qMinhasFichas).forEach(f => { if(f[campo]) set.add(f[campo]); });
@@ -6247,15 +6367,19 @@ function qConcluir(){
 }
 function qAbrirEscolhaSignatarios(){
   const f = qFicha;
+  const souMA = minhaAreaSSTMA() === 'Meio Ambiente';
   const ma = qParticipantes.filter(p => /meio ambiente/i.test(p.funcao || ''));
   const sa = qParticipantes.filter(p => /sa[uú]de/i.test(p.funcao || ''));
+  const st = qParticipantes.filter(p => /seguran[cç]a do trabalho|^tst$/i.test(p.funcao || ''));
   const opt = (lista) => '<option value="">Selecione...</option>' + lista.map(p => `<option value="${escaparHtml(p.email)}">${escaparHtml(p.nome)} · ${trMatTxt(p)}</option>`).join('');
   const caixa = document.getElementById('q-signatarios');
   caixa.innerHTML = `
     <b>Quem assina esta quinzena</b>
     <div class="q-sig-linha"><span>Encarregado</span><b>${escaparHtml(f.encarregado.nome)}${f.encarregado.email ? '' : ' <em>(sem cadastro na aba Líderes)</em>'}</b></div>
-    <div class="q-sig-linha"><span>Segurança do Trabalho</span><b>${escaparHtml(qMeuPerfil().nome)} (você)</b></div>
-    <label class="q-campo">Meio Ambiente<select id="q-sel-ma">${opt(ma)}</select></label>
+    ${souMA ? `<label class="q-campo">Segurança do Trabalho<select id="q-sel-st">${opt(st)}</select></label>
+    <div class="q-sig-linha"><span>Meio Ambiente</span><b>${escaparHtml(qMeuPerfil().nome)} (você)</b></div>`
+    : `<div class="q-sig-linha"><span>Segurança do Trabalho</span><b>${escaparHtml(qMeuPerfil().nome)} (você)</b></div>
+    <label class="q-campo">Meio Ambiente<select id="q-sel-ma">${opt(ma)}</select></label>`}
     <label class="q-campo">Saúde Ocupacional<select id="q-sel-sa">${opt(sa)}</select></label>
     <p class="q-alerta" style="display:${f.encarregado.email ? 'none' : 'block'}">Cadastre o encarregado na aba "Líderes" (com o e-mail do login dele) para poder pedir a assinatura.</p>
     <div class="q-sig-botoes">
@@ -6266,14 +6390,17 @@ function qAbrirEscolhaSignatarios(){
   caixa.scrollIntoView({ behavior: 'smooth', block: 'center' });
   document.getElementById('q-sig-cancelar').addEventListener('click', () => { caixa.style.display = 'none'; });
   document.getElementById('q-sig-confirmar').addEventListener('click', () => {
-    const emMA = document.getElementById('q-sel-ma').value, emSA = document.getElementById('q-sel-sa').value;
-    if(!emMA || !emSA){ mostrarAvisoApp('Falta escolher', 'Selecione quem assina por Meio Ambiente e por Saúde Ocupacional.'); return; }
-    const pMA = qParticipantes.find(p => p.email === emMA), pSA = qParticipantes.find(p => p.email === emSA);
+    const eu = (({ nome, matricula, email }) => ({ nome, matricula, email }))(qMeuPerfil());
+    const emSA = document.getElementById('q-sel-sa').value;
+    const emOutro = document.getElementById(souMA ? 'q-sel-st' : 'q-sel-ma').value;
+    if(!emOutro || !emSA){ mostrarAvisoApp('Falta escolher', souMA ? 'Selecione quem assina por Segurança do Trabalho e por Saúde Ocupacional.' : 'Selecione quem assina por Meio Ambiente e por Saúde Ocupacional.'); return; }
+    const pOutro = qParticipantes.find(p => p.email === emOutro), pSA = qParticipantes.find(p => p.email === emSA);
+    const outro = { nome: pOutro.nome, matricula: String(pOutro.matricula || ''), email: pOutro.email };
     caixa.style.display = 'none';
     qEnviarParaAssinatura({
       encarregado: { ...f.encarregado },
-      seguranca: (({ nome, matricula, email }) => ({ nome, matricula, email }))(qMeuPerfil()),
-      meioAmbiente: { nome: pMA.nome, matricula: String(pMA.matricula || ''), email: pMA.email },
+      seguranca: souMA ? outro : eu,
+      meioAmbiente: souMA ? eu : outro,
       saude: { nome: pSA.nome, matricula: String(pSA.matricula || ''), email: pSA.email }
     });
   });
@@ -6354,7 +6481,7 @@ function qRenderAssinaturas(){
       <span class="q-res-txt">${q.estado === 'fechada' ? `Quinzena fechada${q.codigo ? ' · código ' + escaparHtml(q.codigo) : ' · gerando o PDF'}` : 'Aguardando as assinaturas'}</span>
     </div>
     ${linhas}
-    ${ehTST() && q.estado === 'assinando' ? '<button type="button" class="q-reabrir" id="q-reabrir">Reabrir para edição (apaga as assinaturas já feitas)</button>' : ''}`;
+    ${ehSSTMA() && q.estado === 'assinando' ? '<button type="button" class="q-reabrir" id="q-reabrir">Reabrir para edição (apaga as assinaturas já feitas)</button>' : ''}`;
 
   box.querySelectorAll('.q-pad').forEach(qLigarPad);
   box.querySelectorAll('.q-btn-assinar').forEach(b => b.addEventListener('click', () => { qAssinar(b.dataset.papel, b.closest('.q-ass')); }));
@@ -6903,7 +7030,7 @@ function lvRenderInicio(){
   document.getElementById('lv-cats').innerHTML = LV_CATS.map(c => `<button type="button" class="lv-cat" data-cat="${escaparHtml(c)}">
       <b>${escaparHtml(c)}</b><span>${escaparHtml(LV_CAT_DESC[c] || '')}</span><em>${LV_TIPOS.filter(t => t.cat === c).length} fichas ›</em></button>`).join('');
   document.querySelectorAll('#lv-cats .lv-cat').forEach(b => b.addEventListener('click', () => { lvFiltroCat = b.dataset.cat; lvAbrirNova(); }));
-  document.getElementById('lv-at-nova').style.display = ehTST() ? '' : 'none';
+  document.getElementById('lv-at-nova').style.display = ehSSTMA() ? '' : 'none';
   const ult = document.getElementById('lv-ultimas');
   ult.innerHTML = lvRecentes.length ? lvRecentes.slice(0, 8).map(l => lvCard(l)).join('') : '<p class="empty-state">Nenhuma LV registrada ainda.</p>';
   lvLigarCards(ult);
@@ -6911,7 +7038,7 @@ function lvRenderInicio(){
 
 /* ---------- nova LV: escolher o tipo ---------- */
 function lvAbrirNova(){
-  if(!ehTST()){ mostrarAvisoApp('Só TST', 'As LVs são preenchidas pelos TSTs.'); return; }
+  if(!ehSSTMA()){ mostrarAvisoApp('Só SSTMA', 'As LVs são preenchidas pelos TSTs e pelo Meio Ambiente.'); return; }
   irPara('view-lv-nova');
   document.getElementById('lv-busca-tipo').value = '';
   lvRenderTipos();
@@ -6950,7 +7077,7 @@ function lvAbrir(lv){
   lvAnteriores = []; lvSombra = null;
   const meu = lv.criadoPor === (auth.currentUser && auth.currentUser.uid);
   lvPasso = lv.estado === 'concluida' ? 4 : (lv.estado === 'assinando' ? 3 : 1);
-  if(lv.estado !== 'concluida' && !(meu && ehTST())) lvPasso = 4;   // rascunho de outra pessoa: só leitura
+  if(lv.estado !== 'concluida' && !(meu && ehSSTMA())) lvPasso = 4;   // rascunho de outra pessoa: só leitura
   irPara('view-lv-ficha'); lvRenderFicha();
   if(lv.estado !== 'concluida') lvBuscarAnteriores();
   // fotos do externo já tiradas antes (ficam no banco): recarrega para não pedir de novo
@@ -7035,7 +7162,7 @@ function lvRenderAnteriores(){
 
 /* ---------- ficha ---------- */
 const LV_NC_OBRIG = Object.assign({}, typeof Q_NC_OBRIG !== 'undefined' ? Q_NC_OBRIG : {});
-function lvPodeEditar(){ return lvAtual && lvAtual.estado !== 'concluida' && ehTST() && lvAtual.criadoPor === (auth.currentUser && auth.currentUser.uid); }
+function lvPodeEditar(){ return lvAtual && lvAtual.estado !== 'concluida' && ehSSTMA() && lvAtual.criadoPor === (auth.currentUser && auth.currentUser.uid); }
 function lvRenderFicha(){
   const lv = lvAtual, ed = lvPodeEditar();
   document.getElementById('lv-ficha-selo').textContent = (lv.numero ? lv.numero + ' · ' : (lv.estado === 'rascunho' ? 'NOVA LV · ' : 'LV · ')) + lv.tipoNome.toUpperCase();
@@ -7210,9 +7337,9 @@ function lvRenderAssinaturas(corpo, barra, ed){
     </div>
     <span class="secao-titulo" style="margin-top:6px;">Assinaturas</span>
     <div class="q-ass ${!at ? 'q-ass-minha' : ''}">
-      <div class="q-ass-topo"><span><small>INSPEÇÃO E SEGURANÇA DO TRABALHO · VOCÊ</small><b>${escaparHtml(at ? at.nome : eu.nome)}</b><em>TST · Mat. ${escaparHtml((at ? at.matricula : eu.matricula) || '—')}</em></span>
+      <div class="q-ass-topo"><span><small>INSPEÇÃO E ${escaparHtml(((at && at.area) || minhaAreaSSTMA()).toUpperCase())} · VOCÊ</small><b>${escaparHtml(at ? at.nome : eu.nome)}</b><em>${(at && at.area || minhaAreaSSTMA()) === 'Meio Ambiente' ? 'Meio Ambiente' : 'TST'} · Mat. ${escaparHtml((at ? at.matricula : eu.matricula) || '—')}</em></span>
         <span class="q-tag ${at ? 'q-tag-ok' : 'q-tag-aviso'}">${at ? 'Assinado ✓' : 'Pendente'}</span></div>
-      ${at ? `<div class="q-ass-img"><img src="${at.imagem}" alt="Assinatura do TST"><span>Conferida com a assinatura cadastrada · vale para Inspeção e Segurança do Trabalho</span></div>` : (ed ? `
+      ${at ? `<div class="q-ass-img"><img src="${at.imagem}" alt="Assinatura do TST"><span>Conferida com a assinatura cadastrada · vale para Inspeção e ${escaparHtml(at.area || 'Segurança do Trabalho')}</span></div>` : (ed ? `
         <div class="q-pad-caixa"><canvas class="q-pad" id="lv-pad-tst" width="600" height="220" aria-label="Área para assinar com o dedo"></canvas>
           <button type="button" class="q-pad-limpar">Limpar</button><span class="q-pad-dica">Assine com o dedo</span></div>
         <label class="q-declara"><input type="checkbox" id="lv-declara-tst"> Declaro que realizei esta inspeção e confirmo as informações registradas.</label>
@@ -7273,6 +7400,7 @@ function lvRenderAssinaturas(corpo, barra, ed){
       if(!conf.ok){ registrarFalhaAssinatura(bloco, padT); return; }
       const reg = montarRegistroAssinatura(padT, { nome: eu.nome, matricula: eu.matricula }, eu, conf, '');
       reg.declaracao = 'Declaro que realizei esta inspeção e confirmo as informações registradas.';
+      reg.area = minhaAreaSSTMA();
       lvSalvar(true);
       gravarSemEsperar(db.collection('lvs').doc(lv.id).set({ assinaturaTST: reg, resultado: lv.resultado, resultadoObs: lv.resultadoObs || '' }, { merge: true }), 'assinatura do TST');
       aprenderAssinatura(db, eu.uid, ref, padT._tracos);
@@ -7397,12 +7525,12 @@ function lvRenderResumo(corpo, barra){
       <b>${escaparHtml(lv.estado === 'concluida' ? (lv.resultado || 'Concluída') : s.txt)}</b>
       <small>${escaparHtml([formatarDataBR(lv.data), lv.empresaNome || lv.empresaTipo, lvDescEquip(lv)].filter(Boolean).join(' · '))}</small>
       <small>${(lv.itensTexto || []).length} itens: ${conta('C')} C · ${conta('NC')} NC · ${conta('NA')} NA${lv.numero ? ' · ' + escaparHtml(lv.numero) : ''}</small></div>
-    ${lv.estado === 'concluida' ? ((ehTST() ? lv.pdfUrl : (lv.pdfPublicoUrl || lv.pdfUrl)) ? `<a class="q-pdf" href="${escaparHtml(ehTST() ? lv.pdfUrl : (lv.pdfPublicoUrl || lv.pdfUrl))}" target="_blank" rel="noopener"><span class="q-pdf-icone">PDF</span><span class="q-pdf-txt"><b>${escaparHtml(lv.pdfNome || 'LV em PDF')}</b><small>${ehTST() ? 'Versão completa (com as fotos) · Drive › LV' : 'Versão para compartilhar'}</small></span></a>`
+    ${lv.estado === 'concluida' ? ((ehSSTMA() ? lv.pdfUrl : (lv.pdfPublicoUrl || lv.pdfUrl)) ? `<a class="q-pdf" href="${escaparHtml(ehSSTMA() ? lv.pdfUrl : (lv.pdfPublicoUrl || lv.pdfUrl))}" target="_blank" rel="noopener"><span class="q-pdf-icone">PDF</span><span class="q-pdf-txt"><b>${escaparHtml(lv.pdfNome || 'LV em PDF')}</b><small>${ehSSTMA() ? 'Versão completa (com as fotos) · Drive › LV' : 'Versão para compartilhar'}</small></span></a>`
       : '<p class="q-pdf-aguardando">LV concluída. O número e o PDF saem na próxima sincronização (até 10 minutos).</p>') : '<p class="lv-sub">LV em andamento, preenchida por ' + escaparHtml(lv.criadoPorNome || '') + '.</p>'}
     ${desvios.length ? `<div class="lv-bloco"><b>Desvio${desvios.length > 1 ? 's' : ''} gerado${desvios.length > 1 ? 's' : ''}</b>${desvios.map(n => `<span class="lv-sub">Item ${n} · ${escaparHtml((lv.ncs[n] || {}).descricao || '')} · prazo ${escaparHtml(formatarDataBR((lv.ncs[n] || {}).prazo))}</span>`).join('')}</div>` : ''}
     ${lv.estado === 'concluida' ? `<span class="secao-titulo" style="margin-top:6px;">Compartilhar</span>
       <button type="button" class="zap-btn principal" id="lv-compartilhar">Compartilhar resultado (WhatsApp ou e-mail)</button>` : ''}
-    ${ehTST() ? `<button type="button" class="zap-btn secundario" id="lv-nova-mesmo">Nova LV deste ${lv.forma === 'veiculo' ? 'veículo' : 'item'}</button>` : ''}
+    ${ehSSTMA() ? `<button type="button" class="zap-btn secundario" id="lv-nova-mesmo">Nova LV deste ${lv.forma === 'veiculo' ? 'veículo' : 'item'}</button>` : ''}
   </div>`;
   barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b>${escaparHtml(lv.numero || lv.tipoNome)}</b><small>${escaparHtml(s.txt)}</small></span></div><button type="button" class="btn-primary" id="lv-fechar">Fechar</button>`;
   document.getElementById('lv-fechar').addEventListener('click', () => irPara('view-lv'));
@@ -7432,7 +7560,7 @@ async function gerarCartaoLV(lv){
     return { n, desc: quebra('Item ' + n + ' — ' + (nc.descricao || (lv.itensTexto || [])[n - 1] || ''), `600 30px ${fonte}`, W - 2 * M - 48),
              acao: quebra([nc.medida && 'Ação: ' + nc.medida, nc.responsavel && 'Resp.: ' + nc.responsavel, nc.prazo && 'Prazo: ' + formatarDataBR(nc.prazo)].filter(Boolean).join(' · '), `400 26px ${fonte}`, W - 2 * M - 48) }; });
   const at = lv.assinaturaTST || {}, ae = lv.assinaturaExterno || {};
-  const ass = [['Inspeção e Segurança do Trabalho', [at.nome, at.matricula ? 'Mat. ' + at.matricula : ''].filter(Boolean).join(' · ')],
+  const ass = [['Inspeção e ' + (at.area || 'Segurança do Trabalho'), [at.nome, at.matricula ? 'Mat. ' + at.matricula : ''].filter(Boolean).join(' · ')],
                [lv.respArea ? 'Responsável pela área' : 'Responsável pelo equipamento', [ae.nome, ae.funcao, ae.empresa].filter(Boolean).join(' · ')]].filter(a => a[1]);
   const H = 150 + 40 + tituloL.length * 56 + 50 + 110 + obsL.length * 40 + 30 + 120 + corpo.reduce((a, c) => a + 30 + c.v.length * 42, 0) + 30
     + (pend.length ? 70 + pend.reduce((a, p) => a + 36 + p.desc.length * 40 + p.acao.length * 34, 0) : 0)
@@ -7586,7 +7714,7 @@ async function lvRenderBusca(){
         <span class="lv-sub">${escaparHtml([lvDescEquip(u), u.empresaNome || u.empresaTipo].filter(Boolean).join(' · '))}</span>
         <span class="lv-sub">${g.length} LV(s)${rep.length ? ' · NC repetida nos itens ' + rep.join(', ') : ''}</span></div>
       ${g.slice(0, 6).map(l => lvCard(l)).join('')}
-      ${ehTST() ? `<button type="button" class="zap-btn secundario lv-nova-de" data-tipo="${escaparHtml(u.tipoId)}" data-ident="${escaparHtml(u.identificador || '')}">Nova LV deste ${u.forma === 'veiculo' ? 'veículo' : 'item'}</button>` : ''}</div>`;
+      ${ehSSTMA() ? `<button type="button" class="zap-btn secundario lv-nova-de" data-tipo="${escaparHtml(u.tipoId)}" data-ident="${escaparHtml(u.identificador || '')}">Nova LV deste ${u.forma === 'veiculo' ? 'veículo' : 'item'}</button>` : ''}</div>`;
   }).join('');
   lvRecentes = lvRecentes.concat(achadas.filter(a => !lvRecentes.some(r => r.id === a.id)));
   lvLigarCards(caixa);
@@ -7709,6 +7837,8 @@ function trAtualizarTelas(){
 }
 /* linha do acumulado do ano no card do início (histórico INDICA + treinamentos do app) */
 let trAcumEm = 0;
+// deixa o leitor de QR guardado no celular (para funcionar offline mesmo quem nunca abriu a câmera)
+setTimeout(() => { if(navigator.onLine) fetch('./jsqr.js').catch(() => {}); }, 8000);
 async function trRenderAcumulado(){
   const el = document.getElementById('tr-acumulado');
   if(!el || typeof trhMeses !== 'function') return;
@@ -7740,7 +7870,7 @@ function trRenderInicio(){
     <div class="q-kpi"><b>${doMes.length}</b><span>treinamentos</span></div>
     <div class="q-kpi"><b>${part}</b><span>participações</span></div>
     <div class="q-kpi"><b>${hh >= 10 ? Math.round(hh) : String(Math.round(hh * 10) / 10).replace('.', ',')}h</b><span>horas-homem</span></div>`;
-  document.getElementById('tr-at-novo').style.display = ehTST() ? '' : 'none';
+  document.getElementById('tr-at-novo').style.display = ehSSTMA() ? '' : 'none';
   trRenderAcumulado();
   const ult = document.getElementById('tr-ultimos');
   const lista = trOrdenar(todos).slice(0, 10);
@@ -7750,7 +7880,7 @@ function trRenderInicio(){
 
 /* ---------- escolher o tema ---------- */
 function trAbrirEscolher(){
-  if(!ehTST()){ mostrarAvisoApp('Só TST', 'Os treinamentos são registrados pelos TSTs.'); return; }
+  if(!ehSSTMA()){ mostrarAvisoApp('Só SSTMA', 'Os treinamentos são registrados pelos TSTs e pelo Meio Ambiente.'); return; }
   trTrocandoTema = false;
   irPara('view-tr-escolher');
   document.getElementById('tr-busca-tema').value = '';
@@ -7809,13 +7939,13 @@ function trAbrir(t){
   trAtual = JSON.parse(JSON.stringify(t));
   trAtual.participantes = trAtual.participantes || []; trAtual.fotos = trAtual.fotos || [];
   const meu = t.criadoPor === (auth.currentUser && auth.currentUser.uid);
-  trPasso = t.estado === 'concluido' ? 4 : (meu && ehTST() ? 1 : 4);
+  trPasso = t.estado === 'concluido' ? 4 : (meu && ehSSTMA() ? 1 : 4);
   irPara('view-tr-ficha'); trRenderFicha(); window.scrollTo(0, 0);
 }
 
 /* ---------- salvar ---------- */
 const TR_NAO_REGRAVAR = ['novo', 'id', 'criadoEm', 'concluidoEm', 'numero', 'pdfUrl', 'pdfNome', 'versoes', 'relatorioPendente', 'listaIncluida', 'atualizadoEm', 'fotosDrive'];
-function trPodeEditar(){ return !!trAtual && trAtual.estado !== 'concluido' && ehTST() && trAtual.criadoPor === (auth.currentUser && auth.currentUser.uid); }
+function trPodeEditar(){ return !!trAtual && trAtual.estado !== 'concluido' && ehSSTMA() && trAtual.criadoPor === (auth.currentUser && auth.currentUser.uid); }
 function trDados(){ const d = Object.assign({}, trAtual); TR_NAO_REGRAVAR.forEach(k => delete d[k]); d.matriculas = (trAtual.participantes || []).filter(trMatNum).map(p => String(p.matricula)); return d; }
 function trSalvar(imediato){
   if(!trPodeEditar()) return;
@@ -7851,15 +7981,13 @@ function trDadosFaltando(){
   return f;
 }
 function trRenderDados(corpo, barra, ed){
-  const t = trAtual, h = Math.floor((Number(t.cargaMin) || 0) / 60), m = (Number(t.cargaMin) || 0) % 60;
+  const t = trAtual;
   corpo.innerHTML = `<div class="lv-form">
     <div class="lv-campo">Treinamento *<div class="tr-sel"><span>${t.codigo ? `<span class="tr-cod">${escaparHtml(t.codigo)}</span> ` : ''}<b>${escaparHtml(t.tema)}</b></span>${ed ? '<button type="button" class="tr-trocar" id="tr-trocar">trocar</button>' : ''}</div></div>
     <div class="tr-conteudo"><b>CONTEÚDO DO TREINAMENTO</b>${trAssuntos(t.assuntos).length ? `<ul>${trAssuntos(t.assuntos).map(a => `<li>${escaparHtml(a)}</li>`).join('')}</ul>` : '<p class="lv-sub" style="margin:0">Este treinamento está sem assuntos na lista.</p>'}</div>
     <label class="lv-campo">Título da turma (opcional)<input type="text" data-tr="turma" value="${escaparHtml(t.turma || '')}" placeholder="Ex.: Início das atividades de desmonte de rocha"></label>
-    <div class="lv-dois"><label class="lv-campo">Data *<input type="date" data-tr="data" value="${escaparHtml(t.data || '')}"></label><label class="lv-campo">Início *<input type="time" data-tr="hora" value="${escaparHtml(t.hora || '')}"></label></div>
-    <div class="lv-campo">Carga horária *<div class="lv-dois">
-      <select id="tr-carga-h" aria-label="Horas">${Array.from({ length: 9 }, (_, i) => `<option value="${i}" ${i === h ? 'selected' : ''}>${i} h</option>`).join('')}</select>
-      <select id="tr-carga-m" aria-label="Minutos">${[0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55].map(i => `<option value="${i}" ${i === m ? 'selected' : ''}>${String(i).padStart(2, '0')} min</option>`).join('')}</select></div></div>
+    <div class="lv-dois"><label class="lv-campo">Data *<input type="date" data-tr="data" value="${escaparHtml(t.data || '')}"></label><div class="lv-campo">Início *<button type="button" class="campo-roda${t.hora ? '' : ' vazio'}" id="tr-hora" aria-label="Horário de início"><span>${escaparHtml(t.hora || '--:--')}</span><span class="icone-svg" data-icone="relogio"></span></button></div></div>
+    <div class="lv-campo">Carga horária *<button type="button" class="campo-roda${t.cargaMin ? '' : ' vazio'}" id="tr-carga" aria-label="Carga horária"><span>${escaparHtml(textoDuracao(t.cargaMin) || 'Escolher duração')}</span><span class="icone-svg" data-icone="relogio"></span></button></div>
     ${qCampoLista('Local', 'local', 'local', t.local, ed, 'Descreva o local')}
     <label class="lv-campo">Categoria no INDICA<select id="tr-categoria">${TRH_CATEGORIAS.map(c => `<option value="${escaparHtml(c)}" ${c === (t.categoria || trhCategoriaPadrao(t.tema, t.codigo)) ? 'selected' : ''}>${escaparHtml(c === 'INTEGRAÇÃO' ? 'Integração' : c === 'TREINAMENTO DIÁRIO DE TRABALHO (TDT)' ? 'Treinamento Diário de Trabalho (TDT)' : c)}</option>`).join('')}</select>
       <small class="lv-sub" style="font-weight:400">Bloco do relatório INDICA onde as horas deste treinamento entram. Integração e TDT não contam no indicador de capacitação.</small></label>
@@ -7871,9 +7999,15 @@ function trRenderDados(corpo, barra, ed){
   const selCat = document.getElementById('tr-categoria');
   if(!t.categoria) t.categoria = selCat.value;
   selCat.addEventListener('change', () => { t.categoria = selCat.value; trSalvar(); });
-  ['tr-carga-h', 'tr-carga-m'].forEach(id => document.getElementById(id).addEventListener('change', () => {
-    t.cargaMin = Number(document.getElementById('tr-carga-h').value) * 60 + Number(document.getElementById('tr-carga-m').value); trSalvar(); atualizar();
-  }));
+  const btHora = document.getElementById('tr-hora'), btCarga = document.getElementById('tr-carga');
+  btHora.addEventListener('click', async () => {
+    const v = await rodaHora('Início do treinamento', t.hora); if(v === null) return;
+    t.hora = v; btHora.firstChild.textContent = v; btHora.classList.remove('vazio'); trSalvar(); atualizar();
+  });
+  btCarga.addEventListener('click', async () => {
+    const v = await rodaDuracao('Carga horária', t.cargaMin, 8, 5); if(v === null) return;
+    t.cargaMin = v; btCarga.firstChild.textContent = textoDuracao(v) || 'Escolher duração'; btCarga.classList.toggle('vazio', !v); trSalvar(); atualizar();
+  });
   lvLigarListas(corpo, (chave, valor) => { t[chave] = valor; trSalvar(); atualizar(); });
   const tr = document.getElementById('tr-trocar'); if(tr) tr.addEventListener('click', () => { trSalvar(true); trTrocandoTema = true; irPara('view-tr-escolher'); document.getElementById('tr-busca-tema').value = ''; trRenderTemas(); });
   const bt = document.getElementById('tr-ir-2');
@@ -7947,8 +8081,10 @@ async function trAbrirCamera(){
     if('BarcodeDetector' in window){
       try{ const f = await window.BarcodeDetector.getSupportedFormats(); if(f.includes('qr_code')) detector = new window.BarcodeDetector({ formats: ['qr_code'] }); }catch(e){}
     }
-    if(!detector) await trCarregarJsQR();
-    trCam = { stream, video, detector, canvas: document.createElement('canvas'), ocupado: false };
+    // o leitor próprio (jsqr.js, guardado no celular) sempre entra junto: o leitor do Android
+    // depende do Google Play Services e pode não funcionar sem internet
+    if(!detector) await trCarregarJsQR(); else trCarregarJsQR().catch(() => {});
+    trCam = { stream, video, detector, canvas: document.createElement('canvas'), ocupado: false, tique: 0, falhasDet: 0 };
     caixa.classList.remove('tr-cam-off'); msg.textContent = 'Aponte para o QR code do crachá';
     trCam.timer = setInterval(trLerQuadro, 160);
   }catch(e){
@@ -7963,7 +8099,13 @@ async function trLerQuadro(){
   c.ocupado = true;
   try{
     let txt = null;
-    if(c.detector){ const r = await c.detector.detect(c.video); txt = r && r[0] && r[0].rawValue; }
+    c.tique++;
+    // com os dois leitores disponíveis, alterna entre eles (um quadro cada)
+    const usarDetector = c.detector && (!window.jsQR || c.tique % 2 === 0);
+    if(usarDetector){
+      try{ const r = await c.detector.detect(c.video); txt = r && r[0] && r[0].rawValue; c.falhasDet = 0; }
+      catch(e){ if(++c.falhasDet >= 3) c.detector = null; }   // leitor do Android falhando (ex.: offline): fica só o jsqr
+    }
     else if(window.jsQR){
       const vw = c.video.videoWidth, vh = c.video.videoHeight; if(!vw) return;
       const esc = Math.min(1, 720 / Math.max(vw, vh)), w = Math.round(vw * esc), h = Math.round(vh * esc);
@@ -8163,7 +8305,7 @@ async function trConcluir(){
 /* ---------- concluído ---------- */
 function trRenderConcluido(corpo, barra){
   const t = trAtual, conc = t.estado === 'concluido', n = (t.participantes || []).length;
-  const tst = ehTST();
+  const tst = ehSSTMA();
   const versoes = (t.versoes || []).slice().reverse();
   const novas = (t.fotos || []).filter(f => !f.emRelatorio).length;
   const proxRv = (t.versoes || []).length + 1;
@@ -8334,7 +8476,7 @@ async function emCarregarContatos(){
   }catch(e){ console.warn('contatos:', e); }
 }
 function abrirEmailResp(){
-  if(!ehTST()){ irPara('view-desvios'); return; }
+  if(!ehSSTMA()){ irPara('view-desvios'); return; }
   emSel = null; emRender();
   emCarregarContatos().then(() => { if(document.getElementById('view-email-resp').style.display !== 'none') emRender(); });
 }
@@ -8846,7 +8988,7 @@ function trhMontarQuadros(modo){
   const semHT = doAno.filter(p => !meses[p].horasTrab);
   const temIndica = periodos.some(p => meses[p].origem === 'INDICA');
   const avisoHT = (!temIndica ? '<p class="an-aviso">Ainda não há relatórios INDICA lidos. Confira se os PDFs estão na pasta "Histórico Treinamentos" e se o script já rodou (função reprocessarHistoricoTreinamentos).</p>' : '')
-    + (semHT.length ? `<p class="an-aviso">Sem horas trabalhadas em ${semHT.map(anMesCurto).join(', ')}: ${ehTST() ? 'informe na análise de Treinamentos (quadro "Fonte de cada mês") ou coloque o PDF do INDICA na pasta' : 'o mês aparece quando o INDICA for colocado na pasta'}.</p>` : '');
+    + (semHT.length ? `<p class="an-aviso">Sem horas trabalhadas em ${semHT.map(anMesCurto).join(', ')}: ${ehSSTMA() ? 'informe na análise de Treinamentos (quadro "Fonte de cada mês") ou coloque o PDF do INDICA na pasta' : 'o mês aparece quando o INDICA for colocado na pasta'}.</p>` : '');
   q.push({ titulo: 'Hora homem treinada ST – ' + ano, sub: 'Total de hora homem treinada ÷ total de hora homem trabalhada × 100 (sem TDT e Integração)',
     corpo: anColunasHtml(colunas, { fmt: v => anFmt(v, 2), meta: TR_META_HHT, metaRot: 'Meta mensal ' + anFmt(TR_META_HHT, 2) + '%' }) + avisoHT, larga: true });
   if(!doPeriodo.length){
@@ -8922,7 +9064,7 @@ function trhMontarQuadros(modo){
   }
   // 8. de onde veio cada mês (só na página)
   if(!apr){
-    const tst = ehTST();
+    const tst = ehSSTMA();
     q.push({ titulo: 'Fonte de cada mês', sub: 'Mês com relatório INDICA na pasta usa o INDICA; sem ele, entram os treinamentos do app',
       corpo: `<div class="ag-tabela-scroll"><table class="ag-tabela an-fontes"><thead><tr><th>Mês</th><th>Fonte</th><th>Horas treinadas</th><th>Horas trabalhadas</th><th>Indicador</th></tr></thead><tbody>
         ${periodos.slice().reverse().map(p => { const r = meses[p], i2 = trhIndicador(r.horas, r.horasTrab);
