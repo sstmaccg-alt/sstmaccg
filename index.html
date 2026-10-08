@@ -1082,6 +1082,15 @@
   .em-resp{ width:100%; text-align:left; margin-bottom:8px; }
   .lv-tag.em-tag-atraso{ background:#fde2e1; color:#a32d2d; }
   .lv-tag.em-tag-ok{ background:#e3f1d6; color:#2d5214; }
+  .lv-tag.em-tag-sem{ background:#fdf0d5; color:#7a4b06; }
+  .em-auto{ display:flex; gap:10px; align-items:flex-start; background:var(--white); border:1px solid var(--border); border-radius:14px; padding:12px 14px; margin:0 0 14px; }
+  .em-auto .icone-svg{ width:20px; height:20px; color:var(--green-dark); flex:none; margin-top:2px; }
+  .em-auto b{ display:block; color:var(--navy); font-size:14px; }
+  .em-auto span{ display:block; font-size:12.5px; color:var(--text-muted); line-height:1.4; }
+  .em-auto.desligado .icone-svg{ color:#a1520f; }
+  .em-status{ font-size:13px; margin:10px 0 0; color:var(--text-muted); }
+  .em-status.ok{ color:var(--green-dark); font-weight:700; } .em-status.erro{ color:var(--error); font-weight:700; }
+  .em-link{ background:none; border:0; color:var(--green-dark); font:inherit; font-size:13px; font-weight:700; text-decoration:underline; cursor:pointer; padding:6px 0; }
   .lv-chip.on{ background:var(--navy); color:var(--white); border-color:var(--navy); font-weight:700; }
   .lv-passos{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin:0 0 14px; }
   .lv-passos span{ height:5px; border-radius:3px; background:var(--border); } .lv-passos span.feito{ background:var(--green); }
@@ -8543,7 +8552,22 @@ document.querySelectorAll('#view-tr-escolher .tr-volta-inicio').forEach(b => b.a
    à da reunião) e monta o e-mail com os desvios dele + o PDF da tabela.
    O e-mail de cada responsável fica guardado em contatosResponsaveis/{chave}.
    ===================================================================== */
-let emSel = null, emBusca = '', emContatos = {}, emContatosCarregados = false;
+let emSel = null, emBusca = '', emContatos = {}, emContatosCarregados = false, emAuto = null, emPedidoOuvinte = null;
+function emListaEmails(t){ return String(t || '').split(/[;,\s]+/).map(x => x.trim().toLowerCase()).filter(Boolean); }
+function emEmailsValidos(t){ const l = emListaEmails(t); return l.every(x => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x)); }
+function emAutoHtml(){
+  const a = emAuto;
+  if(!a || !a.remetente) return `<div class="em-auto desligado"><span class="icone-svg" data-icone="relogio"></span><div><b>Envio automático ainda não ativado</b><span>Depois de configurado no script e no Power Automate, os responsáveis recebem os desvios toda sexta de manhã pelo Outlook.</span></div></div>`;
+  const quando = a.ultimoEnvio ? new Date(a.ultimoEnvio).toLocaleString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
+  const n = (a.enviados || []).length, sem = (a.semEmail || []).length;
+  return `<div class="em-auto${a.pausado ? ' desligado' : ''}"><span class="icone-svg" data-icone="relogio"></span><div>
+    <b>${a.pausado ? 'Envio automático pausado' : 'Envio automático toda sexta às 7h'}</b>
+    <span>Sai pelo Outlook de ${escaparHtml(a.remetente)} para quem tem e-mail na planilha.${quando ? ` Último envio: ${escaparHtml(quando)} · ${n} responsáve${n === 1 ? 'l' : 'is'}${sem ? ` · ${sem} sem e-mail` : ''}.` : ''}</span>
+    ${a.planilhaUrl ? `<a class="em-link" href="${escaparHtml(a.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha de e-mails</a>` : ''}</div></div>`;
+}
+async function emCarregarAuto(){
+  try{ const d = await db.collection('config').doc('emailSemanal').get(); emAuto = d.exists ? d.data() : null; }catch(e){}
+}
 function emChave(nome){ return qNorm(nome).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80) || 'sem-nome'; }
 function emGrupos(){
   const g = {};
@@ -8567,8 +8591,8 @@ async function emCarregarContatos(){
 }
 function abrirEmailResp(){
   if(!ehSSTMA()){ irPara('view-desvios'); return; }
-  emSel = null; emRender();
-  emCarregarContatos().then(() => { if(document.getElementById('view-email-resp').style.display !== 'none') emRender(); });
+  emSel = null; emContatosCarregados = false; emRender();   // e-mails podem ter mudado na planilha
+  Promise.all([emCarregarContatos(), emCarregarAuto()]).then(() => { if(document.getElementById('view-email-resp').style.display !== 'none') emRender(); });
 }
 function emRender(){
   const corpo = document.getElementById('email-resp-corpo');
@@ -8579,16 +8603,18 @@ function emRender(){
   const grupos = emGrupos();
   const termo = qNorm(emBusca.trim());
   const vis = termo ? grupos.filter(g => qNorm(g.nome).includes(termo)) : grupos;
-  corpo.innerHTML = `
+  corpo.innerHTML = emAutoHtml() + `
     <div class="field" style="margin-bottom:12px"><input type="search" id="em-busca" placeholder="Buscar responsável" value="${escaparHtml(emBusca)}"></div>
     ${!grupos.length ? '<p class="empty-state">Nenhum desvio em aberto no momento.</p>'
       : (vis.length ? vis.map(g => `<button type="button" class="lv-card em-resp" data-k="${g.chave}">
           <span class="lv-card-topo"><b>${escaparHtml(g.nome)}</b>${g.atrasados ? `<span class="lv-tag em-tag-atraso">${g.atrasados} atrasado${g.atrasados === 1 ? '' : 's'}</span>` : '<span class="lv-tag em-tag-ok">No prazo</span>'}</span>
           <span class="lv-sub">${g.lista.length} desvio${g.lista.length === 1 ? '' : 's'} em aberto${g.altos ? ' · ' + g.altos + ' de potencial alto' : ''}${emContatos[g.chave] ? ' · ' + escaparHtml(emContatos[g.chave]) : ''}</span>
+          ${emContatos[g.chave] ? '' : '<span class="lv-tag em-tag-sem" style="align-self:flex-start;margin-top:4px">Sem e-mail na planilha: não recebe o envio de sexta</span>'}
         </button>`).join('') : '<p class="empty-state">Ninguém encontrado com esse nome.</p>')}`;
   const b = document.getElementById('em-busca');
   b.addEventListener('input', () => { emBusca = b.value; const pos = b.selectionStart; emRender(); const n = document.getElementById('em-busca'); n.focus(); try{ n.setSelectionRange(pos, pos); }catch(e){} });
   corpo.querySelectorAll('.em-resp').forEach(x => x.addEventListener('click', () => { emSel = x.dataset.k; emRender(); window.scrollTo(0, 0); }));
+  corpo.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
 }
 function emGrupoAtual(){ return emGrupos().find(g => g.chave === emSel); }
 function emResumoTexto(g){
@@ -8599,62 +8625,59 @@ function emResumoTexto(g){
 function emRenderDetalhe(corpo, sub){
   const g = emGrupoAtual();
   if(!g){ emSel = null; emRender(); return; }
-  sub.textContent = 'Confira a lista, informe o e-mail e escolha como enviar.';
+  sub.textContent = 'Confira a lista e o e-mail do responsável.';
+  const rem = emAuto && emAuto.remetente, planilha = emAuto && emAuto.planilhaUrl;
   corpo.innerHTML = `
     <div class="lv-resumo-cab"><span class="rotulo">RESPONSÁVEL PELA ÁREA</span><b style="font-size:18px">${escaparHtml(g.nome)}</b>
       <small>${escaparHtml(emResumoTexto(g))}</small></div>
     <div class="field" style="margin:14px 0 4px"><label for="em-para" style="font-size:12px;font-weight:700;color:var(--navy)">E-mail do responsável</label>
-      <input type="email" id="em-para" inputmode="email" autocomplete="off" placeholder="nome@empresa.com.br" value="${escaparHtml(emContatos[g.chave] || '')}"></div>
-    <p class="lv-sub" style="margin:0 0 14px">Fica guardado para os próximos envios (visível só para os TSTs).</p>
+      <input type="email" id="em-para" inputmode="email" autocomplete="off" placeholder="${planilha ? 'Sem e-mail na planilha' : 'nome@empresa.com.br'}" value="${escaparHtml(emContatos[g.chave] || '')}" ${planilha ? 'readonly' : ''}></div>
+    <p class="lv-sub" style="margin:0 0 14px">${planilha ? `Os e-mails ficam na planilha de e-mails dos responsáveis. <a class="em-link" href="${escaparHtml(planilha)}" target="_blank" rel="noopener">Editar na planilha</a>` : 'Fica guardado para o envio automático de sexta. Mais de um: separe com ponto e vírgula.'}</p>
     <span class="secao-titulo">Desvios em aberto</span>
     <div class="em-tabela">${agTabelaAbertosHtml(g.lista)}</div>
     <div class="zap-acoes" style="margin-top:16px">
-      <div class="email-linha"><button type="button" class="zap-btn principal em-enviar" data-via="outlook" style="background:var(--navy)">E-mail · Outlook</button>
-        <button type="button" class="zap-btn principal em-enviar" data-via="gmail" style="background:var(--navy)">E-mail · Gmail</button></div>
-      <button type="button" class="zap-btn secundario" id="em-copiar">Copiar e-mail com a tabela formatada</button>
-      <button type="button" class="zap-btn secundario" id="em-pdf">Baixar PDF da tabela</button>
+      <button type="button" class="zap-btn principal" id="em-agora" style="background:var(--navy)" ${rem ? '' : 'disabled'}>Enviar agora pelo Outlook</button>
+      <button type="button" class="zap-btn secundario" id="em-copiar">Copiar e-mail para colar no Outlook</button>
     </div>
-    <p class="lv-sub" style="margin:10px 0 0">No computador, o PDF é baixado para você anexar. Para colar a tabela já formatada no corpo do e-mail, use “Copiar e-mail com a tabela formatada” e cole no Outlook.</p>`;
+    <p class="em-status" id="em-status">${rem ? `Sai pelo Outlook de ${escaparHtml(rem)} em até 10 minutos, com um texto curto e esta tabela no corpo do e-mail.` : 'O envio pelo Outlook ainda não foi ativado. Use “Copiar e-mail” e cole numa mensagem nova.'}</p>
+    <button type="button" class="em-link" id="em-pdf">Baixar PDF da tabela</button>`;
   const para = document.getElementById('em-para');
   const guardar = () => {
-    const v = para.value.trim().toLowerCase();
-    if(v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return false;
+    if(planilha) return true;   // e-mails vêm da planilha
+    const v = emListaEmails(para.value).join('; ');
+    if(!emEmailsValidos(para.value)) return false;
     if((emContatos[g.chave] || '') !== v){
       emContatos[g.chave] = v;
       gravarSemEsperar(db.collection('contatosResponsaveis').doc(g.chave).set({ nome: g.nome, email: v, atualizadoPor: qMeuPerfil().nome, atualizadoEm: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }), 'e-mail do responsável');
     }
     return true;
   };
-  para.addEventListener('change', () => { if(!guardar()) mostrarAvisoApp('E-mail inválido', 'Confira o endereço digitado.'); });
-  corpo.querySelectorAll('.em-enviar').forEach(b => b.addEventListener('click', async () => {
-    if(!guardar()){ mostrarAvisoApp('E-mail inválido', 'Confira o endereço digitado.'); para.focus(); return; }
-    const assunto = emAssunto(g), texto = emTextoEmail(g), dest = para.value.trim();
-    const celular = /android|iphone|ipad/i.test(navigator.userAgent);
-    let arquivo = null;
-    try{ arquivo = await emGerarPdf(g); }catch(e){ console.warn('PDF:', e); }
-    if(celular && arquivo && navigator.canShare && navigator.canShare({ files: [arquivo] })){
-      if(dest){ try{ await navigator.clipboard.writeText(dest); }catch(e){} }
-      try{
-        await navigator.share({ files: [arquivo], title: assunto, text: texto });
-        if(dest) mostrarAvisoApp('Destinatário copiado', 'Cole ' + dest + ' no campo "Para" do e-mail.');
-        return;
-      }catch(e){ if(e && e.name === 'AbortError') return; }
-    }
-    if(arquivo) emBaixar(arquivo);
-    const url = b.dataset.via === 'gmail'
-      ? 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(dest) + '&su=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(texto)
-      : 'https://outlook.office.com/mail/deeplink/compose?to=' + encodeURIComponent(dest) + '&subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(texto);
-    window.open(url, '_blank');
-    mostrarAvisoApp('E-mail aberto', arquivo ? 'O PDF da tabela foi baixado: anexe no e-mail antes de enviar.' : 'Confira o texto antes de enviar.');
-  }));
+  para.addEventListener('change', () => { if(!guardar()) mostrarAvisoApp('E-mail inválido', 'Confira o endereço digitado.'); else para.value = emContatos[g.chave] || ''; });
+  const st = document.getElementById('em-status');
+  document.getElementById('em-agora').addEventListener('click', async (ev) => {
+    const bt = ev.currentTarget;
+    if(!guardar() || !emListaEmails(para.value).length){ mostrarAvisoApp(planilha ? 'Sem e-mail na planilha' : 'Informe o e-mail', planilha ? 'Coloque o e-mail deste responsável na planilha de e-mails. Em até 30 minutos ele aparece aqui.' : 'Digite o e-mail do responsável antes de enviar.'); if(!planilha) para.focus(); return; }
+    if(!(await confirmarApp('Enviar agora?', `${emResumoTexto(g)} para ${emContatos[g.chave]}, pelo Outlook de ${rem}.`, 'Enviar'))) return;
+    bt.disabled = true;
+    const ref = db.collection('emailPedidos').doc();
+    gravarSemEsperar(ref.set({ chave: g.chave, nome: g.nome, email: emContatos[g.chave], qtd: g.lista.length, estado: 'pendente',
+      pedidoEm: firebase.firestore.FieldValue.serverTimestamp(), porEmail: qMeuEmail(), porNome: qMeuPerfil().nome }), 'pedido de e-mail');
+    st.className = 'em-status'; st.textContent = 'Pedido registrado. O e-mail sai pelo Outlook em até 10 minutos.';
+    if(emPedidoOuvinte) emPedidoOuvinte();
+    emPedidoOuvinte = ref.onSnapshot(d => {
+      const x = d.data() || {}, alvo = document.getElementById('em-status'); if(!alvo) return;
+      if(x.estado === 'enviado'){ alvo.className = 'em-status ok'; alvo.textContent = 'Enviado para ' + (x.para || x.email) + '.'; }
+      else if(x.estado === 'erro'){ alvo.className = 'em-status erro'; alvo.textContent = 'Não foi enviado: ' + (x.erro || 'erro no script') + '.'; const b = document.getElementById('em-agora'); if(b) b.disabled = false; }
+    }, () => {});
+  });
   document.getElementById('em-copiar').addEventListener('click', async () => {
     const html = emHtmlEmail(g), txt = emTextoEmail(g);
     try{
       if(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write){
         await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([txt], { type: 'text/plain' }) })]);
       } else await navigator.clipboard.writeText(txt);
-      mostrarAvisoApp('E-mail copiado', 'Abra um e-mail novo e cole no corpo da mensagem.');
-    }catch(e){ mostrarAvisoApp('Não consegui copiar', 'Use os botões do Outlook ou do Gmail.'); }
+      mostrarAvisoApp('E-mail copiado', 'Abra uma mensagem nova no Outlook e cole no corpo. Assunto sugerido: ' + emAssunto(g));
+    }catch(e){ mostrarAvisoApp('Não consegui copiar', 'Tente de novo pelo computador.'); }
   });
   document.getElementById('em-pdf').addEventListener('click', async (ev) => {
     const bt = ev.currentTarget; bt.disabled = true; const r = bt.textContent; bt.textContent = 'Gerando PDF...';
@@ -8667,50 +8690,33 @@ function emBaixar(arquivo){ const a = document.createElement('a'); a.href = URL.
 function emHoje(){ const d = new Date(); return d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); }
 function emAssunto(g){ return `Desvios de segurança em aberto – ${g.nome} – ${new Date().toLocaleDateString('pt-BR')}`; }
 function emPrazoTxt(d){ return formatarDataBR(d.prazo) || String(d.prazo || '') || '—'; }
+function emSaudacao(g){ return g.nome.startsWith('Sem responsável') ? 'Prezados,' : `Prezado(a) ${msgNomeProprio(g.nome)},`; }
+function emFraseCurta(g){
+  return `Seguem os desvios de segurança em aberto na sua área: ${emResumoTexto(g)}. ` +
+    (g.atrasados || g.altos ? 'Pedimos prioridade aos atrasados e aos de potencial alto. ' : '') + 'Para registrar a resolução, clique no número do desvio.';
+}
 function emTextoEmail(g){
-  const eu = (typeof qMeuPerfil === 'function') ? qMeuPerfil() : {};
-  const blocos = g.lista.map(d => [
-    `DESVIO Nº ${d.numero || '—'} – ${String(d.status || '').toUpperCase()}`,
-    ...msgCampos([['Data', formatarDataBR(d.data)], ['Potencial', d.potencial], ['Local', d.local], ['Processo / Atividade', d.processo],
-      ['Descrição', d.descricao], ['Ações para correção', d.acoesCorrecao], ['Prazo', emPrazoTxt(d)], ['Origem', d.origem],
-      ['Registrar a resolução', d.id ? linkResolverDesvio(d.id) : '']], false)
-  ]);
-  let txt = msgBlocos([
-    [g.nome.startsWith('Sem responsável') ? 'Prezados,' : `Prezado(a) ${msgNomeProprio(g.nome)},`],
-    [`Segue a relação dos desvios de segurança em aberto sob sua responsabilidade, atualizada em ${emHoje()}.`, `Total: ${emResumoTexto(g)}.`],
-    ...blocos,
-    ['Solicitamos a regularização dos itens dentro dos prazos indicados, com prioridade para os desvios atrasados e de potencial alto. A resolução de cada desvio pode ser registrada pelo aplicativo, no link indicado em cada item.'],
-    ['A tabela completa segue em anexo (PDF).'],
-    msgAssinaturaEmail()
-  ]);
-  // links longos demais quebram o e-mail aberto pelo navegador: versão resumida (a tabela completa vai no PDF)
-  if(encodeURIComponent(txt).length > 7000){
-    txt = msgBlocos([
-      [g.nome.startsWith('Sem responsável') ? 'Prezados,' : `Prezado(a) ${msgNomeProprio(g.nome)},`],
-      [`Segue a relação dos desvios de segurança em aberto sob sua responsabilidade, atualizada em ${emHoje()}.`, `Total: ${emResumoTexto(g)}.`],
-      g.lista.map(d => `- Nº ${d.numero || '—'} | ${d.status} | ${d.potencial || '—'} | ${d.local || '—'} | Prazo: ${emPrazoTxt(d)}`),
-      ['A descrição e as ações de correção de cada desvio estão na tabela em anexo (PDF). A resolução pode ser registrada pelo aplicativo: ' + location.origin + '/'],
-      msgAssinaturaEmail()
-    ]);
-  }
-  return txt;
+  return msgBlocos([[emSaudacao(g)], [emFraseCurta(g).replace('clique no número do desvio', 'use o app: ' + location.origin + '/')],
+    g.lista.map(d => `Nº ${d.numero || '—'} | ${d.status} | ${d.potencial || '—'} | ${d.local || '—'} | Prazo: ${emPrazoTxt(d)}`), msgAssinaturaEmail()]);
 }
 function emHtmlEmail(g){
   const e = escaparHtml, eu = (typeof qMeuPerfil === 'function') ? qMeuPerfil() : {};
-  const cor = { 'Alto': '#d64545', 'Médio': '#e8c25a', 'Baixo': '#7fae5a' };
-  const th = 'style="background:#8a95a3;color:#fff;font-weight:700;padding:6px 8px;border:1px solid #c9ced6;font-size:12px;text-align:center"';
-  const td = 'style="padding:6px 8px;border:1px solid #c9ced6;font-size:12px;vertical-align:middle;text-align:center"';
-  const tdL = 'style="padding:6px 8px;border:1px solid #c9ced6;font-size:12px;vertical-align:middle"';
-  const linhas = g.lista.map(d => `<tr><td ${td}><b>${e(d.numero)}</b></td><td ${td}>${e(formatarDataBR(d.data))}</td><td ${td}>${e(d.processo)}</td><td ${td}>${e(d.local)}</td>
-    <td ${tdL}>${e(d.descricao)}</td><td style="padding:6px 8px;border:1px solid #c9ced6;font-size:12px;text-align:center;font-weight:700;background:${cor[d.potencial] || '#eee'};color:${d.potencial === 'Médio' ? '#3d2c00' : '#fff'}">${e(d.potencial)}</td>
+  const cor = { 'Alto': ['#d64545', '#fff'], 'Médio': ['#e8c25a', '#3d2c00'], 'Baixo': ['#7fae5a', '#fff'] };
+  const b = 'border:1px solid #c9ced6;padding:6px 8px;font-family:Segoe UI,Arial,sans-serif;font-size:12px;color:#142131;';
+  const th = `style="${b}background:#8a95a3;color:#fff;font-weight:bold;text-align:center"`, td = `style="${b}text-align:center"`, tdL = `style="${b}text-align:left"`;
+  const linhas = g.lista.map(d => { const c = cor[d.potencial] || ['#eee', '#142131']; return `<tr>
+    <td ${td}>${d.id ? `<a href="${e(linkResolverDesvio(d.id))}" style="color:#142131;font-weight:bold">${e(d.numero || '—')}</a>` : e(d.numero || '—')}</td><td ${td}>${e(formatarDataBR(d.data))}</td><td ${td}>${e(d.processo)}</td><td ${td}>${e(d.local)}</td>
+    <td ${tdL}>${e(d.descricao)}</td><td style="${b}text-align:center;font-weight:bold;background:${c[0]};color:${c[1]}" bgcolor="${c[0]}">${e(d.potencial || '—')}</td>
     <td ${tdL}>${e(d.acoesCorrecao || '—')}</td><td ${td}>${e(emPrazoTxt(d))}</td>
-    <td style="padding:6px 8px;border:1px solid #c9ced6;font-size:12px;text-align:center;font-weight:700;color:${d.status === 'Atrasado' ? '#c62828' : '#2d5214'}">${e(d.status)}</td>
-    <td ${td}>${d.id ? `<a href="${e(linkResolverDesvio(d.id))}">Resolver</a>` : '—'}</td></tr>`).join('');
+    <td style="${b}text-align:center;font-weight:bold;color:${d.status === 'Atrasado' ? '#c62828' : '#2d5214'}">${e(d.status)}</td><td ${td}>${e(d.origem || '—')}</td></tr>`; }).join('');
   return `<div style="font-family:Segoe UI,Arial,sans-serif;font-size:14px;color:#142131">
-    <p>${g.nome.startsWith('Sem responsável') ? 'Prezados,' : 'Prezado(a) ' + e(msgNomeProprio(g.nome)) + ','}</p>
-    <p>Segue a relação dos desvios de segurança em aberto sob sua responsabilidade, atualizada em ${e(emHoje())}.<br><b>Total: ${e(emResumoTexto(g))}.</b></p>
-    <table style="border-collapse:collapse;width:100%"><thead><tr><th ${th}>Nº</th><th ${th}>Data</th><th ${th}>Processo / Atividade</th><th ${th}>Local</th><th ${th}>Descrição do desvio</th><th ${th}>Potencial</th><th ${th}>Ações para correção</th><th ${th}>Prazo</th><th ${th}>Status</th><th ${th}>Resolução</th></tr></thead><tbody>${linhas}</tbody></table>
-    <p>Solicitamos a regularização dos itens dentro dos prazos indicados, com prioridade para os desvios atrasados e de potencial alto. A resolução de cada desvio pode ser registrada pelo aplicativo, no link "Resolver" da tabela.</p>
+    <p>${e(emSaudacao(g))}</p><p>${e(emFraseCurta(g))}</p>
+    <table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;max-width:1100px">
+      <tr><td bgcolor="#142131" style="background:#142131;padding:10px 12px"><div style="color:#fff;font-size:16px;font-weight:bold">Desvios em aberto – ${e(g.nome)}</div>
+        <div style="color:#c8d0d8;font-size:11px">Segurança do Trabalho · Consórcio Construtor Gávea · Atualizado em ${e(new Date().toLocaleDateString('pt-BR'))}</div></td></tr>
+      <tr><td style="padding:0"><table cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+        <tr><th ${th}>Nº</th><th ${th}>Data</th><th ${th}>Processo / Atividade</th><th ${th}>Local</th><th ${th}>Descrição do desvio</th><th ${th}>Potencial</th><th ${th}>Ações para correção</th><th ${th}>Prazo</th><th ${th}>Status</th><th ${th}>Origem</th></tr>
+        ${linhas}</table></td></tr></table>
     <p>Atenciosamente,<br><br><b>${e(msgNomeProprio(eu.nome))}</b>${eu.matricula ? '<br>Matrícula ' + e(eu.matricula) : ''}<br>Segurança do Trabalho<br>Consórcio Construtor Gávea</p></div>`;
 }
 function emCarregarScript(urls){
