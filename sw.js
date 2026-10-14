@@ -57,7 +57,7 @@ self.addEventListener('notificationclick', (event) => {
   })());
 });
 
-const CACHE_NAME = 'sst-ccg-v104';
+const CACHE_NAME = 'sst-ccg-v106';
 // Leitor de placas (pasta ./ocr/, ~7 MB por celular): cache próprio, que NÃO é
 // apagado a cada versão nova do app — baixa uma vez e segue funcionando offline.
 // Trocar o nome só se os arquivos da pasta ocr mudarem.
