@@ -1431,6 +1431,8 @@
   .apr-exec-ass{ width:96px; height:32px; object-fit:contain; background:#fff; border-radius:6px; flex-shrink:0; }
   .apr-btn-link{ display:flex; align-items:center; justify-content:center; text-decoration:none; }
   .apr-frente-escolha{ max-height:52vh; overflow-y:auto; margin:6px 0; }
+  .apr-uso{ display:flex; flex-direction:column; gap:9px; }
+  .apr-uso .email-linha{ display:flex; gap:8px; } .apr-uso .email-linha .zap-btn{ flex:1; }
 </style>
 </head>
 <body>
@@ -10348,8 +10350,8 @@ function aprAtualizarTelas(){
   if(aprVisivel('view-apr-busca')) aprRenderBusca();
   if(aprVisivel('view-apr-ficha') && aprAtual && !aprAtual.novo && !aprAtual.ehModelo){
     const novo = aprLista.find(x => x.id === aprAtual.id);
-    if(novo && (novo.pdfUrl !== aprAtual.pdfUrl || novo.numero !== aprAtual.numero || novo.validaAteMes !== aprAtual.validaAteMes || aprExecHojeN(novo) !== aprExecHojeN(aprAtual))){
-      ['pdfUrl', 'numero', 'validaAteMes', 'execHoje', 'revalidacoes', 'estado'].forEach(k => { aprAtual[k] = novo[k]; });
+    if(novo && (novo.pdfUrl !== aprAtual.pdfUrl || novo.pdfPendente !== aprAtual.pdfPendente || novo.numero !== aprAtual.numero || novo.validaAteMes !== aprAtual.validaAteMes || aprExecHojeN(novo) !== aprExecHojeN(aprAtual))){
+      ['pdfUrl', 'pdfPublicoUrl', 'pdfNome', 'pdfPendente', 'numero', 'validaAteMes', 'execHoje', 'revalidacoes', 'estado'].forEach(k => { aprAtual[k] = novo[k]; });
       aprRenderFicha();
     }
   }
@@ -10699,7 +10701,7 @@ function aprVerModelo(m){
 }
 
 /* ---------- salvar ---------- */
-const APR_NAO_REGRAVAR = ['novo', 'id', 'numero', 'pdfUrl', 'pdfNome', 'pdfGeradoEm', 'criadoEm', 'execHoje', 'ehModelo'];
+const APR_NAO_REGRAVAR = ['novo', 'id', 'numero', 'pdfUrl', 'pdfId', 'pdfPublicoUrl', 'pdfPublicoId', 'pdfNome', 'pdfGeradoEm', 'criadoEm', 'execHoje', 'ehModelo'];
 function aprPodeEditar(){ return !!aprAtual && aprAtual.estado === 'rascunho' && aprPodeGerir() && (aprAtual.criadoPor === (auth.currentUser && auth.currentUser.uid) || ehSSTMA()); }
 function aprSalvar(imediato){
   if(!aprPodeEditar()) return;
@@ -10764,14 +10766,62 @@ function aprRenderFicha(){
       ${a.infoAdicionais ? `<p class="lv-sub"><b>Informações adicionais:</b> ${escaparHtml(a.infoAdicionais)}</p>` : ''}</details>`;
   const assin = a.ehModelo ? '' : `<span class="secao-titulo">Responsáveis pela elaboração</span>${APR_PAPEIS.map(([k, rot]) => aprAssinaturaHtml('elaboracao', k, rot, (a.elaboracao || {})[k], ed)).join('')}
     ${(a.revalidacoes || []).length ? `<span class="secao-titulo">Revalidações (prorrogação)</span>${a.revalidacoes.slice().reverse().map(r => `<div class="apr-reval"><b>${escaparHtml(aprMesTxt(r.mes))}</b><span class="lv-sub">${APR_PAPEIS.map(([k, rot]) => rot + ': ' + escaparHtml((r.assinaturas && r.assinaturas[k] && r.assinaturas[k].nome) || '—')).join(' · ')}</span></div>`).join('')}` : ''}`;
-  corpo.innerHTML = `<div class="lv-form">${cabecalho}${modeloInfo}
+  corpo.innerHTML = `<div class="lv-form">${cabecalho}${modeloInfo}${a.ehModelo || ed || a.estado === 'rascunho' ? '' : aprUsoHtml(a, s)}
     <span class="secao-titulo">Etapas, perigos e controles (${(a.etapas || []).length})</span>
     ${etapasHtml}
     ${ed ? '<button type="button" class="zap-btn secundario" id="apr-add-etapa">+ Adicionar etapa</button>' : ''}
     ${ambHtml}${assin}</div>`;
   aprLigarFicha(corpo, ed);
+  if(!a.ehModelo && !ed) aprLigarUso(corpo, a);
   aprBarra(barra, ed, s);
   aprPintarIcones(corpo);
+}
+/* ---- APR publicada: executantes e PDF (WhatsApp / e-mail) ---- */
+// equipe SSTMA abre o PDF completo; os demais, a versão para compartilhar (CPF mascarado)
+function aprLinkPdf(a){ return (ehSSTMA() ? a.pdfUrl : (a.pdfPublicoUrl || a.pdfUrl)) || ''; }
+function aprUsoHtml(a, s){
+  const n = aprExecHojeN(a), pode = a.estado === 'vigente' && !s.revalidar;
+  const exec = `<div class="lv-bloco apr-uso"><b>Executantes da atividade</b>
+    <p class="lv-sub">Todos que participam da atividade registram nome, matrícula/empresa e CPF e assinam com o dedo, todos os dias.</p>
+    <div class="tr-cont-linha"><b>${n} executante${n === 1 ? '' : 's'} hoje</b></div>
+    ${pode ? '<button type="button" class="btn-primary" id="apr-uso-exec">Registrar executantes</button>' : `<p class="lv-sub">${s.revalidar ? 'Revalide a APR para registrar executantes.' : 'APR encerrada.'}</p>`}</div>`;
+  const temPdf = !!(a.pdfPublicoUrl || a.pdfUrl);
+  const pdf = `<div class="lv-bloco apr-uso"><b>PDF da APR</b>
+    ${temPdf ? `<p class="lv-sub">${escaparHtml(a.pdfNome || '')}${a.pdfPendente ? ' · atualizando com as últimas assinaturas (até 10 min)' : ''}</p>
+      <a class="zap-btn secundario apr-btn-link" href="${escaparHtml(aprLinkPdf(a))}" target="_blank" rel="noopener">Abrir PDF</a>
+      <button type="button" class="zap-btn principal" id="apr-zap">Compartilhar no WhatsApp</button>
+      <div class="email-linha"><button type="button" class="zap-btn secundario apr-email" data-via="outlook">E-mail · Outlook</button><button type="button" class="zap-btn secundario apr-email" data-via="gmail">E-mail · Gmail</button></div>
+      <p class="lv-sub">O link enviado abre a versão para compartilhar (CPF mascarado). O PDF completo fica na pasta APR do Drive.</p>`
+    : '<p class="lv-sub">O PDF fica pronto na próxima sincronização (até 10 minutos depois de publicar) e vai para a pasta APR › ano › mês.</p>'}</div>`;
+  return exec + pdf;
+}
+function aprTextoMsg(a){
+  const prog = a.programacao || {};
+  return {
+    titulo: [aprNumTxt(a), a.titulo].filter(Boolean).join(' - '),
+    campos: [['APR', [aprNumTxt(a), a.titulo].filter(Boolean).join(' – ')], ['Nº de controle', a.numero], ['Frente', a.frenteNome], ['Atividade', a.atividade],
+      ['Programação', prog.inicio ? formatarDataBR(prog.inicio) + ' a ' + formatarDataBR(prog.termino) : ''], ['Válida até', 'fim de ' + aprMesTxt(a.validaAteMes)],
+      ['Executantes hoje', String(aprExecHojeN(a))]]
+  };
+}
+function aprLigarUso(corpo, a){
+  const be = document.getElementById('apr-uso-exec'); if(be) be.addEventListener('click', () => aprAbrirExecutantes(a));
+  const link = a.pdfPublicoUrl || a.pdfUrl;
+  const zap = document.getElementById('apr-zap');
+  if(zap) zap.addEventListener('click', async () => {
+    const m = aprTextoMsg(a);
+    const texto = msgBlocos([['*ANÁLISE PRELIMINAR DE RISCO – APR*'], msgCampos(m.campos, true), ['*APR (PDF):*', link]]);
+    if(navigator.share && /android|iphone|ipad/i.test(navigator.userAgent)){ try{ await navigator.share({ text: texto }); return; }catch(e){ if(e && e.name === 'AbortError') return; } }
+    window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+  });
+  corpo.querySelectorAll('.apr-email').forEach(b => b.addEventListener('click', () => {
+    const m = aprTextoMsg(a), prog = a.programacao || {};
+    const assunto = ['APR', m.titulo.replace(/^APR\s*/, ''), a.frenteNome, prog.inicio ? formatarDataBR(prog.inicio) : ''].filter(Boolean).join(' – ');
+    const corpoEmail = msgBlocos([['Prezados,'], ['Segue a Análise Preliminar de Risco (APR) da atividade, com os executantes e as assinaturas no PDF.'],
+      msgSecaoEmail('Dados da APR', m.campos), ['APR (PDF)', link], msgAssinaturaEmail()]);
+    window.open(b.dataset.via === 'gmail' ? 'https://mail.google.com/mail/?view=cm&fs=1&su=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail)
+      : 'https://outlook.office.com/mail/deeplink/compose?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail), '_blank');
+  }));
 }
 function aprEtapaHtml(e, i, ed){
   const editando = ed && aprEditEtapa === i;
@@ -10879,7 +10929,7 @@ function aprBarra(barra, ed, s){
   }
   const n = aprExecHojeN(a);
   barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b>${escaparHtml(s.txt)}</b><small>${a.estado === 'vigente' && !s.revalidar ? 'Executantes hoje: ' + n : (a.pdfUrl ? 'PDF pronto' : '')}</small></span></div>
-    ${a.pdfUrl ? `<a class="btn-primary q-btn-sec apr-btn-link" href="${escaparHtml(a.pdfUrl)}" target="_blank" rel="noopener">PDF</a>` : ''}
+    ${a.pdfUrl ? `<a class="btn-primary q-btn-sec apr-btn-link" href="${escaparHtml(aprLinkPdf(a))}" target="_blank" rel="noopener">PDF</a>` : ''}
     ${s.revalidar && aprPodeGerir() ? '<button type="button" class="btn-primary" id="apr-revalidar">Revalidar</button>' : ''}
     ${a.estado === 'vigente' && !s.revalidar ? '<button type="button" class="btn-primary" id="apr-exec">Executantes de hoje</button>' : ''}`;
   const br = document.getElementById('apr-revalidar'); if(br) br.addEventListener('click', aprAbrirRevalidar);
