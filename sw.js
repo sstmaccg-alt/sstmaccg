@@ -57,7 +57,11 @@ self.addEventListener('notificationclick', (event) => {
   })());
 });
 
-const CACHE_NAME = 'sst-ccg-v102';
+const CACHE_NAME = 'sst-ccg-v104';
+// Leitor de placas (pasta ./ocr/, ~7 MB por celular): cache próprio, que NÃO é
+// apagado a cada versão nova do app — baixa uma vez e segue funcionando offline.
+// Trocar o nome só se os arquivos da pasta ocr mudarem.
+const CACHE_OCR = 'sstma-ocr-v1';
 const ARQUIVOS_PARA_CACHE = [
   './',
   './index.html',
@@ -78,7 +82,7 @@ const FIREBASE_SCRIPTS = [
 // Arquivos extras do app (não travam a instalação se faltarem no servidor):
 // jsqr.js = leitor de QR code dos crachás (Treinamentos), usado quando o
 // celular não tem o leitor nativo (iPhone, por exemplo).
-const ARQUIVOS_OPCIONAIS = ['./jsqr.js'];
+const ARQUIVOS_OPCIONAIS = ['./jsqr.js', './qrcode.js'];   // qrcode.js = gera o QR das frentes de APR
 
 // Quanto tempo esperar a rede antes de abrir a cópia guardada (sinal ruim no campo)
 const TEMPO_LIMITE_REDE_MS = 4000;
@@ -107,7 +111,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((nomes) =>
       Promise.all(
-        nomes.filter((nome) => nome !== CACHE_NAME).map((nome) => caches.delete(nome))
+        nomes.filter((nome) => nome !== CACHE_NAME && nome !== CACHE_OCR).map((nome) => caches.delete(nome))
       )
     )
   );
@@ -170,6 +174,18 @@ self.addEventListener('fetch', (event) => {
 
   if (ehPaginaDoApp) {
     event.respondWith(paginaRedePrimeiro(event.request));
+    return;
+  }
+
+  // leitor de placas: cache próprio, primeiro o que já está guardado
+  if (url.origin === self.location.origin && url.pathname.includes('/ocr/')) {
+    event.respondWith(caches.open(CACHE_OCR).then(async (cache) => {
+      const guardado = await cache.match(event.request, { ignoreSearch: true, ignoreVary: true });
+      if (guardado) return guardado;
+      const resp = await fetch(event.request);
+      if (resp && resp.ok) cache.put(event.request, resp.clone());
+      return resp;
+    }).catch(() => Response.error()));
     return;
   }
 
