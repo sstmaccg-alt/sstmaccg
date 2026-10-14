@@ -1433,6 +1433,16 @@
   .apr-frente-escolha{ max-height:52vh; overflow-y:auto; margin:6px 0; }
   .apr-uso{ display:flex; flex-direction:column; gap:9px; }
   .apr-uso .email-linha{ display:flex; gap:8px; } .apr-uso .email-linha .zap-btn{ flex:1; }
+  .apr-cat{ background:var(--white); border-radius:14px; box-shadow:0 1px 4px rgba(20,33,49,.07); margin-bottom:9px; overflow:hidden; scroll-margin-top:70px; }
+  .apr-cat-topo{ display:flex; align-items:center; gap:10px; width:100%; min-height:56px; padding:12px 14px; background:none; border:none; font:inherit; color:var(--navy); text-align:left; cursor:pointer; }
+  .apr-cat-topo b{ flex:1; font-size:15px; }
+  .apr-cat-n{ min-width:28px; height:24px; padding:0 8px; border-radius:12px; background:#e3f1d6; color:#2d5214; font-size:12.5px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+  [data-theme="dark"] .apr-cat-n{ background:#253420; color:#c8e3a8; }
+  .apr-cat-seta{ font-size:22px; line-height:1; color:var(--text-muted); transition:transform .15s; }
+  .apr-cat.aberta .apr-cat-seta{ transform:rotate(90deg); }
+  .apr-cat.aberta .apr-cat-topo{ border-bottom:1px solid var(--border); }
+  .apr-cat-lista{ padding:10px 10px 2px; background:var(--bg, transparent); }
+  .apr-cat-lista .lv-card{ box-shadow:none; border:1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -10284,7 +10294,7 @@ const APR_CAT_DESC = {
 };
 const APR_DECLARACAO_EXEC = 'Declaro que participei da apresentação desta APR, conheço os riscos e as medidas de controle da atividade e vou cumpri-las.';
 let aprModelos = [], aprModelosCarregados = false, aprFrentes = [], aprLista = [], aprOuvindo = false;
-let aprAtual = null, aprEditEtapa = -1, aprSalvarTimer = null, aprFiltroCat = 'Todas', aprFrenteSel = null, aprNovaFrenteId = '';
+let aprAtual = null, aprEditEtapa = -1, aprSalvarTimer = null, aprFiltroCat = '', aprFrenteSel = null, aprNovaFrenteId = '';
 let aprExecHoje = [], aprExecApr = null, aprCam = null;
 
 function aprHoje(){ const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
@@ -10643,16 +10653,29 @@ function aprRenderModelos(){
   const ativas = aprFrentes.filter(f => f.ativa !== false);
   sel.innerHTML = '<option value="">Escolha a frente *</option>' + ativas.map(f => `<option value="${escaparHtml(f.id)}" ${f.id === aprNovaFrenteId ? 'selected' : ''}>${escaparHtml(f.nome)}</option>`).join('');
   const termo = qNorm(document.getElementById('apr-busca-modelo').value.trim());
-  const chips = document.getElementById('apr-chips');
-  chips.innerHTML = ['Todas'].concat(APR_CATS).map(c => `<button type="button" class="lv-chip ${c === aprFiltroCat ? 'on' : ''}" data-cat="${escaparHtml(c)}">${escaparHtml(c)}</button>`).join('');
-  chips.querySelectorAll('.lv-chip').forEach(b => b.addEventListener('click', () => { aprFiltroCat = b.dataset.cat; aprRenderModelos(); }));
-  const lista = aprModelos.filter(m => (aprFiltroCat === 'Todas' || m.categoria === aprFiltroCat) &&
-    (!termo || qNorm('apr ' + m.numero + ' ' + m.titulo + ' ' + (m.processo || '') + ' ' + (m.categoria || '')).includes(termo) || String(m.numero) === termo.replace(/\D/g, '')));
+  // categorias em lista vertical (abre uma por vez); com busca, lista direta de tudo que bate
+  const chips = document.getElementById('apr-chips'); if(chips){ chips.innerHTML = ''; chips.style.display = 'none'; }
+  const bate = (m) => !termo || qNorm('apr ' + m.numero + ' ' + m.titulo + ' ' + (m.processo || '') + ' ' + (m.atividade || '') + ' ' + (m.categoria || '')).includes(termo) || String(m.numero) === termo.replace(/\D/g, '');
+  const lista = aprModelos.filter(bate);
   document.getElementById('apr-modelos-contagem').textContent = !aprModelos.length ? (aprModelosCarregados ? 'Nenhum modelo importado ainda: rode importarModelosAPRAgora no Apps Script.' : 'Carregando os modelos…')
-    : `${lista.length} modelo${lista.length === 1 ? '' : 's'}${termo ? ` para "${document.getElementById('apr-busca-modelo').value.trim()}"` : ''}`;
+    : termo ? `${lista.length} modelo${lista.length === 1 ? '' : 's'} para "${document.getElementById('apr-busca-modelo').value.trim()}"` : `${aprModelos.length} modelos em ${APR_CATS.filter(c => aprModelos.some(m => m.categoria === c)).length} grupos · toque no grupo para abrir`;
+  const card = (m) => `<button type="button" class="lv-card" data-modelo="${escaparHtml(m.id)}"><span class="lv-card-topo"><b>APR ${escaparHtml(m.numero)} · ${escaparHtml(m.titulo)}</b><span class="lv-seta">›</span></span>
+      <span class="lv-sub">${escaparHtml([termo ? m.categoria : '', 'Rev. ' + (m.revisao || '00'), (m.etapas || []).length + ' etapas', m.fonte === 'app' ? 'criado no app' : ''].filter(Boolean).join(' · '))}</span></button>`;
   const caixa = document.getElementById('apr-modelos');
-  caixa.innerHTML = lista.map(m => `<button type="button" class="lv-card" data-modelo="${escaparHtml(m.id)}"><span class="lv-card-topo"><b>APR ${escaparHtml(m.numero)} · ${escaparHtml(m.titulo)}</b><span class="lv-seta">›</span></span>
-      <span class="lv-sub">${escaparHtml([m.categoria, 'Rev. ' + (m.revisao || '00'), (m.etapas || []).length + ' etapas', m.fonte === 'app' ? 'criado no app' : ''].filter(Boolean).join(' · '))}</span></button>`).join('');
+  if(termo){
+    caixa.innerHTML = lista.map(card).join('') || '<p class="empty-state">Nenhum modelo encontrado. Use a "APR em branco".</p>';
+  } else {
+    const outras = aprModelos.filter(m => APR_CATS.indexOf(m.categoria) < 0);
+    const grupos = APR_CATS.map(c => [c, aprModelos.filter(m => m.categoria === c)]).concat(outras.length ? [['Outras', outras]] : []).filter(g => g[1].length);
+    caixa.innerHTML = grupos.map(([c, ms]) => { const aberta = c === aprFiltroCat; return `<div class="apr-cat ${aberta ? 'aberta' : ''}">
+      <button type="button" class="apr-cat-topo" data-cat="${escaparHtml(c)}" aria-expanded="${aberta}"><b>${escaparHtml(c)}</b><span class="apr-cat-n">${ms.length}</span><span class="apr-cat-seta">›</span></button>
+      ${aberta ? `<div class="apr-cat-lista">${ms.map(card).join('')}</div>` : ''}</div>`; }).join('');
+    caixa.querySelectorAll('.apr-cat-topo').forEach(b => b.addEventListener('click', () => {
+      aprFiltroCat = aprFiltroCat === b.dataset.cat ? '' : b.dataset.cat;
+      aprRenderModelos();
+      const t = caixa.querySelector('.apr-cat.aberta'); if(t) t.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }));
+  }
   caixa.querySelectorAll('[data-modelo]').forEach(b => b.addEventListener('click', () => aprNova(aprModelos.find(m => m.id === b.dataset.modelo))));
 }
 function aprEscolherFrente(aoEscolher){
