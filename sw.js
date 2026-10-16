@@ -57,7 +57,7 @@ self.addEventListener('notificationclick', (event) => {
   })());
 });
 
-const CACHE_NAME = 'sst-ccg-v106';
+const CACHE_NAME = 'sst-ccg-v109';
 // Leitor de placas (pasta ./ocr/, ~7 MB por celular): cache próprio, que NÃO é
 // apagado a cada versão nova do app — baixa uma vez e segue funcionando offline.
 // Trocar o nome só se os arquivos da pasta ocr mudarem.
@@ -82,7 +82,7 @@ const FIREBASE_SCRIPTS = [
 // Arquivos extras do app (não travam a instalação se faltarem no servidor):
 // jsqr.js = leitor de QR code dos crachás (Treinamentos), usado quando o
 // celular não tem o leitor nativo (iPhone, por exemplo).
-const ARQUIVOS_OPCIONAIS = ['./jsqr.js', './qrcode.js'];   // qrcode.js = gera o QR das frentes de APR
+const ARQUIVOS_OPCIONAIS = ['./jsqr.js', './qrcode.js', './frente.html', './assinar.html'];   // qrcode.js = gera o QR das frentes de APR
 
 // Quanto tempo esperar a rede antes de abrir a cópia guardada (sinal ruim no campo)
 const TEMPO_LIMITE_REDE_MS = 4000;
