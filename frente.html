@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APR da frente — SSTMA CCG</title>
+<meta name="theme-color" content="#142131">
+<link rel="icon" href="icon-192.png">
+<!-- Página aberta pelo QR da placa da frente de serviço. Não precisa de login nem do app:
+     mostra as APRs vigentes daquela frente (etapas, riscos, controles) e o PDF com as assinaturas.
+     Os dados vêm de aprPublico/{frente}, que o Apps Script atualiza (sem CPF e sem assinatura). -->
+<style>
+  :root{ --navy:#142131; --green:#4E7A30; --green2:#5E8A3F; --bg:#F6F5F0; --white:#fff; --muted:#5b6573; --border:#e2e4e0; --red:#a32d2d; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--navy); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size:15px; line-height:1.4; }
+  header{ background:var(--navy); color:#fff; padding:14px 16px; display:flex; align-items:center; gap:12px; }
+  header img{ width:38px; height:38px; border-radius:10px; background:#fff; }
+  header b{ display:block; font-size:17px; } header small{ color:#b9c2cd; font-size:12px; }
+  main{ max-width:720px; margin:0 auto; padding:16px; }
+  .selo{ color:var(--green); font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; margin:4px 0 2px; }
+  h1{ font-size:24px; margin:0 0 4px; line-height:1.2; }
+  .sub{ color:var(--muted); font-size:13px; margin:0 0 14px; }
+  .aviso{ border-radius:12px; padding:11px 13px; font-size:13.5px; margin:0 0 12px; background:#e0ecf8; color:#1e4e8c; }
+  .aviso.nok{ background:#fde2e1; color:#8f2525; } .aviso.off{ background:#fdf0d5; color:#6b4106; }
+  .apr{ background:var(--white); border-radius:14px; box-shadow:0 1px 4px rgba(20,33,49,.08); margin-bottom:12px; overflow:hidden; }
+  .apr > summary{ list-style:none; cursor:pointer; padding:14px; display:flex; flex-direction:column; gap:6px; }
+  .apr > summary::-webkit-details-marker{ display:none; }
+  .apr[open] > summary{ border-bottom:1px solid var(--border); }
+  .apr-topo{ display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+  .apr-topo b{ font-size:16px; }
+  .tag{ flex-shrink:0; font-size:12px; font-weight:800; padding:3px 9px; border-radius:8px; background:#e3f1d6; color:#2d5214; }
+  .tag.nok{ background:#fde2e1; color:#8f2525; }
+  .mini{ color:var(--muted); font-size:13px; }
+  .abrir{ color:var(--green); font-size:13px; font-weight:700; }
+  .apr[open] .abrir{ display:none; }
+  .corpo{ padding:12px 14px 16px; }
+  .grade{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px 12px; margin-bottom:12px; }
+  .grade small, .grupo small{ display:block; font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.03em; }
+  .grade .larga{ grid-column:1 / -1; }
+  .etapa{ border:1px solid var(--border); border-radius:12px; padding:10px 12px; margin-bottom:9px; }
+  .etapa-nome{ display:flex; gap:10px; font-weight:700; }
+  .etapa-n{ width:26px; height:26px; border-radius:13px; background:var(--green); color:#fff; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .grupo{ margin-top:9px; padding-top:8px; border-top:1px dashed var(--border); }
+  ul{ margin:4px 0 6px; padding-left:20px; } li{ margin:2px 0; font-size:14px; }
+  .riscos li{ color:#8a2a1f; }
+  h2{ font-size:13px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin:16px 0 8px; }
+  .btn{ display:flex; align-items:center; justify-content:center; min-height:50px; border-radius:12px; font-weight:800; font-size:15px; text-decoration:none; margin-top:12px; border:none; width:100%; cursor:pointer; font-family:inherit; }
+  .btn.pri{ background:var(--green); color:#fff; } .btn.sec{ background:var(--white); color:var(--navy); border:1px solid #c9ced6; }
+  .vazio{ text-align:center; color:var(--muted); padding:28px 12px; background:var(--white); border-radius:14px; }
+  footer{ text-align:center; color:var(--muted); font-size:12px; padding:8px 16px 28px; }
+  footer a{ color:var(--navy); }
+  .carregando{ text-align:center; color:var(--muted); padding:40px 0; }
+</style>
+</head>
+<body>
+<header><img src="icon-192.png" alt="" onerror="this.style.display='none'"><div><b>SSTMA</b><small>Consórcio Construtor Gávea</small></div></header>
+<main id="conteudo"><p class="carregando">Carregando as APRs da frente…</p></main>
+<footer><button type="button" class="btn sec" id="atualizar">Atualizar</button><p id="rodape"></p></footer>
+<script>
+(function(){
+  const PROJETO = 'app-seguranca-trabalho', CHAVE = 'AIzaSyB7J_vxFOeZ_cKJ025tqMAT_iG00FTyNIY';
+  const params = new URLSearchParams(location.search);
+  const id = params.get('f') || params.get('frente') || '';
+  const el = document.getElementById('conteudo');
+  const esc = (t) => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const br = (iso) => { const m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? m[3] + '/' + m[2] + '/' + m[1] : ''; };
+  const hoje = new Date(), mesAtual = hoje.getFullYear() + '-' + String(hoje.getMonth() + 1).padStart(2, '0');
+  const lista = (xs, cls) => (xs && xs.length) ? `<ul class="${cls || ''}">${xs.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '';
+  const rotulo = (t) => t === 'Acidentes' ? 'Risco de acidentes' : 'Risco ' + String(t || '').toLowerCase();
+
+  function aprHtml(a, abrir){
+    const vigente = String(a.validaAteMes || '') >= mesAtual;
+    const nome = (a.modeloNumero ? 'APR ' + a.modeloNumero : 'APR') + ' · ' + (a.titulo || '');
+    const validade = a.validaDe && a.validaAte ? 'Válida de ' + br(a.validaDe) + ' a ' + br(a.validaAte) : '';
+    const etapas = (a.etapas || []).map((e, i) => `<div class="etapa"><div class="etapa-nome"><span class="etapa-n">${i + 1}</span><span>${esc(e.nome || 'Etapa')}</span></div>
+      ${(e.riscos || []).map(r => `<div class="grupo"><small>${esc(rotulo(r.tipo))}</small>${lista(r.itens, 'riscos')}${(r.controles || []).length ? '<small>Controles</small>' + lista(r.controles) : ''}</div>`).join('')}</div>`).join('');
+    const amb = a.ambiental || {};
+    return `<details class="apr" ${abrir ? 'open' : ''}><summary>
+        <span class="apr-topo"><b>${esc(nome)}</b><span class="tag ${vigente ? '' : 'nok'}">${vigente ? 'Vigente' : 'Revalidar'}</span></span>
+        <span class="mini">${esc([a.numero, validade, a.revalidada ? 'revalidada' : ''].filter(Boolean).join(' · '))}</span>
+        <span class="abrir">Toque para ver etapas, riscos e controles ›</span></summary>
+      <div class="corpo">
+        ${vigente ? '' : '<p class="aviso nok"><b>Fora da validade.</b> Esta APR precisa ser revalidada. Fale com o encarregado antes de iniciar a atividade.</p>'}
+        <div class="grade">
+          <div class="larga"><small>Atividade</small>${esc(a.atividade || '—')}</div>
+          <div><small>Processo</small>${esc(a.processo || '—')}</div>
+          <div><small>Setor · Área</small>${esc([a.setor, a.area].filter(Boolean).join(' · ') || '—')}</div>
+        </div>
+        <h2>Etapas, perigos e controles</h2>${etapas || '<p class="mini">Sem etapas.</p>'}
+        ${(amb.danos || []).length || (amb.medidas || []).length ? `<h2>Aspectos e impactos ambientais</h2><div class="etapa">
+          ${(amb.danos || []).length ? '<div><small>Danos ambientais</small>' + lista(amb.danos) + '</div>' : ''}
+          ${(amb.medidas || []).length ? '<div class="grupo"><small>Medidas de controle</small>' + lista(amb.medidas) + '</div>' : ''}</div>` : ''}
+        ${a.infoAdicionais ? `<p class="mini"><b>Informações adicionais:</b> ${esc(a.infoAdicionais)}</p>` : ''}
+        ${(a.elaboracao || []).some(Boolean) ? `<p class="mini"><b>Elaboração:</b> ${esc(a.elaboracao.filter(Boolean).join(' · '))}</p>` : ''}
+        ${a.pdf ? `<a class="btn pri" href="${esc(a.pdf)}" target="_blank" rel="noopener">Abrir PDF com as assinaturas</a>` : '<p class="mini">O PDF com as assinaturas fica disponível em alguns minutos.</p>'}
+      </div></details>`;
+  }
+
+  function mostrar(d, offline){
+    const aprs = d.aprs || [];
+    document.title = (d.nome || 'Frente') + ' — APR SSTMA';
+    el.innerHTML = `<p class="selo">Frente de serviço${d.codigo ? ' · ' + esc(d.codigo) : ''}</p><h1>${esc(d.nome || 'Frente')}</h1>
+      <p class="sub">${aprs.length ? aprs.length + ' APR' + (aprs.length > 1 ? 's' : '') + ' nesta frente' : ''}</p>
+      ${offline ? `<p class="aviso off">Sem internet agora: mostrando a última versão salva neste celular${offline !== true ? ' (' + esc(offline) + ')' : ''}.</p>` : ''}
+      ${d.ativa === false ? '<p class="aviso nok">Esta frente foi encerrada.</p>' : ''}
+      ${aprs.length ? aprs.map(a => aprHtml(a, aprs.length === 1)).join('') : '<div class="vazio">Nenhuma APR vigente nesta frente no momento.<br>Fale com o encarregado ou com a equipe de SSTMA.</div>'}`;
+    document.getElementById('rodape').innerHTML = (d._em ? 'Atualizado em ' + esc(new Date(d._em).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })) + ' · ' : '')
+      + `<a href="./?abrirfrente=${encodeURIComponent(id)}">Sou da equipe: abrir no app</a>`;
+  }
+
+  async function carregar(){
+    if(!id){ el.innerHTML = '<div class="vazio">QR sem a identificação da frente. Leia o QR da placa de novo.</div>'; return; }
+    const chaveLocal = 'sst_frente_pub_' + id;
+    try{
+      const r = await fetch(`https://firestore.googleapis.com/v1/projects/${PROJETO}/databases/(default)/documents/aprPublico/${encodeURIComponent(id)}?key=${CHAVE}`, { cache: 'no-store' });
+      if(r.status === 404){ el.innerHTML = '<div class="vazio">Esta frente ainda não tem APR publicada.<br>Se acabou de publicar, aguarde alguns minutos e toque em Atualizar.</div>'; return; }
+      if(!r.ok) throw new Error('HTTP ' + r.status);
+      const doc = await r.json();
+      const d = JSON.parse(doc.fields.json.stringValue);
+      d._em = doc.fields.atualizadoEm && doc.fields.atualizadoEm.stringValue;
+      try{ localStorage.setItem(chaveLocal, JSON.stringify(d)); }catch(e){}
+      mostrar(d, false);
+    }catch(e){
+      let salvo = null; try{ salvo = JSON.parse(localStorage.getItem(chaveLocal) || 'null'); }catch(e2){}
+      if(salvo) mostrar(salvo, salvo._em ? new Date(salvo._em).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) : true);
+      else el.innerHTML = '<div class="vazio">Não consegui carregar. Confira a internet e toque em Atualizar.</div>';
+    }
+  }
+  document.getElementById('atualizar').addEventListener('click', () => { el.innerHTML = '<p class="carregando">Carregando…</p>'; carregar(); });
+  carregar();
+})();
+</script>
+</body>
+</html>

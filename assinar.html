@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assinatura — SSTMA CCG</title>
+<meta name="theme-color" content="#142131">
+<meta name="robots" content="noindex">
+<link rel="icon" href="icon-192.png">
+<!-- Assinatura por link (PTR / PAVE). Não precisa de login nem do app.
+     Lê assinaturasRemotas/{token}; a pessoa confere as respostas da etapa, informa CPF e nome,
+     aceita as declarações e assina com o dedo. O app e o Apps Script levam a assinatura para o formulário.
+     As regras do Firestore só deixam passar de "pendente" para "assinado", uma vez. -->
+<style>
+  :root{ --navy:#142131; --green:#4E7A30; --bg:#F6F5F0; --white:#fff; --muted:#5b6573; --border:#e2e4e0; --red:#a32d2d; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--navy); font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size:15px; line-height:1.4; }
+  header{ background:var(--navy); color:#fff; padding:14px 16px; display:flex; align-items:center; gap:12px; }
+  header img{ width:38px; height:38px; border-radius:10px; background:#fff; }
+  header b{ display:block; font-size:17px; } header small{ color:#b9c2cd; font-size:12px; }
+  main{ max-width:640px; margin:0 auto; padding:16px 16px 40px; }
+  .selo{ color:var(--green); font-size:12px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; margin:4px 0 2px; }
+  h1{ font-size:22px; margin:0 0 4px; line-height:1.2; }
+  .sub{ color:var(--muted); font-size:13px; margin:0 0 14px; }
+  .caixa{ background:var(--white); border-radius:14px; box-shadow:0 1px 4px rgba(20,33,49,.08); padding:14px; margin-bottom:12px; }
+  .caixa h2{ font-size:13px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin:0 0 8px; }
+  .item{ display:flex; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:14px; }
+  .item:last-child{ border-bottom:none; }
+  .item span{ flex:1; } .item b.r{ flex-shrink:0; min-width:42px; text-align:center; border-radius:8px; padding:2px 6px; font-size:13px; background:#e8ecf1; }
+  .r-S, .r-SIM{ background:#e3f1d6 !important; color:#2d5214; } .r-N, .r-NÃO{ background:#fde2e1 !important; color:#a32d2d; }
+  label.campo{ display:flex; flex-direction:column; gap:4px; font-size:13px; font-weight:700; margin-bottom:12px; }
+  input[type=text], input[type=tel]{ height:48px; border:1px solid #c9ced6; border-radius:10px; padding:0 12px; font:inherit; font-size:16px; color:var(--navy); background:#fff; }
+  .decl{ display:flex; gap:10px; align-items:flex-start; font-size:14px; padding:8px 0; cursor:pointer; }
+  .decl input{ width:22px; height:22px; flex:0 0 22px; margin:0; accent-color:var(--green); }
+  .pad-caixa{ position:relative; border:1px dashed #9aa3ad; border-radius:12px; background:#fafbfc; }
+  canvas{ display:block; width:100%; height:180px; touch-action:none; }
+  .limpar{ position:absolute; top:6px; right:6px; border:1px solid #c9ced6; background:#fff; border-radius:8px; padding:6px 10px; font:inherit; font-size:12px; cursor:pointer; }
+  .dica{ position:absolute; bottom:6px; left:10px; font-size:12px; color:var(--muted); pointer-events:none; }
+  .btn{ display:flex; align-items:center; justify-content:center; min-height:52px; border-radius:12px; font-weight:800; font-size:16px; border:none; width:100%; cursor:pointer; font-family:inherit; background:var(--green); color:#fff; margin-top:6px; }
+  .btn:disabled{ opacity:.55; }
+  .erro{ color:var(--red); font-size:13.5px; font-weight:600; min-height:18px; margin:6px 0 0; }
+  .aviso{ border-radius:12px; padding:12px 14px; font-size:14px; margin:0 0 12px; background:#e0ecf8; color:#1e4e8c; }
+  .aviso.ok{ background:#e3f1d6; color:#2d5214; } .aviso.nok{ background:#fde2e1; color:#8f2525; }
+  .rodape{ color:var(--muted); font-size:12px; text-align:center; margin-top:18px; }
+</style>
+</head>
+<body>
+<header><img src="icon-192.png" alt=""><span><b>SSTMA</b><small>Consórcio Construtor Gávea</small></span></header>
+<main id="m"><p class="sub">Carregando…</p></main>
+<script>
+const PROJETO = 'app-seguranca-trabalho', CHAVE = 'AIzaSyB7J_vxFOeZ_cKJ025tqMAT_iG00FTyNIY';
+const BASE = `https://firestore.googleapis.com/v1/projects/${PROJETO}/databases/(default)/documents`;
+const token = new URLSearchParams(location.search).get('t') || '';
+const m = document.getElementById('m');
+const esc = (t) => String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+function valor(v){
+  if(!v) return null;
+  if('stringValue' in v) return v.stringValue;
+  if('integerValue' in v) return Number(v.integerValue);
+  if('doubleValue' in v) return v.doubleValue;
+  if('booleanValue' in v) return v.booleanValue;
+  if('timestampValue' in v) return v.timestampValue;
+  if('nullValue' in v) return null;
+  if('arrayValue' in v) return (v.arrayValue.values || []).map(valor);
+  if('mapValue' in v){ const o = {}; Object.entries(v.mapValue.fields || {}).forEach(([k, x]) => o[k] = valor(x)); return o; }
+  return null;
+}
+function cpfValido(c){
+  c = String(c).replace(/\D/g, '');
+  if(c.length !== 11 || /^(\d)\1+$/.test(c)) return false;
+  for(let t = 9; t < 11; t++){ let s = 0; for(let i = 0; i < t; i++) s += Number(c[i]) * (t + 1 - i); const d = ((10 * s) % 11) % 10; if(Number(c[t]) !== d) return false; }
+  return true;
+}
+function cpfFmt(c){ c = String(c).replace(/\D/g, '').slice(0, 11); return c.replace(/^(\d{3})(\d)/, '$1.$2').replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3').replace(/\.(\d{3})(\d{1,2})$/, '.$1-$2'); }
+function aviso(txt, cls){ m.innerHTML = `<div class="aviso ${cls || ''}">${txt}</div>`; }
+
+async function carregar(){
+  if(!/^[0-9a-f]{20,64}$/.test(token)){ aviso('Link inválido. Peça um novo link a quem enviou.', 'nok'); return; }
+  let d;
+  try{
+    const r = await fetch(`${BASE}/assinaturasRemotas/${token}?key=${CHAVE}`, { cache: 'no-store' });
+    if(r.status === 404 || r.status === 403){ aviso('Este link não existe mais. Peça um novo link a quem enviou.', 'nok'); return; }
+    if(!r.ok) throw new Error(r.status);
+    const j = await r.json(); d = {}; Object.entries(j.fields || {}).forEach(([k, v]) => d[k] = valor(v));
+  }catch(e){ aviso('Não consegui abrir. Confira a internet e tente de novo.', 'nok'); return; }
+  if(d.estado === 'assinado'){ aviso(`Esta etapa já foi assinada por <b>${esc(d.nome)}</b>${d.dataTexto ? ' em ' + esc(d.dataTexto) : ''}. Obrigado.`, 'ok'); return; }
+  if(d.estado !== 'pendente'){ aviso('Este link foi cancelado. Peça um novo link a quem enviou.', 'nok'); return; }
+  if(d.expiraEm && new Date(d.expiraEm) < new Date()){ aviso('Este link venceu (vale 7 dias). Peça um novo link a quem enviou.', 'nok'); return; }
+  const resumo = (d.resumo || []).map(s => `<div class="caixa"><h2>${esc(s.secao)}</h2>${(s.itens || []).map(i => `<div class="item"><span>${i.n ? '<b>' + esc(i.n) + '</b> ' : ''}${esc(i.t)}</span><b class="r r-${esc(String(i.r).toUpperCase())}">${esc(i.r)}</b></div>`).join('')}</div>`).join('');
+  const decl = (d.declaracoes || []).map((t, i) => `<label class="decl"><input type="checkbox" class="dc" data-i="${i}"><span>${esc(t)}</span></label>`).join('');
+  m.innerHTML = `<p class="selo">Assinatura · ${esc(d.tipo === 'pave' ? 'PAVE' : 'PTR')}</p><h1>${esc(d.papelRotulo || 'Assinatura')}</h1>
+    <p class="sub">${esc(d.titulo || '')}${d.detalhes ? '<br>' + esc(d.detalhes) : ''}${d.criadoPor && d.criadoPor.nome ? '<br>Enviado por ' + esc(d.criadoPor.nome) : ''}</p>
+    ${resumo}
+    <div class="caixa"><h2>Seus dados</h2>
+      <label class="campo">CPF<input type="tel" id="cpf" inputmode="numeric" autocomplete="off" placeholder="000.000.000-00" maxlength="14"></label>
+      <label class="campo">Nome completo<input type="text" id="nome" autocomplete="name" value="${esc(d.nomeSugerido || '')}"></label>
+    </div>
+    <div class="caixa"><h2>Declarações</h2>${decl}</div>
+    <div class="caixa"><h2>Assinatura</h2>
+      <div class="pad-caixa"><canvas id="pad" width="600" height="220" aria-label="Área para assinar com o dedo"></canvas><button type="button" class="limpar" id="limpar">Limpar</button><span class="dica">Assine com o dedo</span></div>
+      <p class="erro" id="erro"></p>
+      <button type="button" class="btn" id="ok">Assinar</button>
+    </div>
+    <p class="rodape">Seus dados ficam registrados só para a segurança do trabalho e auditoria do Consórcio Construtor Gávea (LGPD).</p>`;
+  const cpf = document.getElementById('cpf');
+  cpf.addEventListener('input', () => { cpf.value = cpfFmt(cpf.value); });
+  const pad = document.getElementById('pad'), ctx = pad.getContext('2d');
+  ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#142131';
+  let des = false, vazio = true;
+  const pos = (e) => { const r = pad.getBoundingClientRect(); return [(e.clientX - r.left) * pad.width / r.width, (e.clientY - r.top) * pad.height / r.height]; };
+  pad.addEventListener('pointerdown', e => { des = true; pad.setPointerCapture(e.pointerId); const [x, y] = pos(e); ctx.beginPath(); ctx.moveTo(x, y); });
+  pad.addEventListener('pointermove', e => { if(!des) return; const [x, y] = pos(e); ctx.lineTo(x, y); ctx.stroke(); vazio = false; });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => pad.addEventListener(ev, () => { des = false; }));
+  document.getElementById('limpar').addEventListener('click', () => { ctx.clearRect(0, 0, pad.width, pad.height); vazio = true; });
+  document.getElementById('ok').addEventListener('click', async (ev) => {
+    const erro = document.getElementById('erro'), nome = document.getElementById('nome').value.trim().replace(/\s+/g, ' ');
+    erro.textContent = '';
+    if(!cpfValido(cpf.value)){ erro.textContent = 'CPF inválido. Confira os números.'; return; }
+    if(nome.split(' ').length < 2){ erro.textContent = 'Escreva o nome completo.'; return; }
+    if([...document.querySelectorAll('.dc')].some(c => !c.checked)){ erro.textContent = 'Marque todas as declarações.'; return; }
+    if(vazio){ erro.textContent = 'Assine com o dedo no quadro.'; return; }
+    const bt = ev.currentTarget; bt.disabled = true; bt.textContent = 'Enviando…';
+    const mini = document.createElement('canvas'); mini.width = 300; mini.height = 110; mini.getContext('2d').drawImage(pad, 0, 0, 300, 110);
+    const agora = new Date();
+    const campos = { estado: 'assinado', nome: nome.toUpperCase(), cpf: cpf.value.replace(/\D/g, ''), assinatura: mini.toDataURL('image/png'),
+      dataTexto: agora.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+      assinadoEmCliente: agora.toISOString(), aparelho: (/iphone|ipad/i.test(navigator.userAgent) ? 'iPhone' : /android/i.test(navigator.userAgent) ? 'Android' : 'Computador') + ' · ' + navigator.userAgent.slice(0, 160),
+      declaracoesAceitas: d.declaracoes || [] };
+    const tipar = (v) => Array.isArray(v) ? { arrayValue: { values: v.map(tipar) } } : { stringValue: String(v) };
+    const fields = {}; Object.entries(campos).forEach(([k, v]) => fields[k] = tipar(v));
+    const corpo = { writes: [{ update: { name: `projects/${PROJETO}/databases/(default)/documents/assinaturasRemotas/${token}`, fields },
+      updateMask: { fieldPaths: Object.keys(campos) }, updateTransforms: [{ fieldPath: 'assinadoEm', setToServerValue: 'REQUEST_TIME' }], currentDocument: { exists: true } }] };
+    try{
+      const r = await fetch(`https://firestore.googleapis.com/v1/projects/${PROJETO}/databases/(default)/documents:commit?key=${CHAVE}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo) });
+      if(!r.ok) throw new Error(r.status);
+      aviso(`Assinatura registrada. Obrigado, <b>${esc(nome)}</b>.<br>Pode fechar esta página.`, 'ok'); window.scrollTo(0, 0);
+    }catch(e){ bt.disabled = false; bt.textContent = 'Assinar'; erro.textContent = 'Não consegui enviar. Confira a internet e tente de novo.'; }
+  });
+}
+carregar();
+</script>
+</body>
+</html>
