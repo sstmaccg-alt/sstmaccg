@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<script>(function(){ var p = new URLSearchParams(location.search), f = p.get('frente'); if(f) location.replace('frente.html?f=' + encodeURIComponent(f)); })();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SSTMA — Consórcio Construtor Gávea</title>
 <link rel="manifest" href="manifest.json">
@@ -1080,6 +1081,29 @@
   .em-tabela .ag-tabela{ min-width:900px; }
   #email-resp-corpo{ padding-bottom:40px; }
   .em-resp{ width:100%; text-align:left; margin-bottom:8px; }
+  .em-gerencia{ border-left:4px solid var(--navy); }
+  .lv-reg-grade{ display:grid; grid-template-columns:repeat(auto-fill, minmax(92px, 1fr)); gap:8px; margin:8px 0 10px; }
+  .lv-reg-foto{ position:relative; aspect-ratio:1/1; border-radius:10px; overflow:hidden; background:var(--border); }
+  .lv-reg-foto img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .lv-reg-tirar{ position:absolute; top:4px; right:4px; width:28px; height:28px; border-radius:14px; border:none; background:rgba(20,33,49,.75); color:#fff; font-size:18px; line-height:1; cursor:pointer; }
+  .ap-pag-modal .q-modal-caixa{ width:min(100%, 560px); }
+  .ind-pir-par{ display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:end; }
+  .ind-pir{ display:flex; flex-direction:column; gap:4px; }
+  .ind-pir-rot{ align-self:flex-start; background:#142131; color:#fff; font-weight:800; font-size:13px; padding:5px 12px; border-radius:6px; margin-bottom:6px; }
+  .ind-pir-linha{ display:grid; grid-template-columns:55% 1fr; align-items:center; gap:10px; }
+  .ind-pir-nivel{ justify-self:center; width:var(--w); height:44px; clip-path:polygon(12% 0, 88% 0, 100% 100%, 0 100%); display:flex; align-items:center; justify-content:center; }
+  .ind-pir-linha:first-of-type .ind-pir-nivel{ clip-path:polygon(50% 0, 50% 0, 100% 100%, 0 100%); }
+  .ind-pir-nivel b{ color:#fff; font-size:24px; font-weight:800; text-shadow:0 1px 2px rgba(0,0,0,.35); }
+  .ind-pir-linha span{ font-size:13px; font-weight:700; color:var(--navy); line-height:1.25; }
+  .an-fonte{ font-size:11px; color:var(--text-muted); margin:6px 0 0; }
+  .ap-pag-atalhos{ display:flex; gap:6px; flex-wrap:wrap; margin:0 0 10px; }
+  .ap-pag-lista{ max-height:52vh; overflow-y:auto; border:1px solid var(--border); border-radius:12px; padding:4px 0; margin-bottom:12px; }
+  .ap-pag-secao{ display:block; font-size:11px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--green); padding:10px 14px 4px; }
+  .ap-pag-item{ display:flex; align-items:center; gap:10px; padding:6px 14px; }
+  .ap-pag-item.atual{ background:#eef5e6; }
+  .ap-pag-item input{ width:20px; height:20px; accent-color:var(--green); flex-shrink:0; margin:0; }
+  .ap-pag-item label{ flex:1; font-size:14px; color:var(--navy); cursor:pointer; line-height:1.35; }
+  .ap-pag-item label em{ color:var(--text-muted); font-style:normal; font-size:12px; }
   .lv-tag.em-tag-atraso{ background:#fde2e1; color:#a32d2d; }
   .lv-tag.em-tag-ok{ background:#e3f1d6; color:#2d5214; }
   .lv-tag.em-tag-sem{ background:#fdf0d5; color:#7a4b06; }
@@ -1443,6 +1467,73 @@
   .apr-cat.aberta .apr-cat-topo{ border-bottom:1px solid var(--border); }
   .apr-cat-lista{ padding:10px 10px 2px; background:var(--bg, transparent); }
   .apr-cat-lista .lv-card{ box-shadow:none; border:1px solid var(--border); }
+  .apr-card-linha{ display:flex; gap:8px; align-items:stretch; margin-bottom:9px; }
+  .apr-card-linha > .lv-card{ flex:1; min-width:0; margin-bottom:0 !important; }
+  .apr-reval-mini{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; width:92px; flex-shrink:0; align-self:stretch; border-color:var(--green); color:#2d5214; background:#e3f1d6; }
+  .apr-reval-mini small{ font-size:10.5px; font-weight:600; }
+  .apr-reval-mini:disabled{ background:var(--white); color:var(--text-muted); border-color:var(--border-strong); opacity:.75; cursor:not-allowed; }
+  [data-theme="dark"] .apr-reval-mini:not(:disabled){ background:#253420; color:#c8e3a8; }
+  .form-tipos{ display:grid; grid-template-columns:repeat(3, 1fr); gap:6px; background:var(--white); border-radius:14px; padding:5px; box-shadow:0 1px 4px rgba(20,33,49,.07); margin:0 0 14px; }
+  .form-tipo{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; min-height:44px; border:none; border-radius:10px; background:none; font:inherit; font-size:15px; font-weight:800; color:var(--navy); cursor:pointer; }
+  .form-tipo small{ font-size:10px; font-weight:600; color:var(--text-muted); }
+  .form-tipo.on{ background:var(--navy); color:#fff; }
+  .form-tipo:disabled{ opacity:.6; cursor:default; }
+  /* ---------- PTR / PAVE ---------- */
+  .fm-hero .btn-primary{ margin-top:10px; }
+  .fm-sec .fm-checks{ display:flex; flex-direction:column; gap:2px; margin:6px 0 8px; }
+  .fm-check{ display:flex; align-items:flex-start; gap:10px; padding:8px 2px; font-size:14px; color:var(--navy); line-height:1.35; cursor:pointer; border-bottom:1px solid var(--border); }
+  .fm-check:last-child{ border-bottom:none; }
+  .fm-check input{ width:20px; height:20px; flex:0 0 20px; margin:0; accent-color:var(--green); }
+  .fm-apl{ margin:8px 0; }
+  .fm-tres{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:8px; }
+  .fm-item{ display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid var(--border); font-size:13.5px; line-height:1.35; }
+  .fm-item > span{ flex:1; min-width:0; }
+  .fm-item-titulo{ margin:10px 0 2px; font-size:13.5px; color:var(--navy); }
+  .fm-sna{ display:flex; gap:4px; flex:0 0 auto; }
+  .fm-sna button{ min-width:44px; height:40px; border-radius:10px; border:1px solid var(--border-strong); background:var(--white); color:var(--navy); font:inherit; font-size:13px; font-weight:800; cursor:pointer; padding:0 8px; }
+  .fm-sna button.on.o-s{ background:#e3f1d6; border:2px solid var(--green); color:#2d5214; }
+  .fm-sna button.on.o-n{ background:#fde2e1; border:2px solid #d64545; color:#a32d2d; }
+  .fm-sna button.on.o-na{ background:#e8ecf1; border:2px solid #7b8794; color:#3d4a57; }
+  .fm-sna button:disabled{ opacity:.75; cursor:default; }
+  .fm-fogo{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; justify-content:space-between; margin:12px 0 4px; padding:10px; border-radius:12px; background:#fdf0d5; }
+  .fm-fase{ display:inline-block; font-size:10.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; background:var(--navy); color:#fff; border-radius:6px; padding:2px 7px; margin-right:4px; vertical-align:1px; }
+  .fm-bloco .q-ass, .fm-sec .q-ass{ margin-top:12px; }
+  .fm-ass-acoes{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+  .fm-exec{ display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
+  .fm-exec img{ width:110px; height:40px; object-fit:contain; background:#fafbfc; border:1px solid var(--border); border-radius:8px; }
+  .fm-exec span{ display:flex; flex-direction:column; min-width:0; } .fm-exec small{ color:var(--text-muted); font-size:12px; }
+  .fm-anexo{ padding:10px 0 12px; border-bottom:1px solid var(--border); display:flex; flex-direction:column; gap:6px; }
+  .fm-anexo:last-of-type{ border-bottom:none; }
+  .fm-anexo-topo{ display:flex; align-items:center; gap:8px; justify-content:space-between; }
+  .fm-anexo-arq{ display:flex; align-items:center; gap:8px; justify-content:space-between; }
+  .fm-nc{ border:1px solid var(--border); border-radius:12px; padding:10px; margin:8px 0; }
+  .fm-nc .apr-mini{ margin-top:4px; }
+  #view-form-ficha{ padding-bottom:90px; }
+  /* ---------- Calendário SSTMA ---------- */
+  .cal-cx{ background:var(--white); border-radius:14px; box-shadow:0 1px 4px rgba(20,33,49,.07); padding:10px 10px 12px; margin:0 0 12px; }
+  .cal-nav{ display:flex; align-items:center; justify-content:space-between; margin:0 0 8px; color:var(--navy); }
+  .cal-nav b{ font-size:16px; }
+  .cal-seta{ width:44px; height:40px; border:1px solid var(--border-strong); border-radius:10px; background:var(--white); color:var(--navy); font-size:22px; line-height:1; cursor:pointer; }
+  .cal-grade{ display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); gap:4px; }
+  .cal-sem{ text-align:center; font-size:11px; font-weight:700; color:var(--text-muted); padding:2px 0 4px; }
+  .cal-dia{ position:relative; height:44px; border:none; border-radius:10px; background:#f4f6f2; color:var(--navy); font:inherit; font-size:14px; font-weight:600; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:0; }
+  .cal-dia.hoje{ outline:2px solid var(--green); outline-offset:-2px; }
+  .cal-dia.sel{ background:var(--navy); color:#fff; }
+  .cal-dia i{ display:block; min-width:8px; height:8px; border-radius:4px; background:#d64545; font-style:normal; font-size:9px; line-height:8px; color:#fff; padding:0 2px; }
+  .cal-dia i:not(:empty){ height:13px; line-height:13px; border-radius:7px; min-width:13px; }
+  .cal-dia i.ok{ background:var(--green); }
+  .cal-botoes{ display:flex; flex-direction:column; gap:8px; margin:0 0 6px; }
+  .cal-ev{ background:var(--white); border-radius:14px; box-shadow:0 1px 4px rgba(20,33,49,.07); padding:12px 14px; margin-bottom:9px; display:flex; flex-direction:column; gap:4px; color:var(--navy); }
+  .cal-ev.feito{ opacity:.72; }
+  .cal-ev-topo{ display:flex; justify-content:space-between; align-items:center; gap:8px; }
+  .cal-tipo{ font-size:10.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; border-radius:6px; padding:2px 7px; background:#e8ecf1; color:#3d4a57; }
+  .cal-tipo.t-qualimetria{ background:#e0ecf8; color:#1e4e8c; } .cal-tipo.t-treinamento{ background:#fdf0d5; color:#7a4b06; } .cal-tipo.t-lv{ background:#e3f1d6; color:#2d5214; }
+  .cal-desc{ margin:2px 0; font-size:13.5px; line-height:1.4; }
+  .cal-acoes{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  .cal-trein{ background:#fdf0d5; color:#6b4106; border-radius:14px; padding:12px 14px; margin:0 0 12px; display:flex; flex-direction:column; gap:6px; }
+  .cal-trein span{ font-size:13px; }
+  .cal-limpa{ border:none; background:none; color:var(--green); font:inherit; font-size:12px; font-weight:700; cursor:pointer; text-transform:none; letter-spacing:0; }
+  .cal-rodape{ margin:14px 2px 0; }
 </style>
 </head>
 <body>
@@ -1579,13 +1670,14 @@
       <button type="button" class="nav-btn sb-item active" data-view="view-desvios"><span class="icone-svg" data-icone="alerta-triangulo"></span><span class="sb-rotulo">Desvios</span><span class="sb-badge vermelho" id="sb-badge-atrasados" style="display:none;"></span></button>
       <button type="button" class="nav-btn sb-item" data-view="view-qualimetria"><span class="icone-svg" data-icone="clipboard"></span><span class="sb-rotulo">Qualimetria</span></button>
       <button type="button" class="nav-btn sb-item" data-view="view-lv"><span class="icone-svg" data-icone="filetext"></span><span class="sb-rotulo">LV</span></button>
-      <button type="button" class="nav-btn sb-item" data-view="view-apr"><span class="icone-svg" data-icone="escudo"></span><span class="sb-rotulo">APR</span></button>
+      <button type="button" class="nav-btn sb-item" data-view="view-apr"><span class="icone-svg" data-icone="escudo"></span><span class="sb-rotulo">Formulários</span></button>
       <button type="button" class="nav-btn sb-item" data-view="view-treinamentos"><span class="icone-svg" data-icone="message"></span><span class="sb-rotulo">Treinamentos</span></button>
     </div>
     <div class="sb-grupo">
       <span class="sb-titulo">SEGURANÇA</span>
       <button type="button" class="sb-item" id="sb-novo"><span class="icone-svg" data-icone="plus"></span><span class="sb-rotulo">Novo desvio</span></button>
       <button type="button" class="sb-item" id="sb-aprovacoes"><span class="icone-svg" data-icone="check-circulo"></span><span class="sb-rotulo" id="sb-aprovacoes-label">Enviados</span><span class="sb-badge" id="sb-badge-aprovacoes" style="display:none;"></span></button>
+      <button type="button" class="sb-item" id="sb-cal" style="display:none;"><span class="icone-svg" data-icone="calendar"></span><span class="sb-rotulo">Calendário SSTMA</span></button>
       <button type="button" class="sb-item" id="sb-email" style="display:none;"><span class="icone-svg" data-icone="mail"></span><span class="sb-rotulo">E-mail aos responsáveis</span></button>
       <button type="button" class="sb-item" data-apr="prever"><span class="icone-svg" data-icone="apresentacao"></span><span class="sb-rotulo">Apresentação Préver</span></button>
       <button type="button" class="sb-item" id="sb-analise"><span class="icone-svg" data-icone="barchart"></span><span class="sb-rotulo">Análise geral</span></button>
@@ -1790,6 +1882,11 @@
 
     <!-- ======================= APR — ANÁLISE PRELIMINAR DE RISCO ======================= -->
     <div id="view-apr" style="display:none;">
+      <div class="form-tipos" role="tablist" aria-label="Tipo de formulário">
+        <button type="button" class="form-tipo on" role="tab" aria-selected="true" data-ftipo="apr">APR</button>
+        <button type="button" class="form-tipo" role="tab" aria-selected="false" data-ftipo="ptr">PTR</button>
+        <button type="button" class="form-tipo" role="tab" aria-selected="false" data-ftipo="pave">PAVE</button>
+      </div>
       <div class="atalhos-rapidos">
         <button type="button" class="atalho-item" id="apr-at-nova"><div class="atalho-icone"><span class="icone-svg" data-icone="plus"></span></div><p class="atalho-label">Nova APR</p></button>
         <button type="button" class="atalho-item" id="apr-at-qr"><div class="atalho-icone"><span class="icone-svg" data-icone="qr"></span></div><p class="atalho-label">Ler QR</p></button>
@@ -1877,6 +1974,40 @@
       <div class="lv-bloco" id="apr-exec-lista"></div>
     </div>
 
+
+    <!-- ======================= PTR e PAVE ======================= -->
+    <div id="view-form" style="display:none;">
+      <div class="form-tipos" role="tablist" aria-label="Tipo de formulário">
+        <button type="button" class="form-tipo" role="tab" aria-selected="false" data-ftipo="apr">APR</button>
+        <button type="button" class="form-tipo" role="tab" aria-selected="false" data-ftipo="ptr">PTR</button>
+        <button type="button" class="form-tipo" role="tab" aria-selected="false" data-ftipo="pave">PAVE</button>
+      </div>
+      <div class="hero-flutuante q-hero fm-hero">
+        <div class="q-hero-topo"><span class="rotulo" id="fm-titulo">PTR</span><button type="button" class="voltar" id="fm-voltar" aria-label="Voltar para a APR" style="display:none"></button></div>
+        <button type="button" class="btn-primary" id="fm-nova">Nova PTR</button>
+      </div>
+      <input type="search" id="fm-busca" class="lv-busca" placeholder="Número, local, descrição, frente ou nome" aria-label="Buscar">
+      <div id="fm-lista"></div>
+    </div>
+
+    <div id="view-form-ficha" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header"><button type="button" class="voltar" id="fm-ficha-voltar" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button></div>
+        <div class="tela-selo" id="fm-ficha-selo">PTR</div>
+        <p class="tela-titulo" id="fm-ficha-titulo">PTR</p>
+      </div>
+      <div id="fm-ficha-corpo"></div>
+      <div class="q-barra" id="fm-barra"></div>
+    </div>
+    <!-- ======================= CALENDÁRIO SSTMA (só TST e Meio Ambiente) ======================= -->
+    <div id="view-cal" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header"><button type="button" class="voltar" id="cal-voltar" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button></div>
+        <div class="tela-selo">SSTMA</div>
+        <p class="tela-titulo">Calendário</p>
+      </div>
+      <div id="cal-corpo"></div>
+    </div>
     <!-- Tela: Treinamentos (placeholder) -->
     <!-- ======================= TREINAMENTOS ======================= -->
     <div id="view-treinamentos" style="display:none;">
@@ -1982,6 +2113,10 @@
           <button type="button" class="atalho-item" id="atalho-email" style="display:none;">
             <div class="atalho-icone"><span class="icone-svg" data-icone="mail"></span></div>
             <p class="atalho-label">E-mail</p>
+          </button>
+          <button type="button" class="atalho-item" id="atalho-cal" style="display:none;">
+            <div class="atalho-icone"><span class="icone-svg" data-icone="calendar"></span></div>
+            <p class="atalho-label">Calendário</p>
           </button>
           <button type="button" class="atalho-item" id="atalho-analise">
             <div class="atalho-icone"><span class="icone-svg" data-icone="barchart"></span></div>
@@ -2456,7 +2591,7 @@
       <span class="nav-icon"><span class="icone-svg" data-icone="filetext"></span></span> LV
     </button>
     <button class="nav-btn" data-view="view-apr">
-      <span class="nav-icon"><span class="icone-svg" data-icone="escudo"></span></span> APR
+      <span class="nav-icon"><span class="icone-svg" data-icone="escudo"></span></span> Formulários
     </button>
     <button class="nav-btn" data-view="view-treinamentos">
       <span class="nav-icon"><span class="icone-svg" data-icone="message"></span></span> Treinamentos
@@ -3046,7 +3181,7 @@ document.getElementById('logout-btn').addEventListener('click', () => {
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-tr-escolher','view-tr-busca','view-tr-meus','view-tr-analise','view-tr-ficha','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-lv-analise','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha','view-email-resp','view-q-analise','view-apr','view-apr-frente','view-apr-frentes','view-apr-nova','view-apr-busca','view-apr-ficha','view-apr-exec'];
+const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-tr-escolher','view-tr-busca','view-tr-meus','view-tr-analise','view-tr-ficha','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-lv-analise','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha','view-email-resp','view-q-analise','view-apr','view-apr-frente','view-apr-frentes','view-apr-nova','view-apr-busca','view-apr-ficha','view-apr-exec','view-form','view-form-ficha','view-cal'];
 function irPara(viewId){
   if(typeof trFecharCamera === 'function') trFecharCamera();   // a câmera dos crachás nunca fica ligada fora da tela dela
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
@@ -3059,6 +3194,8 @@ function irPara(viewId){
   if(viewId === 'view-treinamentos' && typeof abrirTreinamentos === 'function'){ abrirTreinamentos(); }
   if(typeof aprFecharLeitor === 'function') aprFecharLeitor();
   if(viewId === 'view-apr' && typeof abrirAPR === 'function'){ abrirAPR(); }
+  if(viewId === 'view-cal' && typeof abrirCalendario === 'function'){ abrirCalendario(); }
+  if(/^view-form/.test(viewId)) document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'view-apr'));
   if(/^view-apr-/.test(viewId)){
     if(typeof abrirAPR === 'function' && !aprOuvindo) abrirAPR();
     document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'view-apr'));
@@ -3106,6 +3243,8 @@ document.getElementById('sb-email').addEventListener('click', () => irPara('view
 document.getElementById('sb-instalar').addEventListener('click', () => instalarApp());
 document.getElementById('perfil-card-instalar').addEventListener('click', () => instalarApp());
 document.getElementById('atalho-email').addEventListener('click', () => irPara('view-email-resp'));
+document.getElementById('atalho-cal').addEventListener('click', () => irPara('view-cal'));
+document.getElementById('sb-cal').addEventListener('click', () => irPara('view-cal'));
 document.getElementById('btn-voltar-email').addEventListener('click', () => {
   if(emSel){ emSel = null; emRender(); window.scrollTo(0, 0); } else irPara('view-desvios');
 });
@@ -3340,6 +3479,8 @@ function abrirDestinoNotificacao(abrir){
   else if(abrir === 'qualimetria') irPara('view-qualimetria');
   else if(abrir === 'lv') irPara('view-lv');
   else if(abrir === 'treinamentos') irPara('view-treinamentos');
+  else if(abrir === 'calendario') irPara(ehSSTMA() ? 'view-cal' : 'view-desvios');
+  else if(abrir === 'apr' || abrir === 'formularios') irPara('view-apr');
   else if(abrir) irPara('view-desvios');
 }
 async function salvarTokenPush(){
@@ -4102,6 +4243,8 @@ function aplicarPerfilTST(){
   document.getElementById('perfil-card-aprovacoes').style.display = tst ? 'flex' : 'none';
   document.getElementById('atalho-email').style.display = tst ? '' : 'none';
   document.getElementById('sb-email').style.display = tst ? '' : 'none';
+  document.getElementById('atalho-cal').style.display = tst ? '' : 'none';
+  document.getElementById('sb-cal').style.display = tst ? '' : 'none';
   document.getElementById('meus-envios-secao').style.display = tst ? 'none' : 'block';
   renderizarMeusEnvios();
   atualizarBadgeAprovacoes();
@@ -5477,7 +5620,13 @@ document.addEventListener('DOMContentLoaded', function(){
     if(novo < 0 || novo >= quadros.length) return;
     atual = novo; mostrar();
   }
-  async function abrir(fonte){
+  async function abrir(fonte, jaEscolhido){
+    if(fonte === 'prever' && !jaEscolhido){
+      const sel = await anEscolherPrever();
+      if(!sel) return;
+      anPreverSel = sel.size === AN_PREVER_SECOES.length ? null : sel;
+      return abrir('prever', true);
+    }
     aprFonte = typeof fonte === 'string' ? fonte : 'desvios';
     overlay.setAttribute('aria-label', 'Apresentação ' + (AN_SECOES[aprFonte] || ''));
     overlay.querySelector('.apr-faixa-titulo').textContent = AN_SECOES[aprFonte] || 'Desvios';
@@ -5520,7 +5669,44 @@ document.addEventListener('DOMContentLoaded', function(){
       document.head.appendChild(sc);
     });
   }
-  async function baixarPdf(){
+  /* escolher as páginas: abre a lista de quadros, todos marcados; dá para baixar só alguns */
+  function escolherPaginas(){
+    if(!navigator.onLine){ mostrarAvisoApp('Sem internet', 'Para gerar o PDF é preciso estar com internet.'); return; }
+    const lista = anMontar(aprFonte, 'apresentacao');
+    if(!lista.length){ mostrarAvisoApp('Sem páginas', 'Não há gráficos para baixar neste período.'); return; }
+    const marcadas = new Set(lista.map((_, i) => i));
+    const modal = document.createElement('div'); modal.className = 'q-modal ap-pag-modal';
+    let secaoAnt = null;
+    const itens = lista.map((q, i) => {
+      const sec = q.secao || '';
+      const cab = sec && sec !== secaoAnt ? `<span class="ap-pag-secao">${escaparHtml(sec)}</span>` : '';
+      secaoAnt = sec;
+      return cab + `<div class="ap-pag-item${i === atual ? ' atual' : ''}"><input type="checkbox" id="ap-pag-${i}" data-i="${i}" checked><label for="ap-pag-${i}"><b>${i + 1}.</b> ${escaparHtml(String(q.titulo || '').replace(/<[^>]+>/g, ''))}${i === atual ? ' <em>(na tela agora)</em>' : ''}</label></div>`;
+    }).join('');
+    modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Escolher páginas"><h3>Quais páginas baixar?</h3>
+      <p>Desmarque as que não quer no PDF.</p>
+      <div class="ap-pag-atalhos"><button type="button" class="apr-mini" data-ap="todas">Marcar todas</button><button type="button" class="apr-mini" data-ap="nenhuma">Desmarcar todas</button><button type="button" class="apr-mini" data-ap="esta">Só a da tela</button></div>
+      <div class="ap-pag-lista">${itens}</div>
+      <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary" id="ap-pag-ok"></button></div></div>`;
+    overlay.appendChild(modal);
+    const ok = modal.querySelector('#ap-pag-ok');
+    const atualizar = () => {
+      modal.querySelectorAll('input[data-i]').forEach(c => { c.checked = marcadas.has(Number(c.dataset.i)); });
+      ok.textContent = marcadas.size === lista.length ? 'Baixar todas (' + lista.length + ')' : 'Baixar ' + marcadas.size + ' página' + (marcadas.size === 1 ? '' : 's');
+      ok.disabled = !marcadas.size;
+    };
+    modal.querySelectorAll('input[data-i]').forEach(c => c.addEventListener('change', () => { const i = Number(c.dataset.i); if(c.checked) marcadas.add(i); else marcadas.delete(i); atualizar(); }));
+    modal.querySelectorAll('[data-ap]').forEach(b => b.addEventListener('click', () => {
+      marcadas.clear();
+      if(b.dataset.ap === 'todas') lista.forEach((_, i) => marcadas.add(i));
+      if(b.dataset.ap === 'esta') marcadas.add(atual);
+      atualizar();
+    }));
+    modal.querySelector('.q-modal-cancelar').addEventListener('click', () => modal.remove());
+    ok.addEventListener('click', () => { const sel = [...marcadas].sort((a, b) => a - b); modal.remove(); baixarPdf(sel); });
+    atualizar();
+  }
+  async function baixarPdf(selecao){
     if(!navigator.onLine){
       mostrarAvisoApp('Sem internet', 'Para gerar o PDF é preciso estar com internet.');
       return;
@@ -5542,7 +5728,9 @@ document.addEventListener('DOMContentLoaded', function(){
       const dataArquivo = agora.toISOString().slice(0, 10);
       const periodo = textoPeriodoAnalise();
       const logos = document.querySelector('#apresentacao .apr-logos').src;
-      const lista = anMontar(aprFonte, 'apresentacao');
+      const todos = anMontar(aprFonte, 'apresentacao');
+      const lista = Array.isArray(selecao) ? selecao.map(i => todos[i]).filter(Boolean) : todos;
+      const parcial = lista.length < todos.length;
 
       palcoExport.className = 'apresentacao apr-export';
       document.body.appendChild(palcoExport);
@@ -5571,7 +5759,7 @@ document.addEventListener('DOMContentLoaded', function(){
         if(i > 0) pdf.addPage([1600, 900], 'landscape');
         pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 1600, 900);
       }
-      pdf.save(`${{ desvios: 'Desvios', qualimetria: 'Qualimetria', lv: 'LV', treinamentos: 'Capacitacao', prever: 'Apresentacao_Prever' }[aprFonte] || 'Apresentacao'}_${dataArquivo}.pdf`);
+      pdf.save(`${{ desvios: 'Desvios', qualimetria: 'Qualimetria', lv: 'LV', treinamentos: 'Capacitacao', prever: 'Apresentacao_Prever' }[aprFonte] || 'Apresentacao'}_${dataArquivo}${parcial ? '_' + lista.length + 'pag' : ''}.pdf`);
     }catch(err){
       console.error('Falha ao gerar o PDF', err);
       mostrarAvisoApp('PDF não gerado', 'Confira a internet e tente de novo.');
@@ -5581,7 +5769,7 @@ document.addEventListener('DOMContentLoaded', function(){
       botao.disabled = false;
     }
   }
-  document.getElementById('apr-baixar').addEventListener('click', baixarPdf);
+  document.getElementById('apr-baixar').addEventListener('click', escolherPaginas);
 
   window.abrirApresentacao = abrir;
   document.getElementById('btn-apresentacao').addEventListener('click', () => abrir('desvios'));
@@ -7191,11 +7379,14 @@ const LV_IDENT = {   // como cada tipo de ficha identifica o que foi inspecionad
   local: { rotulo: 'Local / área inspecionada', dica: 'Ex.: Vestiário do canteiro Puc', modelo: false, horimetro: false }
 };
 const LV_RESULTADOS = ['Liberado', 'Liberado com ressalvas', 'Não liberado'];
-const LV_DECLARACAO_EXTERNO = 'Declaro que acompanhei a inspeção, estou ciente do resultado e das pendências e autorizo o registro da minha assinatura, das fotos do meu documento e do meu rosto e da localização, para fins de segurança e auditoria do Consórcio Construtor Gávea (Lei nº 13.709/2018).';
+const LV_DECLARACAO_EXTERNO = 'Declaro que acompanhei a inspeção, estou ciente do resultado e das pendências e autorizo o registro da minha assinatura, das fotos de registro e da localização, para fins de segurança e auditoria do Consórcio Construtor Gávea (Lei nº 13.709/2018).';
+const lvRegistro = {};   // fotos de registro por LV: [{ id, b64 }] (ficam em lvs/{id}/anexos/reg_*)
 let lvRecentes = [], lvMinhasLista = [], lvOuvindo = false, lvFiltroCat = 'Todos', lvFiltroMinhas = 'todas';
 let lvAtual = null, lvPasso = 1, lvAnteriores = [], lvSombra = null, lvSalvarTimer = null, lvBuscaTimer = null;
 const lvMiniaturas = {};
 
+// TAG opcional logo depois da placa / identificação (o tipo "equipamento" já usa a TAG como identificação; "local" não tem)
+function lvTemTag(lv){ return lv && (lv.forma === 'veiculo' || lv.forma === 'identificacao'); }
 function lvNorm(t){ return String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
 function lvTipo(id){ return LV_TIPOS.find(t => t.id === id); }
 function lvSituacao(lv){
@@ -7311,12 +7502,7 @@ function lvAbrir(lv){
   irPara('view-lv-ficha'); lvRenderFicha();
   if(lv.estado !== 'concluida') lvBuscarAnteriores();
   // fotos do externo já tiradas antes (ficam no banco): recarrega para não pedir de novo
-  if(lv.estado === 'assinando' && !lv.assinaturaExterno){
-    db.collection('lvs').doc(lv.id).collection('anexos').get().then(snap => {
-      snap.docs.forEach(d => { if(d.data().base64) lvMiniaturas[lv.id + '_' + d.id] = d.data().base64; });
-      if(lvAtual && lvAtual.id === lv.id && lvPasso === 3) lvRenderFicha();
-    }).catch(() => {});
-  }
+  if(lv.estado === 'assinando' && !lvRegistro[lv.id]) lvCarregarRegistro(lv);
 }
 
 /* ---------- salvar (rascunho no aparelho/banco) ---------- */
@@ -7415,6 +7601,7 @@ function lvRenderIdent(corpo, barra, ed){
   corpo.innerHTML = `<div class="lv-form">
     ${lv.forma === 'veiculo' && ed ? `<div class="pl-campo-linha">${lvCampo(f.rotulo, 'identificador', lv.identificador, { obrig: true, dica: f.dica, maiusc: true })}<button type="button" class="pl-campo-cam" id="lv-ler-placa" aria-label="Ler a placa com a câmera"><span class="icone-svg" data-icone="placa"></span></button></div>`
       : lvCampo(f.rotulo, 'identificador', lv.identificador, { obrig: true, dica: f.dica, maiusc: lv.forma !== 'local' })}
+    ${lvTemTag(lv) ? lvCampo('TAG (opcional)', 'tag', lv.tag, { dica: 'Ex.: CB-12', maiusc: true }) : ''}
     <div class="lv-anteriores" id="lv-anteriores" style="display:none;"></div>
     ${f.modelo ? `<div class="lv-dois">${lvCampo('Modelo', 'modelo', lv.modelo)}${lvCampo('Ano', 'ano', lv.ano, { modo: 'numeric' })}</div>` : ''}
     <div class="lv-campo">Empresa *<div class="lv-ops2">${['CCG', 'Subcontratada'].map(o => `<button type="button" class="lv-op ${lv.empresaTipo === o ? 'on' : ''}" data-emp="${o}">${o}</button>`).join('')}</div></div>
@@ -7428,7 +7615,7 @@ function lvRenderIdent(corpo, barra, ed){
   barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b>Etapa 1 de 3</b><small>${escaparHtml(lv.tipoNome)}</small></span></div><button type="button" class="btn-primary" id="lv-ir-2">Continuar</button>`;
   if(!ed){ corpo.querySelectorAll('input,select,button').forEach(e => e.disabled = true); }
   corpo.querySelectorAll('[data-lv]').forEach(el => el.addEventListener(el.type === 'date' ? 'change' : 'input', () => {
-    lv[el.dataset.lv] = el.dataset.lv === 'identificador' ? el.value.toUpperCase().trim() : el.value.trim();
+    lv[el.dataset.lv] = el.dataset.lv === 'identificador' || el.dataset.lv === 'tag' ? el.value.toUpperCase().trim() : el.value.trim();
     lvSalvar();
     if(el.dataset.lv === 'identificador'){ clearTimeout(lvBuscaTimer); lvBuscaTimer = setTimeout(lvBuscarAnteriores, 600); }
   }));
@@ -7563,6 +7750,49 @@ function lvAtualizarBotaoItens(){
   b.textContent = marcados < textos.length ? 'Faltam ' + (textos.length - marcados) + ' itens' : (ncFalta.length ? 'Complete os desvios' : 'Continuar');
 }
 
+/* ---------- fotos de registro (opcionais, quantas quiser, câmera ou galeria) ---------- */
+function lvCarregarRegistro(lv){
+  lvRegistro[lv.id] = lvRegistro[lv.id] || [];
+  db.collection('lvs').doc(lv.id).collection('anexos').get().then(snap => {
+    const lista = [];
+    snap.docs.forEach(d => { const x = d.data() || {}; if(x.base64 && /^reg_/.test(d.id)) lista.push({ id: d.id, b64: x.base64, ordem: x.ordem || 0 }); });
+    lista.sort((a, b) => a.ordem - b.ordem);
+    if(lista.length){ lvRegistro[lv.id] = lista; if(lvAtual && lvAtual.id === lv.id && lvPasso === 3) lvRenderFicha(); }
+  }).catch(() => {});
+}
+function lvRegistroHtml(lv, ed){
+  const fotos = lvRegistro[lv.id] || [];
+  if(!ed && !fotos.length) return '';
+  return `<div class="lv-bloco lv-registro"><b>Fotos de Registro <span class="lv-sub" style="font-weight:400">(opcional)</span></b>
+    ${fotos.length ? `<div class="lv-reg-grade">${fotos.map(f => `<div class="lv-reg-foto"><img src="${f.b64}" alt="Foto de registro">${ed ? `<button type="button" class="lv-reg-tirar" data-reg="${escaparHtml(f.id)}" aria-label="Remover foto">×</button>` : ''}</div>`).join('')}</div>` : '<p class="lv-sub">Nenhuma foto ainda. Pode tirar na hora ou escolher da galeria, quantas quiser.</p>'}
+    ${ed ? `<div class="q-foto-botoes"><button type="button" class="btn-primary q-foto-btn lv-reg-add" data-modo="camera"><span class="icone-svg" data-icone="camera"></span> Tirar foto</button><button type="button" class="btn-primary q-foto-btn q-foto-galeria lv-reg-add" data-modo="galeria"><span class="icone-svg" data-icone="imagem"></span> Galeria</button></div>` : ''}
+    <p class="lv-sub">As fotos entram no PDF completo da LV (acesso restrito à equipe SSTMA).</p></div>`;
+}
+function lvLigarRegistro(corpo, lv){
+  corpo.querySelectorAll('.lv-reg-add').forEach(b => b.addEventListener('click', () => {
+    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*';
+    if(b.dataset.modo === 'camera') inp.setAttribute('capture', 'environment'); else inp.multiple = true;
+    inp.addEventListener('change', async () => {
+      const arqs = [...(inp.files || [])]; if(!arqs.length) return;
+      const lista = lvRegistro[lv.id] = lvRegistro[lv.id] || [];
+      for(const arq of arqs){
+        const b64 = await comprimirImagem(arq, 1100, 0.65);
+        const id = 'reg_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6), ordem = Date.now();
+        lista.push({ id, b64, ordem });
+        gravarSemEsperar(db.collection('lvs').doc(lv.id).collection('anexos').doc(id).set({ base64: b64, tipo: 'registro', ordem, criadoEm: firebase.firestore.FieldValue.serverTimestamp() }), 'foto de registro');
+      }
+      lvSalvar(); lvRenderFicha();
+    });
+    inp.click();
+  }));
+  corpo.querySelectorAll('.lv-reg-tirar').forEach(b => b.addEventListener('click', async () => {
+    if(!(await confirmarApp('Remover a foto?', 'Ela sai da LV.', 'Remover'))) return;
+    lvRegistro[lv.id] = (lvRegistro[lv.id] || []).filter(f => f.id !== b.dataset.reg);
+    gravarSemEsperar(db.collection('lvs').doc(lv.id).collection('anexos').doc(b.dataset.reg).delete(), 'remover foto');
+    lvRenderFicha();
+  }));
+}
+
 /* ---------- resultado e assinaturas ---------- */
 function lvRenderAssinaturas(corpo, barra, ed){
   const lv = lvAtual, eu = qMeuPerfil(), at = lv.assinaturaTST, ae = lv.assinaturaExterno;
@@ -7572,6 +7802,7 @@ function lvRenderAssinaturas(corpo, barra, ed){
       <div class="lv-ops-col">${LV_RESULTADOS.map(r => `<button type="button" class="lv-op lv-res ${lv.resultado === r ? 'on ' + (r === 'Liberado' ? 'r-ok' : r === 'Não liberado' ? 'r-nok' : 'r-ress') : ''}" data-res="${r}" ${ed && !at ? '' : 'disabled'}>${r}</button>`).join('')}</div>
       <label class="lv-campo">Observação<textarea rows="2" id="lv-res-obs" ${ed && !at ? '' : 'disabled'}>${escaparHtml(lv.resultadoObs || '')}</textarea></label>
     </div>
+    ${lvRegistroHtml(lv, ed)}
     <span class="secao-titulo" style="margin-top:6px;">Assinaturas</span>
     <div class="q-ass ${!at ? 'q-ass-minha' : ''}">
       <div class="q-ass-topo"><span><small>INSPEÇÃO E ${escaparHtml(((at && at.area) || minhaAreaSSTMA()).toUpperCase())} · VOCÊ</small><b>${escaparHtml(at ? at.nome : eu.nome)}</b><em>${(at && at.area || minhaAreaSSTMA()) === 'Meio Ambiente' ? 'Meio Ambiente' : 'TST'} · Mat. ${escaparHtml((at ? at.matricula : eu.matricula) || '—')}</em></span>
@@ -7592,9 +7823,8 @@ function lvRenderAssinaturas(corpo, barra, ed){
         <label class="lv-campo">Documento (RG, CPF ou CNH) *<input type="text" id="lv-ext-doc" value="${escaparHtml(lv.externoRasc && lv.externoRasc.documento || '')}" placeholder="Ex.: CNH 04512345678"></label>
         <div class="q-pad-caixa"><canvas class="q-pad" id="lv-pad-ext" width="600" height="220" aria-label="Área para a pessoa assinar com o dedo"></canvas>
           <button type="button" class="q-pad-limpar">Limpar</button><span class="q-pad-dica">A pessoa assina com o dedo</span></div>
-        <div class="q-foto-botoes"><button type="button" class="btn-primary q-foto-btn lv-ext-foto" data-qual="documento">Foto do documento *${lvMiniaturas[lv.id + '_documento'] ? ' ✓' : ''}</button><button type="button" class="btn-primary q-foto-btn q-foto-galeria lv-ext-foto" data-qual="pessoa">Foto da pessoa *${lvMiniaturas[lv.id + '_pessoa'] ? ' ✓' : ''}</button></div>
         <label class="q-declara"><input type="checkbox" id="lv-declara-ext"> ${escaparHtml(LV_DECLARACAO_EXTERNO)}</label>
-        <p class="lv-sub">As fotos ficam guardadas só no app e no PDF da LV. Fica registrado também: data e hora do servidor, localização e você como testemunha.</p>
+        <p class="lv-sub">Fica registrado também: data e hora do servidor, localização e você como testemunha.</p>
         <button type="button" class="btn-primary" id="lv-assinar-ext">Confirmar assinatura</button>` : (!at ? '<p class="lv-sub">Liberado depois que você assinar.</p>' : ''))}
     </div>
   </div>`;
@@ -7603,6 +7833,8 @@ function lvRenderAssinaturas(corpo, barra, ed){
     <button type="button" class="btn-primary q-btn-sec" id="lv-volta-2" ${at ? 'disabled' : ''}>Voltar</button><button type="button" class="btn-primary" id="lv-concluir" ${pronta ? '' : 'disabled'}>Concluir LV</button>`;
   document.getElementById('lv-volta-2').addEventListener('click', () => { lv.estado = 'rascunho'; lvSalvar(); lvPasso = 2; lvRenderFicha(); window.scrollTo(0, 0); });
   if(!ed) return;
+  if(!lvRegistro[lv.id]) lvCarregarRegistro(lv);
+  lvLigarRegistro(corpo, lv);
   corpo.querySelectorAll('.lv-res').forEach(b => b.addEventListener('click', () => { lv.resultado = b.dataset.res; lvSalvar(); lvRenderFicha(); }));
   const obs = document.getElementById('lv-res-obs'); if(obs) obs.addEventListener('input', () => { lv.resultadoObs = obs.value.trim(); lvSalvar(); });
   const padT = document.getElementById('lv-pad-tst'); if(padT) qLigarPad(padT);
@@ -7646,25 +7878,11 @@ function lvRenderAssinaturas(corpo, barra, ed){
       lvRenderFicha();
     } finally { btT.disabled = false; }
   });
-  corpo.querySelectorAll('.lv-ext-foto').forEach(b => b.addEventListener('click', () => {
-    const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.setAttribute('capture', b.dataset.qual === 'pessoa' ? 'user' : 'environment');
-    inp.addEventListener('change', async () => {
-      if(!inp.files[0]) return;
-      const b64 = await comprimirImagem(inp.files[0], 900, 0.62);
-      lvMiniaturas[lv.id + '_' + b.dataset.qual] = b64;
-      lvAtualizarBotoesExterno();
-      gravarSemEsperar(db.collection('lvs').doc(lv.id).collection('anexos').doc(b.dataset.qual).set({ base64: b64, tipo: b.dataset.qual, criadoEm: firebase.firestore.FieldValue.serverTimestamp() }), 'foto da assinatura');
-      b.textContent = (b.dataset.qual === 'pessoa' ? 'Foto da pessoa' : 'Foto do documento') + ' ✓';
-      lvAtualizarBotoesExterno();
-    });
-    inp.click();
-  }));
   const btE = document.getElementById('lv-assinar-ext');
   if(btE) btE.addEventListener('click', async () => {
     const x = lv.externoRasc || {};
     const falta = ['nome', 'empresa', 'funcao', 'documento'].filter(k => !String(x[k] || '').trim());
     if(falta.length){ mostrarAvisoApp('Falta preencher', 'Nome, empresa, função e documento da pessoa.'); return; }
-    if(!lvMiniaturas[lv.id + '_documento'] || !lvMiniaturas[lv.id + '_pessoa']){ mostrarAvisoApp('Faltam as fotos', 'Tire a foto do documento e a foto da pessoa.'); return; }
     if(padE._vazio){ mostrarAvisoApp('Falta a assinatura', 'A pessoa precisa assinar no quadro.'); return; }
     if(!document.getElementById('lv-declara-ext').checked){ mostrarAvisoApp('Falta confirmar', 'Marque a declaração da pessoa.'); return; }
     btE.disabled = true;
@@ -7677,7 +7895,7 @@ function lvRenderAssinaturas(corpo, barra, ed){
       nome: x.nome, empresa: x.empresa, funcao: x.funcao, documento: x.documento,
       imagem: menor.toDataURL('image/png'), assinadoEm: firebase.firestore.FieldValue.serverTimestamp(),
       aparelho: /iphone|ipad/i.test(navigator.userAgent) ? 'iPhone' : (/android/i.test(navigator.userAgent) ? 'Android' : 'Computador'),
-      localizacao: local, fotoDocumento: !!lvMiniaturas[lv.id + '_documento'], fotoPessoa: !!lvMiniaturas[lv.id + '_pessoa'],
+      localizacao: local, fotosRegistro: (lvRegistro[lv.id] || []).length,
       testemunha: { nome: eu.nome, matricula: eu.matricula, email: eu.email, uid: eu.uid },
       declaracao: LV_DECLARACAO_EXTERNO
     };
@@ -7692,7 +7910,7 @@ function lvAtualizarBotoesExterno(){
   const b = document.getElementById('lv-assinar-ext'); if(!b || !lvAtual) return;
   const lv = lvAtual, x = lv.externoRasc || {};
   const faltaCampo = ['nome', 'empresa', 'funcao', 'documento'].some(k => !String(x[k] || '').trim());
-  const faltaFoto = !lvMiniaturas[lv.id + '_documento'] || !lvMiniaturas[lv.id + '_pessoa'];
+  const faltaFoto = false;   // fotos de registro são opcionais
   const dec = document.getElementById('lv-declara-ext');
   b.disabled = faltaCampo || faltaFoto || !(dec && dec.checked);
   b.textContent = faltaCampo ? 'Preencha os dados da pessoa' : (faltaFoto ? 'Faltam as fotos' : (!(dec && dec.checked) ? 'Falta a declaração' : 'Confirmar assinatura de ' + String(x.nome).split(' ')[0]));
@@ -7734,7 +7952,7 @@ function lvConcluir(){
 function lvTextoCompartilhar(lv, formal){
   const pend = Object.keys(lv.itens || {}).filter(n => lv.itens[n] === 'NC').map(n => `- Item ${n}: ${(lv.ncs[n] || {}).descricao || (lv.itensTexto || [])[n - 1] || ''}`);
   const pdf = lv.pdfPublicoUrl || lv.pdfUrl;
-  const dados = [['Identificação', (lv.identificador || '') + (lvDescEquip(lv) ? ' (' + lvDescEquip(lv) + ')' : '')],
+  const dados = [['Identificação', (lv.identificador || '') + (lvDescEquip(lv) ? ' (' + lvDescEquip(lv) + ')' : '')], ['TAG', lv.tag],
     ['Empresa', lv.empresaNome || lv.empresaTipo || '—'], ['Data', formatarDataBR(lv.data)], ['Área', lv.area],
     ['Resultado', (lv.resultado || '—') + (lv.resultadoObs ? ' – ' + lv.resultadoObs : '')]];
   if(!formal) return msgBlocos([
@@ -7786,7 +8004,7 @@ async function gerarCartaoLV(lv){
   const ncs = Object.keys(lv.itens || {}).filter(n => lv.itens[n] === 'NC').sort((a, b) => a - b);
   const corRes = { 'Liberado': ['#e3f1d6', '#2d5214'], 'Liberado com ressalvas': ['#fdf0d5', '#7a4b06'], 'Não liberado': ['#fde2e1', '#a32d2d'] }[lv.resultado] || ['#eceee8', '#33404c'];
   const rotIdent = (LV_IDENT[lv.forma] || LV_IDENT.equipamento).rotulo;
-  const linhas = [[rotIdent, lv.identificador], ['Modelo / ano', lvDescEquip(lv)], ['Empresa', lv.empresaNome || lv.empresaTipo],
+  const linhas = [[rotIdent, lv.identificador], ['TAG', lv.tag], ['Modelo / ano', lvDescEquip(lv)], ['Empresa', lv.empresaNome || lv.empresaTipo],
     ['Contrato', lv.contrato], ['Processo / atividade', lv.processo], ['Área / setor', lv.area], ['Data', formatarDataBR(lv.data)],
     ['Tipo de inspeção', lv.tipoInspecao], ['Horímetro / KM', lv.horimetro]].filter(l => l[1]);
   const fRot = `400 28px ${fonte}`, fVal = `400 32px ${fonte}`;
@@ -7927,7 +8145,7 @@ async function lvRenderBusca(){
   const caixa = document.getElementById('lv-busca-res');
   if(termoBruto.length < 2){ caixa.innerHTML = ''; return; }
   const norm = lvNorm(termoBruto), termo = qNorm(termoBruto);
-  let achadas = lvRecentes.filter(l => (l.identificadorNorm || '').includes(norm) || lvNorm(l.numero).includes(norm) || qNorm([l.tipoNome, l.empresaNome, l.modelo, l.area].join(' ')).includes(termo));
+  let achadas = lvRecentes.filter(l => (l.identificadorNorm || '').includes(norm) || lvNorm(l.numero).includes(norm) || qNorm([l.tipoNome, l.empresaNome, l.modelo, l.area, l.tag].join(' ')).includes(termo) || (l.tag && lvNorm(l.tag).includes(norm)));
   if(norm.length >= 4){
     try{ const snap = await db.collection('lvs').where('identificadorNorm', '==', norm).get(); snap.docs.forEach(d => { if(!achadas.some(a => a.id === d.id)) achadas.push({ id: d.id, ...d.data() }); }); }catch(e){}
   }
@@ -9131,8 +9349,21 @@ function emAutoHtml(){
     <span>Sai pelo Outlook de ${escaparHtml(a.remetente)} para quem tem e-mail na planilha.${quando ? ` Último envio: ${escaparHtml(quando)} · ${n} responsáve${n === 1 ? 'l' : 'is'}${sem ? ` · ${sem} sem e-mail` : ''}.` : ''}</span>
     ${a.planilhaUrl ? `<a class="em-link" href="${escaparHtml(a.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha de e-mails</a>` : ''}</div></div>`;
 }
+const EM_GERENCIA = '__gerencia__';
 async function emCarregarAuto(){
   try{ const d = await db.collection('config').doc('emailSemanal').get(); emAuto = d.exists ? d.data() : null; }catch(e){}
+  // destinatários do e-mail da gerência = aba "Gerência" da planilha de e-mails
+  const ger = (emAuto && emAuto.gerencia) || [];
+  if(ger.length) emContatos[EM_GERENCIA] = ger.join('; '); else delete emContatos[EM_GERENCIA];
+}
+/* todos os desvios em aberto num grupo só (e-mail da gerência) */
+function emGrupoGeral(){
+  const grupos = emGrupos(), lista = [];
+  grupos.forEach(g => g.lista.forEach(d => lista.push(d)));
+  const pot = { 'Alto': 0, 'Médio': 1, 'Baixo': 2 };
+  lista.sort((a, b) => (a.status === b.status ? 0 : a.status === 'Atrasado' ? -1 : 1) || ((pot[a.potencial] ?? 3) - (pot[b.potencial] ?? 3)) || ((Number(a.numero) || 0) - (Number(b.numero) || 0)));
+  return { chave: EM_GERENCIA, nome: 'Todas as áreas', geral: true, lista, grupos,
+    atrasados: lista.filter(d => d.status === 'Atrasado').length, altos: lista.filter(d => d.potencial === 'Alto').length };
 }
 function emChave(nome){ return qNorm(nome).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80) || 'sem-nome'; }
 function emGrupos(){
@@ -9169,7 +9400,14 @@ function emRender(){
   const grupos = emGrupos();
   const termo = qNorm(emBusca.trim());
   const vis = termo ? grupos.filter(g => qNorm(g.nome).includes(termo)) : grupos;
-  corpo.innerHTML = emAutoHtml() + `
+  const geral = grupos.length ? emGrupoGeral() : null, gerDest = emContatos[EM_GERENCIA] || '';
+  corpo.innerHTML = emAutoHtml() + (geral && !termo ? `
+    <button type="button" class="lv-card em-resp em-gerencia" data-k="${EM_GERENCIA}">
+      <span class="lv-card-topo"><b>Gerência · todas as áreas</b>${geral.atrasados ? `<span class="lv-tag em-tag-atraso">${geral.atrasados} atrasado${geral.atrasados === 1 ? '' : 's'}</span>` : '<span class="lv-tag em-tag-ok">No prazo</span>'}</span>
+      <span class="lv-sub">${geral.lista.length} desvio${geral.lista.length === 1 ? '' : 's'} em aberto em ${geral.grupos.length} área${geral.grupos.length === 1 ? '' : 's'}${gerDest ? ' · ' + escaparHtml(gerDest) : ''}</span>
+      ${gerDest ? '' : '<span class="lv-tag em-tag-sem" style="align-self:flex-start;margin-top:4px">Ninguém na aba Gerência da planilha: não recebe o envio de sexta</span>'}
+    </button>
+    <span class="secao-titulo">Por responsável pela área</span>` : '') + `
     <div class="field" style="margin-bottom:12px"><input type="search" id="em-busca" placeholder="Buscar responsável" value="${escaparHtml(emBusca)}"></div>
     ${!grupos.length ? '<p class="empty-state">Nenhum desvio em aberto no momento.</p>'
       : (vis.length ? vis.map(g => `<button type="button" class="lv-card em-resp" data-k="${g.chave}">
@@ -9182,7 +9420,7 @@ function emRender(){
   corpo.querySelectorAll('.em-resp').forEach(x => x.addEventListener('click', () => { emSel = x.dataset.k; emRender(); window.scrollTo(0, 0); }));
   corpo.querySelectorAll('.icone-svg').forEach(el => { el.innerHTML = ICONES[el.dataset.icone] || ''; });
 }
-function emGrupoAtual(){ return emGrupos().find(g => g.chave === emSel); }
+function emGrupoAtual(){ return emSel === EM_GERENCIA ? emGrupoGeral() : emGrupos().find(g => g.chave === emSel); }
 function emResumoTexto(g){
   const np = g.lista.length - g.atrasados;
   return `${g.lista.length} desvio${g.lista.length === 1 ? '' : 's'} em aberto` +
@@ -9194,11 +9432,11 @@ function emRenderDetalhe(corpo, sub){
   sub.textContent = 'Confira a lista e o e-mail do responsável.';
   const rem = emAuto && emAuto.remetente, planilha = emAuto && emAuto.planilhaUrl;
   corpo.innerHTML = `
-    <div class="lv-resumo-cab"><span class="rotulo">RESPONSÁVEL PELA ÁREA</span><b style="font-size:18px">${escaparHtml(g.nome)}</b>
-      <small>${escaparHtml(emResumoTexto(g))}</small></div>
-    <div class="field" style="margin:14px 0 4px"><label for="em-para" style="font-size:12px;font-weight:700;color:var(--navy)">E-mail do responsável</label>
-      <input type="email" id="em-para" inputmode="email" autocomplete="off" placeholder="${planilha ? 'Sem e-mail na planilha' : 'nome@empresa.com.br'}" value="${escaparHtml(emContatos[g.chave] || '')}" ${planilha ? 'readonly' : ''}></div>
-    <p class="lv-sub" style="margin:0 0 14px">${planilha ? `Os e-mails ficam na planilha de e-mails dos responsáveis. <a class="em-link" href="${escaparHtml(planilha)}" target="_blank" rel="noopener">Editar na planilha</a>` : 'Fica guardado para o envio automático de sexta. Mais de um: separe com ponto e vírgula.'}</p>
+    <div class="lv-resumo-cab"><span class="rotulo">${g.geral ? 'GERÊNCIA · TODOS OS DESVIOS EM ABERTO' : 'RESPONSÁVEL PELA ÁREA'}</span><b style="font-size:18px">${escaparHtml(g.nome)}</b>
+      <small>${escaparHtml(emResumoTexto(g))}${g.geral ? ' · ' + g.grupos.length + ' área' + (g.grupos.length === 1 ? '' : 's') : ''}</small></div>
+    <div class="field" style="margin:14px 0 4px"><label for="em-para" style="font-size:12px;font-weight:700;color:var(--navy)">${g.geral ? 'E-mails da gerência' : 'E-mail do responsável'}</label>
+      <input type="email" id="em-para" inputmode="email" autocomplete="off" placeholder="${g.geral ? 'Ninguém na aba Gerência da planilha' : (planilha ? 'Sem e-mail na planilha' : 'nome@empresa.com.br')}" value="${escaparHtml(emContatos[g.chave] || '')}" ${planilha || g.geral ? 'readonly' : ''}></div>
+    <p class="lv-sub" style="margin:0 0 14px">${g.geral ? `Quem recebe fica na aba <b>Gerência</b> da planilha de e-mails. Sai toda sexta junto com os dos responsáveis.${planilha ? ` <a class="em-link" href="${escaparHtml(planilha)}" target="_blank" rel="noopener">Editar na planilha</a>` : ''}` : (planilha ? `Os e-mails ficam na planilha de e-mails dos responsáveis. <a class="em-link" href="${escaparHtml(planilha)}" target="_blank" rel="noopener">Editar na planilha</a>` : 'Fica guardado para o envio automático de sexta. Mais de um: separe com ponto e vírgula.')}</p>
     <span class="secao-titulo">Desvios em aberto</span>
     <div class="em-tabela">${agTabelaAbertosHtml(g.lista)}</div>
     <div class="zap-acoes" style="margin-top:16px">
@@ -9209,7 +9447,7 @@ function emRenderDetalhe(corpo, sub){
     <button type="button" class="em-link" id="em-pdf">Baixar PDF da tabela</button>`;
   const para = document.getElementById('em-para');
   const guardar = () => {
-    if(planilha) return true;   // e-mails vêm da planilha
+    if(planilha || g.geral) return true;   // e-mails vêm da planilha
     const v = emListaEmails(para.value).join('; ');
     if(!emEmailsValidos(para.value)) return false;
     if((emContatos[g.chave] || '') !== v){
@@ -9222,7 +9460,7 @@ function emRenderDetalhe(corpo, sub){
   const st = document.getElementById('em-status');
   document.getElementById('em-agora').addEventListener('click', async (ev) => {
     const bt = ev.currentTarget;
-    if(!guardar() || !emListaEmails(para.value).length){ mostrarAvisoApp(planilha ? 'Sem e-mail na planilha' : 'Informe o e-mail', planilha ? 'Coloque o e-mail deste responsável na planilha de e-mails. Em até 30 minutos ele aparece aqui.' : 'Digite o e-mail do responsável antes de enviar.'); if(!planilha) para.focus(); return; }
+    if(!guardar() || !emListaEmails(para.value).length){ if(g.geral){ mostrarAvisoApp('Ninguém na aba Gerência', 'Coloque os e-mails da gerência na aba Gerência da planilha de e-mails. Em até 30 minutos eles aparecem aqui.'); return; } mostrarAvisoApp(planilha ? 'Sem e-mail na planilha' : 'Informe o e-mail', planilha ? 'Coloque o e-mail deste responsável na planilha de e-mails. Em até 30 minutos ele aparece aqui.' : 'Digite o e-mail do responsável antes de enviar.'); if(!planilha) para.focus(); return; }
     if(!(await confirmarApp('Enviar agora?', `${emResumoTexto(g)} para ${emContatos[g.chave]}, pelo Outlook de ${rem}.`, 'Enviar'))) return;
     bt.disabled = true;
     const ref = db.collection('emailPedidos').doc();
@@ -9256,8 +9494,9 @@ function emBaixar(arquivo){ const a = document.createElement('a'); a.href = URL.
 function emHoje(){ const d = new Date(); return d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); }
 function emAssunto(g){ return `Desvios de segurança em aberto – ${g.nome} – ${new Date().toLocaleDateString('pt-BR')}`; }
 function emPrazoTxt(d){ return formatarDataBR(d.prazo) || String(d.prazo || '') || '—'; }
-function emSaudacao(g){ return g.nome.startsWith('Sem responsável') ? 'Prezados,' : `Prezado(a) ${msgNomeProprio(g.nome)},`; }
+function emSaudacao(g){ return g.geral || g.nome.startsWith('Sem responsável') ? 'Prezados,' : `Prezado(a) ${msgNomeProprio(g.nome)},`; }
 function emFraseCurta(g){
+  if(g.geral) return `Segue a relação de todos os desvios de segurança em aberto na obra: ${emResumoTexto(g)}${g.altos ? ', sendo ' + g.altos + ' de potencial alto' : ''}.`;
   return `Seguem os desvios de segurança em aberto na sua área: ${emResumoTexto(g)}. ` +
     (g.atrasados || g.altos ? 'Pedimos prioridade aos atrasados e aos de potencial alto. ' : '') + 'Para registrar a resolução, clique no número do desvio.';
 }
@@ -9306,12 +9545,12 @@ async function emGerarPdf(g){
   };
   cab();
   pdf.setTextColor(20, 33, 49); pdf.setFontSize(10); pdf.setFont('helvetica', 'bold');
-  pdf.text(t('Responsável pela área: ' + g.nome + '   |   ' + emResumoTexto(g)), 12, 30);
+  pdf.text(t((g.geral ? 'Todas as áreas (' + g.grupos.length + ')' : 'Responsável pela área: ' + g.nome) + '   |   ' + emResumoTexto(g)), 12, 30);
   const cores = { 'Alto': [214, 69, 69], 'Médio': [232, 194, 90], 'Baixo': [127, 174, 90] };
   pdf.autoTable({
     startY: 34, margin: { left: 10, right: 10, top: 28, bottom: 14 },
-    head: [['Nº', 'Data', 'Processo / Atividade', 'Local', 'Descrição do desvio', 'Potencial', 'Ações para correção', 'Prazo', 'Status', 'Origem']],
-    body: g.lista.map(d => [d.numero || '-', formatarDataBR(d.data), d.processo, d.local, d.descricao, d.potencial, d.acoesCorrecao || '-', emPrazoTxt(d), d.status, d.origem || '-'].map(t)),
+    head: [['Nº', 'Data', 'Processo / Atividade', 'Local', 'Descrição do desvio', 'Potencial', 'Ações para correção', 'Prazo', 'Status', g.geral ? 'Resp. pela área' : 'Origem']],
+    body: g.lista.map(d => [d.numero || '-', formatarDataBR(d.data), d.processo, d.local, d.descricao, d.potencial, d.acoesCorrecao || '-', emPrazoTxt(d), d.status, (g.geral ? d.respArea : d.origem) || '-'].map(t)),
     styles: { font: 'helvetica', fontSize: 8, cellPadding: 2, valign: 'middle', halign: 'center', lineColor: [201, 206, 214], lineWidth: 0.2, textColor: [20, 33, 49] },
     headStyles: { fillColor: [138, 149, 163], textColor: 255, fontStyle: 'bold' },
     columnStyles: { 0: { cellWidth: 12, fontStyle: 'bold' }, 1: { cellWidth: 19 }, 2: { cellWidth: 28 }, 3: { cellWidth: 24 }, 4: { cellWidth: 'auto', halign: 'left' },
@@ -9345,7 +9584,20 @@ let agAnoSel = '';                         // '' = todos os anos
 const anDados = { qualimetria: null, lvs: null, treinos: null, hist: null, erros: {} };
 const AN_CACHE = {};
 const TR_META_HHT = 1.65;                  // meta mensal de capacitação (% das horas trabalhadas)
-const AN_SECOES = { desvios: 'Desvios', qualimetria: 'Qualimetria', lv: 'LV', treinamentos: 'Capacitação', prever: 'Préver' };
+const AN_SECOES = { desvios: 'Desvios', qualimetria: 'Qualimetria', lv: 'LV', treinamentos: 'Capacitação', prever: 'Préver',
+  meioambiente: 'Meio Ambiente', incidentes: 'Incidentes', acidentes: 'Acidentes', saude: 'Saúde' };
+// Apresentação Préver: ordem das seções (a mesma da reunião) e o que cada uma traz
+const AN_PREVER_SECOES = [
+  ['treinamentos', 'Capacitação', 'Hora homem treinada (proativo)'],
+  ['meioambiente', 'Meio Ambiente', 'Reciclagem, etanol na frota leve e redução de água (proativo)'],
+  ['incidentes', 'Pirâmide de Bird e incidentes', 'Simples atendimento, danos materiais e quase acidentes'],
+  ['desvios', 'Desvios', 'Status, tipologia, local, responsáveis e abertos'],
+  ['acidentes', 'Acidentes', 'Sem e com afastamento, taxas de frequência e gravidade'],
+  ['saude', 'Saúde', 'Absenteísmo e CID M'],
+  ['qualimetria', 'Qualimetria', 'Menções das lideranças'],
+  ['lv', 'Listas de verificação', 'Inspeções por equipamento e resultado']
+];
+let anPreverSel = null;   // seções escolhidas na abertura da Préver (null = todas)
 
 function anFmt(v, dec){
   if(v === null || v === undefined || isNaN(v)) return '—';
@@ -9372,7 +9624,7 @@ async function anBuscar(chave, fn){
 }
 function anFontesPara(fonte){
   return { desvios: ['desvios'], qualimetria: ['qualimetria', 'hist'], lv: ['lv'], treinamentos: ['treinos', 'hist', 'desvios'],
-           prever: ['desvios', 'qualimetria', 'lv', 'treinos', 'hist'] }[fonte] || [];
+           prever: ['desvios', 'qualimetria', 'lv', 'treinos', 'hist', 'indicadores'] }[fonte] || [];
 }
 async function anCarregar(fontes){
   const [ini, fim] = anIntervalo(), tarefas = [];
@@ -9392,6 +9644,8 @@ async function anCarregar(fontes){
   if(fontes.includes('treinos')) pegar('treinos', 'tr|' + agAnoSel, async () =>
     (await db.collection('treinamentos').where('data', '>=', ini).where('data', '<=', fim).get()).docs.map(d => ({ id: d.id, ...d.data() })));
   if(fontes.includes('hist')) pegar('hist', 'hist', async () => (await db.collection('trHistorico').get()).docs.map(d => ({ id: d.id, ...d.data() })));
+  // indicadores de sustentabilidade (planilha da pasta "Indicadores de Sustentabilidade"): só na Préver
+  if(fontes.includes('indicadores')) pegar('indicadores', 'ind', async () => { const d = await db.collection('config').doc('indicadoresPrever').get(); return d.exists ? d.data() : null; });
   await Promise.all(tarefas);
 }
 function anAnosDisponiveis(){
@@ -9430,9 +9684,11 @@ function anAoMudar(){
 function anMontar(fonte, modo){
   const mont = { desvios: agMontarQuadros, qualimetria: qaMontarQuadros, lv: lvaMontarQuadros, treinamentos: trhMontarQuadros };
   const com = (s, lista) => lista.map(q => Object.assign({ secao: AN_SECOES[s] }, q));
+  mont.meioambiente = m => indMontar('meioambiente', m); mont.incidentes = m => indMontar('incidentes', m);
+  mont.acidentes = m => indMontar('acidentes', m); mont.saude = m => indMontar('saude', m);
   if(fonte !== 'prever') return com(fonte, mont[fonte](modo));
   let todos = [anCapaPrever()];
-  ['treinamentos', 'desvios', 'qualimetria', 'lv'].forEach(s => {
+  AN_PREVER_SECOES.map(x => x[0]).filter(s => !anPreverSel || anPreverSel.has(s)).forEach(s => {
     let qs = [];
     try{ qs = mont[s](modo); }catch(e){ console.warn('Préver (' + s + '):', e); }
     todos = todos.concat(com(s, qs));
@@ -9505,6 +9761,112 @@ function anKpisHtml(kpis, pequeno){
     <p class="ag-kpi-val"${k.cor ? ` style="color:${k.cor}"` : ''}>${k.val}</p>${k.peq ? `<p class="an-kpi-peq">${escaparHtml(k.peq)}</p>` : ''}</div>`).join('')}</div>`;
 }
 function anVazio(txt){ return `<p class="empty-state">${escaparHtml(txt)}</p>`; }
+
+/* =====================================================================
+   INDICADORES DE SUSTENTABILIDADE (só na Apresentação Préver)
+   Vêm da planilha "INDICADORES DE SUSTENTABILIDADE" da pasta do Drive, lida
+   pelo Apps Script (config/indicadoresPrever). Linhas pela descrição da
+   coluna B (ex.: "ST:NSAA" = "Nº SAA" da aba BASE DADOS ST).
+   ===================================================================== */
+function indNorm(t){ return String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+function indSerie(chave){ const D = anDados.indicadores; return D && D.linhas ? D.linhas[chave] || null : null; }
+function indUltimoMes(){
+  // último mês com dado (HHT preenchido): os meses seguintes da planilha ficam com zero
+  const h = indSerie('ST:HHTGERAL'); if(!h) return 11;
+  let u = -1; (h.m || []).forEach((v, i) => { if(Number(v) > 0) u = i; });
+  return u;
+}
+function indColunas(chave, op){
+  op = op || {};
+  const D = anDados.indicadores, s = indSerie(chave);
+  if(!s) return { html: anVazio('Linha não encontrada na planilha de indicadores.'), s: null };
+  const ult = indUltimoMes(), ano = D.ano;
+  const ruim = (v) => s.meta === undefined || s.meta === null || v === null ? false : (s.tipoMeta === 'limite' ? v > s.meta : v < s.meta);
+  const dec = op.dec === undefined ? 2 : op.dec;
+  const colunas = [];
+  for(let i = 0; i <= ult; i++){
+    const per = ano + '-' + String(i + 1).padStart(2, '0'), v = s.m[i] === null || s.m[i] === undefined ? null : Number(s.m[i]);
+    colunas.push({ rotulo: anMesCurto(per), valor: v, apagado: !anPeriodoOk(per), cor: ruim(v) ? '#d64545' : 'var(--green)' });
+  }
+  if(s.acum !== null && s.acum !== undefined) colunas.push({ rotulo: 'Acumulado', valor: Number(s.acum), cor: ruim(Number(s.acum)) ? '#d64545' : '#142131' });
+  const html = anColunasHtml(colunas, { fmt: v => anFmt(v, dec), meta: s.meta === null || s.meta === undefined ? null : s.meta, metaRot: s.metaRot || 'Meta' });
+  return { html, s };
+}
+function indQuadro(titulo, chave, calculo, op){
+  const r = indColunas(chave, op);
+  return { titulo: titulo + (anDados.indicadores ? ' – ' + anDados.indicadores.ano : ''), sub: 'Cálculo do indicador: ' + calculo, corpo: r.html + (op && op.nota ? `<p class="an-aviso">${escaparHtml(op.nota)}</p>` : ''), larga: !!(op && op.larga) };
+}
+function indPiramideHtml(rotulo, v){
+  const niveis = [['Fatalidade / lesão grave', v.fatal, '#d62828'], ['Acidente com afastamento', v.caf, '#f4a100'], ['Acidente sem afastamento', v.saf, '#2e9e44'],
+    ['Incidentes (quase acidente / SAA / dano material)', v.inc, '#1c9ad6'], ['Desvios', v.desvios, '#6b3fa0']];
+  return `<div class="ind-pir"><span class="ind-pir-rot">${escaparHtml(rotulo)}</span>
+    ${niveis.map((n, i) => `<div class="ind-pir-linha"><div class="ind-pir-nivel" style="--w:${36 + i * 16}%;background:${n[2]}"><b>${anFmt(n[1] || 0)}</b></div><span>${escaparHtml(n[0])}</span></div>`).join('')}</div>`;
+}
+function indMontar(secao, modo){
+  const D = anDados.indicadores;
+  if(!D || !D.linhas){
+    return [{ titulo: AN_SECOES[secao], sub: 'Indicadores de Sustentabilidade', corpo: anVazio('Os indicadores ainda não foram lidos. Coloque a planilha "INDICADORES DE SUSTENTABILIDADE" na pasta Indicadores de Sustentabilidade do Drive; ela entra na próxima sincronização.') }];
+  }
+  const q = [];
+  if(secao === 'meioambiente'){
+    q.push(indQuadro('Reciclagem – resíduos da construção civil (RCC)', 'MA:RECICLAGEMRCC', 'quantidade de resíduos RCC reciclados ÷ RCC gerados × 100 (%)', { dec: 2, larga: true }));
+    q.push(indQuadro('Reciclagem – resíduos diversos', 'MA:RECICLAGEM', 'quantidade de resíduos reciclados ÷ quantidade de resíduos totais gerados × 100 (%)', { dec: 2, larga: true }));
+    q.push(indQuadro('Frota leve – etanol', 'MA:FROTALEVEETANOL', 'etanol consumido ÷ combustível consumido (gasolina + etanol) × 100 (%)', { dec: 2, larga: true }));
+    q.push(indQuadro('Redução de água – custo', 'MA:REDUCAODEAGUA', 'redução do custo com água em relação à referência (%)', { dec: 2, larga: true }));
+  }
+  if(secao === 'incidentes'){
+    const ult = indUltimoMes();
+    // mês da pirâmide: o último mês escolhido no filtro que tem dados (ou o último com dados)
+    let mi = ult; for(let i = ult; i >= 0; i--){ if(anPeriodoOk(D.ano + '-' + String(i + 1).padStart(2, '0'))){ mi = i; break; } }
+    const val = (k, i) => { const s = indSerie(k); return s ? Number(i === 'acum' ? s.acum : s.m[i]) || 0 : 0; };
+    const ponto = (i) => ({ fatal: val('ST:FATAL', i), caf: val('ST:NCAF', i), saf: val('ST:NSAF', i),
+      inc: val('ST:NSAA', i) + val('ST:NDANOSMATERIAISEOUQA', i), desvios: val('ST:DESVIOS', i) });
+    const nomeMes = mi >= 0 ? anMesLongo(D.ano + '-' + String(mi + 1).padStart(2, '0')) : '—';
+    q.push({ titulo: 'Pirâmide de Bird', sub: 'Do mais grave (topo) aos desvios (base) · ' + nomeMes + ' e acumulado de ' + D.ano,
+      corpo: `<div class="ind-pir-par">${indPiramideHtml(nomeMes.toUpperCase(), ponto(mi))}${indPiramideHtml('ACUMULADO ' + D.ano, ponto('acum'))}</div>`, larga: true });
+    q.push(indQuadro('Simples atendimento ambulatorial (SAA)', 'ST:NSAA', 'nº de ocorrências de simples atendimento ambulatorial', { dec: 0, larga: true }));
+    q.push(indQuadro('Danos materiais e/ou quase acidentes', 'ST:NDANOSMATERIAISEOUQA', 'nº de ocorrências de dano material e/ou quase acidente', { dec: 0, larga: true }));
+  }
+  if(secao === 'acidentes'){
+    q.push(indQuadro('Acidentes sem afastamento (SAF)', 'ST:NSAF', 'nº de ocorrências sem afastamento', { dec: 0, larga: true }));
+    q.push(indQuadro('TF SAF – taxa de frequência sem afastamento', 'ST:TFSAF', 'nº de ocorrências sem afastamento × 1.000.000 ÷ total de hora homem trabalhada', { larga: true }));
+    q.push(indQuadro('Acidentes com afastamento (CAF)', 'ST:NCAF', 'nº de ocorrências com afastamento', { dec: 0, larga: true }));
+    q.push(indQuadro('TF CAF – taxa de frequência com afastamento', 'ST:TFCAF', 'nº de ocorrências com afastamento × 1.000.000 ÷ total de hora homem trabalhada', { larga: true }));
+    q.push(indQuadro('TFT – taxa de frequência total', 'ST:TFT', 'total de acidentes × 1.000.000 ÷ total de hora homem trabalhada', { larga: true }));
+    q.push(indQuadro('TG – taxa de gravidade', 'ST:TG', 'dias perdidos × 1.000.000 ÷ total de hora homem trabalhada', { larga: true }));
+  }
+  if(secao === 'saude'){
+    q.push(indQuadro('Absenteísmo', 'SO:ABSENTEISMO', 'hora homem não trabalhada × 100 ÷ total de hora homem trabalhada (%)', { larga: true }));
+    q.push(indQuadro('CID M', 'SO:CIDM', 'nº de atestados CID M × 1.000 ÷ efetivo médio', { larga: true }));
+  }
+  const rodape = D.arquivo ? `<p class="an-fonte">Fonte: ${escaparHtml(D.arquivo)}${D.atualizadoEm ? ' · lida em ' + escaparHtml(new Date(D.atualizadoEm).toLocaleDateString('pt-BR')) : ''}</p>` : '';
+  q.forEach(x => { x.corpo += rodape; });
+  return q;
+}
+/* antes de começar a Préver: escolher o que apresentar (tudo marcado) */
+function anEscolherPrever(){
+  return new Promise(resolver => {
+    const marcadas = new Set(anPreverSel ? [...anPreverSel] : AN_PREVER_SECOES.map(x => x[0]));
+    const modal = document.createElement('div'); modal.className = 'q-modal ap-pag-modal';
+    modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="O que apresentar"><h3>O que apresentar?</h3>
+      <p>Deixe tudo marcado ou escolha só as partes que vão ser vistas hoje.</p>
+      <div class="ap-pag-atalhos"><button type="button" class="apr-mini" data-pv="todas">Marcar tudo</button><button type="button" class="apr-mini" data-pv="nenhuma">Desmarcar tudo</button></div>
+      <div class="ap-pag-lista">${AN_PREVER_SECOES.map(([k, rot, sub]) => `<div class="ap-pag-item"><input type="checkbox" id="pv-${k}" data-k="${k}"><label for="pv-${k}"><b>${escaparHtml(rot)}</b><br><em>${escaparHtml(sub)}</em></label></div>`).join('')}</div>
+      <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary" id="pv-ok">Começar</button></div></div>`;
+    document.body.appendChild(modal);
+    const ok = modal.querySelector('#pv-ok');
+    const atualizar = () => {
+      modal.querySelectorAll('input[data-k]').forEach(c => { c.checked = marcadas.has(c.dataset.k); });
+      ok.disabled = !marcadas.size;
+      ok.textContent = marcadas.size === AN_PREVER_SECOES.length ? 'Começar (tudo)' : 'Começar (' + marcadas.size + ' parte' + (marcadas.size === 1 ? '' : 's') + ')';
+    };
+    modal.querySelectorAll('input[data-k]').forEach(c => c.addEventListener('change', () => { if(c.checked) marcadas.add(c.dataset.k); else marcadas.delete(c.dataset.k); atualizar(); }));
+    modal.querySelectorAll('[data-pv]').forEach(b => b.addEventListener('click', () => { marcadas.clear(); if(b.dataset.pv === 'todas') AN_PREVER_SECOES.forEach(x => marcadas.add(x[0])); atualizar(); }));
+    modal.querySelector('.q-modal-cancelar').addEventListener('click', () => { modal.remove(); resolver(null); });
+    ok.addEventListener('click', () => { modal.remove(); resolver(new Set(marcadas)); });
+    atualizar();
+  });
+}
 
 /* =====================================================================
    CAPACITAÇÃO (Treinamentos): INDICA (PDFs da pasta) + treinamentos do app
@@ -10309,6 +10671,18 @@ function aprSituacao(a){
   if(String(a.validaAteMes || '') < aprMes()) return { txt: 'Revalidar', cls: 'nok', revalidar: true };
   return { txt: 'Vigente', cls: 'ok' };
 }
+/* revalidação: a APR vale até o dia 1 do mês seguinte. O botão Revalidar só libera no dia 1
+   (vale de 01/MM a 01/MM+1). Fora do dia 1 ele aparece travado, com a data em que libera. */
+function aprDia1Seguinte(mes){ const [y, m] = String(mes || aprMes()).split('-').map(Number); const d = new Date(y, m, 1); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-01'; }
+function aprValidaAteTxt(a){ return a.validaAteMes ? formatarDataBR(aprDia1Seguinte(a.validaAteMes)) : ''; }
+function aprEhDia1(){ return new Date().getDate() === 1; }
+function aprPodeRevalidar(a){ return !!a && a.estado === 'vigente' && aprPodeGerir() && String(a.validaAteMes || '') < aprMes() && aprEhDia1(); }
+function aprRevalBotao(a){
+  if(!a || a.estado !== 'vigente' || !aprPodeGerir()) return '';
+  const pode = aprPodeRevalidar(a);
+  const libera = String(a.validaAteMes || '') < aprMes() ? formatarDataBR(aprDia1Seguinte(aprMes())) : formatarDataBR(aprDia1Seguinte(a.validaAteMes));
+  return `<button type="button" class="apr-mini apr-reval-mini" data-reval="${escaparHtml(a.id)}" ${pode ? '' : 'disabled'} title="${pode ? 'Revalidar para ' + escaparHtml(aprMesTxt(aprMes())) : 'Libera no dia ' + libera}">Revalidar<small>${pode ? 'liberado hoje' : 'libera ' + libera.slice(0, 5)}</small></button>`;
+}
 function aprExecHojeN(a){ return a.execHoje && a.execHoje.data === aprHoje() ? (a.execHoje.n || 0) : 0; }
 function aprLinhas(t){ return String(t || '').split(/\n+/).map(x => x.replace(/^[\s\-–•]+/, '').trim()).filter(Boolean); }
 function aprIcone(nome){ return `<span class="icone-svg" data-icone="${nome}"></span>`; }
@@ -10373,15 +10747,21 @@ function aprAtualizarTelas(){
 function aprCardApr(a){
   const s = aprSituacao(a), n = aprExecHojeN(a);
   const prog = a.programacao || {};
-  return `<button type="button" class="lv-card apr-card" data-aprid="${escaparHtml(a.id)}">
+  const reval = aprRevalBotao(a);
+  return `${reval ? '<div class="apr-card-linha">' : ''}<button type="button" class="lv-card apr-card" data-aprid="${escaparHtml(a.id)}">
     <span class="lv-card-topo"><b>${escaparHtml(aprNumTxt(a))} · ${escaparHtml(a.titulo || 'Sem título')}</b><span class="lv-tag ${s.cls}">${escaparHtml(s.txt)}</span></span>
     <span class="lv-sub">${escaparHtml([a.numero, a.frenteNome, prog.inicio && prog.termino ? formatarDataBR(prog.inicio) + ' a ' + formatarDataBR(prog.termino) : ''].filter(Boolean).join(' · '))}</span>
     ${a.estado === 'vigente' && !s.revalidar ? `<span class="apr-exec-tag ${n ? 'ok' : ''}">${n ? 'Executantes hoje: ' + n : 'Sem executantes hoje'}</span>` : ''}
-    ${s.revalidar ? `<span class="apr-exec-tag nok">Revalidar para ${escaparHtml(aprMesTxt(aprMes()))}</span>` : ''}
-  </button>`;
+    ${s.revalidar ? `<span class="apr-exec-tag nok">${aprEhDia1() ? 'Revalidar hoje (dia 1)' : 'Fora da validade · revalidação só no dia 1'}</span>` : (a.estado === 'vigente' ? `<span class="lv-sub">Válida até ${escaparHtml(aprValidaAteTxt(a))}</span>` : '')}
+  </button>${reval ? reval + '</div>' : ''}`;
 }
 function aprLigarCards(caixa){
   caixa.querySelectorAll('[data-aprid]').forEach(b => b.addEventListener('click', () => { const a = aprLista.find(x => x.id === b.dataset.aprid); if(a) aprAbrir(a); }));
+  caixa.querySelectorAll('[data-reval]').forEach(b => b.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    const a = aprLista.find(x => x.id === b.dataset.reval); if(!a || !aprPodeRevalidar(a)) return;
+    aprAbrir(a); setTimeout(aprAbrirRevalidar, 150);
+  }));
   caixa.querySelectorAll('[data-frente]').forEach(b => b.addEventListener('click', () => aprAbrirFrente(b.dataset.frente)));
 }
 function aprCardFrente(f){
@@ -10404,7 +10784,7 @@ function aprRenderInicio(){
     <div class="q-kpi"><b style="color:${rev.length ? 'var(--error)' : 'inherit'}">${rev.length}</b><span>a revalidar</span></div>`;
   const aviso = document.getElementById('apr-aviso-reval');
   aviso.style.display = rev.length ? 'block' : 'none';
-  aviso.innerHTML = rev.length ? `<b>${rev.length} APR${rev.length > 1 ? 's precisam' : ' precisa'} ser revalidada${rev.length > 1 ? 's' : ''}</b><span>Toda APR vale até o fim do mês. No dia 1 ela precisa das 4 assinaturas de novo para continuar valendo.</span>` : '';
+  aviso.innerHTML = rev.length ? `<b>${rev.length} APR${rev.length > 1 ? 's precisam' : ' precisa'} ser revalidada${rev.length > 1 ? 's' : ''}</b><span>Toda APR vale até o dia 1 do mês seguinte. A revalidação (4 assinaturas de novo) só é liberada no dia 1.</span>` : '';
   document.getElementById('apr-at-nova').style.display = aprPodeGerir() ? '' : 'none';
   const lf = document.getElementById('apr-frentes-lista');
   lf.innerHTML = ativas.length ? ativas.map(aprCardFrente).join('') : `<p class="empty-state">Nenhuma frente cadastrada ainda.${aprPodeGerir() ? ' Toque em "Frentes" para criar a primeira e gerar o QR.' : ''}</p>`;
@@ -10555,7 +10935,7 @@ async function aprBaixarPlaca(f){
 }
 
 /* ---------- link ?frente=<id> (QR da placa) e leitura do QR dentro do app ---------- */
-const aprFrentePeloLink = new URLSearchParams(location.search).get('frente');
+const aprFrentePeloLink = new URLSearchParams(location.search).get('abrirfrente') || new URLSearchParams(location.search).get('frente');
 if(aprFrentePeloLink) sessionStorage.setItem('sst_frente_link', aprFrentePeloLink);
 function aprProcessarLinkFrente(){
   const id = sessionStorage.getItem('sst_frente_link'); if(!id) return;
@@ -10635,7 +11015,7 @@ document.addEventListener('visibilitychange', () => { if(document.hidden) aprFec
 function aprLerQRFrente(){
   aprAbrirLeitor('Ler QR da frente', 'Aponte para o QR da placa da frente de serviço', (txt) => {
     let id = '';
-    try{ id = new URL(txt).searchParams.get('frente') || ''; }catch(e){ const m = String(txt).match(/[?&]frente=([^&\s]+)/); id = m ? decodeURIComponent(m[1]) : ''; }
+    try{ const u = new URL(txt).searchParams; id = u.get('frente') || u.get('abrirfrente') || u.get('f') || ''; }catch(e){ const m = String(txt).match(/[?&](?:abrir)?frente=([^&\s]+)/); id = m ? decodeURIComponent(m[1]) : ''; }
     if(!id){ mostrarAvisoApp('Não é o QR de uma frente', 'Leia o QR da placa "APR desta frente".'); return; }
     aprAbrirFrenteSeExistir(id);
   });
@@ -10766,7 +11146,7 @@ function aprRenderFicha(){
       ${campo('Processo', 'processo', a.processo, { obrig: true })}
       ${campo('Atividade', 'atividade', a.atividade, { area: true, obrig: true })}
       <div class="lv-dois">${campo('Setor', 'setor', a.setor)}${campo('Área / local', 'area', a.area)}</div>
-    </div>` : `<div class="apr-situacao ${s.cls}"><b>${escaparHtml(s.txt)}</b><span>${s.revalidar ? 'Esta APR valeu até o fim de ' + escaparHtml(aprMesTxt(a.validaAteMes)) + '. Revalide para continuar usando.' : (a.estado === 'vigente' ? 'Vale até o fim de ' + escaparHtml(aprMesTxt(a.validaAteMes)) + '. No dia 1 do próximo mês precisa ser revalidada.' : (a.estado === 'rascunho' ? 'Ainda não publicada.' : ''))}</span></div>
+    </div>` : `<div class="apr-situacao ${s.cls}"><b>${escaparHtml(s.txt)}</b><span>${s.revalidar ? 'Esta APR valeu até ' + escaparHtml(aprValidaAteTxt(a)) + '. ' + (aprEhDia1() ? 'Hoje é dia 1: revalide para valer até ' + escaparHtml(formatarDataBR(aprDia1Seguinte(aprMes()))) + '.' : 'A revalidação só é liberada no dia 1 (próximo: ' + escaparHtml(formatarDataBR(aprDia1Seguinte(aprMes()))) + ').') : (a.estado === 'vigente' ? ((a.revalidacoes || []).length ? 'Revalidada: válida de ' + escaparHtml(formatarDataBR(a.validaAteMes + '-01')) + ' a ' : 'Válida até ') + escaparHtml(aprValidaAteTxt(a)) + '. No dia 1 pode ser revalidada para mais um mês.' : (a.estado === 'rascunho' ? 'Ainda não publicada.' : ''))}</span></div>
     <div class="apr-info">
       <div><small>Frente</small><b>${escaparHtml(a.frenteNome || '')}</b></div>
       <div><small>Programação</small><b>${prog.inicio ? escaparHtml(formatarDataBR(prog.inicio) + ' a ' + formatarDataBR(prog.termino)) : '—'}</b></div>
@@ -10823,7 +11203,7 @@ function aprTextoMsg(a){
   return {
     titulo: [aprNumTxt(a), a.titulo].filter(Boolean).join(' - '),
     campos: [['APR', [aprNumTxt(a), a.titulo].filter(Boolean).join(' – ')], ['Nº de controle', a.numero], ['Frente', a.frenteNome], ['Atividade', a.atividade],
-      ['Programação', prog.inicio ? formatarDataBR(prog.inicio) + ' a ' + formatarDataBR(prog.termino) : ''], ['Válida até', 'fim de ' + aprMesTxt(a.validaAteMes)],
+      ['Programação', prog.inicio ? formatarDataBR(prog.inicio) + ' a ' + formatarDataBR(prog.termino) : ''], ['Válida até', aprValidaAteTxt(a)],
       ['Executantes hoje', String(aprExecHojeN(a))]]
   };
 }
@@ -10953,7 +11333,7 @@ function aprBarra(barra, ed, s){
   const n = aprExecHojeN(a);
   barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b>${escaparHtml(s.txt)}</b><small>${a.estado === 'vigente' && !s.revalidar ? 'Executantes hoje: ' + n : (a.pdfUrl ? 'PDF pronto' : '')}</small></span></div>
     ${a.pdfUrl ? `<a class="btn-primary q-btn-sec apr-btn-link" href="${escaparHtml(aprLinkPdf(a))}" target="_blank" rel="noopener">PDF</a>` : ''}
-    ${s.revalidar && aprPodeGerir() ? '<button type="button" class="btn-primary" id="apr-revalidar">Revalidar</button>' : ''}
+    ${s.revalidar && aprPodeGerir() ? (aprPodeRevalidar(a) ? '<button type="button" class="btn-primary" id="apr-revalidar">Revalidar</button>' : `<button type="button" class="btn-primary" disabled>Revalidar · ${escaparHtml(formatarDataBR(aprDia1Seguinte(aprMes())).slice(0, 5))}</button>`) : ''}
     ${a.estado === 'vigente' && !s.revalidar ? '<button type="button" class="btn-primary" id="apr-exec">Executantes de hoje</button>' : ''}`;
   const br = document.getElementById('apr-revalidar'); if(br) br.addEventListener('click', aprAbrirRevalidar);
   const be = document.getElementById('apr-exec'); if(be) be.addEventListener('click', () => aprAbrirExecutantes(a));
@@ -10961,7 +11341,7 @@ function aprBarra(barra, ed, s){
 async function aprPublicar(){
   const a = aprAtual, falta = aprFaltando();
   if(falta.length){ mostrarAvisoApp('Falta preencher', falta.join(', ')); return; }
-  if(!(await confirmarApp('Publicar a APR?', 'Ela fica vigente na frente ' + a.frenteNome + ' até o fim de ' + aprMesTxt(aprMes()) + '. Depois de publicada, o conteúdo não muda mais.', 'Publicar'))) return;
+  if(!(await confirmarApp('Publicar a APR?', 'Ela fica vigente na frente ' + a.frenteNome + ' até ' + formatarDataBR(aprDia1Seguinte(aprMes())) + '. Depois de publicada, o conteúdo não muda mais.', 'Publicar'))) return;
   a.estado = 'vigente'; a.validaAteMes = aprMes(); a.pdfPendente = true;
   const d = Object.assign({}, a); APR_NAO_REGRAVAR.forEach(k => delete d[k]);
   d.publicadaEm = firebase.firestore.FieldValue.serverTimestamp(); d.atualizadoEm = firebase.firestore.FieldValue.serverTimestamp();
@@ -11001,8 +11381,9 @@ function aprSalvarComoModelo(){
 /* ---------- revalidação (dia 1 de cada mês) ---------- */
 function aprAbrirRevalidar(){
   const a = aprAtual;
+  if(!aprPodeRevalidar(a)){ mostrarAvisoApp('Revalidação só no dia 1', 'A revalidação é liberada no dia 1 de cada mês (próximo: ' + formatarDataBR(aprDia1Seguinte(aprMes())) + ').'); return; }
   const modal = document.createElement('div'); modal.className = 'q-modal apr-reval-modal';
-  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Revalidar APR"><h3>Revalidar para ${escaparHtml(aprMesTxt(aprMes()))}</h3>
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Revalidar APR"><h3>Revalidar: ${escaparHtml(formatarDataBR(aprMes() + '-01'))} a ${escaparHtml(formatarDataBR(aprDia1Seguinte(aprMes())))}</h3>
     <p>Confira se a atividade, as etapas e os controles continuam valendo. As 4 pessoas assinam de novo (responsáveis pela prorrogação).</p>
     <div id="apr-reval-ass">${APR_PAPEIS.map(([k, rot]) => aprAssinaturaHtml('reval', k, rot, null, true)).join('')}</div>
     <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary" id="apr-reval-ok" disabled>Revalidar APR</button></div></div>`;
@@ -11025,7 +11406,7 @@ function aprAbrirRevalidar(){
     gravarSemEsperar(db.collection('aprs').doc(a.id).set({ revalidacoes: a.revalidacoes, validaAteMes: a.validaAteMes, pdfPendente: true, revalidadaEm: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true }), 'revalidar APR');
     const i = aprLista.findIndex(x => x.id === a.id); if(i >= 0) Object.assign(aprLista[i], { revalidacoes: a.revalidacoes, validaAteMes: a.validaAteMes });
     modal.remove(); aprRenderFicha();
-    mostrarAvisoApp('APR revalidada', 'Vale até o fim de ' + aprMesTxt(aprMes()) + '.');
+    mostrarAvisoApp('APR revalidada', 'Válida de ' + formatarDataBR(aprMes() + '-01') + ' a ' + formatarDataBR(aprDia1Seguinte(aprMes())) + '. O PDF revalidado sai na próxima sincronização, na mesma pasta do original.');
   });
 }
 
@@ -11136,6 +11517,842 @@ document.getElementById('apr-ficha-voltar').addEventListener('click', () => {
 });
 document.querySelectorAll('.apr-volta-inicio').forEach(b => b.addEventListener('click', () => irPara('view-apr')));
 document.getElementById('apr-frente-voltar').addEventListener('click', () => irPara('view-apr'));
+
+/* ======================================================================
+   FORMULÁRIOS: PTR (PI-FR-C 04901) e PAVE (PI-FR-C 10701)
+   Definições tiradas dos modelos das pastas PTR e PAVE do Drive.
+   Assinaturas: 'local'  = a pessoa assina com o dedo no celular de quem conduz
+                'sstma'  = só TST: logado na própria conta (ou com o login dele
+                           no celular emprestado)
+                'remoto' = também pode receber um link (WhatsApp / e-mail) e
+                           assinar de fora do app (CPF, declarações, nome e assinatura)
+   ====================================================================== */
+const FM_PTR_SECOES = [
+  { id: 'servico', titulo: 'Tipo de serviço / atividades', itens: ['Movimentação de carga', 'Altura', 'Trabalho a quente', 'Atividade com inflamáveis', 'Escavações / perfuração de solo', 'Eletricidade'] },
+  { id: 'riscos', titulo: 'Riscos potenciais', outros: true, itens: ['Produtos corrosivos', 'Produtos tóxicos', 'Produtos inflamáveis', 'Poeiras', 'Vapores e gases tóxicos', 'Contato com energia elétrica (choque)', 'Desmoronamento de talude', 'Soterramento', 'Umidade', 'Queda de altura', 'Prensamento / esmagamento', 'Queda de material', 'Queimadura', 'Atropelamento', 'Colisão'] },
+  { id: 'equip', titulo: 'Equipamento(s) utilizado(s)', outros: true, itens: ['Andaime / escadas', 'Soldas / maçaricos', 'Lixadeiras / furadeiras', 'Ferramentas manuais / pneumáticas', 'Guindaste / guindauto / manipulador', 'Máquinas de escavação', 'Caminhões e veículos'] },
+  { id: 'gerais', titulo: 'Precauções obrigatórias para qualquer natureza de risco', outros: true, itens: ['Somente utilizar equipamentos/acessórios adequados e liberados por check list', 'Verificar qualificação dos autorizados a realizar abastecimento manual', 'Providenciar kit de mitigação para produtos químicos e inflamáveis', 'Solicitar bloqueio dos equipamentos e verificar cartões dos executantes', 'Solicitar APR do responsável pela execução do serviço', 'Providenciar acesso adequado à área de trabalho', 'Efetuar o isolamento e sinalização da área', 'Providenciar EPIs adequados ao serviço', 'Providenciar linha de vida para fixação do cinto de segurança', 'Proteger canaletas, esgotos, bueiros e aberturas no piso', 'Providenciar escoramento para a escavação', 'Integrantes capacitados para a atividade', 'Providenciar treinamento dos envolvidos para operação de máquinas e equipamentos', 'Em condições climáticas adversas paralisar a atividade'] },
+  { id: 'cargas', titulo: 'Precauções obrigatórias para movimentação de cargas', aplicavel: true, outros: true, itens: ['Isolar e sinalizar a área', 'Somente profissional qualificado pode operar equipamento de guindar', 'Possui sinaleiro em tempo integral para a atividade', 'Plano de rigging', 'Realizar check list do equipamento de guindar e dos acessórios de içamento de cargas', 'Corda guia para controle da carga suspensa'] },
+  { id: 'inflamaveis', titulo: 'Precauções obrigatórias para atividades com inflamáveis', aplicavel: true, itens: ['Somente profissional qualificado pode realizar abastecimento', 'Atender procedimento específico ao tipo de serviço a ser executado', 'Realizar isolamento / sinalização da área', 'Anexar FDS dos produtos em uso', 'Transportar contêiner de segurança para inflamáveis na vertical e fixados', 'Qualificação e habilitação do motorista (curso MOPP e habilitação)', 'Disponibilizar extintores de incêndio e certificar que estejam operativos', 'Verificar existência de fonte de calor ou ignição (máquinas, equipamentos etc.)', 'Verificar validade do CIV (Certificado de Inspeção Veicular) / CIPP (Certificado de Inspeção de Produtos Perigosos)', 'Realizar aterramento do comboio'] },
+  { id: 'altura', titulo: 'Precauções obrigatórias para trabalhos em altura', aplicavel: true, itens: ['Executar proteção contra queda de objetos sobre pessoas', 'Providenciar passagem segura para pedestres abaixo da atividade', 'Verificar condições de utilização das torres de andaime', 'Cinto de segurança para todos os envolvidos', 'Realizar isolamento / sinalização da área', 'Providenciar cabo-guia para fixação do cinto de segurança', 'Todas as ferramentas com risco de queda devem estar amarradas', 'Verificar pressão arterial de todos que forem subir em altura', 'Forração com pranchões em perfeitas condições, sem nós, rachaduras ou pintura', 'Guarda-corpo em toda periferia com risco de queda da plataforma ou andaime', 'Instalar cabos-guias e trava-quedas nos andaimes e torres', 'Pranchões e linha de vida para trabalhos sobre telhado', 'Realizar checklist do cinto de segurança e do sistema de ancoragem'] },
+  { id: 'eletricidade', titulo: 'Precauções para trabalhos em eletricidade', aplicavel: true, itens: ['Profissional qualificado para trabalhar em eletricidade', 'EPIs necessários e adequados para a atividade', 'EPCs necessários e adequados para a atividade', 'Sinalização e isolamento da área', 'Desenergização da rede', 'Bloqueio da rede ou equipamento', 'As instalações (cabos/fios) estão protegidas do contato com a água, estruturas metálicas e/ou impactos mecânicos', 'Todos os equipamentos elétricos utilizados são compatíveis com as instalações existentes'] },
+  { id: 'quente', titulo: 'Precauções para trabalhos a quente', aplicavel: true, itens: ['Profissional qualificado para trabalhar com solda a quente', 'Sinalização e isolamento da área', 'EPIs adequados para a atividade', 'Manter extintor de incêndio no local', 'Realizar checklist dos equipamentos (conjuntos oxiacetileno e/ou máquina de solda)', 'Manter material combustível afastado do local da atividade'] },
+  { id: 'escavacao', titulo: 'Precauções obrigatórias para trabalhos com escavação e perfuração no solo', aplicavel: true, itens: ['Verificar existência de eletrodutos, tubos e galerias', 'Verificar possível contaminação ou impacto no solo', 'Emissão de laudo de estabilidade de solo', 'Realizar isolamento / sinalização', 'Saídas de emergência com escadas / cordas e estrutura para resgate', 'Manter escavações escoradas a partir de 1,25 metros'] },
+  { id: 'epi', titulo: 'Equipamentos de proteção individual / especiais', aplicavel: true, outros: true, itens: ['Máscara: filtro / autônoma / ar / solda', 'Avental: raspa / PVC / plumbífero', 'Botas de couro / PVC / borracha', 'Capacete com jugular', 'Luvas: couro / PVC / alta tensão', 'Conjunto antiácido / tyvek', 'Cinto de segurança paraquedista', 'Proteção facial acoplada ao capacete', 'Cordas: náilon / sisal', 'Protetor auricular', 'Trava-quedas', 'Óculos de segurança de impacto', 'Abafador de ruído tipo concha', 'Camisa manga longa'] }
+];
+const FM_PTR_PAPEIS = [
+  ['encarregado', 'Encarregado ou líder da atividade', 'local'],
+  ['respArea', 'Responsável da área (mestre, encarregado geral ou engenheiro)', 'local'],
+  ['seguranca', 'Segurança do Trabalho', 'sstma']
+];
+const FM_PAVE_BLOCOS = [
+  { id: 'ato', fase: 'Antes do carregamento', titulo: 'ATO', itens: [
+      ['1', 'As condições de estabilidade de frente foram verificadas, permitindo o avanço seguinte?'],
+      ['2', 'As leituras dos instrumentos indicam condições que permitam o avanço?'],
+      ['3', 'Todas as medidas definidas em projeto/ATO foram executadas até o último avanço / cambota instalada?'],
+      ['4', 'Foram aplicados todos os tratamentos necessários para liberação do avanço?']],
+    texto: ['5', 'Classe geológica'],
+    assinaturas: [['ato', 'ATO ou engenheiro responsável', 'remoto']] },
+  { id: 'seguranca', fase: 'Antes do carregamento', titulo: 'Segurança', itens: [
+      ['6', 'Foram abordados, durante o TDT, os procedimentos de segurança para cada uma das atividades previstas para o turno?'],
+      ['7', 'Existe APR (Análise Preliminar de Risco) para o serviço? Se sim, todos os envolvidos na atividade foram treinados na respectiva?'],
+      ['8', 'O local foi inspecionado e se apresenta em condições seguras para o avanço?'],
+      ['9', 'A equipe está treinada com relação ao plano de ação nas emergências e ele se encontra na frente de serviço?'],
+      ['10', 'Os EPIs foram disponibilizados a todos os colaboradores?'],
+      ['11', 'Os EPCs são adequados para o tipo de atividade?'],
+      ['12', 'As estruturas de apoio estão em condições seguras e inspecionadas (andaimes, plataformas, escadas etc.)?'],
+      ['13', 'A equipe de apoio (medicina, trânsito e comunicação) está preparada para atuar?'],
+      ['14', 'Há sinalização e isolamento adequado na área de risco?'],
+      ['15', 'Foram retirados pessoas, veículos, máquinas, equipamentos e demais materiais passíveis de danos na área de risco?']],
+    assinaturas: [['seguranca', 'Técnico de Segurança do Trabalho', 'sstma']] },
+  { id: 'producao', fase: 'Antes do carregamento', titulo: 'Produção', itens: [
+      ['18', 'Os seguintes materiais adicionais para eventuais situações de contingência e/ou imprevistos, de acordo com o tipo de frente de escavação, estão disponíveis?', 'titulo'],
+      ['21.1', 'Sacos de cimento'], ['21.2', 'Sacos de areia'], ['21.3', 'Tubos de dreno'], ['21.4', 'Resina pega rápida'],
+      ['21.5', 'Tela'], ['21.6', 'Concreto via seca ensacado'], ['21.7', 'Tirantes'],
+      ['20', 'Todos os itens do plano de fogo foram atendidos?']],
+    fogo: 'Com base nas informações fornecidas, foram verificadas as condições da frente e elas são satisfatórias para o avanço das escavações. Fogo autorizado?',
+    assinaturas: [['producao', 'Encarregado frente ou engenheiro responsável', 'remoto']] },
+  { id: 'carregamento', fase: 'Carregamento', titulo: 'Produção', itens: [
+      ['23', 'A área a ser detonada está limpa de materiais rochosos soltos?'],
+      ['24', 'A área de risco foi delimitada de acordo com o plano de fogo?'],
+      ['25', 'Os furos possuem tamponamento de acordo com o plano de fogo?'],
+      ['26', 'Todas as amarrações, espaçamentos, cargas e acessórios estão conforme plano de fogo?'],
+      ['27', 'Foram instalados lead line para realização da detonação?'],
+      ['28', 'Os cordéis estão totalmente esticados?'],
+      ['29', 'Foram instalados os equipamentos para realização de sismografia?'],
+      ['30', 'Foram retirados da área de risco todos os explosivos e acessórios que não serão utilizados na detonação?']],
+    assinaturas: [['carregEnc', 'Encarregado frente ou engenheiro responsável', 'remoto'], ['carregBlaster', 'Blaster ou engenheiro responsável ou encarregado frente', 'remoto']] },
+  { id: 'pos', fase: 'Pós-detonação', titulo: 'Blaster', itens: [
+      ['31', 'O primeiro acesso à área de risco foi feito por dupla entre blaster / encarregado frente / engenheiro responsável?'],
+      ['32', 'Foi encontrado algum fogo falhado?'],
+      ['33', 'Caso tenha sido encontrado fogo falhado, religar e detonar?'],
+      ['34', 'A área está liberada para o acesso dos colaboradores?']],
+    assinaturas: [['pos', 'Blaster ou engenheiro responsável ou encarregado frente', 'remoto']] }
+];
+const FM_PAVE_ANEXOS = [
+  ['planoFogo', 'Plano de fogo', true], ['apr', 'APR da atividade', true],
+  ['ptr', 'Permissão para Trabalho de Risco (PTR)', 'seAplicavel'], ['tagExplosivos', 'Lista com TAG dos explosivos e acessórios', true]
+];
+const FM_TIPOS = {
+  ptr: { nome: 'PTR', titulo: 'Permissão para Trabalho de Risco', codigo: 'PI-FR-C 04901', rev: '01' },
+  pave: { nome: 'PAVE', titulo: 'Permissão de Avanço de Escavação com Detonação', codigo: 'PI-FR-C 10701', rev: '00' }
+};
+const FM_DECL_LOCAL = 'Declaro que conferi as informações desta permissão e autorizo o registro da minha assinatura.';
+const FM_DECL_REMOTO = ['Li o conteúdo da permissão e confirmo as respostas da etapa que vou assinar.', 'Sou o responsável indicado e assino em meu próprio nome.', 'Autorizo o registro do meu nome, CPF, assinatura e da data e hora para fins de segurança e auditoria do Consórcio Construtor Gávea (Lei nº 13.709/2018).'];
+
+/* ======================================================================
+   FORMULÁRIOS PTR e PAVE (aba Formulários, junto com a APR)
+   - formularios/{id}: { tipo: 'ptr'|'pave', estado, campos..., marcados, respostas,
+     assinaturas: { papel: {...} }, linksAssinatura: { papel: {token, ...} }, numero, pdfUrl }
+   - anexos da PAVE: formularios/{id}/anexos/{aid} (+ /partes/{n} com o arquivo em pedaços);
+     o Apps Script junta, salva no Drive e apaga os pedaços.
+   - assinatura por link: assinaturasRemotas/{token} (página assinar.html, sem login).
+   ====================================================================== */
+let fmAberto = {}; let fmTipo = 'ptr', fmLista = [], fmOuvindo = false, fmAtual = null, fmSalvarTimer = null, fmBusca = '';
+
+function fmHoje(){ return typeof aprHoje === 'function' ? aprHoje() : new Date().toISOString().slice(0, 10); }
+function fmAgoraHora(){ const d = new Date(); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
+function fmPodeCriar(){ return typeof aprPodeGerir === 'function' && aprPodeGerir(); }
+function fmPapeis(f){
+  if(f.tipo === 'ptr') return FM_PTR_PAPEIS;
+  const l = []; FM_PAVE_BLOCOS.forEach(b => b.assinaturas.forEach(a => l.push(a))); return l;
+}
+function fmRotPapel(f, papel){ const x = fmPapeis(f).find(p => p[0] === papel) || (f.tipo === 'ptr' && FM_PTR_PAPEIS.find(p => papel.endsWith('_' + p[0]))); return x ? x[1] : papel; }
+
+/* ---------- lista ---------- */
+function fmOuvir(){
+  if(fmOuvindo || !auth.currentUser) return;
+  fmOuvindo = true;
+  db.collection('formularios').orderBy('criadoEm', 'desc').limit(300).onSnapshot(s => {
+    fmLista = s.docs.map(d => ({ id: d.id, ...d.data() }));
+    if(fmVisivel('view-form')) fmRenderLista();
+    if(fmVisivel('view-form-ficha') && fmAtual && !fmAtual.novo){
+      const novo = fmLista.find(x => x.id === fmAtual.id);
+      // o que vem do servidor (número, PDF, assinaturas por link, anexos no Drive) entra sem perder o que está sendo digitado
+      if(novo && JSON.stringify([novo.numero, novo.pdfUrl, novo.pdfPendente, novo.assinaturas, novo.anexosDrive, novo.estado]) !== JSON.stringify([fmAtual.numero, fmAtual.pdfUrl, fmAtual.pdfPendente, fmAtual.assinaturas, fmAtual.anexosDrive, fmAtual.estado])){
+        ['numero', 'pdfUrl', 'pdfPublicoUrl', 'pdfNome', 'pdfPendente', 'assinaturas', 'anexosDrive', 'anexosPendentes', 'estado', 'linksAssinatura'].forEach(k => { if(novo[k] !== undefined) fmAtual[k] = novo[k]; });
+        fmRenderFicha();
+      }
+    }
+  }, e => console.warn('Formulários:', e));
+}
+function fmVisivel(id){ const el = document.getElementById(id); return el && el.style.display === 'block'; }
+function abrirFormularios(tipo){
+  fmTipo = tipo || fmTipo; fmOuvir(); irPara('view-form'); fmRenderLista();
+}
+function fmSituacao(f){
+  if(f.tipo === 'ptr'){
+    if(f.estado === 'encerrada') return { txt: 'Encerrada', cls: 'rasc' };
+    if(fmAprovada(f)) return { txt: 'Liberada', cls: 'ok' };
+    return { txt: 'Rascunho', cls: 'rasc' };
+  }
+  const falta = fmAnexosFaltando(f).length;
+  if(fmTodasAssinadas(f) && !falta) return { txt: 'Concluída', cls: 'ok' };
+  if(falta) return { txt: 'Rascunho · faltam anexos', cls: 'nok' };
+  return { txt: 'Em andamento', cls: 'rasc' };
+}
+function fmTitulo(f){
+  if(f.tipo === 'ptr') return (f.campos && (f.campos.descricao || f.campos.local)) || 'PTR sem descrição';
+  const c = f.campos || {}; return [c.avanco ? 'Avanço ' + c.avanco : '', c.progressiva ? 'Progressiva ' + c.progressiva : ''].filter(Boolean).join(' · ') || 'PAVE sem identificação';
+}
+function fmCard(f){
+  const s = fmSituacao(f), c = f.campos || {};
+  return `<button type="button" class="lv-card fm-card" data-fmid="${escaparHtml(f.id)}"><span class="lv-card-topo"><b>${escaparHtml(FM_TIPOS[f.tipo].nome)} · ${escaparHtml(fmTitulo(f))}</b><span class="lv-tag ${s.cls}">${escaparHtml(s.txt)}</span></span>
+    <span class="lv-sub">${escaparHtml([f.numero, f.tipo === 'ptr' ? c.local : c.frente, formatarDataBR((f.tipo === 'ptr' ? (f.validade || {}).data : c.data) || ''), f.criadoPorNome].filter(Boolean).join(' · '))}</span></button>`;
+}
+function fmRenderLista(){
+  const T = FM_TIPOS[fmTipo];
+  document.querySelectorAll('#view-form .form-tipo').forEach(b => { const on = (b.dataset.ftipo || 'apr') === fmTipo; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+  document.getElementById('fm-titulo').textContent = T.nome + ' · ' + T.titulo;
+  document.getElementById('fm-nova').style.display = fmPodeCriar() ? '' : 'none';
+  document.getElementById('fm-nova').textContent = 'Nova ' + T.nome;
+  const termo = qNorm(fmBusca.trim());
+  const doTipo = fmLista.filter(f => f.tipo === fmTipo && (!termo || qNorm([f.numero, fmTitulo(f), JSON.stringify(f.campos || {}), f.criadoPorNome].join(' ')).includes(termo)));
+  const andamento = doTipo.filter(f => fmSituacao(f).cls !== 'ok' && f.estado !== 'encerrada');
+  const prontas = doTipo.filter(f => !andamento.includes(f));
+  const corpo = document.getElementById('fm-lista');
+  corpo.innerHTML = (andamento.length ? `<span class="secao-titulo">Em andamento (${andamento.length})</span>${andamento.map(fmCard).join('')}` : '') +
+    (prontas.length ? `<span class="secao-titulo">${fmTipo === 'ptr' ? 'Liberadas e encerradas' : 'Concluídas'} (${prontas.length})</span>${prontas.slice(0, 60).map(fmCard).join('')}` : '') +
+    (!doTipo.length ? `<p class="empty-state">${termo ? 'Nada encontrado.' : 'Nenhuma ' + T.nome + ' ainda.'}</p>` : '');
+  corpo.querySelectorAll('[data-fmid]').forEach(b => b.addEventListener('click', () => { const f = fmLista.find(x => x.id === b.dataset.fmid); if(f) fmAbrir(f); }));
+}
+
+/* ---------- nova / abrir / salvar ---------- */
+function fmNova(){
+  if(!fmPodeCriar()) return;
+  const eu = qMeuPerfil(), id = db.collection('formularios').doc().id;
+  fmAtual = { id, novo: true, tipo: fmTipo, estado: 'rascunho', campos: fmTipo === 'pave' ? { frente: 'Estação Metrô Gávea', data: fmHoje(), mestre: '' } : { local: '', processo: '', descricao: '', respArea: '', encarregado: '' },
+    marcados: {}, aplicavel: {}, outros: {}, respostas: {}, assinaturas: {}, executantes: [], ncs: [], recusa: { houve: false },
+    validade: { data: fmHoje(), inicio: fmAgoraHora(), termino: '' }, anexosOk: {},
+    criadoPor: eu.uid, criadoPorNome: eu.nome, criadoPorEmail: eu.email, criadoEmTexto: new Date().toISOString() };
+  fmAberto = {}; irPara('view-form-ficha'); fmRenderFicha(); window.scrollTo(0, 0);
+}
+function fmAbrir(f){ fmAberto = {}; fmAtual = JSON.parse(JSON.stringify(f)); irPara('view-form-ficha'); fmRenderFicha(); window.scrollTo(0, 0); fmCarregarAnexos(); fmConferirLinks(); }
+const FM_NAO_REGRAVAR = ['novo', 'id', 'numero', 'pdfUrl', 'pdfPublicoUrl', 'pdfNome', 'pdfId', 'pdfPublicoId', 'pdfGeradoEm', 'criadoEm', 'anexosDrive', 'assinaturas'];
+function fmSalvar(imediato){
+  if(!fmAtual) return;
+  clearTimeout(fmSalvarTimer);
+  const gravar = () => {
+    const f = fmAtual, d = JSON.parse(JSON.stringify(f));
+    FM_NAO_REGRAVAR.forEach(k => delete d[k]);
+    d.atualizadoEm = firebase.firestore.FieldValue.serverTimestamp();
+    if(f.novo){ d.criadoEm = firebase.firestore.FieldValue.serverTimestamp(); f.novo = false; }
+    if(f.pdfJaGerado) d.pdfPendente = true;
+    gravarSemEsperar(db.collection('formularios').doc(f.id).set(d, { merge: true }), FM_TIPOS[f.tipo].nome);
+  };
+  if(imediato) gravar(); else fmSalvarTimer = setTimeout(gravar, 700);
+}
+
+/* ---------- regras ---------- */
+function fmAprovada(f){ return FM_PTR_PAPEIS.every(p => (f.assinaturas || {})[p[0]]); }
+function fmTodasAssinadas(f){ return fmPapeis(f).every(p => (f.assinaturas || {})[p[0]]); }
+function fmBlocoAssinado(f, bloco){ return bloco.assinaturas.some(a => (f.assinaturas || {})[a[0]]); }
+function fmAnexosFaltando(f){
+  if(f.tipo !== 'pave') return [];
+  return FM_PAVE_ANEXOS.filter(([k, , obrig]) => !(obrig === 'seAplicavel' && (f.anexosNaoAplica || {})[k]) && !((f.anexosOk || {})[k] || (f.anexosDrive || {})[k])).map(a => a[1]);
+}
+function fmPodeEditar(f){ return fmPodeCriar() && f.estado !== 'encerrada'; }
+function fmFaltaPtr(f){
+  const c = f.campos || {}, v = f.validade || {}, falta = [];
+  if(!c.local) falta.push('local do trabalho'); if(!c.descricao) falta.push('descrição do trabalho');
+  if(!c.respArea) falta.push('responsável da área'); if(!c.encarregado) falta.push('encarregado ou líder');
+  if(!v.data || !v.inicio || !v.termino) falta.push('validade (data e horários)');
+  if(!Object.keys(f.marcados || {}).some(k => k.startsWith('servico|') && f.marcados[k])) falta.push('tipo de serviço');
+  FM_PTR_SECOES.filter(s => s.aplicavel && f.aplicavel[s.id] === undefined).forEach(s => falta.push('"' + s.titulo.replace(/^Precauções (obrigatórias )?(para )?/i, '') + '": aplicável?'));
+  return falta;
+}
+
+/* ---------- ficha ---------- */
+function fmRenderFicha(){
+  const f = fmAtual; if(!f) return;
+  const T = FM_TIPOS[f.tipo], s = fmSituacao(f), ed = fmPodeEditar(f);
+  document.getElementById('fm-ficha-selo').textContent = [f.numero || T.nome, T.codigo, s.txt.toUpperCase()].join(' · ');
+  document.getElementById('fm-ficha-titulo').textContent = T.titulo;
+  const corpo = document.getElementById('fm-ficha-corpo');
+  corpo.innerHTML = `<div class="lv-form">${f.tipo === 'ptr' ? fmPtrHtml(f, ed) : fmPaveHtml(f, ed)}${fmPdfHtml(f)}</div>`;
+  fmLigar(corpo, f, ed);
+  const barra = document.getElementById('fm-barra');
+  const nota = f.tipo === 'ptr' ? (fmAprovada(f) ? 'Liberada' : (fmFaltaPtr(f).length ? 'Faltam ' + fmFaltaPtr(f).length + ' itens' : 'Pronta para as assinaturas'))
+    : (fmAnexosFaltando(f).length ? 'Faltam ' + fmAnexosFaltando(f).length + ' anexo(s)' : (fmTodasAssinadas(f) ? 'Concluída' : 'Em andamento'));
+  barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b>${escaparHtml(nota)}</b><small>${f.pdfUrl ? 'PDF pronto' : (f.pdfPendente ? 'PDF sai na próxima sincronização' : 'Salvo automaticamente')}</small></span></div>${f.pdfUrl ? `<a class="btn-primary apr-btn-link" href="${escaparHtml(ehSSTMA() ? f.pdfUrl : (f.pdfPublicoUrl || f.pdfUrl))}" target="_blank" rel="noopener">PDF</a>` : ''}`;
+  corpo.querySelectorAll('.icone-svg').forEach(el => { if(!el.innerHTML) el.innerHTML = ICONES[el.dataset.icone] || ''; });
+}
+function fmCampo(rot, chave, valor, op){
+  op = op || {};
+  const dis = op.dis ? 'disabled' : '';
+  return `<label class="lv-campo">${rot}${op.obrig ? ' *' : ''}${op.area ? `<textarea rows="${op.linhas || 2}" data-fmc="${chave}" ${dis}>${escaparHtml(valor || '')}</textarea>`
+    : `<input type="${op.tipo || 'text'}" data-fmc="${chave}" value="${escaparHtml(valor || '')}" ${op.ph ? `placeholder="${escaparHtml(op.ph)}"` : ''} ${dis}>`}</label>`;
+}
+
+/* --- PTR --- */
+function fmPtrHtml(f, ed){
+  const c = f.campos, v = f.validade || {}, trava = !ed || fmAprovada(f), r = f.recusa || {};
+  const secao = (s) => {
+    const apl = s.aplicavel ? f.aplicavel[s.id] : true;
+    const marc = s.itens.filter((_, i) => f.marcados[s.id + '|' + i]).length;
+    return `<details class="apr-det fm-sec" data-fmdet="${s.id}" ${fmDetAberto(s.id, (s.aplicavel && apl === undefined) || (s.id === 'servico' && !marc)) ? 'open' : ''}><summary>${escaparHtml(s.titulo)} <span class="lv-sub">${s.aplicavel ? (apl === undefined ? '· aplicável?' : apl ? '· aplicável · ' + marc + ' marcado(s)' : '· não aplicável') : '· ' + marc + ' marcado(s)'}</span></summary>
+      ${s.aplicavel ? `<div class="lv-ops2 fm-apl">${['Sim', 'Não'].map(o => `<button type="button" class="lv-op ${apl === (o === 'Sim') ? 'on' : ''}" data-fmapl="${s.id}" data-v="${o === 'Sim' ? 1 : 0}" ${trava ? 'disabled' : ''}>Aplicável nesta PTR: ${o}</button>`).join('')}</div>` : ''}
+      ${apl === false ? '' : `<div class="fm-checks">${s.itens.map((t, i) => `<label class="fm-check"><input type="checkbox" data-fmk="${s.id}|${i}" ${f.marcados[s.id + '|' + i] ? 'checked' : ''} ${trava ? 'disabled' : ''}><span>${escaparHtml(t)}</span></label>`).join('')}</div>
+        ${s.outros ? fmCampo('Outros', 'outros.' + s.id, (f.outros || {})[s.id], { dis: trava }) : ''}`}
+    </details>`;
+  };
+  const ass = (sufixo, titulo) => `<span class="secao-titulo">${titulo}</span>${FM_PTR_PAPEIS.map(p => fmAssHtml(f, p[0] + sufixo, p[1], p[2], ed && fmPtrPodeAssinar(f, sufixo))).join('')}`;
+  const execs = f.executantes || [];
+  return `
+    <div class="lv-bloco"><b>Identificação</b>
+      ${fmCampo('Local do trabalho', 'local', c.local, { obrig: true, dis: trava })}
+      ${fmCampo('Processo / equipamento', 'processo', c.processo, { dis: trava })}
+      ${fmCampo('Descrição do trabalho que será realizado', 'descricao', c.descricao, { obrig: true, area: true, linhas: 3, dis: trava })}
+      <div class="lv-dois">${fmCampo('Responsável da área', 'respArea', c.respArea, { obrig: true, dis: trava })}${fmCampo('Encarregado ou líder da atividade', 'encarregado', c.encarregado, { obrig: true, dis: trava })}</div>
+    </div>
+    <div class="lv-bloco"><b>Validade da PTR *</b>
+      <div class="fm-tres">${fmCampo('Data', 'v.data', v.data, { tipo: 'date', dis: trava })}${fmCampo('Início', 'v.inicio', v.inicio, { tipo: 'time', dis: trava })}${fmCampo('Término', 'v.termino', v.termino, { tipo: 'time', dis: trava })}</div>
+    </div>
+    ${FM_PTR_SECOES.map(secao).join('')}
+    <div class="lv-bloco"><b>Recusa do trabalho</b>
+      <div class="lv-ops2">${['Não houve', 'Houve recusa'].map((o, i) => `<button type="button" class="lv-op ${!!r.houve === !!i ? 'on' : ''}" data-fmrec="${i}" ${!ed ? 'disabled' : ''}>${o}</button>`).join('')}</div>
+      ${r.houve ? `<div class="lv-dois">${fmCampo('Horário da recusa', 'rec.horario', r.horario, { tipo: 'time', dis: !ed })}${fmCampo('Motivo da recusa', 'rec.motivo', r.motivo, { dis: !ed })}</div>` : ''}
+      ${fmCampo('Observações', 'observacoes', f.observacoes, { area: true, dis: !ed })}
+    </div>
+    ${ass('', 'Aprovação da PTR')}
+    ${fmAprovada(f) ? `
+      <span class="secao-titulo">Executantes (${execs.length})</span>
+      <div class="lv-bloco">${execs.length ? execs.map(x => `<div class="fm-exec"><img src="${x.imagem}" alt=""><span><b>${escaparHtml(x.nome)}</b><small>${escaparHtml([x.matricula ? 'Mat. ' + x.matricula : '', x.funcao].filter(Boolean).join(' · '))}</small></span></div>`).join('') : '<p class="lv-sub">Todos que vão executar o trabalho assinam aqui, no celular de quem conduz.</p>'}
+        ${ed ? '<button type="button" class="btn-primary" id="fm-exec-add">Adicionar executante</button>' : ''}</div>
+      <details class="apr-det" ${f.revalidacao && f.revalidacao.data ? 'open' : ''}><summary>Revalidação da PTR (se aplicável)</summary>
+        <div class="fm-tres">${fmCampo('Data', 'rv.data', (f.revalidacao || {}).data, { tipo: 'date', dis: !ed })}${fmCampo('Início', 'rv.inicio', (f.revalidacao || {}).inicio, { tipo: 'time', dis: !ed })}${fmCampo('Término', 'rv.termino', (f.revalidacao || {}).termino, { tipo: 'time', dis: !ed })}</div>
+        ${f.revalidacao && f.revalidacao.data && f.revalidacao.inicio && f.revalidacao.termino ? FM_PTR_PAPEIS.map(p => fmAssHtml(f, p[0] + '_rv', p[1], p[2], ed)).join('') : '<p class="lv-sub">Preencha a data e os horários para liberar as assinaturas da revalidação.</p>'}
+      </details>
+      ${ass('_enc', 'Conclusão dos trabalhos / encerramento da PTR')}` : ''}`;
+}
+function fmDetAberto(id, padrao){ return fmAberto[id] === undefined ? padrao : fmAberto[id]; }
+function fmPtrPodeAssinar(f, sufixo){
+  if(sufixo === '') return !fmFaltaPtr(f).length;
+  return true;
+}
+
+/* --- PAVE --- */
+function fmPaveHtml(f, ed){
+  const c = f.campos, resp = f.respostas || {};
+  const bloco = (b) => {
+    const trava = !ed || fmBlocoAssinado(f, b);
+    const linhas = b.itens.map(([n, t, tipo]) => tipo === 'titulo' ? `<p class="fm-item-titulo"><b>${n}.</b> ${escaparHtml(t)}</p>` :
+      `<div class="fm-item"><span><b>${n}</b> ${escaparHtml(t)}</span><div class="fm-sna">${['S', 'N', 'NA'].map(o => `<button type="button" class="${resp[n] === o ? 'on o-' + o.toLowerCase() : ''}" data-fmr="${n}" data-v="${o}" ${trava ? 'disabled' : ''}>${o}</button>`).join('')}</div></div>`).join('');
+    return `<details class="apr-det fm-bloco" data-fmdet="${b.id}" ${fmDetAberto(b.id, !fmBlocoAssinado(f, b)) ? 'open' : ''}><summary><span class="fm-fase">${escaparHtml(b.fase)}</span> ${escaparHtml(b.titulo)} <span class="lv-sub">· ${b.itens.filter(i => i[2] !== 'titulo' && resp[i[0]]).length}/${b.itens.filter(i => i[2] !== 'titulo').length} respondidos${fmBlocoAssinado(f, b) ? ' · assinado' : ''}</span></summary>
+      ${linhas}
+      ${b.texto ? fmCampo(b.texto[0] + '. ' + b.texto[1], 'r.' + b.texto[0], resp[b.texto[0]], { dis: trava }) : ''}
+      ${b.fogo ? `<div class="fm-fogo"><b>${escaparHtml(b.fogo)}</b><div class="fm-sna">${['SIM', 'NÃO', 'N/A'].map(o => `<button type="button" class="${resp.fogo === o ? 'on o-' + (o === 'SIM' ? 's' : o === 'NÃO' ? 'n' : 'na') : ''}" data-fmr="fogo" data-v="${o}" ${trava ? 'disabled' : ''}>${o}</button>`).join('')}</div></div>` : ''}
+      ${b.assinaturas.map(a => fmAssHtml(f, a[0], a[1], a[2], ed && fmBlocoCompleto(f, b))).join('')}
+      ${ed && !fmBlocoCompleto(f, b) ? '<p class="lv-sub">Responda todos os itens desta etapa para liberar a assinatura.</p>' : ''}
+    </details>`;
+  };
+  const anx = FM_PAVE_ANEXOS.map(([k, rot, obrig]) => {
+    const na = obrig === 'seAplicavel' && (f.anexosNaoAplica || {})[k];
+    const lista = ((f.anexosLista || {})[k] || []), drive = (f.anexosDrive || {})[k] || [];
+    return `<div class="fm-anexo"><div class="fm-anexo-topo"><b>${escaparHtml(rot)}${obrig === true ? ' *' : ''}</b>
+        <span class="lv-tag ${na ? '' : (lista.length || drive.length ? 'ok' : 'nok')}">${na ? 'Não se aplica' : (lista.length || drive.length ? (lista.length || drive.length) + ' arquivo(s)' : 'Falta')}</span></div>
+      ${drive.map(d => `<a class="em-link" href="${escaparHtml(d.url)}" target="_blank" rel="noopener">${escaparHtml(d.nome)}</a>`).join('')}
+      ${lista.filter(x => !drive.some(d => d.aid === x.aid)).map(x => `<span class="lv-sub fm-anexo-arq">${escaparHtml(x.nome)} · enviando para o Drive na próxima sincronização${ed ? ` <button type="button" class="apr-mini apr-remover" data-fmanxdel="${k}|${escaparHtml(x.aid)}">Remover</button>` : ''}</span>`).join('')}
+      ${ed && !na ? `<div class="q-foto-botoes"><button type="button" class="btn-primary q-foto-btn fm-anx-add" data-k="${k}" data-modo="camera"><span class="icone-svg" data-icone="camera"></span> Foto</button><button type="button" class="btn-primary q-foto-btn q-foto-galeria fm-anx-add" data-k="${k}" data-modo="arquivo"><span class="icone-svg" data-icone="imagem"></span> Arquivo / galeria</button></div>` : ''}
+      ${obrig === 'seAplicavel' && ed ? `<label class="fm-check"><input type="checkbox" data-fmna="${k}" ${na ? 'checked' : ''}><span>Não se aplica a esta PAVE</span></label>` : ''}
+    </div>`;
+  }).join('');
+  const ncs = f.ncs || [];
+  return `
+    <div class="lv-bloco"><b>Identificação</b>
+      ${fmCampo('Frente de serviço', 'frente', c.frente, { dis: !ed })}
+      <div class="lv-dois">${fmCampo('Identificação do avanço', 'avanco', c.avanco, { obrig: true, dis: !ed })}${fmCampo('Progressiva / cambota', 'progressiva', c.progressiva, { dis: !ed })}</div>
+      <div class="lv-dois">${fmCampo('Plano de fogo', 'planoFogo', c.planoFogo, { dis: !ed })}${fmCampo('Data', 'data', c.data, { tipo: 'date', obrig: true, dis: !ed })}</div>
+      ${fmCampo('Mestre / encarregado', 'mestre', c.mestre, { dis: !ed })}
+      <p class="lv-sub">S = sim · N = não · NA = não aplicável</p>
+    </div>
+    ${FM_PAVE_BLOCOS.map(bloco).join('')}
+    <details class="apr-det" ${ncs.length ? 'open' : ''}><summary>Ocorrência de não conformidade (${ncs.length})</summary>
+      ${ncs.map((n, i) => `<div class="fm-nc"><div class="lv-dois">${fmCampo('Item', 'nc.' + i + '.item', n.item, { dis: !ed })}${fmCampo('Responsável', 'nc.' + i + '.responsavel', n.responsavel, { dis: !ed })}</div>${fmCampo('Descrição', 'nc.' + i + '.descricao', n.descricao, { area: true, dis: !ed })}${ed ? `<button type="button" class="apr-mini apr-remover" data-fmncdel="${i}">Remover</button>` : ''}</div>`).join('')}
+      ${ed ? '<button type="button" class="zap-btn secundario" id="fm-nc-add">+ Não conformidade</button>' : ''}
+    </details>
+    <div class="lv-bloco">${fmCampo('Observações', 'observacoes', f.observacoes, { area: true, dis: !ed })}</div>
+    <span class="secao-titulo">Documentos obrigatórios anexos</span>
+    <div class="lv-bloco">${anx}<p class="lv-sub">Enquanto faltar algum anexo, a PAVE fica como rascunho e o PDF não é gerado.</p></div>`;
+}
+function fmBlocoCompleto(f, b){
+  const r = f.respostas || {};
+  return b.itens.every(i => i[2] === 'titulo' || r[i[0]]) && (!b.texto || r[b.texto[0]]) && (!b.fogo || r.fogo);
+}
+
+/* --- assinaturas --- */
+function fmAssHtml(f, papel, rot, modo, pode){
+  const a = (f.assinaturas || {})[papel], link = (f.linksAssinatura || {})[papel];
+  if(a) return `<div class="q-ass"><div class="q-ass-topo"><span><small>${escaparHtml(rot.toUpperCase())}</small><b>${escaparHtml(a.nome)}</b><em>${escaparHtml([a.dataTexto, a.metodo].filter(Boolean).join(' · '))}</em></span><span class="q-tag q-tag-ok">Assinado ✓</span></div>
+    <div class="q-ass-img"><img src="${a.imagem}" alt="Assinatura de ${escaparHtml(a.nome)}"></div></div>`;
+  const remoto = modo === 'remoto';
+  return `<div class="q-ass fm-ass" data-papel="${escaparHtml(papel)}" data-modo="${modo}"><div class="q-ass-topo"><span><small>${escaparHtml(rot.toUpperCase())}</small><b>${link ? 'Link enviado' : '—'}</b>${link ? `<em>${escaparHtml((link.para ? 'para ' + link.para + ' · ' : '') + 'aguardando a assinatura')}</em>` : ''}</span><span class="q-tag q-tag-aviso">Pendente</span></div>
+    ${pode ? `<div class="fm-ass-acoes">
+      ${modo === 'sstma' ? `<button type="button" class="btn-primary fm-ass-sstma">${ehTST() ? 'Assinar (TST logado)' : 'Assinar com o login do TST'}</button>${ehTST() ? '<button type="button" class="zap-btn secundario fm-ass-login">Outro TST neste celular</button>' : ''}`
+        : `<button type="button" class="btn-primary fm-ass-local">Assinar neste celular</button>${remoto ? `<button type="button" class="zap-btn secundario fm-ass-link">${link ? 'Reenviar link' : 'Enviar link (WhatsApp / e-mail)'}</button>` : ''}`}
+    </div>` : ''}</div>`;
+}
+function fmPapelSstma(papel){ return /^seguranca/.test(papel); }
+function fmRegistrar(papel, ass){
+  const f = fmAtual;
+  f.assinaturas = f.assinaturas || {};
+  f.assinaturas[papel] = Object.assign({}, ass, { assinadoEm: null });
+  const upd = {}; upd['assinaturas.' + papel] = ass; upd.pdfPendente = true; upd.atualizadoEm = firebase.firestore.FieldValue.serverTimestamp();
+  if(f.linksAssinatura && f.linksAssinatura[papel]){ upd['linksAssinatura.' + papel] = firebase.firestore.FieldValue.delete(); delete f.linksAssinatura[papel]; }
+  fmSalvar(true);
+  return db.collection('formularios').doc(f.id).update(upd);
+}
+function fmDataTexto(){ return new Date().toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+function fmImagemPad(canvas){ const m = document.createElement('canvas'); m.width = 300; m.height = 110; m.getContext('2d').drawImage(canvas, 0, 0, 300, 110); return m.toDataURL('image/png'); }
+function fmAparelho(){ return /iphone|ipad/i.test(navigator.userAgent) ? 'iPhone' : (/android/i.test(navigator.userAgent) ? 'Android' : 'Computador'); }
+
+/* assinatura presencial: nome (+ matrícula/função) e assinatura com o dedo no celular de quem conduz */
+function fmAssinarLocal(papel, rot, opcoes){
+  opcoes = opcoes || {};
+  return new Promise(resolver => {
+    const modal = document.createElement('div'); modal.className = 'q-modal';
+    modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Assinar"><h3>${escaparHtml(opcoes.titulo || rot)}</h3>
+      <p>${escaparHtml(opcoes.texto || 'A pessoa assina com o dedo neste celular.')}</p>
+      <label>Nome completo *<input type="text" class="fm-l-nome" autocomplete="off" value="${escaparHtml(opcoes.nome || '')}"></label>
+      <div class="lv-dois"><label>Matrícula<input type="text" class="fm-l-mat" inputmode="numeric" autocomplete="off"></label><label>Função<input type="text" class="fm-l-func" autocomplete="off"></label></div>
+      <div class="q-pad-caixa"><canvas class="q-pad" width="600" height="220" aria-label="Área para assinar com o dedo"></canvas><button type="button" class="q-pad-limpar">Limpar</button><span class="q-pad-dica">Assine com o dedo</span></div>
+      <label class="q-declara" style="flex-direction:row;font-weight:400"><input type="checkbox" class="fm-l-dec"> ${escaparHtml(opcoes.declaracao || FM_DECL_LOCAL)}</label>
+      <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary fm-l-ok">Assinar</button></div></div>`;
+    document.body.appendChild(modal);
+    const pad = modal.querySelector('.q-pad'); qLigarPad(pad);
+    modal.querySelector('.q-modal-cancelar').addEventListener('click', () => { modal.remove(); resolver(null); });
+    modal.querySelector('.fm-l-ok').addEventListener('click', () => {
+      const nome = modal.querySelector('.fm-l-nome').value.trim();
+      if(nome.split(/\s+/).length < 2){ mostrarAvisoApp('Falta o nome', 'Escreva o nome completo.'); return; }
+      if(pad._vazio){ mostrarAvisoApp('Falta a assinatura', 'Assine com o dedo no quadro.'); return; }
+      if(!modal.querySelector('.fm-l-dec').checked){ mostrarAvisoApp('Falta confirmar', 'Marque a declaração.'); return; }
+      const eu = qMeuPerfil();
+      const ass = { nome: nome.toUpperCase(), matricula: modal.querySelector('.fm-l-mat').value.trim(), funcao: modal.querySelector('.fm-l-func').value.trim(),
+        imagem: fmImagemPad(pad), assinadoEm: firebase.firestore.FieldValue.serverTimestamp(), dataTexto: fmDataTexto(), data: fmHoje(), hora: fmAgoraHora(),
+        aparelho: fmAparelho(), metodo: 'presencial no celular de ' + (eu.nome || ''), registradoPor: { nome: eu.nome, email: eu.email, uid: eu.uid },
+        declaracao: opcoes.declaracao || FM_DECL_LOCAL };
+      modal.remove(); resolver(ass);
+    });
+  });
+}
+/* TST: assina logado (confere com a assinatura cadastrada). Outro TST: entra com o login dele numa sessão separada. */
+async function fmAssinarSstma(papel, rot, outro){
+  const f = fmAtual;
+  if(ehTST() && !outro){
+    const eu = qMeuPerfil();
+    const ass = await fmPadConferido(rot, db, eu);
+    if(!ass) return;
+    gravarSemEsperar(fmRegistrar(papel, ass), 'assinatura');
+    mostrarAvisoApp('Assinatura conferida', 'Assinado como ' + eu.nome + '.'); fmRenderFicha(); return;
+  }
+  if(!navigator.onLine){ mostrarAvisoApp('Sem internet', 'Para assinar com o login de outra pessoa é preciso estar online.'); return; }
+  const modal = document.createElement('div'); modal.className = 'q-modal';
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Login do TST"><h3>${escaparHtml(rot)}</h3>
+    <p>Só um TST pode assinar esta linha. Ele entra com o login dele só para assinar; depois o app volta para a sua conta.</p>
+    <label>E-mail do TST<input type="email" class="fm-t-email" autocomplete="off"></label>
+    <label>Senha<input type="password" class="fm-t-senha" autocomplete="off"></label>
+    <p class="q-m-erro" style="color:#a32d2d;display:none"></p>
+    <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary fm-t-ok">Entrar</button></div></div>`;
+  document.body.appendChild(modal);
+  let app = null; try{ app = qAssinanteApp(); }catch(e){}
+  const sair = () => { try{ app && app.auth().signOut().catch(() => {}); }catch(e){} };
+  modal.querySelector('.q-modal-cancelar').addEventListener('click', () => { modal.remove(); sair(); });
+  modal.querySelector('.fm-t-ok').addEventListener('click', async (ev) => {
+    const bt = ev.currentTarget, erro = modal.querySelector('.q-m-erro'), email = modal.querySelector('.fm-t-email').value.trim().toLowerCase();
+    erro.style.display = 'none';
+    if(papelDoEmail(email) !== 'tst' && !emailsTST.has(email)){ erro.textContent = 'Este e-mail não é de um TST.'; erro.style.display = 'block'; return; }
+    bt.disabled = true;
+    try{
+      await app.auth().signInWithEmailAndPassword(email, modal.querySelector('.fm-t-senha').value);
+      const u = app.auth().currentUser; modal.remove();
+      let nome = email, mat = '';
+      try{ const p = await app.firestore().collection('usuarios').doc(u.uid).get(); if(p.exists){ nome = p.data().nome || nome; mat = p.data().matricula || ''; } }catch(e){}
+      const ass = await fmPadConferido(rot + ' · ' + nome, app.firestore(), { uid: u.uid, nome, matricula: mat, email });
+      if(!ass){ sair(); return; }
+      ass.metodo = 'login próprio no celular de ' + qMeuPerfil().nome;
+      const upd = {}; upd['assinaturas.' + papel] = ass; upd.pdfPendente = true;
+      try{ await app.firestore().collection('formularios').doc(f.id).update(upd); }
+      catch(e){ mostrarAvisoApp('Não consegui gravar', 'Salve a PTR antes (ela precisa existir no banco) e tente de novo.'); sair(); return; }
+      f.assinaturas = f.assinaturas || {}; f.assinaturas[papel] = Object.assign({}, ass, { assinadoEm: null });
+      sair(); mostrarAvisoApp('Assinatura registrada', nome + ' assinou. Você continua na sua conta.'); fmRenderFicha();
+    }catch(e){ bt.disabled = false; erro.textContent = /wrong-password|invalid-credential|invalid-login/i.test(e.code || '') ? 'E-mail ou senha incorretos.' : 'Não consegui entrar: ' + (e.code || e.message); erro.style.display = 'block'; }
+  });
+}
+function fmPadConferido(titulo, fs, pessoa){
+  return new Promise(resolver => {
+    const modal = document.createElement('div'); modal.className = 'q-modal';
+    modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Assinar"><h3>${escaparHtml(titulo)}</h3><p>${escaparHtml(pessoa.nome)} · a assinatura é conferida com a cadastrada.</p>
+      <div class="q-pad-caixa"><canvas class="q-pad" width="600" height="220"></canvas><button type="button" class="q-pad-limpar">Limpar</button><span class="q-pad-dica">Assine com o dedo</span></div>
+      <label class="q-declara" style="flex-direction:row;font-weight:400"><input type="checkbox" class="fm-c-dec"> Declaro que conferi as condições e autorizo esta permissão.</label>
+      <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary fm-c-ok">Assinar</button></div></div>`;
+    document.body.appendChild(modal);
+    const pad = modal.querySelector('.q-pad'); qLigarPad(pad);
+    modal.querySelector('.q-modal-cancelar').addEventListener('click', () => { modal.remove(); resolver(null); });
+    modal.querySelector('.fm-c-ok').addEventListener('click', async (ev) => {
+      if(pad._vazio){ mostrarAvisoApp('Falta a assinatura', 'Assine com o dedo no quadro.'); return; }
+      if(!modal.querySelector('.fm-c-dec').checked){ mostrarAvisoApp('Falta confirmar', 'Marque a declaração.'); return; }
+      ev.currentTarget.disabled = true;
+      const ref = await carregarRefAssinatura(fs, pessoa.uid);
+      if(!ref){ ev.currentTarget.disabled = false; mostrarAvisoApp('Assinatura não cadastrada', pessoa.nome + ' ainda não cadastrou a assinatura no app (Perfil > Minha assinatura).'); return; }
+      const conf = conferirAssinatura(pad._tracos, ref);
+      if(!conf.ok){ ev.currentTarget.disabled = false; mostrarAvisoApp('Assinatura não confere', 'Limpe o quadro e assine de novo, do jeito de sempre.'); pad.getContext('2d').clearRect(0, 0, pad.width, pad.height); pad._vazio = true; pad._tracos = []; return; }
+      aprenderAssinatura(fs, pessoa.uid, ref, pad._tracos);
+      modal.remove();
+      resolver({ nome: pessoa.nome, matricula: pessoa.matricula || '', email: pessoa.email, uid: pessoa.uid, imagem: fmImagemPad(pad),
+        assinadoEm: firebase.firestore.FieldValue.serverTimestamp(), dataTexto: fmDataTexto(), data: fmHoje(), hora: fmAgoraHora(), aparelho: fmAparelho(),
+        metodo: 'logado na própria conta', conferida: true, conferencia: { distancia: conf.distancia, limite: conf.limite }, declaracao: 'Declaro que conferi as condições e autorizo esta permissão.' });
+    });
+  });
+}
+
+/* --- assinatura por link (WhatsApp / e-mail) --- */
+function fmResumoBloco(f, papel){
+  const b = FM_PAVE_BLOCOS.find(x => x.assinaturas.some(a => a[0] === papel)); if(!b) return [];
+  const r = f.respostas || {};
+  const itens = b.itens.filter(i => i[2] !== 'titulo').map(([n, t]) => ({ n, t, r: r[n] || '—' }));
+  if(b.texto) itens.push({ n: b.texto[0], t: b.texto[1], r: r[b.texto[0]] || '—' });
+  if(b.fogo) itens.push({ n: '', t: b.fogo, r: r.fogo || '—' });
+  return [{ secao: b.fase + ' · ' + b.titulo, itens }];
+}
+async function fmEnviarLink(papel, rot){
+  const f = fmAtual;
+  if(f.novo) fmSalvar(true);
+  const modal = document.createElement('div'); modal.className = 'q-modal';
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Enviar link"><h3>Assinatura por link</h3>
+    <p>${escaparHtml(rot)}: a pessoa abre o link, confere as respostas, informa o CPF e o nome completo e assina com o dedo. Não precisa ter o app.</p>
+    <label>Nome de quem vai assinar (opcional)<input type="text" class="fm-k-nome" autocomplete="off"></label>
+    <div class="zap-acoes"><button type="button" class="zap-btn principal fm-k-zap">Enviar pelo WhatsApp</button>
+      <div class="email-linha"><button type="button" class="zap-btn secundario fm-k-mail" data-via="outlook">E-mail · Outlook</button><button type="button" class="zap-btn secundario fm-k-mail" data-via="gmail">E-mail · Gmail</button></div>
+      <button type="button" class="zap-btn secundario fm-k-copiar">Copiar o link</button></div>
+    <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Fechar</button></div></div>`;
+  document.body.appendChild(modal);
+  modal.querySelector('.q-modal-cancelar').addEventListener('click', () => modal.remove());
+  let link = null;
+  const criar = async () => {
+    if(link) return link;
+    const token = Array.from(crypto.getRandomValues(new Uint8Array(18))).map(b => b.toString(16).padStart(2, '0')).join('');
+    const eu = qMeuPerfil(), c = f.campos || {}, nome = modal.querySelector('.fm-k-nome').value.trim();
+    const doc = { formId: f.id, tipo: f.tipo, papel, papelRotulo: rot, estado: 'pendente', nomeSugerido: nome,
+      titulo: FM_TIPOS[f.tipo].nome + ' · ' + fmTitulo(f), detalhes: [c.frente, c.data ? formatarDataBR(c.data) : '', c.planoFogo ? 'Plano de fogo ' + c.planoFogo : ''].filter(Boolean).join(' · '),
+      resumo: fmResumoBloco(f, papel), declaracoes: FM_DECL_REMOTO, criadoPor: { nome: eu.nome, email: eu.email }, criadoEm: firebase.firestore.FieldValue.serverTimestamp(),
+      expiraEm: new Date(Date.now() + 7 * 864e5).toISOString() };
+    await db.collection('assinaturasRemotas').doc(token).set(doc);
+    const upd = {}; upd['linksAssinatura.' + papel] = { token, para: nome, enviadoEm: new Date().toISOString(), por: eu.nome };
+    gravarSemEsperar(db.collection('formularios').doc(f.id).update(upd), 'link de assinatura');
+    f.linksAssinatura = f.linksAssinatura || {}; f.linksAssinatura[papel] = upd['linksAssinatura.' + papel];
+    link = location.origin + location.pathname.replace(/index\.html$/, '') + 'assinar.html?t=' + token;
+    fmRenderFicha();
+    return link;
+  };
+  const texto = (l) => msgBlocos([['*ASSINATURA DE ' + FM_TIPOS[f.tipo].nome + '*'], msgCampos([[FM_TIPOS[f.tipo].nome, fmTitulo(f)], ['Etapa', rot], ['Frente', (f.campos || {}).frente]], true), ['Para conferir e assinar (não precisa do app):', l]]);
+  modal.querySelector('.fm-k-zap').addEventListener('click', async () => {
+    try{ const l = await criar(); window.open('https://wa.me/?text=' + encodeURIComponent(texto(l)), '_blank'); }catch(e){ mostrarAvisoApp('Não consegui criar o link', 'Confira a internet e tente de novo.'); }
+  });
+  modal.querySelectorAll('.fm-k-mail').forEach(b => b.addEventListener('click', async () => {
+    try{
+      const l = await criar(), assunto = 'Assinatura – ' + FM_TIPOS[f.tipo].nome + ' – ' + fmTitulo(f);
+      const corpo = msgBlocos([['Prezado(a),'], ['Solicito a sua assinatura na etapa "' + rot + '" da ' + FM_TIPOS[f.tipo].titulo + '. Pelo link abaixo é possível conferir as respostas e assinar, sem precisar do app.'], ['ASSINAR', l], msgAssinaturaEmail()]);
+      window.open(b.dataset.via === 'gmail' ? 'https://mail.google.com/mail/?view=cm&fs=1&su=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpo)
+        : 'https://outlook.office.com/mail/deeplink/compose?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpo), '_blank');
+    }catch(e){ mostrarAvisoApp('Não consegui criar o link', 'Confira a internet e tente de novo.'); }
+  }));
+  modal.querySelector('.fm-k-copiar').addEventListener('click', async () => {
+    try{ const l = await criar(); await navigator.clipboard.writeText(l); mostrarAvisoApp('Link copiado', 'Cole na conversa com quem vai assinar.'); }catch(e){ mostrarAvisoApp('Não consegui copiar', 'Use o WhatsApp ou o e-mail.'); }
+  });
+}
+/* ao abrir: se alguém já assinou pelo link, traz a assinatura na hora (o Apps Script também faz isso) */
+async function fmConferirLinks(){
+  const f = fmAtual; if(!f || !f.linksAssinatura) return;
+  for(const papel of Object.keys(f.linksAssinatura)){
+    if((f.assinaturas || {})[papel]) continue;
+    try{
+      const d = await db.collection('assinaturasRemotas').doc(f.linksAssinatura[papel].token).get();
+      const x = d.exists ? d.data() : null;
+      if(x && x.estado === 'assinado' && fmAtual && fmAtual.id === f.id){
+        const ass = { nome: x.nome, cpf: x.cpf, imagem: x.assinatura, assinadoEm: firebase.firestore.FieldValue.serverTimestamp(), dataTexto: x.dataTexto || '', data: (x.assinadoEmCliente || '').slice(0, 10),
+          aparelho: x.aparelho || '', metodo: 'assinatura por link', declaracoes: x.declaracoesAceitas || FM_DECL_REMOTO, token: f.linksAssinatura[papel].token };
+        await fmRegistrar(papel, ass); fmRenderFicha();
+      }
+    }catch(e){}
+  }
+}
+
+/* --- PTR: executantes --- */
+function fmAddExecutante(){
+  fmAssinarLocal('exec', 'Executante', { titulo: 'Executante', texto: 'Quem vai executar o trabalho confere a PTR e assina com o dedo.', declaracao: 'Declaro que conheço os riscos e as precauções desta PTR e vou cumpri-las.' }).then(ass => {
+    if(!ass) return;
+    const f = fmAtual; f.executantes = f.executantes || [];
+    if(f.executantes.some(x => qNorm(x.nome) === qNorm(ass.nome))){ mostrarAvisoApp('Já está na lista', ass.nome + ' já assinou esta PTR.'); return; }
+    const x = Object.assign({}, ass); delete x.assinadoEm;
+    f.executantes.push(x); f.pdfJaGerado = !!f.pdfUrl; fmSalvar(true); fmRenderFicha();
+  });
+}
+
+/* --- PAVE: anexos (em pedaços no banco até o Apps Script levar para o Drive) --- */
+const FM_PARTE = 700000;
+function fmLerArquivo(arq){ return new Promise((ok, erro) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = erro; r.readAsDataURL(arq); }); }
+async function fmAnexar(k, arqs){
+  const f = fmAtual;
+  if(f.novo) fmSalvar(true);
+  for(const arq of arqs){
+    if(arq.size > 15 * 1024 * 1024){ mostrarAvisoApp('Arquivo grande demais', arq.name + ' tem mais de 15 MB.'); continue; }
+    const dados = /^image\//.test(arq.type) ? await comprimirImagem(arq, 1800, 0.72) : await fmLerArquivo(arq);
+    const aid = db.collection('formularios').doc().id, partes = [];
+    for(let i = 0; i < dados.length; i += FM_PARTE) partes.push(dados.slice(i, i + FM_PARTE));
+    const ref = db.collection('formularios').doc(f.id).collection('anexos').doc(aid);
+    const nome = arq.name || (FM_PAVE_ANEXOS.find(a => a[0] === k)[1] + '.jpg');
+    gravarSemEsperar(ref.set({ tipoDoc: k, nome, mime: /^image\//.test(arq.type) ? 'image/jpeg' : (arq.type || 'application/octet-stream'), partes: partes.length, tamanho: arq.size, criadoEm: firebase.firestore.FieldValue.serverTimestamp(), noDrive: false }), 'anexo');
+    partes.forEach((p, i) => gravarSemEsperar(ref.collection('partes').doc(String(i)).set({ d: p }), 'anexo (parte ' + (i + 1) + ')'));
+    f.anexosLista = f.anexosLista || {}; (f.anexosLista[k] = f.anexosLista[k] || []).push({ aid, nome });
+    f.anexosOk = f.anexosOk || {}; f.anexosOk[k] = true; f.anexosPendentes = true;
+  }
+  f.pdfJaGerado = !!f.pdfUrl; fmSalvar(true); fmRenderFicha();
+}
+function fmCarregarAnexos(){ /* a lista de anexos fica no próprio formulário (anexosLista / anexosDrive) */ }
+
+/* --- PDF e compartilhar --- */
+function fmPdfHtml(f){
+  if(!f.pdfUrl){
+    if(f.tipo === 'pave' && fmAnexosFaltando(f).length) return '';
+    if(f.tipo === 'ptr' && !fmAprovada(f)) return '';
+    return '<div class="lv-bloco"><b>PDF</b><p class="lv-sub">O PDF sai na próxima sincronização (até 10 minutos) e vai para a pasta ' + FM_TIPOS[f.tipo].nome + ' › ano › mês do Drive.</p></div>';
+  }
+  return `<div class="lv-bloco apr-uso"><b>PDF da ${escaparHtml(FM_TIPOS[f.tipo].nome)}</b><p class="lv-sub">${escaparHtml(f.pdfNome || '')}${f.pdfPendente ? ' · atualizando (até 10 min)' : ''}</p>
+    <a class="zap-btn secundario apr-btn-link" href="${escaparHtml(ehSSTMA() ? f.pdfUrl : (f.pdfPublicoUrl || f.pdfUrl))}" target="_blank" rel="noopener">Abrir PDF</a>
+    <button type="button" class="zap-btn principal" id="fm-zap">Compartilhar no WhatsApp</button>
+    <div class="email-linha"><button type="button" class="zap-btn secundario fm-email" data-via="outlook">E-mail · Outlook</button><button type="button" class="zap-btn secundario fm-email" data-via="gmail">E-mail · Gmail</button></div></div>`;
+}
+function fmLigarCompartilhar(corpo, f){
+  const link = f.pdfPublicoUrl || f.pdfUrl, T = FM_TIPOS[f.tipo];
+  const campos = () => [[T.nome, fmTitulo(f)], ['Nº', f.numero], [f.tipo === 'ptr' ? 'Local' : 'Frente', f.tipo === 'ptr' ? f.campos.local : f.campos.frente],
+    ['Data', formatarDataBR((f.tipo === 'ptr' ? (f.validade || {}).data : f.campos.data) || '')], ['Situação', fmSituacao(f).txt]];
+  const z = corpo.querySelector('#fm-zap');
+  if(z) z.addEventListener('click', async () => {
+    const texto = msgBlocos([['*' + T.titulo.toUpperCase() + '*'], msgCampos(campos(), true), ['*PDF:*', link]]);
+    if(navigator.share && /android|iphone|ipad/i.test(navigator.userAgent)){ try{ await navigator.share({ text: texto }); return; }catch(e){ if(e && e.name === 'AbortError') return; } }
+    window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+  });
+  corpo.querySelectorAll('.fm-email').forEach(b => b.addEventListener('click', () => {
+    const assunto = [T.nome, fmTitulo(f), f.numero].filter(Boolean).join(' – ');
+    const corpoEmail = msgBlocos([['Prezados,'], ['Segue a ' + T.titulo + ', com as assinaturas no PDF.'], msgSecaoEmail('Dados', campos()), [T.nome + ' (PDF)', link], msgAssinaturaEmail()]);
+    window.open(b.dataset.via === 'gmail' ? 'https://mail.google.com/mail/?view=cm&fs=1&su=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail)
+      : 'https://outlook.office.com/mail/deeplink/compose?subject=' + encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpoEmail), '_blank');
+  }));
+}
+
+/* --- ligações da ficha --- */
+function fmLigar(corpo, f, ed){
+  corpo.querySelectorAll('[data-fmdet]').forEach(d => d.addEventListener('toggle', () => { fmAberto[d.dataset.fmdet] = d.open; }));
+  fmLigarCompartilhar(corpo, f);
+  corpo.querySelectorAll('[data-fmc]').forEach(el => el.addEventListener(el.type === 'date' || el.type === 'time' ? 'change' : 'input', () => {
+    const k = el.dataset.fmc, v = el.value;
+    if(k.startsWith('v.')){ f.validade = f.validade || {}; f.validade[k.slice(2)] = v; }
+    else if(k.startsWith('rv.')){ f.revalidacao = f.revalidacao || {}; f.revalidacao[k.slice(3)] = v; }
+    else if(k.startsWith('rec.')){ f.recusa = f.recusa || {}; f.recusa[k.slice(4)] = v; }
+    else if(k.startsWith('outros.')){ f.outros = f.outros || {}; f.outros[k.slice(7)] = v; }
+    else if(k.startsWith('r.')){ f.respostas = f.respostas || {}; f.respostas[k.slice(2)] = v; }
+    else if(k.startsWith('nc.')){ const [, i, c] = k.split('.'); f.ncs[Number(i)][c] = v; }
+    else if(k === 'observacoes') f.observacoes = v;
+    else f.campos[k] = v;
+    f.pdfJaGerado = !!f.pdfUrl; fmSalvar();
+    if(/^(rv\.|v\.)/.test(k) || ['local', 'descricao', 'respArea', 'encarregado', 'r.5'].includes(k)) { clearTimeout(fmLigar._t); fmLigar._t = setTimeout(() => { const y = window.scrollY; fmRenderFicha(); window.scrollTo(0, y); }, 900); }
+  }));
+  const reRender = () => { const y = window.scrollY; fmSalvar(); fmRenderFicha(); window.scrollTo(0, y); };
+  corpo.querySelectorAll('[data-fmk]').forEach(el => el.addEventListener('change', () => { f.marcados[el.dataset.fmk] = el.checked; if(!el.checked) delete f.marcados[el.dataset.fmk]; fmSalvar(); }));
+  corpo.querySelectorAll('[data-fmapl]').forEach(b => b.addEventListener('click', () => { f.aplicavel[b.dataset.fmapl] = b.dataset.v === '1'; reRender(); }));
+  corpo.querySelectorAll('[data-fmrec]').forEach(b => b.addEventListener('click', () => { f.recusa = f.recusa || {}; f.recusa.houve = b.dataset.fmrec === '1'; reRender(); }));
+  corpo.querySelectorAll('[data-fmr]').forEach(b => b.addEventListener('click', () => { f.respostas = f.respostas || {}; f.respostas[b.dataset.fmr] = b.dataset.v; reRender(); }));
+  corpo.querySelectorAll('[data-fmna]').forEach(c => c.addEventListener('change', () => { f.anexosNaoAplica = f.anexosNaoAplica || {}; f.anexosNaoAplica[c.dataset.fmna] = c.checked; reRender(); }));
+  corpo.querySelectorAll('[data-fmncdel]').forEach(b => b.addEventListener('click', () => { f.ncs.splice(Number(b.dataset.fmncdel), 1); reRender(); }));
+  const nc = corpo.querySelector('#fm-nc-add'); if(nc) nc.addEventListener('click', () => { f.ncs = f.ncs || []; f.ncs.push({ item: '', descricao: '', responsavel: '' }); reRender(); });
+  const ex = corpo.querySelector('#fm-exec-add'); if(ex) ex.addEventListener('click', fmAddExecutante);
+  corpo.querySelectorAll('.fm-anx-add').forEach(b => b.addEventListener('click', () => {
+    const inp = document.createElement('input'); inp.type = 'file';
+    if(b.dataset.modo === 'camera'){ inp.accept = 'image/*'; inp.setAttribute('capture', 'environment'); }
+    else { inp.accept = 'image/*,application/pdf,.pdf,.doc,.docx,.xls,.xlsx'; inp.multiple = true; }
+    inp.addEventListener('change', () => { const l = [...(inp.files || [])]; if(l.length) fmAnexar(b.dataset.k, l); });
+    inp.click();
+  }));
+  corpo.querySelectorAll('[data-fmanxdel]').forEach(b => b.addEventListener('click', async () => {
+    const [k, aid] = b.dataset.fmanxdel.split('|');
+    if(!(await confirmarApp('Remover o anexo?', 'Ele sai desta PAVE.', 'Remover'))) return;
+    f.anexosLista[k] = (f.anexosLista[k] || []).filter(x => x.aid !== aid);
+    if(!f.anexosLista[k].length && !((f.anexosDrive || {})[k] || []).length) delete f.anexosOk[k];
+    gravarSemEsperar(db.collection('formularios').doc(f.id).collection('anexos').doc(aid).delete(), 'remover anexo');
+    reRender();
+  }));
+  corpo.querySelectorAll('.fm-ass').forEach(bl => {
+    const papel = bl.dataset.papel, rot = bl.querySelector('small').textContent;
+    const rotulo = fmRotPapel(f, papel.replace(/_(rv|enc)$/, '')) + (/_rv$/.test(papel) ? ' (revalidação)' : /_enc$/.test(papel) ? ' (encerramento)' : '');
+    const bL = bl.querySelector('.fm-ass-local');
+    if(bL) bL.addEventListener('click', async () => {
+      if(f.novo) fmSalvar(true);
+      const ass = await fmAssinarLocal(papel, rotulo);
+      if(!ass) return;
+      gravarSemEsperar(fmRegistrar(papel, ass), 'assinatura'); fmRenderFicha();
+    });
+    const bS = bl.querySelector('.fm-ass-sstma'); if(bS) bS.addEventListener('click', () => { if(f.novo) fmSalvar(true); fmAssinarSstma(papel, rotulo, false); });
+    const bO = bl.querySelector('.fm-ass-login'); if(bO) bO.addEventListener('click', () => { if(f.novo) fmSalvar(true); fmAssinarSstma(papel, rotulo, true); });
+    const bK = bl.querySelector('.fm-ass-link'); if(bK) bK.addEventListener('click', () => fmEnviarLink(papel, rotulo));
+  });
+}
+
+/* ---------- ligações gerais ---------- */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest && e.target.closest('[data-ftipo]');
+  if(!b || b.disabled) return;
+  if(b.dataset.ftipo === 'apr'){ irPara('view-apr'); return; }
+  abrirFormularios(b.dataset.ftipo);
+});
+document.getElementById('fm-nova').addEventListener('click', fmNova);
+document.getElementById('fm-busca').addEventListener('input', (e) => { fmBusca = e.target.value; fmRenderLista(); });
+document.getElementById('fm-ficha-voltar').addEventListener('click', () => { if(fmAtual && !fmAtual.novo) fmSalvar(true); fmAtual = null; abrirFormularios(fmTipo); });
+document.getElementById('fm-voltar').addEventListener('click', () => irPara('view-apr'));
+
+/* ======================================================================
+   CALENDÁRIO SSTMA: eventos fixos (iguais no app e no Apps Script)
+   - Qualimetria: prazo no dia 15 e no último dia de cada mês (fim de cada quinzena)
+   - Treinamento semanal: um por semana (segunda); aviso segunda, quarta e sexta
+     até alguém marcar "Sim, já foi dado"
+   O id é fixo (fixo-...), então marcar como feito grava calendario/{id}.
+   ====================================================================== */
+function calIso(d){ return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+function calData(iso){ const p = String(iso).split('-').map(Number); return new Date(p[0], p[1] - 1, p[2] || 1, 12); }
+function calSegunda(iso){ const d = calData(iso), dia = d.getDay(); d.setDate(d.getDate() - (dia === 0 ? 6 : dia - 1)); return calIso(d); }
+function calSomaDias(iso, n){ const d = calData(iso); d.setDate(d.getDate() + n); return calIso(d); }
+function calDiasEntre(de, ate){ return Math.round((calData(ate) - calData(de)) / 864e5); }
+function calFixos(de, ate){
+  const l = [];
+  let d = calData(de.slice(0, 7) + '-01');
+  while(calIso(d) <= ate){
+    const mes = calIso(d).slice(0, 7), ult = new Date(d.getFullYear(), d.getMonth() + 1, 0, 12);
+    [[mes + '-15', '1'], [calIso(ult), '2']].forEach(([data, q]) => {
+      if(data >= de && data <= ate) l.push({ id: 'fixo-quali-' + mes + '-' + q, tipo: 'qualimetria', origem: 'fixo', data,
+        titulo: 'Prazo da qualimetria – ' + q + 'ª quinzena', descricao: 'Fechar as fichas de qualimetria da ' + q + 'ª quinzena de ' + mes.slice(5) + '/' + mes.slice(0, 4) + '.' });
+    });
+    d = new Date(d.getFullYear(), d.getMonth() + 1, 1, 12);
+  }
+  let s = calSegunda(de);
+  while(s <= ate){
+    if(s >= calSegunda(de)) l.push({ id: 'fixo-trein-' + s, tipo: 'treinamento', origem: 'fixo', data: s, semanal: true,
+      titulo: 'Treinamento semanal', descricao: 'Treinamento da semana de ' + s.slice(8, 10) + '/' + s.slice(5, 7) + ' a ' + calSomaDias(s, 4).slice(8, 10) + '/' + calSomaDias(s, 4).slice(5, 7) + '.' });
+    s = calSomaDias(s, 7);
+  }
+  return l.sort((a, b) => a.data.localeCompare(b.data));
+}
+const CAL_TIPOS = { evento: 'Evento', qualimetria: 'Qualimetria', treinamento: 'Treinamento', lv: 'LV', reuniao: 'Reunião', auditoria: 'Auditoria', prazo: 'Prazo' };
+
+/* ======================================================================
+   CALENDÁRIO SSTMA (só TST e Meio Ambiente)
+   calendario/{id}: { titulo, data 'AAAA-MM-DD', hora, tipo, descricao, origem: 'app'|'planilha'|'fixo',
+                      feito, feitoPor, feitoEm, criadoPor }
+   Eventos fixos (qualimetria, treinamento semanal) vêm de calFixos(); o doc com o mesmo id guarda o "feito".
+   Os avisos no celular (5 dias, 3 dias e no dia) e os lembretes do treinamento saem pelo Apps Script.
+   ====================================================================== */
+let calMes = '', calSel = '', calDocs = {}, calOuvindo = false;
+const CAL_MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+const CAL_SEMANA = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+function calHoje(){ return calIso(new Date()); }
+function calOuvir(){
+  if(calOuvindo || !auth.currentUser || !ehSSTMA()) return;
+  calOuvindo = true;
+  db.collection('calendario').where('data', '>=', calSomaDias(calHoje(), -120)).onSnapshot(s => {
+    calDocs = {}; s.docs.forEach(d => { calDocs[d.id] = Object.assign({ id: d.id }, d.data()); });
+    if(document.getElementById('view-cal').style.display === 'block') calRender();
+  }, e => console.warn('Calendário:', e));
+}
+function abrirCalendario(){
+  if(!ehSSTMA()){ irPara('view-desvios'); return; }
+  if(!calMes) calMes = calHoje().slice(0, 7);
+  calOuvir(); calRender();
+}
+function calEventos(de, ate){
+  const l = {};
+  calFixos(de, ate).forEach(e => { l[e.id] = e; });
+  Object.values(calDocs).forEach(d => {
+    if(l[d.id]) l[d.id] = Object.assign({}, l[d.id], d, { origem: 'fixo' });
+    else if(d.data >= de && d.data <= ate && !d.removido) l[d.id] = Object.assign({}, d);
+  });
+  return Object.values(l).filter(e => !e.removido).sort((a, b) => (a.data + (a.hora || '99')).localeCompare(b.data + (b.hora || '99')));
+}
+function calDataTxt(iso){ const d = calData(iso); return CAL_SEMANA[d.getDay()] + ', ' + iso.slice(8, 10) + '/' + iso.slice(5, 7); }
+function calQuando(e){
+  const n = calDiasEntre(calHoje(), e.data);
+  if(e.semanal) return e.data <= calHoje() && calHoje() <= calSomaDias(e.data, 6) ? 'esta semana' : '';
+  return n === 0 ? 'hoje' : n === 1 ? 'amanhã' : n > 1 ? 'em ' + n + ' dias' : (n === -1 ? 'ontem' : 'há ' + (-n) + ' dias');
+}
+function calItem(e){
+  const quando = calQuando(e), atrasado = !e.feito && e.data < calHoje() && !e.semanal;
+  return `<div class="cal-ev ${e.feito ? 'feito' : ''}" data-calid="${escaparHtml(e.id)}">
+    <div class="cal-ev-topo"><span class="cal-tipo t-${escaparHtml(e.tipo || 'evento')}">${escaparHtml(CAL_TIPOS[e.tipo] || 'Evento')}</span>
+      <span class="lv-tag ${e.feito ? 'ok' : atrasado ? 'nok' : 'rasc'}">${e.feito ? (e.semanal ? 'Dado' : 'Feito') : escaparHtml(quando || 'Pendente')}</span></div>
+    <b>${escaparHtml(e.titulo)}</b>
+    <span class="lv-sub">${escaparHtml(calDataTxt(e.data))}${e.hora ? ' · ' + escaparHtml(e.hora) : ''}${e.origem === 'planilha' ? ' · da planilha' : e.origem === 'fixo' ? ' · fixo' : ''}</span>
+    ${e.descricao ? `<p class="cal-desc">${escaparHtml(e.descricao)}</p>` : ''}
+    ${e.feito && e.feitoPor ? `<span class="lv-sub">${e.semanal ? 'Marcado como dado' : 'Feito'} por ${escaparHtml(e.feitoPor)}</span>` : ''}
+    <div class="cal-acoes">
+      <button type="button" class="apr-mini" data-calfeito="${e.feito ? 0 : 1}">${e.feito ? 'Reabrir' : (e.semanal ? 'Sim, já foi dado' : 'Marcar como feito')}</button>
+      <button type="button" class="apr-mini" data-calmail>E-mail aos TSTs</button>
+      ${e.origem === 'app' ? '<button type="button" class="apr-mini apr-remover" data-caldel>Excluir</button>' : ''}
+    </div></div>`;
+}
+function calRender(){
+  const hoje = calHoje(), [a, m] = calMes.split('-').map(Number);
+  const ini = calMes + '-01', fimMes = calIso(new Date(a, m, 0, 12));
+  const doMes = calEventos(ini, fimMes);
+  const porDia = {}; doMes.forEach(e => { if(!e.semanal) (porDia[e.data] = porDia[e.data] || []).push(e); });
+  // grade do mês (começa na segunda)
+  const primeiro = calData(ini), vazio = (primeiro.getDay() + 6) % 7, dias = Number(fimMes.slice(8));
+  let grade = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map(d => `<span class="cal-sem">${d}</span>`).join('');
+  for(let i = 0; i < vazio; i++) grade += '<span></span>';
+  for(let d = 1; d <= dias; d++){
+    const iso = calMes + '-' + ('0' + d).slice(-2), evs = porDia[iso] || [];
+    const pend = evs.some(e => !e.feito);
+    grade += `<button type="button" class="cal-dia ${iso === hoje ? 'hoje' : ''} ${iso === calSel ? 'sel' : ''}" data-caldia="${iso}" aria-label="${d} de ${CAL_MESES[m - 1]}${evs.length ? ', ' + evs.length + ' evento(s)' : ''}">
+      <span>${d}</span>${evs.length ? `<i class="${pend ? '' : 'ok'}">${evs.length > 1 ? evs.length : ''}</i>` : ''}</button>`;
+  }
+  // treinamento desta semana
+  const semana = calEventos(calSegunda(hoje), calSegunda(hoje)).find(e => e.semanal);
+  const aviso = semana && !semana.feito ? `<div class="cal-trein" data-calid="${escaparHtml(semana.id)}"><b>O treinamento desta semana já foi dado?</b><span>Enquanto ninguém marcar, o lembrete sai segunda, quarta e sexta.</span>
+      <button type="button" class="btn-primary" data-calfeito="1">Sim, já foi dado</button></div>` : '';
+  let lista, titulo;
+  if(calSel){ lista = calEventos(calSel, calSel).filter(e => !e.semanal || calSel === e.data); titulo = calDataTxt(calSel); }
+  else { lista = calEventos(hoje, calSomaDias(hoje, 30)).filter(e => !e.semanal || e.data <= calSomaDias(hoje, 7)); titulo = 'Próximos 30 dias'; }
+  const atrasados = calEventos(calSomaDias(hoje, -30), calSomaDias(hoje, -1)).filter(e => !e.feito && e.origem !== 'fixo');
+  const corpo = document.getElementById('cal-corpo');
+  corpo.innerHTML = `${aviso}
+    <div class="cal-cx">
+      <div class="cal-nav"><button type="button" class="cal-seta" data-calmes="-1" aria-label="Mês anterior">‹</button><b>${CAL_MESES[m - 1]} ${a}</b><button type="button" class="cal-seta" data-calmes="1" aria-label="Próximo mês">›</button></div>
+      <div class="cal-grade">${grade}</div>
+    </div>
+    <div class="cal-botoes"><button type="button" class="btn-primary" id="cal-novo">Novo evento</button><button type="button" class="zap-btn secundario" id="cal-mail-todos">Enviar a agenda por e-mail</button></div>
+    ${atrasados.length && !calSel ? `<span class="secao-titulo">Passaram e não foram marcados (${atrasados.length})</span>${atrasados.map(calItem).join('')}` : ''}
+    <span class="secao-titulo">${escaparHtml(titulo)}${calSel ? ' <button type="button" class="cal-limpa" id="cal-limpa">ver próximos 30 dias</button>' : ''}</span>
+    ${lista.length ? lista.map(calItem).join('') : '<p class="empty-state">Nenhum evento.</p>'}
+    <p class="lv-sub cal-rodape">Avisos no celular de todos os TSTs 5 dias antes, 3 dias antes e no dia. Eventos também entram pela planilha "SSTMA - Calendário".</p>`;
+  corpo.querySelectorAll('[data-calmes]').forEach(b => b.addEventListener('click', () => {
+    const d = new Date(a, m - 1 + Number(b.dataset.calmes), 1, 12); calMes = calIso(d).slice(0, 7); calSel = ''; calRender();
+  }));
+  corpo.querySelectorAll('[data-caldia]').forEach(b => b.addEventListener('click', () => { calSel = calSel === b.dataset.caldia ? '' : b.dataset.caldia; calRender(); }));
+  const lp = corpo.querySelector('#cal-limpa'); if(lp) lp.addEventListener('click', () => { calSel = ''; calRender(); });
+  corpo.querySelector('#cal-novo').addEventListener('click', () => calNovo());
+  corpo.querySelector('#cal-mail-todos').addEventListener('click', () => {
+    const evs = calEventos(hoje, calSomaDias(hoje, 30)).filter(e => !e.feito && (!e.semanal || e.data <= calSomaDias(hoje, 7)));
+    calPedirEmail(evs, 'Agenda SSTMA – próximos 30 dias');
+  });
+  const todos = calEventos(calSomaDias(hoje, -60), calSomaDias(fimMes > hoje ? fimMes : hoje, 31)).concat(calSel ? calEventos(calSel, calSel) : []);
+  const achar = (id) => todos.find(e => e.id === id);
+  corpo.querySelectorAll('[data-calfeito]').forEach(b => b.addEventListener('click', () => {
+    const e = achar(b.closest('[data-calid]').dataset.calid); if(!e) return;
+    const feito = b.dataset.calfeito === '1', eu = qMeuPerfil();
+    const d = { feito, feitoPor: feito ? eu.nome : '', feitoEm: feito ? new Date().toISOString() : '', data: e.data, titulo: e.titulo, tipo: e.tipo || 'evento', origem: e.origem || 'app' };
+    calDocs[e.id] = Object.assign({}, calDocs[e.id] || {}, { id: e.id }, d);
+    gravarSemEsperar(db.collection('calendario').doc(e.id).set(d, { merge: true }), 'calendário');
+    calRender();
+  }));
+  corpo.querySelectorAll('[data-calmail]').forEach(b => b.addEventListener('click', () => {
+    const e = achar(b.closest('[data-calid]').dataset.calid); if(e) calPedirEmail([e], e.titulo + ' – ' + formatarDataBR(e.data));
+  }));
+  corpo.querySelectorAll('[data-caldel]').forEach(b => b.addEventListener('click', async () => {
+    const e = achar(b.closest('[data-calid]').dataset.calid); if(!e) return;
+    if(!(await confirmarApp('Excluir o evento?', e.titulo, 'Excluir'))) return;
+    delete calDocs[e.id];
+    gravarSemEsperar(db.collection('calendario').doc(e.id).delete(), 'calendário');
+    calRender();
+  }));
+}
+function calNovo(){
+  const modal = document.createElement('div'); modal.className = 'q-modal';
+  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Novo evento"><h3>Novo evento</h3>
+    <p>Aparece para todos os TSTs, com aviso no celular 5 dias antes, 3 dias antes e no dia.</p>
+    <label>Título *<input type="text" class="cal-n-tit" autocomplete="off"></label>
+    <div class="lv-dois"><label>Data *<input type="date" class="cal-n-data" value="${calSel || calHoje()}"></label><label>Hora<input type="time" class="cal-n-hora"></label></div>
+    <label>Tipo<select class="cal-n-tipo">${Object.entries(CAL_TIPOS).filter(([k]) => k !== 'treinamento' && k !== 'qualimetria').map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></label>
+    <label>Descrição<textarea class="cal-n-desc" rows="3"></textarea></label>
+    <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary cal-n-ok">Salvar</button></div></div>`;
+  document.body.appendChild(modal);
+  modal.querySelector('.q-modal-cancelar').addEventListener('click', () => modal.remove());
+  modal.querySelector('.cal-n-ok').addEventListener('click', () => {
+    const titulo = modal.querySelector('.cal-n-tit').value.trim(), data = modal.querySelector('.cal-n-data').value;
+    if(!titulo || !data){ mostrarAvisoApp('Faltam dados', 'Preencha o título e a data.'); return; }
+    const eu = qMeuPerfil(), id = db.collection('calendario').doc().id;
+    const d = { titulo, data, hora: modal.querySelector('.cal-n-hora').value, tipo: modal.querySelector('.cal-n-tipo').value, descricao: modal.querySelector('.cal-n-desc').value.trim(),
+      origem: 'app', feito: false, criadoPor: { nome: eu.nome, email: eu.email, uid: eu.uid }, criadoEm: firebase.firestore.FieldValue.serverTimestamp() };
+    calDocs[id] = Object.assign({ id }, d);
+    gravarSemEsperar(db.collection('calendario').doc(id).set(d), 'calendário');
+    modal.remove(); calMes = data.slice(0, 7); calSel = data; calRender();
+  });
+}
+async function calPedirEmail(eventos, assunto){
+  if(!eventos.length){ mostrarAvisoApp('Nada para enviar', 'Não há eventos pendentes no período.'); return; }
+  if(!(await confirmarApp('Enviar por e-mail aos TSTs?', eventos.length + ' evento(s). O e-mail sai na próxima sincronização (até 10 minutos) para a lista "E-mails da equipe" da planilha do Calendário.', 'Enviar'))) return;
+  const eu = qMeuPerfil();
+  gravarSemEsperar(db.collection('emailPedidos').add({ tipo: 'calendario', estado: 'pendente', assunto,
+    eventos: eventos.map(e => ({ titulo: e.titulo || '', data: e.data, hora: e.hora || '', tipo: CAL_TIPOS[e.tipo] || 'Evento', descricao: e.descricao || '', feito: !!e.feito })),
+    pedidoPor: { nome: eu.nome, email: eu.email }, criadoEm: firebase.firestore.FieldValue.serverTimestamp() }), 'e-mail do calendário');
+  mostrarAvisoApp('E-mail na fila', 'Sai na próxima sincronização, para todos da lista da equipe.');
+}
+document.getElementById('cal-voltar').addEventListener('click', () => irPara('view-desvios'));
 
 /* ======================= ligações ======================= */
 document.getElementById('q-btn-nova').addEventListener('click', qNovaFicha);
