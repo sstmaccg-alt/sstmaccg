@@ -1383,6 +1383,11 @@
   .q-declara input{ width:20px; height:20px; flex-shrink:0; accent-color:var(--green); }
   .q-reabrir{ background:none; border:none; color:#a32d2d; font:inherit; font-size:13px; font-weight:700; cursor:pointer; padding:4px 0 12px; }
   #view-quali-ficha{ padding-bottom:130px; }
+  .aviso-instalar{ position:fixed; right:20px; bottom:20px; z-index:60; width:min(380px, calc(100% - 32px)); display:flex; gap:12px; align-items:flex-start; background:var(--white); color:var(--navy); border-radius:16px; padding:16px; box-shadow:0 10px 30px rgba(20,33,49,.25); border:1px solid var(--border); box-sizing:border-box; }
+  .aviso-instalar img{ width:44px; height:44px; border-radius:11px; flex-shrink:0; }
+  .aviso-instalar b{ display:block; font-size:15px; margin-bottom:3px; } .aviso-instalar span{ display:block; font-size:13px; color:var(--text-muted); line-height:1.4; }
+  .aviso-instalar-acoes{ display:flex; gap:8px; margin-top:12px; } .aviso-instalar-acoes .btn-primary, .aviso-instalar-acoes .zap-btn{ width:auto; flex:1; height:42px; min-height:42px; padding:0 12px; font-size:14px; margin:0; }
+  @media (max-width:700px){ .aviso-instalar{ left:16px; right:16px; bottom:76px; width:auto; } }
   .q-barra{ position:fixed; left:0; right:0; bottom:58px; z-index:25; background:#142131; color:#fff; padding:10px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 -4px 14px rgba(20,33,49,.18); }
   .q-barra-nota{ display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
   #q-nota{ font-size:26px; font-weight:800; }
@@ -1486,6 +1491,13 @@
     .form-tipo.on{ color:var(--navy); border-bottom-color:var(--green); }
     #view-form .form-tipos + .hero-flutuante{ margin-top:0; }
   }
+  .apr-ass-linha{ display:flex; gap:8px; align-items:flex-end; margin-bottom:10px; }
+  .apr-ass-linha .lv-campo{ flex:1; min-width:0; margin:0; }
+  .apr-ass-cracha{ width:auto !important; height:46px; padding:0 12px !important; display:flex; align-items:center; gap:6px; flex-shrink:0; margin:0 !important; }
+  .apr-ass-cracha svg{ width:18px; height:18px; }
+  .apr-reval-mini.apr-reval-perto{ background:#fdf0d5; color:#7a4b06; border-color:#e2a23a; opacity:1; }
+  [data-theme="dark"] .apr-reval-mini.apr-reval-perto{ background:#3a3220; color:#f3d38a; }
+  .apr-reval-mini .apr-reval-libera{ font-weight:500; opacity:.8; }
   /* ---------- PTR / PAVE ---------- */
   .fm-hero .btn-primary{ margin-top:10px; }
   .fm-sec .fm-checks{ display:flex; flex-direction:column; gap:2px; margin:6px 0 8px; }
@@ -1517,6 +1529,28 @@
   .fm-nc{ border:1px solid var(--border); border-radius:12px; padding:10px; margin:8px 0; }
   .fm-nc .apr-mini{ margin-top:4px; }
   #view-form-ficha{ padding-bottom:90px; }
+  .fm-horas{ margin-top:10px; }
+  .fm-execs .fm-exec-botoes{ display:flex; flex-direction:column; gap:8px; margin:2px 0 6px; }
+  .fm-exec-botoes .btn-primary{ display:flex; align-items:center; justify-content:center; gap:8px; }
+  .fm-exec-botoes .icone-svg svg{ width:18px; height:18px; }
+  .fm-exec .tr-part-txt{ min-width:0; }
+  .fm-exec-tirar{ width:34px; height:34px; flex-shrink:0; border:1px solid var(--border-strong); border-radius:9px; background:var(--white); color:var(--text-muted); cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+  .fm-exec-tirar svg{ width:16px; height:16px; }
+  .fm-exec-vazio{ padding:14px 6px 6px; }
+  .fm-vinc{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
+  .fm-ptr-nova{ margin:4px 0 2px; }
+  .apr-exec-modal .fm-l-cracha{ display:flex; align-items:center; justify-content:center; gap:8px; margin:0 0 12px; }
+  .apr-exec-modal .fm-l-cracha svg{ width:18px; height:18px; }
+  .apr-exec-modal .lv-campo{ margin-bottom:10px; }
+  .apr-exec-modal .lv-dois .lv-campo{ margin-bottom:10px; }
+  .q-modal-caixa .lv-campo select{ height:46px; box-sizing:border-box; border:1px solid var(--border-strong); border-radius:11px; padding:0 10px; font:inherit; font-size:15px; font-weight:400; background:var(--white); color:var(--navy); width:100%; }
+  .lv-form .lv-ops2 .lv-op{ padding:0 8px; }
+  .q-modal-caixa label.q-declara{ flex-direction:row; align-items:flex-start; gap:10px; font-weight:400; font-size:13px; margin:12px 0; }
+  .q-modal-caixa label.q-declara input{ width:20px; height:20px; flex:0 0 20px; margin:0; accent-color:var(--green); }
+  .fan-filtro{ margin:0 0 12px; max-width:220px; }
+  .fan-filtro select{ height:44px; box-sizing:border-box; border:1px solid var(--border-strong); border-radius:11px; padding:0 10px; font:inherit; font-size:15px; background:var(--white); color:var(--navy); width:100%; }
+  #fan-corpo .lv-card{ margin:6px 0; box-shadow:none; border:1px solid var(--border); }
+  .fm-hero .fm-analise-btn{ margin-top:8px; }
   /* ---------- Calendário SSTMA ---------- */
   .cal-cx{ background:var(--white); border-radius:14px; box-shadow:0 1px 4px rgba(20,33,49,.07); padding:10px 10px 12px; margin:0 0 12px; }
   .cal-nav{ display:flex; align-items:center; justify-content:space-between; margin:0 0 8px; color:var(--navy); }
@@ -1524,9 +1558,11 @@
   .cal-seta{ width:44px; height:40px; border:1px solid var(--border-strong); border-radius:10px; background:var(--white); color:var(--navy); font-size:22px; line-height:1; cursor:pointer; }
   .cal-grade{ display:grid; grid-template-columns:repeat(7, minmax(0,1fr)); gap:4px; }
   .cal-sem{ text-align:center; font-size:11px; font-weight:700; color:var(--text-muted); padding:2px 0 4px; }
-  .cal-dia{ position:relative; height:44px; border:none; border-radius:10px; background:#f4f6f2; color:var(--navy); font:inherit; font-size:14px; font-weight:600; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:0; }
+  .cal-dia{ position:relative; height:44px; border:none; border-radius:10px; background:rgba(20,33,49,.05); color:var(--navy); font:inherit; font-size:14px; font-weight:600; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:0; }
   .cal-dia.hoje{ outline:2px solid var(--green); outline-offset:-2px; }
-  .cal-dia.sel{ background:var(--navy); color:#fff; }
+  .cal-dia.sel{ background:#4E7A30; color:#fff; }
+  [data-theme="dark"] .cal-dia{ background:rgba(255,255,255,.07); }
+  [data-theme="dark"] .cal-seta{ background:transparent; }
   .cal-dia i{ display:block; min-width:8px; height:8px; border-radius:4px; background:#d64545; font-style:normal; font-size:9px; line-height:8px; color:#fff; padding:0 2px; }
   .cal-dia i:not(:empty){ height:13px; line-height:13px; border-radius:7px; min-width:13px; }
   .cal-dia i.ok{ background:var(--green); }
@@ -1542,6 +1578,11 @@
   .cal-trein span{ font-size:13px; }
   .cal-limpa{ border:none; background:none; color:var(--green); font:inherit; font-size:12px; font-weight:700; cursor:pointer; text-transform:none; letter-spacing:0; }
   .cal-rodape{ margin:14px 2px 0; }
+  .cal-n-rot{ display:block; font-size:12.5px; font-weight:700; color:var(--navy); margin:12px 0 6px; }
+  .cal-n-tipos{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:6px; margin-bottom:12px; }
+  .cal-n-tipos .lv-op{ text-align:center; padding:0 6px; font-size:13.5px; height:40px; }
+  .cal-modal .lv-campo{ margin-bottom:10px; }
+  .cal-modal .lv-dois .lv-campo{ margin-bottom:0; }
 </style>
 </head>
 <body>
@@ -1900,6 +1941,7 @@
         <button type="button" class="atalho-item" id="apr-at-qr"><div class="atalho-icone"><span class="icone-svg" data-icone="qr"></span></div><p class="atalho-label">Ler QR</p></button>
         <button type="button" class="atalho-item" id="apr-at-buscar"><div class="atalho-icone"><span class="icone-svg" data-icone="search"></span></div><p class="atalho-label">Buscar</p></button>
         <button type="button" class="atalho-item" id="apr-at-frentes"><div class="atalho-icone"><span class="icone-svg" data-icone="pin"></span><span class="atalho-badge" id="apr-badge-reval" style="display:none;"></span></div><p class="atalho-label">Frentes</p></button>
+        <button type="button" class="atalho-item" id="apr-at-analise" style="display:none;"><div class="atalho-icone"><span class="icone-svg" data-icone="barchart"></span></div><p class="atalho-label">Análise</p></button>
       </div>
       <div class="hero-flutuante q-hero">
         <div class="q-hero-topo"><span class="rotulo" id="apr-hero-rotulo">APR</span></div>
@@ -1993,6 +2035,7 @@
       <div class="hero-flutuante q-hero fm-hero">
         <div class="q-hero-topo"><span class="rotulo" id="fm-titulo">PTR</span><button type="button" class="voltar" id="fm-voltar" aria-label="Voltar para a APR" style="display:none"></button></div>
         <button type="button" class="btn-primary" id="fm-nova">Nova PTR</button>
+        <button type="button" class="zap-btn secundario fm-analise-btn" id="fm-analise" style="display:none;">Análise dos formulários</button>
       </div>
       <input type="search" id="fm-busca" class="lv-busca" placeholder="Número, local, descrição, frente ou nome" aria-label="Buscar">
       <div id="fm-lista"></div>
@@ -2015,6 +2058,15 @@
         <p class="tela-titulo">Calendário</p>
       </div>
       <div id="cal-corpo"></div>
+    </div>
+    <!-- ======================= ANÁLISE DOS FORMULÁRIOS ======================= -->
+    <div id="view-form-analise" style="display:none;">
+      <div class="tela-banner">
+        <div class="tela-header"><button type="button" class="voltar" id="fan-voltar" aria-label="Voltar"><span class="icone-svg" data-icone="seta-esquerda"></span></button></div>
+        <div class="tela-selo">FORMULÁRIOS</div>
+        <p class="tela-titulo">Análise</p>
+      </div>
+      <div id="fan-corpo"></div>
     </div>
     <!-- Tela: Treinamentos (placeholder) -->
     <!-- ======================= TREINAMENTOS ======================= -->
@@ -2609,6 +2661,50 @@
 
 <script>
 /* ======================================================================
+   E-MAIL NO CELULAR: os botões "E-mail · Outlook" e "E-mail · Gmail" abrem o
+   APLICATIVO já com assunto e texto (no computador continua o site).
+   Android: abre o app escolhido (sem ele, o site). iPhone: tenta o app e, se não
+   abrir em 2 s, vai para o site. Vale para todo o app (desvios, LV, APR, PTR...).
+   ====================================================================== */
+(function(){
+  const abrirOriginal = window.open;
+  function dadosDoEmail(url){
+    try{
+      const u = new URL(String(url || ''));
+      if(u.hostname === 'mail.google.com' && u.searchParams.get('view') === 'cm')
+        return { via: 'gmail', para: u.searchParams.get('to') || '', assunto: u.searchParams.get('su') || '', corpo: u.searchParams.get('body') || '' };
+      if(/outlook\.(office|live)\.com$/.test(u.hostname) && /deeplink\/compose/.test(u.pathname))
+        return { via: 'outlook', para: u.searchParams.get('to') || '', assunto: u.searchParams.get('subject') || '', corpo: u.searchParams.get('body') || '' };
+    }catch(e){}
+    return null;
+  }
+  // endereço que abre o app de e-mail (null = não é e-mail ou não é celular)
+  window.urlEmailApp = function(url, ua){
+    ua = ua || navigator.userAgent;
+    const d = dadosDoEmail(url); if(!d || !/android|iphone|ipad|ipod/i.test(ua)) return null;
+    const q = 'subject=' + encodeURIComponent(d.assunto) + '&body=' + encodeURIComponent(d.corpo);
+    if(/android/i.test(ua)){
+      const pacote = d.via === 'gmail' ? 'com.google.android.gm' : 'com.microsoft.office.outlook';
+      return { url: 'intent:' + encodeURIComponent(d.para) + '?' + q + '#Intent;scheme=mailto;package=' + pacote + ';S.browser_fallback_url=' + encodeURIComponent(url) + ';end' };
+    }
+    return { url: d.via === 'gmail' ? 'googlegmail://co?to=' + encodeURIComponent(d.para) + '&' + q : 'ms-outlook://compose?to=' + encodeURIComponent(d.para) + '&' + q, reserva: 'mailto:' + d.para + '?' + q };
+  };
+  window.abrirEmailNoApp = function(url){
+    const alvo = window.urlEmailApp(url); if(!alvo) return false;
+    if(!alvo.reserva){ location.href = alvo.url; return true; }
+    const app = alvo.url, q = alvo.reserva.split('?')[1], d = { para: alvo.reserva.slice(7).split('?')[0] };
+    let saiu = false; const marca = () => { saiu = true; };
+    document.addEventListener('visibilitychange', marca, { once: true });
+    location.href = app;
+    setTimeout(() => { document.removeEventListener('visibilitychange', marca); if(!saiu && !document.hidden) location.href = 'mailto:' + d.para + '?' + q; }, 2000);
+    return true;
+  };
+  window.open = function(url){
+    if(window.abrirEmailNoApp(url)) return null;
+    return abrirOriginal.apply(window, arguments);
+  };
+})();
+/* ======================================================================
    ÍCONES — SVG de linha, monocromáticos (usam currentColor, sem emoji)
    ====================================================================== */
 const ICONES = {
@@ -2953,6 +3049,7 @@ function mostrarAppPrincipal(user){
   document.getElementById('perfil-info').textContent =
     `${pl.nomeCompleto || user.displayName || ''}${pl.matricula ? ' · Matrícula ' + pl.matricula : ''} — ${user.email}`;
   irPara('view-desvios');
+  if(typeof fmRetomar === 'function') setTimeout(fmRetomar, 300);
 }
 
 /* ---- telas de primeiro acesso ---- */
@@ -3189,7 +3286,7 @@ document.getElementById('logout-btn').addEventListener('click', () => {
 /* ======================================================================
    NAVEGAÇÃO ENTRE TELAS
    ====================================================================== */
-const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-tr-escolher','view-tr-busca','view-tr-meus','view-tr-analise','view-tr-ficha','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-lv-analise','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha','view-email-resp','view-q-analise','view-apr','view-apr-frente','view-apr-frentes','view-apr-nova','view-apr-busca','view-apr-ficha','view-apr-exec','view-form','view-form-ficha','view-cal'];
+const views = ['view-inspecoes','view-desvios','view-qualimetria','view-lv','view-tr-escolher','view-tr-busca','view-tr-meus','view-tr-analise','view-tr-ficha','view-lv-nova','view-lv-busca','view-lv-minhas','view-lv-ficha','view-lv-analise','view-treinamentos','view-resolver','view-detalhe-potencial','view-detalhe-responsavel','view-analise-geral','view-aprovacoes','view-enviados','view-perfil','view-quali-ficha','view-email-resp','view-q-analise','view-apr','view-apr-frente','view-apr-frentes','view-apr-nova','view-apr-busca','view-apr-ficha','view-apr-exec','view-form','view-form-ficha','view-cal','view-form-analise'];
 function irPara(viewId){
   if(typeof trFecharCamera === 'function') trFecharCamera();   // a câmera dos crachás nunca fica ligada fora da tela dela
   views.forEach(v => document.getElementById(v).style.display = (v === viewId) ? 'block' : 'none');
@@ -3203,6 +3300,7 @@ function irPara(viewId){
   if(typeof aprFecharLeitor === 'function') aprFecharLeitor();
   if(viewId === 'view-apr' && typeof abrirAPR === 'function'){ abrirAPR(); }
   if(viewId === 'view-cal' && typeof abrirCalendario === 'function'){ abrirCalendario(); }
+  if(viewId === 'view-apr' || viewId === 'view-form'){ const pv = typeof fanPodeVer === 'function' && fanPodeVer(); ['apr-at-analise', 'fm-analise'].forEach(id => { const el = document.getElementById(id); if(el) el.style.display = pv ? '' : 'none'; }); }
   if(/^view-form/.test(viewId)) document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.view === 'view-apr'));
   if(/^view-apr-/.test(viewId)){
     if(typeof abrirAPR === 'function' && !aprOuvindo) abrirAPR();
@@ -3443,6 +3541,23 @@ async function instalarApp(){
   await confirmarApp('Instalar o app', passos + ' Depois de instalado, o app abre em janela própria e fica no menu Iniciar e na área de trabalho.', 'Entendi');
 }
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', atualizarBotaoInstalar); else atualizarBotaoInstalar();
+/* aviso de instalar (computador): aparece logo ao abrir o site, até na tela de login.
+   "Agora não" esconde por 7 dias. No Android aparece quando o Chrome libera a instalação. */
+function avisoInstalar(){
+  if(appInstalado() || document.getElementById('aviso-instalar')) return;
+  const pc = !/android|iphone|ipad|ipod/i.test(navigator.userAgent) && !(navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+  if(!pc && !promptInstalar) return;
+  try{ if(Date.now() < Number(localStorage.getItem('sst_instalar_depois') || 0)) return; }catch(e){}
+  const a = document.createElement('div'); a.id = 'aviso-instalar'; a.className = 'aviso-instalar'; a.setAttribute('role', 'dialog'); a.setAttribute('aria-label', 'Instalar o app');
+  a.innerHTML = `<img src="icon-192.png" alt=""><div><b>Instale o SSTMA ${pc ? 'no computador' : 'no celular'}</b><span>Abre em janela própria, direto ${pc ? 'da área de trabalho e do menu Iniciar' : 'da tela inicial'}, e funciona melhor sem internet.</span>
+    <div class="aviso-instalar-acoes"><button type="button" class="btn-primary" id="aviso-instalar-sim">Instalar</button><button type="button" class="zap-btn secundario" id="aviso-instalar-nao">Agora não</button></div></div>`;
+  document.body.appendChild(a);
+  a.querySelector('#aviso-instalar-sim').addEventListener('click', async () => { a.remove(); await instalarApp(); });
+  a.querySelector('#aviso-instalar-nao').addEventListener('click', () => { a.remove(); try{ localStorage.setItem('sst_instalar_depois', String(Date.now() + 7 * 864e5)); }catch(e){} });
+}
+window.addEventListener('beforeinstallprompt', () => setTimeout(avisoInstalar, 300));
+window.addEventListener('appinstalled', () => { const a = document.getElementById('aviso-instalar'); if(a) a.remove(); });
+setTimeout(avisoInstalar, 2500);
 
 /* ---- botão "voltar" do celular: volta uma tela dentro do app em vez de sair ----
    O app guarda uma entrada extra no histórico. Quando o voltar do celular é usado,
@@ -9695,7 +9810,8 @@ function anMontar(fonte, modo){
   mont.meioambiente = m => indMontar('meioambiente', m); mont.incidentes = m => indMontar('incidentes', m);
   mont.acidentes = m => indMontar('acidentes', m); mont.saude = m => indMontar('saude', m);
   if(fonte !== 'prever') return com(fonte, mont[fonte](modo));
-  let todos = [anCapaPrever()];
+  const capa = anCapaPrever();
+  let todos = capa ? [capa] : [];
   AN_PREVER_SECOES.map(x => x[0]).filter(s => !anPreverSel || anPreverSel.has(s)).forEach(s => {
     let qs = [];
     try{ qs = mont[s](modo); }catch(e){ console.warn('Préver (' + s + '):', e); }
@@ -10348,28 +10464,31 @@ function lvaMontarQuadros(modo){
 
 /* ---------------- capa da apresentação Préver ---------------- */
 function anCapaPrever(){
-  const k = [];
-  try{
+  const k = [], tem = (x) => !anPreverSel || anPreverSel.has(x);
+  if(tem('treinamentos')) try{
     const meses = trhMeses(), doPer = Object.values(meses).filter(r => anPeriodoOk(r.periodo));
     const comHT = doPer.filter(r => r.horasTrab), ht = comHT.reduce((a, r) => a + r.horasTrab, 0);
     const ind = ht ? trhIndicador(comHT.reduce((a, r) => a + r.horas, 0), ht) : null;
     k.push({ rot: 'Capacitação (meta ' + anFmt(TR_META_HHT, 2) + '%)', val: ind === null ? '—' : anFmt(ind, 2) + '%', cor: trhCorIndicador(ind), peq: anHoras(doPer.reduce((a, r) => a + r.horas, 0)) + 'h' });
   }catch(e){}
-  try{
+  if(tem('desvios')) try{
     const ab = agDesviosAbertos(), atr = ab.filter(d => d.status === 'Atrasado').length;
     k.push({ rot: 'Desvios em aberto', val: ab.length, peq: atr + ' atrasados', cor: atr ? 'var(--error)' : '' });
   }catch(e){}
-  try{
+  if(tem('qualimetria')) try{
     const { lideres } = qaMatriz();
     const per = new Set(); lideres.forEach(l => Object.keys(l.meses).forEach(p => { if(QA_MENCOES.includes(l.meses[p]) && anPeriodoOk(p)) per.add(p); }));
     const ult = Array.from(per).sort().pop();
     if(ult){ const c = qaContar(lideres, ult), tot = QA_MENCOES.reduce((a, m) => a + c[m], 0); k.push({ rot: 'Qualimetria · ' + anMesCurto(ult), val: anFmt((c['Excelente'] + c['Bom']) / tot * 100) + '%', peq: 'Bom ou Excelente' }); }
   }catch(e){}
-  try{
+  if(tem('lv')) try{
     const lvs = (anDados.lvs || []).filter(l => l.estado === 'concluida' && anNoPeriodo(l.data));
     k.push({ rot: 'LVs no período', val: lvs.length, peq: lvs.filter(l => l.resultado === 'Não liberado').length + ' não liberados' });
   }catch(e){}
-  return { secao: 'Préver', titulo: 'Apresentação Préver', sub: 'Capacitação, desvios, qualimetria e listas de verificação · ' + textoPeriodoAnalise(),
+  // capa só com o resumo do que foi escolhido; sem nenhum resumo, a apresentação começa direto no primeiro tema
+  if(!k.length) return null;
+  const temas = AN_PREVER_SECOES.filter(x => tem(x[0])).map(x => x[1]);
+  return { secao: 'Préver', titulo: 'Apresentação Préver', sub: (temas.length > 4 ? temas.slice(0, 4).join(', ') + ' e outros' : temas.join(', ')) + ' · ' + textoPeriodoAnalise(),
     corpo: anKpisHtml(k) + '<p class="an-nota" style="margin-top:18px">Use as setas para passar pelos quadros de cada tema.</p>' };
 }
 
@@ -10683,13 +10802,21 @@ function aprSituacao(a){
    (vale de 01/MM a 01/MM+1). Fora do dia 1 ele aparece travado, com a data em que libera. */
 function aprDia1Seguinte(mes){ const [y, m] = String(mes || aprMes()).split('-').map(Number); const d = new Date(y, m, 1); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-01'; }
 function aprValidaAteTxt(a){ return a.validaAteMes ? formatarDataBR(aprDia1Seguinte(a.validaAteMes)) : ''; }
+// dias até vencer (a APR vale até o dia 1 do mês seguinte ao último mês validado)
+function aprDiasVencer(a){
+  if(!a || !a.validaAteMes) return null;
+  const fim = aprDia1Seguinte(a.validaAteMes).split('-').map(Number), h = new Date();
+  return Math.round((new Date(fim[0], fim[1] - 1, fim[2]) - new Date(h.getFullYear(), h.getMonth(), h.getDate())) / 864e5);
+}
+function aprVenceTxt(d){ return d === null ? '' : d > 1 ? 'vence em ' + d + ' dias' : d === 1 ? 'vence amanhã' : d === 0 ? 'vence hoje' : 'vencida'; }
 function aprEhDia1(){ return new Date().getDate() === 1; }
 function aprPodeRevalidar(a){ return !!a && a.estado === 'vigente' && aprPodeGerir() && String(a.validaAteMes || '') < aprMes() && aprEhDia1(); }
 function aprRevalBotao(a){
   if(!a || a.estado !== 'vigente' || !aprPodeGerir()) return '';
   const pode = aprPodeRevalidar(a);
   const libera = String(a.validaAteMes || '') < aprMes() ? formatarDataBR(aprDia1Seguinte(aprMes())) : formatarDataBR(aprDia1Seguinte(a.validaAteMes));
-  return `<button type="button" class="apr-mini apr-reval-mini" data-reval="${escaparHtml(a.id)}" ${pode ? '' : 'disabled'} title="${pode ? 'Revalidar para ' + escaparHtml(aprMesTxt(aprMes())) : 'Libera no dia ' + libera}">Revalidar<small>${pode ? 'liberado hoje' : 'libera ' + libera.slice(0, 5)}</small></button>`;
+  const dias = aprDiasVencer(a), perto = dias !== null && dias <= 5;
+  return `<button type="button" class="apr-mini apr-reval-mini${perto && !pode ? ' apr-reval-perto' : ''}" data-reval="${escaparHtml(a.id)}" ${pode ? '' : 'disabled'} title="${pode ? 'Revalidar para ' + escaparHtml(aprMesTxt(aprMes())) : 'Libera no dia ' + libera}">Revalidar<small>${pode ? 'liberado hoje' : escaparHtml(aprVenceTxt(dias) || 'libera ' + libera.slice(0, 5))}</small>${pode ? '' : `<small class="apr-reval-libera">libera ${escaparHtml(libera.slice(0, 5))}</small>`}</button>`;
 }
 function aprExecHojeN(a){ return a.execHoje && a.execHoje.data === aprHoje() ? (a.execHoje.n || 0) : 0; }
 function aprLinhas(t){ return String(t || '').split(/\n+/).map(x => x.replace(/^[\s\-–•]+/, '').trim()).filter(Boolean); }
@@ -10760,7 +10887,7 @@ function aprCardApr(a){
     <span class="lv-card-topo"><b>${escaparHtml(aprNumTxt(a))} · ${escaparHtml(a.titulo || 'Sem título')}</b><span class="lv-tag ${s.cls}">${escaparHtml(s.txt)}</span></span>
     <span class="lv-sub">${escaparHtml([a.numero, a.frenteNome, prog.inicio && prog.termino ? formatarDataBR(prog.inicio) + ' a ' + formatarDataBR(prog.termino) : ''].filter(Boolean).join(' · '))}</span>
     ${a.estado === 'vigente' && !s.revalidar ? `<span class="apr-exec-tag ${n ? 'ok' : ''}">${n ? 'Executantes hoje: ' + n : 'Sem executantes hoje'}</span>` : ''}
-    ${s.revalidar ? `<span class="apr-exec-tag nok">${aprEhDia1() ? 'Revalidar hoje (dia 1)' : 'Fora da validade · revalidação só no dia 1'}</span>` : (a.estado === 'vigente' ? `<span class="lv-sub">Válida até ${escaparHtml(aprValidaAteTxt(a))}</span>` : '')}
+    ${s.revalidar ? `<span class="apr-exec-tag nok">${aprEhDia1() ? 'Revalidar hoje (dia 1)' : 'Fora da validade · revalidação só no dia 1'}</span>` : (a.estado === 'vigente' ? `<span class="lv-sub">Válida até ${escaparHtml(aprValidaAteTxt(a))}${aprDiasVencer(a) !== null ? ' · ' + escaparHtml(aprVenceTxt(aprDiasVencer(a))) : ''}</span>` : '')}
   </button>${reval ? reval + '</div>' : ''}`;
 }
 function aprLigarCards(caixa){
@@ -11263,9 +11390,19 @@ function aprAssinaturaHtml(grupo, k, rot, s, ed){
     ${ed ? `<button type="button" class="apr-mini" data-refazer="${grupo}.${k}">Refazer</button>` : ''}</div>`;
   if(!ed) return `<div class="q-ass"><div class="q-ass-topo"><span><small>${escaparHtml(rot.toUpperCase())}</small><b>—</b></span><span class="q-tag q-tag-aviso">Pendente</span></div></div>`;
   return `<div class="q-ass q-ass-minha" data-ass="${grupo}.${k}"><div class="q-ass-topo"><span><small>${escaparHtml(rot.toUpperCase())}</small><b>Assinatura no celular</b></span><span class="q-tag q-tag-aviso">Pendente</span></div>
-    <label class="lv-campo">Nome completo *<input type="text" class="apr-ass-nome" autocomplete="off"></label>
+    <div class="apr-ass-linha"><label class="lv-campo">Nome completo *<input type="text" class="apr-ass-nome" autocomplete="off"></label><button type="button" class="zap-btn secundario apr-ass-cracha" aria-label="Ler crachá"><span class="icone-svg" data-icone="qr"></span> Crachá</button></div>
     <div class="q-pad-caixa"><canvas class="q-pad" width="600" height="200" aria-label="Área para assinar com o dedo"></canvas><button type="button" class="q-pad-limpar">Limpar</button><span class="q-pad-dica">A pessoa assina com o dedo</span></div>
     <button type="button" class="btn-primary apr-ass-ok">Confirmar assinatura</button></div>`;
+}
+// botão "Crachá" ao lado do nome: lê o QR e preenche o nome (e guarda a matrícula)
+function aprLigarCracha(bloco){
+  aprPintarIcones(bloco);
+  const cr = bloco.querySelector('.apr-ass-cracha'); if(!cr) return;
+  cr.addEventListener('click', () => aprAbrirLeitor('Ler crachá', 'Aponte para o QR code do crachá', (txt) => {
+    const p = trLerQRTexto(txt) || trLimparPalpite(trPalpiteQR(txt));
+    if(p && p.nome){ bloco.querySelector('.apr-ass-nome').value = p.nome; bloco.dataset.matricula = p.matricula || ''; }
+    else mostrarAvisoApp('Crachá não reconhecido', 'Digite o nome completo.');
+  }));
 }
 function aprRegistroAssinatura(bloco){
   const nome = bloco.querySelector('.apr-ass-nome').value.replace(/\s+/g, ' ').trim(), pad = bloco.querySelector('.q-pad');
@@ -11273,7 +11410,7 @@ function aprRegistroAssinatura(bloco){
   if(pad._vazio){ mostrarAvisoApp('Falta a assinatura', 'A pessoa assina com o dedo no quadro.'); return null; }
   const menor = document.createElement('canvas'); menor.width = 300; menor.height = 100; menor.getContext('2d').drawImage(pad, 0, 0, 300, 100);
   const eu = qMeuPerfil(), agora = new Date();
-  return { nome: nome.toUpperCase(), imagem: menor.toDataURL('image/png'), data: agora.toISOString(), dataTexto: agora.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
+  return { nome: nome.toUpperCase(), matricula: bloco.dataset.matricula || '', imagem: menor.toDataURL('image/png'), data: agora.toISOString(), dataTexto: agora.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
     registradoPor: { nome: eu.nome, uid: eu.uid, email: eu.email },
     aparelho: /iphone|ipad/i.test(navigator.userAgent) ? 'iPhone' : (/android/i.test(navigator.userAgent) ? 'Android' : 'Computador') };
 }
@@ -11314,6 +11451,7 @@ function aprLigarFicha(corpo, ed){
   if(add) add.addEventListener('click', () => { a.etapas.push({ nome: '', riscos: [{ tipo: 'Acidentes', itens: [], controles: [] }] }); aprEditEtapa = a.etapas.length - 1; aprSalvar(); aprRenderFicha(); });
   corpo.querySelectorAll('[data-ass]').forEach(bloco => {
     qLigarPad(bloco.querySelector('.q-pad'));
+    aprLigarCracha(bloco);
     bloco.querySelector('.apr-ass-ok').addEventListener('click', () => {
       const reg = aprRegistroAssinatura(bloco); if(!reg) return;
       const [grupo, k] = bloco.dataset.ass.split('.');
@@ -11400,6 +11538,7 @@ function aprAbrirRevalidar(){
   const atualizar = () => { modal.querySelector('#apr-reval-ok').disabled = APR_PAPEIS.some(([k]) => !regs[k]); };
   modal.querySelectorAll('[data-ass]').forEach(bloco => {
     qLigarPad(bloco.querySelector('.q-pad'));
+    aprLigarCracha(bloco);
     bloco.querySelector('.apr-ass-ok').addEventListener('click', () => {
       const reg = aprRegistroAssinatura(bloco); if(!reg) return;
       const k = bloco.dataset.ass.split('.')[1]; regs[k] = reg;
@@ -11637,13 +11776,21 @@ function fmOuvir(){
     if(fmVisivel('view-form-ficha') && fmAtual && !fmAtual.novo){
       const novo = fmLista.find(x => x.id === fmAtual.id);
       // o que vem do servidor (número, PDF, assinaturas por link, anexos no Drive) entra sem perder o que está sendo digitado
-      if(novo && JSON.stringify([novo.numero, novo.pdfUrl, novo.pdfPendente, novo.assinaturas, novo.anexosDrive, novo.estado]) !== JSON.stringify([fmAtual.numero, fmAtual.pdfUrl, fmAtual.pdfPendente, fmAtual.assinaturas, fmAtual.anexosDrive, fmAtual.estado])){
+      if(novo && fmMarcaServidor(novo) !== fmMarcaServidor(fmAtual)){
         ['numero', 'pdfUrl', 'pdfPublicoUrl', 'pdfNome', 'pdfPendente', 'assinaturas', 'anexosDrive', 'anexosPendentes', 'estado', 'linksAssinatura'].forEach(k => { if(novo[k] !== undefined) fmAtual[k] = novo[k]; });
-        fmRenderFicha();
+        // digitando: não redesenha a ficha (o teclado fecharia); só as assinaturas e a barra
+        if(fmDigitando()) fmAtualizarDinamico(); else fmRenderFicha();
       }
+      if(fmAtual && fmAtual.tipo === 'pave' && fmAtual.anexosVinculo && fmAtual.anexosVinculo.ptr && !fmDigitando()) fmAtualizarDinamico();
     }
   }, e => console.warn('Formulários:', e));
 }
+// só o que muda no servidor e importa para a tela (a hora do servidor nas assinaturas não conta)
+function fmMarcaServidor(f){
+  const ass = {}; Object.keys(f.assinaturas || {}).forEach(k => { ass[k] = (f.assinaturas[k] || {}).nome || 1; });
+  return JSON.stringify([f.numero || '', f.pdfUrl || '', !!f.pdfPendente, ass, f.anexosDrive || {}, f.estado || '', !!f.anexosPendentes, Object.keys(f.linksAssinatura || {}).sort()]);
+}
+function fmDigitando(){ const a = document.activeElement; return !!(a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.closest('#fm-ficha-corpo')); }
 function fmVisivel(id){ const el = document.getElementById(id); return el && el.style.display === 'block'; }
 function abrirFormularios(tipo){
   fmTipo = tipo || fmTipo; fmOuvir(); irPara('view-form'); fmRenderLista();
@@ -11695,7 +11842,7 @@ function fmNova(){
     criadoPor: eu.uid, criadoPorNome: eu.nome, criadoPorEmail: eu.email, criadoEmTexto: new Date().toISOString() };
   fmAberto = {}; irPara('view-form-ficha'); fmRenderFicha(); window.scrollTo(0, 0);
 }
-function fmAbrir(f){ fmAberto = {}; fmAtual = JSON.parse(JSON.stringify(f)); irPara('view-form-ficha'); fmRenderFicha(); window.scrollTo(0, 0); fmCarregarAnexos(); fmConferirLinks(); }
+function fmAbrir(f){ fmAberto = {}; fmAtual = Object.assign({ campos: {}, marcados: {}, aplicavel: {}, outros: {}, respostas: {}, assinaturas: {}, executantes: [], ncs: [], recusa: { houve: false }, validade: {}, anexosOk: {} }, JSON.parse(JSON.stringify(f))); irPara('view-form-ficha'); fmRenderFicha(); window.scrollTo(0, 0); fmCarregarAnexos(); fmConferirLinks(); }
 const FM_NAO_REGRAVAR = ['novo', 'id', 'numero', 'pdfUrl', 'pdfPublicoUrl', 'pdfNome', 'pdfId', 'pdfPublicoId', 'pdfGeradoEm', 'criadoEm', 'anexosDrive', 'assinaturas'];
 function fmSalvar(imediato){
   if(!fmAtual) return;
@@ -11715,9 +11862,14 @@ function fmSalvar(imediato){
 function fmAprovada(f){ return FM_PTR_PAPEIS.every(p => (f.assinaturas || {})[p[0]]); }
 function fmTodasAssinadas(f){ return fmPapeis(f).every(p => (f.assinaturas || {})[p[0]]); }
 function fmBlocoAssinado(f, bloco){ return bloco.assinaturas.some(a => (f.assinaturas || {})[a[0]]); }
+function fmPtrVinculada(f){ const id = f && f.anexosVinculo && f.anexosVinculo.ptr; return id ? (fmLista.find(x => x.id === id) || (fmAtual && fmAtual.id === id ? fmAtual : null) || { id, carregando: true }) : null; }
 function fmAnexosFaltando(f){
   if(f.tipo !== 'pave') return [];
-  return FM_PAVE_ANEXOS.filter(([k, , obrig]) => !(obrig === 'seAplicavel' && (f.anexosNaoAplica || {})[k]) && !((f.anexosOk || {})[k] || (f.anexosDrive || {})[k])).map(a => a[1]);
+  return FM_PAVE_ANEXOS.filter(([k, , obrig]) => {
+    if(obrig === 'seAplicavel' && (f.anexosNaoAplica || {})[k]) return false;
+    if(k === 'ptr'){ const v = fmPtrVinculada(f); if(v && !v.carregando && fmAprovada(v)) return false; }
+    return !((f.anexosOk || {})[k] || (f.anexosDrive || {})[k]);
+  }).map(a => a[1]);
 }
 function fmPodeEditar(f){ return fmPodeCriar() && f.estado !== 'encerrada'; }
 function fmFaltaPtr(f){
@@ -11739,15 +11891,30 @@ function fmRenderFicha(){
   const corpo = document.getElementById('fm-ficha-corpo');
   corpo.innerHTML = `<div class="lv-form">${f.tipo === 'ptr' ? fmPtrHtml(f, ed) : fmPaveHtml(f, ed)}${fmPdfHtml(f)}</div>`;
   fmLigar(corpo, f, ed);
+  fmRenderBarra(f);
+  corpo.querySelectorAll('.icone-svg').forEach(el => { if(!el.innerHTML) el.innerHTML = ICONES[el.dataset.icone] || ''; });
+}
+function fmRenderBarra(f){
   const barra = document.getElementById('fm-barra');
   const nota = f.tipo === 'ptr' ? (fmAprovada(f) ? 'Liberada' : (fmFaltaPtr(f).length ? 'Faltam ' + fmFaltaPtr(f).length + ' itens' : 'Pronta para as assinaturas'))
     : (fmAnexosFaltando(f).length ? 'Faltam ' + fmAnexosFaltando(f).length + ' anexo(s)' : (fmTodasAssinadas(f) ? 'Concluída' : 'Em andamento'));
   barra.innerHTML = `<div class="q-barra-nota"><span class="q-barra-txt"><b>${escaparHtml(nota)}</b><small>${f.pdfUrl ? 'PDF pronto' : (f.pdfPendente ? 'PDF sai na próxima sincronização' : 'Salvo automaticamente')}</small></span></div>${f.pdfUrl ? `<a class="btn-primary apr-btn-link" href="${escaparHtml(ehSSTMA() ? f.pdfUrl : (f.pdfPublicoUrl || f.pdfUrl))}" target="_blank" rel="noopener">PDF</a>` : ''}`;
-  corpo.querySelectorAll('.icone-svg').forEach(el => { if(!el.innerHTML) el.innerHTML = ICONES[el.dataset.icone] || ''; });
+}
+/* atualiza só as assinaturas e a barra, sem tocar nos campos (o teclado não fecha) */
+function fmAtualizarDinamico(){
+  const f = fmAtual; if(!f || !fmVisivel('view-form-ficha')) return;
+  const corpo = document.getElementById('fm-ficha-corpo'), ed = fmPodeEditar(f);
+  const tmp = document.createElement('div'); tmp.innerHTML = f.tipo === 'ptr' ? fmPtrHtml(f, ed) : fmPaveHtml(f, ed);
+  corpo.querySelectorAll('[data-fmdin]').forEach(el => {
+    const novo = tmp.querySelector('[data-fmdin="' + el.dataset.fmdin + '"]');
+    if(novo && novo.innerHTML !== el.innerHTML){ el.innerHTML = novo.innerHTML; fmLigarAss(el, f); fmLigarVinculo(el, f, ed); el.querySelectorAll('.icone-svg').forEach(i => { if(!i.innerHTML) i.innerHTML = ICONES[i.dataset.icone] || ''; }); }
+  });
+  fmRenderBarra(f);
 }
 function fmCampo(rot, chave, valor, op){
   op = op || {};
   const dis = op.dis ? 'disabled' : '';
+  if(op.tipo === 'hora') return `<div class="lv-campo">${rot}${op.obrig ? ' *' : ''}<button type="button" class="campo-roda${valor ? '' : ' vazio'}" data-fmhora="${chave}" data-rot="${escaparHtml(rot)}" ${dis}><span>${escaparHtml(valor || '--:--')}</span><span class="icone-svg" data-icone="relogio"></span></button></div>`;
   return `<label class="lv-campo">${rot}${op.obrig ? ' *' : ''}${op.area ? `<textarea rows="${op.linhas || 2}" data-fmc="${chave}" ${dis}>${escaparHtml(valor || '')}</textarea>`
     : `<input type="${op.tipo || 'text'}" data-fmc="${chave}" value="${escaparHtml(valor || '')}" ${op.ph ? `placeholder="${escaparHtml(op.ph)}"` : ''} ${dis}>`}</label>`;
 }
@@ -11759,14 +11926,14 @@ function fmPtrHtml(f, ed){
     const apl = s.aplicavel ? f.aplicavel[s.id] : true;
     const marc = s.itens.filter((_, i) => f.marcados[s.id + '|' + i]).length;
     return `<details class="apr-det fm-sec" data-fmdet="${s.id}" ${fmDetAberto(s.id, (s.aplicavel && apl === undefined) || (s.id === 'servico' && !marc)) ? 'open' : ''}><summary>${escaparHtml(s.titulo)} <span class="lv-sub">${s.aplicavel ? (apl === undefined ? '· aplicável?' : apl ? '· aplicável · ' + marc + ' marcado(s)' : '· não aplicável') : '· ' + marc + ' marcado(s)'}</span></summary>
-      ${s.aplicavel ? `<div class="lv-ops2 fm-apl">${['Sim', 'Não'].map(o => `<button type="button" class="lv-op ${apl === (o === 'Sim') ? 'on' : ''}" data-fmapl="${s.id}" data-v="${o === 'Sim' ? 1 : 0}" ${trava ? 'disabled' : ''}>Aplicável nesta PTR: ${o}</button>`).join('')}</div>` : ''}
+      ${s.aplicavel ? `<div class="lv-ops2 fm-apl">${['Sim', 'Não'].map(o => `<button type="button" class="lv-op ${apl === (o === 'Sim') ? 'on' : ''}" data-fmapl="${s.id}" data-v="${o === 'Sim' ? 1 : 0}" ${trava ? 'disabled' : ''}>${o === 'Sim' ? 'Aplicável' : 'Não aplicável'}</button>`).join('')}</div>` : ''}
       ${apl === false ? '' : `<div class="fm-checks">${s.itens.map((t, i) => `<label class="fm-check"><input type="checkbox" data-fmk="${s.id}|${i}" ${f.marcados[s.id + '|' + i] ? 'checked' : ''} ${trava ? 'disabled' : ''}><span>${escaparHtml(t)}</span></label>`).join('')}</div>
         ${s.outros ? fmCampo('Outros', 'outros.' + s.id, (f.outros || {})[s.id], { dis: trava }) : ''}`}
     </details>`;
   };
   const ass = (sufixo, titulo) => `<span class="secao-titulo">${titulo}</span>${FM_PTR_PAPEIS.map(p => fmAssHtml(f, p[0] + sufixo, p[1], p[2], ed && fmPtrPodeAssinar(f, sufixo))).join('')}`;
   const execs = f.executantes || [];
-  return `
+  return `${f.paveId ? `<div class="apr-aviso fm-vinc"><span>Esta PTR é anexo da PAVE <b>${escaparHtml(f.paveTitulo || '')}</b>. Quando tiver as 3 assinaturas de aprovação, entra sozinha no PDF da PAVE.</span><button type="button" class="apr-mini" id="fm-voltar-pave">Voltar para a PAVE</button></div>` : ''}
     <div class="lv-bloco"><b>Identificação</b>
       ${fmCampo('Local do trabalho', 'local', c.local, { obrig: true, dis: trava })}
       ${fmCampo('Processo / equipamento', 'processo', c.processo, { dis: trava })}
@@ -11774,22 +11941,30 @@ function fmPtrHtml(f, ed){
       <div class="lv-dois">${fmCampo('Responsável da área', 'respArea', c.respArea, { obrig: true, dis: trava })}${fmCampo('Encarregado ou líder da atividade', 'encarregado', c.encarregado, { obrig: true, dis: trava })}</div>
     </div>
     <div class="lv-bloco"><b>Validade da PTR *</b>
-      <div class="fm-tres">${fmCampo('Data', 'v.data', v.data, { tipo: 'date', dis: trava })}${fmCampo('Início', 'v.inicio', v.inicio, { tipo: 'time', dis: trava })}${fmCampo('Término', 'v.termino', v.termino, { tipo: 'time', dis: trava })}</div>
+      ${fmCampo('Data', 'v.data', v.data, { tipo: 'date', dis: trava })}
+      <div class="lv-dois fm-horas">${fmCampo('Início', 'v.inicio', v.inicio, { tipo: 'hora', dis: trava })}${fmCampo('Término', 'v.termino', v.termino, { tipo: 'hora', dis: trava })}</div>
     </div>
     ${FM_PTR_SECOES.map(secao).join('')}
     <div class="lv-bloco"><b>Recusa do trabalho</b>
       <div class="lv-ops2">${['Não houve', 'Houve recusa'].map((o, i) => `<button type="button" class="lv-op ${!!r.houve === !!i ? 'on' : ''}" data-fmrec="${i}" ${!ed ? 'disabled' : ''}>${o}</button>`).join('')}</div>
-      ${r.houve ? `<div class="lv-dois">${fmCampo('Horário da recusa', 'rec.horario', r.horario, { tipo: 'time', dis: !ed })}${fmCampo('Motivo da recusa', 'rec.motivo', r.motivo, { dis: !ed })}</div>` : ''}
+      ${r.houve ? `<div class="lv-dois">${fmCampo('Horário da recusa', 'rec.horario', r.horario, { tipo: 'hora', dis: !ed })}${fmCampo('Motivo da recusa', 'rec.motivo', r.motivo, { dis: !ed })}</div>` : ''}
       ${fmCampo('Observações', 'observacoes', f.observacoes, { area: true, dis: !ed })}
     </div>
-    ${ass('', 'Aprovação da PTR')}
+    <div data-fmdin="aprov">${ass('', 'Aprovação da PTR')}${!fmAprovada(f) && fmFaltaPtr(f).length && ed ? `<p class="lv-sub">Para liberar as assinaturas falta: ${escaparHtml(fmFaltaPtr(f).slice(0, 4).join(', '))}${fmFaltaPtr(f).length > 4 ? '…' : ''}.</p>` : ''}</div>
     ${fmAprovada(f) ? `
       <span class="secao-titulo">Executantes (${execs.length})</span>
-      <div class="lv-bloco">${execs.length ? execs.map(x => `<div class="fm-exec"><img src="${x.imagem}" alt=""><span><b>${escaparHtml(x.nome)}</b><small>${escaparHtml([x.matricula ? 'Mat. ' + x.matricula : '', x.funcao].filter(Boolean).join(' · '))}</small></span></div>`).join('') : '<p class="lv-sub">Todos que vão executar o trabalho assinam aqui, no celular de quem conduz.</p>'}
-        ${ed ? '<button type="button" class="btn-primary" id="fm-exec-add">Adicionar executante</button>' : ''}</div>
+      <div class="lv-bloco fm-execs">
+        ${ed ? '<div class="apr-exec-botoes fm-exec-botoes"><button type="button" class="btn-primary" id="fm-exec-cracha"><span class="icone-svg" data-icone="qr"></span> Ler crachá</button><button type="button" class="zap-btn secundario" id="fm-exec-digitar">Sem crachá: digitar</button></div>' : ''}
+        ${execs.length ? execs.map((x, i) => `<div class="tr-part fm-exec"><span class="tr-part-txt"><b>${escaparHtml(x.nome)}</b>
+          <span class="lv-sub">${escaparHtml([x.matricula ? 'Mat. ' + x.matricula : '', x.funcao, x.empresa, x.hora, x.forma === 'cracha' ? 'crachá' : 'digitado'].filter(Boolean).join(' · '))}</span></span>
+          ${x.imagem ? `<img class="apr-exec-ass" src="${x.imagem}" alt="Assinatura de ${escaparHtml(x.nome)}">` : ''}
+          ${ed ? `<button type="button" class="fm-exec-tirar" data-fmexecdel="${i}" aria-label="Remover ${escaparHtml(x.nome)}">${ICONES.fechar || '×'}</button>` : ''}</div>`).join('')
+          : '<p class="empty-state fm-exec-vazio">Ninguém assinou ainda. Leia o crachá de cada pessoa que vai executar o trabalho; ela confere e assina com o dedo.</p>'}
+      </div>
       <details class="apr-det" ${f.revalidacao && f.revalidacao.data ? 'open' : ''}><summary>Revalidação da PTR (se aplicável)</summary>
-        <div class="fm-tres">${fmCampo('Data', 'rv.data', (f.revalidacao || {}).data, { tipo: 'date', dis: !ed })}${fmCampo('Início', 'rv.inicio', (f.revalidacao || {}).inicio, { tipo: 'time', dis: !ed })}${fmCampo('Término', 'rv.termino', (f.revalidacao || {}).termino, { tipo: 'time', dis: !ed })}</div>
-        ${f.revalidacao && f.revalidacao.data && f.revalidacao.inicio && f.revalidacao.termino ? FM_PTR_PAPEIS.map(p => fmAssHtml(f, p[0] + '_rv', p[1], p[2], ed)).join('') : '<p class="lv-sub">Preencha a data e os horários para liberar as assinaturas da revalidação.</p>'}
+        ${fmCampo('Data', 'rv.data', (f.revalidacao || {}).data, { tipo: 'date', dis: !ed })}
+        <div class="lv-dois fm-horas">${fmCampo('Início', 'rv.inicio', (f.revalidacao || {}).inicio, { tipo: 'hora', dis: !ed })}${fmCampo('Término', 'rv.termino', (f.revalidacao || {}).termino, { tipo: 'hora', dis: !ed })}</div>
+        <div data-fmdin="rv">${f.revalidacao && f.revalidacao.data && f.revalidacao.inicio && f.revalidacao.termino ? FM_PTR_PAPEIS.map(p => fmAssHtml(f, p[0] + '_rv', p[1], p[2], ed)).join('') : '<p class="lv-sub">Preencha a data e os horários para liberar as assinaturas da revalidação.</p>'}</div>
       </details>
       ${ass('_enc', 'Conclusão dos trabalhos / encerramento da PTR')}` : ''}`;
 }
@@ -11810,17 +11985,26 @@ function fmPaveHtml(f, ed){
       ${linhas}
       ${b.texto ? fmCampo(b.texto[0] + '. ' + b.texto[1], 'r.' + b.texto[0], resp[b.texto[0]], { dis: trava }) : ''}
       ${b.fogo ? `<div class="fm-fogo"><b>${escaparHtml(b.fogo)}</b><div class="fm-sna">${['SIM', 'NÃO', 'N/A'].map(o => `<button type="button" class="${resp.fogo === o ? 'on o-' + (o === 'SIM' ? 's' : o === 'NÃO' ? 'n' : 'na') : ''}" data-fmr="fogo" data-v="${o}" ${trava ? 'disabled' : ''}>${o}</button>`).join('')}</div></div>` : ''}
-      ${b.assinaturas.map(a => fmAssHtml(f, a[0], a[1], a[2], ed && fmBlocoCompleto(f, b))).join('')}
-      ${ed && !fmBlocoCompleto(f, b) ? '<p class="lv-sub">Responda todos os itens desta etapa para liberar a assinatura.</p>' : ''}
+      <div data-fmdin="b-${b.id}">${b.assinaturas.map(a => fmAssHtml(f, a[0], a[1], a[2], ed && fmBlocoCompleto(f, b))).join('')}
+      ${ed && !fmBlocoCompleto(f, b) ? '<p class="lv-sub">Responda todos os itens desta etapa para liberar a assinatura.</p>' : ''}</div>
     </details>`;
   };
   const anx = FM_PAVE_ANEXOS.map(([k, rot, obrig]) => {
     const na = obrig === 'seAplicavel' && (f.anexosNaoAplica || {})[k];
+    const vinc = k === 'ptr' ? fmPtrVinculada(f) : null;
+    if(vinc && !na){
+      const ok = !vinc.carregando && fmAprovada(vinc);
+      return `<div class="fm-anexo" data-fmdin="vinc-ptr"><div class="fm-anexo-topo"><b>${escaparHtml(rot)}</b><span class="lv-tag ${ok ? 'ok' : 'rasc'}">${ok ? 'Liberada' : 'Em preenchimento'}</span></div>
+        <span class="lv-sub">${escaparHtml(vinc.carregando ? 'PTR preenchida no app' : [vinc.numero || 'PTR', fmTitulo(vinc)].join(' · '))}. ${ok ? 'O PDF dela entra junto com o PDF desta PAVE.' : 'Entra como anexo assim que tiver as 3 assinaturas de aprovação.'}</span>
+        <button type="button" class="zap-btn secundario" id="fm-ptr-abrir">Abrir a PTR</button>
+        ${ed ? '<button type="button" class="apr-mini apr-remover" id="fm-ptr-desvincular">Desvincular</button>' : ''}</div>`;
+    }
     const lista = ((f.anexosLista || {})[k] || []), drive = (f.anexosDrive || {})[k] || [];
     return `<div class="fm-anexo"><div class="fm-anexo-topo"><b>${escaparHtml(rot)}${obrig === true ? ' *' : ''}</b>
         <span class="lv-tag ${na ? '' : (lista.length || drive.length ? 'ok' : 'nok')}">${na ? 'Não se aplica' : (lista.length || drive.length ? (lista.length || drive.length) + ' arquivo(s)' : 'Falta')}</span></div>
       ${drive.map(d => `<a class="em-link" href="${escaparHtml(d.url)}" target="_blank" rel="noopener">${escaparHtml(d.nome)}</a>`).join('')}
       ${lista.filter(x => !drive.some(d => d.aid === x.aid)).map(x => `<span class="lv-sub fm-anexo-arq">${escaparHtml(x.nome)} · enviando para o Drive na próxima sincronização${ed ? ` <button type="button" class="apr-mini apr-remover" data-fmanxdel="${k}|${escaparHtml(x.aid)}">Remover</button>` : ''}</span>`).join('')}
+      ${ed && !na && k === 'ptr' ? '<button type="button" class="btn-primary fm-ptr-nova" id="fm-ptr-nova">Preencher a PTR agora</button><span class="lv-sub">Ou anexe uma PTR já preenchida:</span>' : ''}
       ${ed && !na ? `<div class="q-foto-botoes"><button type="button" class="btn-primary q-foto-btn fm-anx-add" data-k="${k}" data-modo="camera"><span class="icone-svg" data-icone="camera"></span> Foto</button><button type="button" class="btn-primary q-foto-btn q-foto-galeria fm-anx-add" data-k="${k}" data-modo="arquivo"><span class="icone-svg" data-icone="imagem"></span> Arquivo / galeria</button></div>` : ''}
       ${obrig === 'seAplicavel' && ed ? `<label class="fm-check"><input type="checkbox" data-fmna="${k}" ${na ? 'checked' : ''}><span>Não se aplica a esta PAVE</span></label>` : ''}
     </div>`;
@@ -11874,28 +12058,46 @@ function fmDataTexto(){ return new Date().toLocaleString('pt-BR', { day: '2-digi
 function fmImagemPad(canvas){ const m = document.createElement('canvas'); m.width = 300; m.height = 110; m.getContext('2d').drawImage(canvas, 0, 0, 300, 110); return m.toDataURL('image/png'); }
 function fmAparelho(){ return /iphone|ipad/i.test(navigator.userAgent) ? 'iPhone' : (/android/i.test(navigator.userAgent) ? 'Android' : 'Computador'); }
 
-/* assinatura presencial: nome (+ matrícula/função) e assinatura com o dedo no celular de quem conduz */
+/* leitura do crachá (QR): devolve { nome, matricula, cargo, empresa, genero, qr } */
+function fmLerCracha(){
+  return new Promise(ok => aprAbrirLeitor('Ler crachá', 'Aponte para o QR code do crachá', (txt) => ok(trLerQRTexto(txt) || trLimparPalpite(trPalpiteQR(txt)))));
+}
+/* assinatura presencial: crachá (ou digitado) e assinatura com o dedo no celular de quem conduz */
 function fmAssinarLocal(papel, rot, opcoes){
   opcoes = opcoes || {};
+  const p = opcoes.pessoa || {};
   return new Promise(resolver => {
-    const modal = document.createElement('div'); modal.className = 'q-modal';
+    const modal = document.createElement('div'); modal.className = 'q-modal apr-exec-modal';
     modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Assinar"><h3>${escaparHtml(opcoes.titulo || rot)}</h3>
-      <p>${escaparHtml(opcoes.texto || 'A pessoa assina com o dedo neste celular.')}</p>
-      <label>Nome completo *<input type="text" class="fm-l-nome" autocomplete="off" value="${escaparHtml(opcoes.nome || '')}"></label>
-      <div class="lv-dois"><label>Matrícula<input type="text" class="fm-l-mat" inputmode="numeric" autocomplete="off"></label><label>Função<input type="text" class="fm-l-func" autocomplete="off"></label></div>
-      <div class="q-pad-caixa"><canvas class="q-pad" width="600" height="220" aria-label="Área para assinar com o dedo"></canvas><button type="button" class="q-pad-limpar">Limpar</button><span class="q-pad-dica">Assine com o dedo</span></div>
-      <label class="q-declara" style="flex-direction:row;font-weight:400"><input type="checkbox" class="fm-l-dec"> ${escaparHtml(opcoes.declaracao || FM_DECL_LOCAL)}</label>
+      <p>${escaparHtml(opcoes.texto || 'A pessoa confere e assina com o dedo neste celular.')}</p>
+      <button type="button" class="zap-btn secundario fm-l-cracha"><span class="icone-svg" data-icone="qr"></span> ${p.nome ? 'Ler outro crachá' : 'Ler crachá'}</button>
+      <label class="lv-campo">Nome completo *<input type="text" class="fm-l-nome" autocomplete="off" value="${escaparHtml(p.nome || '')}"></label>
+      <div class="lv-dois"><label class="lv-campo">Matrícula<input type="text" class="fm-l-mat" autocomplete="off" value="${escaparHtml(p.matricula || '')}"></label>
+        <label class="lv-campo">Empresa<input type="text" class="fm-l-emp" autocomplete="off" value="${escaparHtml(p.empresa || 'CCG')}"></label></div>
+      <label class="lv-campo">Função<input type="text" class="fm-l-func" autocomplete="off" value="${escaparHtml(p.cargo || '')}"></label>
+      <div class="q-pad-caixa"><canvas class="q-pad" width="600" height="200" aria-label="Área para assinar com o dedo"></canvas><button type="button" class="q-pad-limpar">Limpar</button><span class="q-pad-dica">A pessoa assina com o dedo</span></div>
+      <label class="q-declara"><input type="checkbox" class="fm-l-dec"> ${escaparHtml(opcoes.declaracao || FM_DECL_LOCAL)}</label>
       <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary fm-l-ok">Assinar</button></div></div>`;
     document.body.appendChild(modal);
+    modal.querySelectorAll('.icone-svg').forEach(i => { i.innerHTML = ICONES[i.dataset.icone] || ''; });
     const pad = modal.querySelector('.q-pad'); qLigarPad(pad);
-    modal.querySelector('.q-modal-cancelar').addEventListener('click', () => { modal.remove(); resolver(null); });
-    modal.querySelector('.fm-l-ok').addEventListener('click', () => {
-      const nome = modal.querySelector('.fm-l-nome').value.trim();
-      if(nome.split(/\s+/).length < 2){ mostrarAvisoApp('Falta o nome', 'Escreva o nome completo.'); return; }
-      if(pad._vazio){ mostrarAvisoApp('Falta a assinatura', 'Assine com o dedo no quadro.'); return; }
-      if(!modal.querySelector('.fm-l-dec').checked){ mostrarAvisoApp('Falta confirmar', 'Marque a declaração.'); return; }
+    let lido = Object.assign({}, p), forma = p.nome ? 'cracha' : 'digitado';
+    const q = (c) => modal.querySelector(c);
+    q('.fm-l-cracha').addEventListener('click', async () => {
+      const x = await fmLerCracha(); if(!x) return;
+      lido = x; forma = 'cracha';
+      if(x.nome) q('.fm-l-nome').value = x.nome; if(x.matricula) q('.fm-l-mat').value = x.matricula;
+      if(x.empresa) q('.fm-l-emp').value = x.empresa; if(x.cargo) q('.fm-l-func').value = x.cargo;
+    });
+    q('.q-modal-cancelar').addEventListener('click', () => { modal.remove(); resolver(null); });
+    q('.fm-l-ok').addEventListener('click', () => {
+      const nome = q('.fm-l-nome').value.replace(/\s+/g, ' ').trim();
+      if(nome.split(' ').length < 2){ mostrarAvisoApp('Falta o nome', 'Escreva o nome completo ou leia o crachá.'); return; }
+      if(pad._vazio){ mostrarAvisoApp('Falta a assinatura', 'A pessoa assina com o dedo no quadro.'); return; }
+      if(!q('.fm-l-dec').checked){ mostrarAvisoApp('Falta confirmar', 'A pessoa precisa marcar a declaração.'); return; }
       const eu = qMeuPerfil();
-      const ass = { nome: nome.toUpperCase(), matricula: modal.querySelector('.fm-l-mat').value.trim(), funcao: modal.querySelector('.fm-l-func').value.trim(),
+      const ass = { nome: nome.toUpperCase(), matricula: q('.fm-l-mat').value.trim().toUpperCase(), funcao: q('.fm-l-func').value.trim().toUpperCase(), empresa: q('.fm-l-emp').value.trim().toUpperCase(),
+        genero: lido.genero || '', forma, qr: lido.qr || '',
         imagem: fmImagemPad(pad), assinadoEm: firebase.firestore.FieldValue.serverTimestamp(), dataTexto: fmDataTexto(), data: fmHoje(), hora: fmAgoraHora(),
         aparelho: fmAparelho(), metodo: 'presencial no celular de ' + (eu.nome || ''), registradoPor: { nome: eu.nome, email: eu.email, uid: eu.uid },
         declaracao: opcoes.declaracao || FM_DECL_LOCAL };
@@ -12045,15 +12247,68 @@ async function fmConferirLinks(){
   }
 }
 
-/* --- PTR: executantes --- */
-function fmAddExecutante(){
-  fmAssinarLocal('exec', 'Executante', { titulo: 'Executante', texto: 'Quem vai executar o trabalho confere a PTR e assina com o dedo.', declaracao: 'Declaro que conheço os riscos e as precauções desta PTR e vou cumpri-las.' }).then(ass => {
-    if(!ass) return;
-    const f = fmAtual; f.executantes = f.executantes || [];
-    if(f.executantes.some(x => qNorm(x.nome) === qNorm(ass.nome))){ mostrarAvisoApp('Já está na lista', ass.nome + ' já assinou esta PTR.'); return; }
-    const x = Object.assign({}, ass); delete x.assinadoEm;
-    f.executantes.push(x); f.pdfJaGerado = !!f.pdfUrl; fmSalvar(true); fmRenderFicha();
+/* --- PTR: executantes (crachá ou digitado) --- */
+async function fmAddExecutante(cracha){
+  let pessoa = null;
+  if(cracha){ pessoa = await fmLerCracha(); if(!pessoa) return; }
+  const f = fmAtual;
+  if(pessoa && (f.executantes || []).some(x => qNorm(x.nome) === qNorm(pessoa.nome))){ mostrarAvisoApp('Já está na lista', pessoa.nome + ' já assinou esta PTR.'); return; }
+  const ass = await fmAssinarLocal('exec', 'Executante', { titulo: cracha ? 'Confira os dados do crachá' : 'Executante sem crachá', pessoa,
+    texto: 'Quem vai executar o trabalho confere a PTR e assina com o dedo.', declaracao: 'Declaro que conheço os riscos e as precauções desta PTR e vou cumpri-las.' });
+  if(!ass) return;
+  f.executantes = f.executantes || [];
+  if(f.executantes.some(x => qNorm(x.nome) === qNorm(ass.nome))){ mostrarAvisoApp('Já está na lista', ass.nome + ' já assinou esta PTR.'); return; }
+  const x = Object.assign({}, ass); delete x.assinadoEm;
+  f.executantes.push(x); f.pdfJaGerado = !!f.pdfUrl; fmSalvar(true);
+  if(typeof trBip === 'function') trBip(true);
+  const y = window.scrollY; fmRenderFicha(); window.scrollTo(0, y);
+  mostrarAvisoApp('Executante registrado', ass.nome + ' · ' + f.executantes.length + ' na PTR');
+}
+
+/* --- PAVE: PTR preenchida na hora vira anexo --- */
+function fmNovaPtrDaPave(){
+  const pave = fmAtual; if(!pave) return;
+  const eu = qMeuPerfil(), id = db.collection('formularios').doc().id, c = pave.campos || {};
+  pave.anexosVinculo = Object.assign({}, pave.anexosVinculo, { ptr: id }); pave.pdfJaGerado = !!pave.pdfUrl;
+  fmSalvar(true);
+  fmTipo = 'ptr';
+  fmAtual = { id, novo: true, tipo: 'ptr', estado: 'rascunho', paveId: pave.id, paveTitulo: fmTitulo(pave),
+    campos: { local: c.frente || '', processo: 'Escavação com detonação', descricao: 'Detonação' + (c.avanco ? ' · avanço ' + c.avanco : '') + (c.planoFogo ? ' · plano de fogo ' + c.planoFogo : ''), respArea: '', encarregado: c.mestre || '' },
+    marcados: {}, aplicavel: {}, outros: {}, respostas: {}, assinaturas: {}, executantes: [], ncs: [], recusa: { houve: false },
+    validade: { data: c.data || fmHoje(), inicio: fmAgoraHora(), termino: '' }, anexosOk: {},
+    criadoPor: eu.uid, criadoPorNome: eu.nome, criadoPorEmail: eu.email, criadoEmTexto: new Date().toISOString() };
+  fmSalvar(true);
+  fmAberto = {}; irPara('view-form-ficha'); fmRenderFicha(); window.scrollTo(0, 0);
+}
+async function fmAbrirPorId(id){
+  let f = fmLista.find(x => x.id === id);
+  if(!f){ try{ const d = await db.collection('formularios').doc(id).get(); if(d.exists) f = Object.assign({ id: d.id }, d.data()); }catch(e){} }
+  if(f){ fmTipo = f.tipo; fmAbrir(f); return true; }
+  mostrarAvisoApp('Não encontrei', 'Confira a internet e tente de novo.'); return false;
+}
+function fmLigarVinculo(raiz, f, ed){
+  const a = raiz.querySelector('#fm-ptr-abrir'); if(a) a.addEventListener('click', () => { fmSalvar(true); fmAbrirPorId(f.anexosVinculo.ptr); });
+  const d = raiz.querySelector('#fm-ptr-desvincular'); if(d) d.addEventListener('click', async () => {
+    if(!(await confirmarApp('Desvincular a PTR?', 'Ela continua salva, mas deixa de ser anexo desta PAVE.', 'Desvincular'))) return;
+    f.anexosVinculo = Object.assign({}, f.anexosVinculo, { ptr: '' }); f.pdfJaGerado = !!f.pdfUrl; fmSalvar(true);
+    const y = window.scrollY; fmRenderFicha(); window.scrollTo(0, y);
   });
+  const n = raiz.querySelector('#fm-ptr-nova'); if(n) n.addEventListener('click', fmNovaPtrDaPave);
+  const v = raiz.querySelector('#fm-voltar-pave'); if(v) v.addEventListener('click', () => { fmSalvar(true); fmAbrirPorId(f.paveId); });
+}
+
+/* --- câmera: alguns celulares recarregam o app ao abrir a câmera; ao voltar, reabre o formulário --- */
+function fmLembrarRetorno(){
+  if(!fmAtual) return;
+  try{ sessionStorage.setItem('sst_retorno', JSON.stringify({ tipo: 'fm', id: fmAtual.id, ftipo: fmAtual.tipo, t: Date.now() })); }catch(e){}
+}
+function fmEsquecerRetorno(){ try{ sessionStorage.removeItem('sst_retorno'); }catch(e){} }
+async function fmRetomar(){
+  let r = null; try{ r = JSON.parse(sessionStorage.getItem('sst_retorno') || 'null'); }catch(e){}
+  if(!r || r.tipo !== 'fm' || Date.now() - r.t > 30 * 60000) return;
+  fmEsquecerRetorno();
+  fmTipo = r.ftipo || fmTipo; fmOuvir();
+  if(await fmAbrirPorId(r.id)) mostrarAvisoApp('Formulário reaberto', 'O celular reiniciou o app ao abrir a câmera. Se a foto não apareceu nos anexos, tire de novo.');
 }
 
 /* --- PAVE: anexos (em pedaços no banco até o Apps Script levar para o Drive) --- */
@@ -12109,22 +12364,31 @@ function fmLigarCompartilhar(corpo, f){
 }
 
 /* --- ligações da ficha --- */
+function fmSetCampo(f, k, v){
+  if(k.startsWith('v.')){ f.validade = f.validade || {}; f.validade[k.slice(2)] = v; }
+  else if(k.startsWith('rv.')){ f.revalidacao = f.revalidacao || {}; f.revalidacao[k.slice(3)] = v; }
+  else if(k.startsWith('rec.')){ f.recusa = f.recusa || {}; f.recusa[k.slice(4)] = v; }
+  else if(k.startsWith('outros.')){ f.outros = f.outros || {}; f.outros[k.slice(7)] = v; }
+  else if(k.startsWith('r.')){ f.respostas = f.respostas || {}; f.respostas[k.slice(2)] = v; }
+  else if(k.startsWith('nc.')){ const [, i, c] = k.split('.'); f.ncs[Number(i)][c] = v; }
+  else if(k === 'observacoes') f.observacoes = v;
+  else f.campos[k] = v;
+}
 function fmLigar(corpo, f, ed){
   corpo.querySelectorAll('[data-fmdet]').forEach(d => d.addEventListener('toggle', () => { fmAberto[d.dataset.fmdet] = d.open; }));
   fmLigarCompartilhar(corpo, f);
-  corpo.querySelectorAll('[data-fmc]').forEach(el => el.addEventListener(el.type === 'date' || el.type === 'time' ? 'change' : 'input', () => {
-    const k = el.dataset.fmc, v = el.value;
-    if(k.startsWith('v.')){ f.validade = f.validade || {}; f.validade[k.slice(2)] = v; }
-    else if(k.startsWith('rv.')){ f.revalidacao = f.revalidacao || {}; f.revalidacao[k.slice(3)] = v; }
-    else if(k.startsWith('rec.')){ f.recusa = f.recusa || {}; f.recusa[k.slice(4)] = v; }
-    else if(k.startsWith('outros.')){ f.outros = f.outros || {}; f.outros[k.slice(7)] = v; }
-    else if(k.startsWith('r.')){ f.respostas = f.respostas || {}; f.respostas[k.slice(2)] = v; }
-    else if(k.startsWith('nc.')){ const [, i, c] = k.split('.'); f.ncs[Number(i)][c] = v; }
-    else if(k === 'observacoes') f.observacoes = v;
-    else f.campos[k] = v;
-    f.pdfJaGerado = !!f.pdfUrl; fmSalvar();
-    if(/^(rv\.|v\.)/.test(k) || ['local', 'descricao', 'respArea', 'encarregado', 'r.5'].includes(k)) { clearTimeout(fmLigar._t); fmLigar._t = setTimeout(() => { const y = window.scrollY; fmRenderFicha(); window.scrollTo(0, y); }, 900); }
+  // campos de texto: salva e atualiza só assinaturas/barra (sem redesenhar: o teclado não fecha)
+  corpo.querySelectorAll('[data-fmc]').forEach(el => el.addEventListener(el.type === 'date' ? 'change' : 'input', () => {
+    fmSetCampo(f, el.dataset.fmc, el.value);
+    f.pdfJaGerado = !!f.pdfUrl; fmSalvar(); fmAtualizarDinamico();
   }));
+  corpo.querySelectorAll('[data-fmhora]').forEach(b => b.addEventListener('click', async () => {
+    const k = b.dataset.fmhora, atual = b.firstChild.textContent;
+    const v = await rodaHora(b.dataset.rot || 'Horário', /^\d\d:\d\d$/.test(atual) ? atual : ''); if(v === null) return;
+    fmSetCampo(f, k, v); b.firstChild.textContent = v; b.classList.remove('vazio');
+    f.pdfJaGerado = !!f.pdfUrl; fmSalvar(); fmAtualizarDinamico();
+  }));
+  fmLigarVinculo(corpo, f, ed);
   const reRender = () => { const y = window.scrollY; fmSalvar(); fmRenderFicha(); window.scrollTo(0, y); };
   corpo.querySelectorAll('[data-fmk]').forEach(el => el.addEventListener('change', () => { f.marcados[el.dataset.fmk] = el.checked; if(!el.checked) delete f.marcados[el.dataset.fmk]; fmSalvar(); }));
   corpo.querySelectorAll('[data-fmapl]').forEach(b => b.addEventListener('click', () => { f.aplicavel[b.dataset.fmapl] = b.dataset.v === '1'; reRender(); }));
@@ -12133,12 +12397,19 @@ function fmLigar(corpo, f, ed){
   corpo.querySelectorAll('[data-fmna]').forEach(c => c.addEventListener('change', () => { f.anexosNaoAplica = f.anexosNaoAplica || {}; f.anexosNaoAplica[c.dataset.fmna] = c.checked; reRender(); }));
   corpo.querySelectorAll('[data-fmncdel]').forEach(b => b.addEventListener('click', () => { f.ncs.splice(Number(b.dataset.fmncdel), 1); reRender(); }));
   const nc = corpo.querySelector('#fm-nc-add'); if(nc) nc.addEventListener('click', () => { f.ncs = f.ncs || []; f.ncs.push({ item: '', descricao: '', responsavel: '' }); reRender(); });
-  const ex = corpo.querySelector('#fm-exec-add'); if(ex) ex.addEventListener('click', fmAddExecutante);
+  const ec = corpo.querySelector('#fm-exec-cracha'); if(ec) ec.addEventListener('click', () => fmAddExecutante(true));
+  const ed2 = corpo.querySelector('#fm-exec-digitar'); if(ed2) ed2.addEventListener('click', () => fmAddExecutante(false));
+  corpo.querySelectorAll('[data-fmexecdel]').forEach(b => b.addEventListener('click', async () => {
+    const x = f.executantes[Number(b.dataset.fmexecdel)]; if(!x) return;
+    if(!(await confirmarApp('Remover executante?', x.nome + ' sai da lista desta PTR.', 'Remover'))) return;
+    f.executantes.splice(Number(b.dataset.fmexecdel), 1); f.pdfJaGerado = !!f.pdfUrl; reRender();
+  }));
   corpo.querySelectorAll('.fm-anx-add').forEach(b => b.addEventListener('click', () => {
     const inp = document.createElement('input'); inp.type = 'file';
     if(b.dataset.modo === 'camera'){ inp.accept = 'image/*'; inp.setAttribute('capture', 'environment'); }
     else { inp.accept = 'image/*,application/pdf,.pdf,.doc,.docx,.xls,.xlsx'; inp.multiple = true; }
-    inp.addEventListener('change', () => { const l = [...(inp.files || [])]; if(l.length) fmAnexar(b.dataset.k, l); });
+    inp.addEventListener('change', () => { fmEsquecerRetorno(); const l = [...(inp.files || [])]; if(l.length) fmAnexar(b.dataset.k, l); });
+    fmSalvar(true); fmLembrarRetorno();
     inp.click();
   }));
   corpo.querySelectorAll('[data-fmanxdel]').forEach(b => b.addEventListener('click', async () => {
@@ -12149,15 +12420,18 @@ function fmLigar(corpo, f, ed){
     gravarSemEsperar(db.collection('formularios').doc(f.id).collection('anexos').doc(aid).delete(), 'remover anexo');
     reRender();
   }));
-  corpo.querySelectorAll('.fm-ass').forEach(bl => {
-    const papel = bl.dataset.papel, rot = bl.querySelector('small').textContent;
+  fmLigarAss(corpo, f);
+}
+function fmLigarAss(raiz, f){
+  raiz.querySelectorAll('.fm-ass').forEach(bl => {
+    const papel = bl.dataset.papel;
     const rotulo = fmRotPapel(f, papel.replace(/_(rv|enc)$/, '')) + (/_rv$/.test(papel) ? ' (revalidação)' : /_enc$/.test(papel) ? ' (encerramento)' : '');
     const bL = bl.querySelector('.fm-ass-local');
     if(bL) bL.addEventListener('click', async () => {
       if(f.novo) fmSalvar(true);
       const ass = await fmAssinarLocal(papel, rotulo);
       if(!ass) return;
-      gravarSemEsperar(fmRegistrar(papel, ass), 'assinatura'); fmRenderFicha();
+      gravarSemEsperar(fmRegistrar(papel, ass), 'assinatura'); const y = window.scrollY; fmRenderFicha(); window.scrollTo(0, y);
     });
     const bS = bl.querySelector('.fm-ass-sstma'); if(bS) bS.addEventListener('click', () => { if(f.novo) fmSalvar(true); fmAssinarSstma(papel, rotulo, false); });
     const bO = bl.querySelector('.fm-ass-login'); if(bO) bO.addEventListener('click', () => { if(f.novo) fmSalvar(true); fmAssinarSstma(papel, rotulo, true); });
@@ -12176,6 +12450,8 @@ document.getElementById('fm-nova').addEventListener('click', fmNova);
 document.getElementById('fm-busca').addEventListener('input', (e) => { fmBusca = e.target.value; fmRenderLista(); });
 document.getElementById('fm-ficha-voltar').addEventListener('click', () => { if(fmAtual && !fmAtual.novo) fmSalvar(true); fmAtual = null; abrirFormularios(fmTipo); });
 document.getElementById('fm-voltar').addEventListener('click', () => irPara('view-apr'));
+document.getElementById('fm-analise').addEventListener('click', () => abrirAnaliseFormularios());
+document.getElementById('apr-at-analise').addEventListener('click', () => abrirAnaliseFormularios());
 
 /* ======================================================================
    CALENDÁRIO SSTMA: eventos fixos (iguais no app e no Apps Script)
@@ -12209,6 +12485,35 @@ function calFixos(de, ate){
   return l.sort((a, b) => a.data.localeCompare(b.data));
 }
 const CAL_TIPOS = { evento: 'Evento', qualimetria: 'Qualimetria', treinamento: 'Treinamento', lv: 'LV', reuniao: 'Reunião', auditoria: 'Auditoria', prazo: 'Prazo' };
+/* convite de calendário (.ics) para Outlook, Google Agenda e o calendário do celular.
+   Horário de Brasília sem horário de verão: UTC-3. Sem hora = dia inteiro. */
+function calIcsTexto(t){ return String(t || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n'); }
+function calIcsUtc(data, hora, somaMin){
+  const p = data.split('-').map(Number), h = String(hora).split(':').map(Number);
+  const d = new Date(Date.UTC(p[0], p[1] - 1, p[2], h[0] + 3, (h[1] || 0) + (somaMin || 0)));
+  return d.toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+}
+function calIcs(eventos){
+  const agora = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+  const l = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//SSTMA CCG//Calendario SSTMA//PT', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  eventos.forEach((e, i) => {
+    l.push('BEGIN:VEVENT', 'UID:' + (e.id || ('ev' + i)) + '-' + String(e.data).replace(/-/g, '') + '@sstma-ccg', 'DTSTAMP:' + agora);
+    if(e.hora){ l.push('DTSTART:' + calIcsUtc(e.data, e.hora), 'DTEND:' + calIcsUtc(e.data, e.hora, 60)); }
+    else { l.push('DTSTART;VALUE=DATE:' + e.data.replace(/-/g, ''), 'DTEND;VALUE=DATE:' + calSomaDias(e.data, 1).replace(/-/g, '')); }
+    l.push('SUMMARY:' + calIcsTexto(e.titulo), 'DESCRIPTION:' + calIcsTexto((e.descricao ? e.descricao + '\n' : '') + 'Calendário SSTMA · Consórcio Construtor Gávea'),
+      'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:' + calIcsTexto(e.titulo), 'TRIGGER:' + (e.hora ? '-PT1H' : '-PT15H'), 'END:VALARM', 'END:VEVENT');
+  });
+  l.push('END:VCALENDAR');
+  return l.join('\r\n');
+}
+/* link "adicionar ao calendário do Outlook" (Outlook web / Microsoft 365) */
+function calLinkOutlook(e){
+  const q = ['path=/calendar/action/compose', 'rru=addevent', 'subject=' + encodeURIComponent(e.titulo || ''),
+    'body=' + encodeURIComponent((e.descricao ? e.descricao + '\n\n' : '') + 'Calendário SSTMA · Consórcio Construtor Gávea')];
+  if(e.hora){ const fim = String(Number(e.hora.slice(0, 2)) + 1).padStart(2, '0') + e.hora.slice(2); q.push('startdt=' + e.data + 'T' + e.hora + ':00-03:00', 'enddt=' + e.data + 'T' + (fim > '23:59' ? '23:59' : fim) + ':00-03:00'); }
+  else q.push('startdt=' + e.data, 'enddt=' + calSomaDias(e.data, 1), 'allday=true');
+  return 'https://outlook.office.com/calendar/0/deeplink/compose?' + q.join('&');
+}
 
 /* ======================================================================
    CALENDÁRIO SSTMA (só TST e Meio Ambiente)
@@ -12260,6 +12565,7 @@ function calItem(e){
     ${e.feito && e.feitoPor ? `<span class="lv-sub">${e.semanal ? 'Marcado como dado' : 'Feito'} por ${escaparHtml(e.feitoPor)}</span>` : ''}
     <div class="cal-acoes">
       <button type="button" class="apr-mini" data-calfeito="${e.feito ? 0 : 1}">${e.feito ? 'Reabrir' : (e.semanal ? 'Sim, já foi dado' : 'Marcar como feito')}</button>
+      <button type="button" class="apr-mini" data-calics>Salvar no meu calendário</button>
       <button type="button" class="apr-mini" data-calmail>E-mail aos TSTs</button>
       ${e.origem === 'app' ? '<button type="button" class="apr-mini apr-remover" data-caldel>Excluir</button>' : ''}
     </div></div>`;
@@ -12318,6 +12624,9 @@ function calRender(){
     gravarSemEsperar(db.collection('calendario').doc(e.id).set(d, { merge: true }), 'calendário');
     calRender();
   }));
+  corpo.querySelectorAll('[data-calics]').forEach(b => b.addEventListener('click', () => {
+    const e = achar(b.closest('[data-calid]').dataset.calid); if(e) calSalvarIcs([e]);
+  }));
   corpo.querySelectorAll('[data-calmail]').forEach(b => b.addEventListener('click', () => {
     const e = achar(b.closest('[data-calid]').dataset.calid); if(e) calPedirEmail([e], e.titulo + ' – ' + formatarDataBR(e.data));
   }));
@@ -12331,25 +12640,48 @@ function calRender(){
 }
 function calNovo(){
   const modal = document.createElement('div'); modal.className = 'q-modal';
-  modal.innerHTML = `<div class="q-modal-caixa" role="dialog" aria-modal="true" aria-label="Novo evento"><h3>Novo evento</h3>
+  modal.innerHTML = `<div class="q-modal-caixa cal-modal" role="dialog" aria-modal="true" aria-label="Novo evento"><h3>Novo evento</h3>
     <p>Aparece para todos os TSTs, com aviso no celular 5 dias antes, 3 dias antes e no dia.</p>
-    <label>Título *<input type="text" class="cal-n-tit" autocomplete="off"></label>
-    <div class="lv-dois"><label>Data *<input type="date" class="cal-n-data" value="${calSel || calHoje()}"></label><label>Hora<input type="time" class="cal-n-hora"></label></div>
-    <label>Tipo<select class="cal-n-tipo">${Object.entries(CAL_TIPOS).filter(([k]) => k !== 'treinamento' && k !== 'qualimetria').map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select></label>
-    <label>Descrição<textarea class="cal-n-desc" rows="3"></textarea></label>
+    <label class="lv-campo">Título *<input type="text" class="cal-n-tit" autocomplete="off" placeholder="Ex.: Auditoria da Metrô"></label>
+    <div class="lv-dois"><label class="lv-campo">Data *<input type="date" class="cal-n-data" value="${calSel || calHoje()}"></label>
+      <div class="lv-campo">Hora<button type="button" class="campo-roda vazio cal-n-hora"><span>Dia todo</span><span class="icone-svg" data-icone="relogio"></span></button></div></div>
+    <span class="cal-n-rot">Tipo</span>
+    <div class="cal-n-tipos">${Object.entries(CAL_TIPOS).filter(([k]) => k !== 'treinamento' && k !== 'qualimetria').map(([k, v], i) => `<button type="button" class="lv-op${i === 0 ? ' on' : ''}" data-caltipo="${k}">${v}</button>`).join('')}</div>
+    <label class="lv-campo">Descrição<textarea class="cal-n-desc" rows="3" placeholder="Opcional"></textarea></label>
     <div class="q-modal-acoes"><button type="button" class="q-modal-cancelar">Cancelar</button><button type="button" class="btn-primary cal-n-ok">Salvar</button></div></div>`;
   document.body.appendChild(modal);
+  modal.querySelectorAll('.icone-svg').forEach(i => { i.innerHTML = ICONES[i.dataset.icone] || ''; });
+  let hora = '', tipo = 'evento';
+  const bh = modal.querySelector('.cal-n-hora');
+  bh.addEventListener('click', async () => {
+    const v = await rodaHora('Hora do evento', hora || '08:00'); if(v === null) return;
+    hora = v; bh.firstChild.textContent = v; bh.classList.remove('vazio');
+  });
+  modal.querySelectorAll('[data-caltipo]').forEach(b => b.addEventListener('click', () => {
+    tipo = b.dataset.caltipo; modal.querySelectorAll('[data-caltipo]').forEach(x => x.classList.toggle('on', x === b));
+  }));
   modal.querySelector('.q-modal-cancelar').addEventListener('click', () => modal.remove());
   modal.querySelector('.cal-n-ok').addEventListener('click', () => {
     const titulo = modal.querySelector('.cal-n-tit').value.trim(), data = modal.querySelector('.cal-n-data').value;
     if(!titulo || !data){ mostrarAvisoApp('Faltam dados', 'Preencha o título e a data.'); return; }
     const eu = qMeuPerfil(), id = db.collection('calendario').doc().id;
-    const d = { titulo, data, hora: modal.querySelector('.cal-n-hora').value, tipo: modal.querySelector('.cal-n-tipo').value, descricao: modal.querySelector('.cal-n-desc').value.trim(),
+    const d = { titulo, data, hora, tipo, descricao: modal.querySelector('.cal-n-desc').value.trim(),
       origem: 'app', feito: false, criadoPor: { nome: eu.nome, email: eu.email, uid: eu.uid }, criadoEm: firebase.firestore.FieldValue.serverTimestamp() };
     calDocs[id] = Object.assign({ id }, d);
     gravarSemEsperar(db.collection('calendario').doc(id).set(d), 'calendário');
     modal.remove(); calMes = data.slice(0, 7); calSel = data; calRender();
   });
+  setTimeout(() => modal.querySelector('.cal-n-tit').focus(), 80);
+}
+/* baixa o convite (.ics): no celular abre o calendário do aparelho; no computador, o Outlook */
+async function calSalvarIcs(eventos){
+  const nome = (eventos.length === 1 ? eventos[0].titulo : 'Agenda SSTMA').replace(/[^\wÀ-ÿ -]+/g, '').trim().slice(0, 50) + '.ics';
+  const arq = new File([calIcs(eventos)], nome, { type: 'text/calendar' });
+  if(/iphone|ipad/i.test(navigator.userAgent) && navigator.canShare && navigator.canShare({ files: [arq] })){
+    try{ await navigator.share({ files: [arq], title: nome }); return; }catch(e){ if(e && e.name === 'AbortError') return; }
+  }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(arq); a.download = nome; document.body.appendChild(a); a.click(); a.remove();
+  mostrarAvisoApp('Convite baixado', 'Abra o arquivo ' + nome + ' para colocar no seu calendário.');
 }
 async function calPedirEmail(eventos, assunto){
   if(!eventos.length){ mostrarAvisoApp('Nada para enviar', 'Não há eventos pendentes no período.'); return; }
@@ -12361,6 +12693,95 @@ async function calPedirEmail(eventos, assunto){
   mostrarAvisoApp('E-mail na fila', 'Sai na próxima sincronização, para todos da lista da equipe.');
 }
 document.getElementById('cal-voltar').addEventListener('click', () => irPara('view-desvios'));
+
+/* ======================================================================
+   ANÁLISE DOS FORMULÁRIOS (APR, PTR e PAVE) — visão gerencial
+   Dados: aprLista (APRs) e fmLista (PTR/PAVE), os mesmos das telas.
+   ====================================================================== */
+let fanMes = '';
+function fanPodeVer(){ return ehSSTMA() || papelDoEmail(qMeuEmail()) === 'gerencia' || (typeof aprPodeGerir === 'function' && aprPodeGerir()); }
+function fanIso(v){ if(!v) return ''; if(typeof v === 'string') return v.slice(0, 10); if(v.toDate) return calIso(v.toDate()); if(v.seconds) return calIso(new Date(v.seconds * 1000)); return ''; }
+function fanDataApr(a){ return fanIso(a.criadoEmTexto) || fanIso(a.criadoEm) || String((a.programacao || {}).inicio || ''); }
+function fanDataFm(f){ return String((f.tipo === 'ptr' ? (f.validade || {}).data : (f.campos || {}).data) || fanIso(f.criadoEmTexto) || fanIso(f.criadoEm)); }
+function fanMeses(n){ const l = [], d = new Date(); d.setDate(1); for(let i = n - 1; i >= 0; i--){ const x = new Date(d.getFullYear(), d.getMonth() - i, 1); l.push(calIso(x).slice(0, 7)); } return l; }
+function fanMesRot(m){ return ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'][Number(m.slice(5)) - 1] + '/' + m.slice(2, 4); }
+function abrirAnaliseFormularios(){
+  if(!fanPodeVer()){ mostrarAvisoApp('Sem acesso', 'A análise dos formulários é da equipe SSTMA e da liderança.'); return; }
+  if(typeof abrirAPR === 'function' && !aprOuvindo) abrirAPR();
+  fmOuvir();
+  if(!fanMes) fanMes = calHoje().slice(0, 7);
+  irPara('view-form-analise'); fanRender();
+  setTimeout(() => { if(fmVisivel('view-form-analise')) fanRender(); }, 1500);
+}
+function fanRender(){
+  const corpo = document.getElementById('fan-corpo'); if(!corpo) return;
+  const mes = fanMes, meses = fanMeses(6), aprs = (typeof aprLista !== 'undefined' ? aprLista : []).filter(a => !a.ehModelo);
+  const ptrs = fmLista.filter(f => f.tipo === 'ptr'), paves = fmLista.filter(f => f.tipo === 'pave');
+  const doMes = (l, fn) => l.filter(x => fn(x).slice(0, 7) === mes);
+  // APR
+  const vig = aprs.filter(a => a.estado === 'vigente');
+  const venc5 = vig.filter(a => { const d = aprDiasVencer(a); return d !== null && d >= 0 && d <= 5; });
+  const revMes = aprs.filter(a => (a.revalidacoes || []).some(r => r.mes === mes)).length;
+  const aprMes = doMes(aprs.filter(a => a.estado !== 'rascunho'), fanDataApr);
+  const semExec = vig.filter(a => !aprExecHojeN(a) && !aprSituacao(a).revalidar);
+  // PTR
+  const ptrMes = doMes(ptrs, fanDataFm), ptrLib = ptrMes.filter(fmAprovada), ptrEnc = ptrMes.filter(f => FM_PTR_PAPEIS.every(p => (f.assinaturas || {})[p[0] + '_enc']));
+  const ptrPend = ptrs.filter(f => !fmAprovada(f));
+  const execPtr = ptrMes.reduce((s, f) => s + (f.executantes || []).length, 0);
+  const recusas = ptrMes.filter(f => f.recusa && f.recusa.houve).length;
+  // PAVE
+  const paveMes = doMes(paves, fanDataFm), paveOk = paveMes.filter(f => fmTodasAssinadas(f) && !fmAnexosFaltando(f).length);
+  const paveFalta = paves.filter(f => fmAnexosFaltando(f).length);
+  const fogoNao = paveMes.filter(f => (f.respostas || {}).fogo === 'NÃO').length, ncs = paveMes.reduce((s, f) => s + (f.ncs || []).length, 0);
+  const linksPend = fmLista.reduce((s, f) => s + Object.keys(f.linksAssinatura || {}).filter(k => !(f.assinaturas || {})[k]).length, 0);
+  const q = [];
+  q.push({ titulo: 'Resumo de ' + fanMesRot(mes), sub: 'APR, PTR e PAVE emitidas no mês', larga: true, corpo: anKpisHtml([
+    { rot: 'APRs publicadas', val: aprMes.length, peq: revMes + ' revalidada(s) no mês' },
+    { rot: 'PTRs', val: ptrMes.length, peq: ptrLib.length + ' liberada(s) · ' + ptrEnc.length + ' encerrada(s)' },
+    { rot: 'PAVEs', val: paveMes.length, peq: paveOk.length + ' concluída(s)' },
+    { rot: 'Executantes em PTR', val: execPtr, peq: recusas ? recusas + ' recusa(s) de trabalho' : 'sem recusas' }]) });
+  q.push({ titulo: 'Atenção agora', sub: 'O que precisa de ação', larga: true, corpo: anKpisHtml([
+    { rot: 'APRs vencem em até 5 dias', val: venc5.length, cor: venc5.length ? '#b26b00' : '', peq: vig.length + ' vigentes' },
+    { rot: 'APRs sem executantes hoje', val: semExec.length, cor: semExec.length ? '#b26b00' : '' },
+    { rot: 'PTRs aguardando aprovação', val: ptrPend.length, cor: ptrPend.length ? '#b26b00' : '' },
+    { rot: 'PAVEs sem os anexos', val: paveFalta.length, cor: paveFalta.length ? 'var(--error)' : '', peq: linksPend + ' assinatura(s) por link pendente(s)' }], true) });
+  const serie = meses.map(m => ({ rotulo: fanMesRot(m), v: {
+    apr: aprs.filter(a => a.estado !== 'rascunho' && fanDataApr(a).slice(0, 7) === m).length,
+    ptr: ptrs.filter(f => fanDataFm(f).slice(0, 7) === m).length,
+    pave: paves.filter(f => fanDataFm(f).slice(0, 7) === m).length } }));
+  q.push({ titulo: 'Formulários por mês', sub: 'Últimos 6 meses', larga: true, corpo: anEmpilhadasHtml(serie, [
+    { chave: 'apr', rot: 'APR', cor: '#142131' }, { chave: 'ptr', rot: 'PTR', cor: '#4E7A30' }, { chave: 'pave', rot: 'PAVE', cor: '#c98a1c' }]) });
+  // APR por frente
+  const porFrente = {}; vig.forEach(a => { const k = a.frenteNome || 'Sem frente'; porFrente[k] = (porFrente[k] || 0) + 1; });
+  q.push({ titulo: 'APRs vigentes por frente', sub: 'Frentes com mais atividades cobertas', corpo: anBarrasHtml(Object.entries(porFrente).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([rotulo, valor]) => ({ rotulo, valor }))) });
+  // PTR por tipo de serviço
+  const srv = FM_PTR_SECOES.find(s => s.id === 'servico');
+  q.push({ titulo: 'PTR por tipo de serviço', sub: fanMesRot(mes), corpo: anBarrasHtml(srv.itens.map((t, i) => ({ rotulo: t, valor: ptrMes.filter(f => (f.marcados || {})['servico|' + i]).length })).filter(x => x.valor).sort((a, b) => b.valor - a.valor), null, '#4E7A30') });
+  // riscos mais marcados
+  const rsc = FM_PTR_SECOES.find(s => s.id === 'riscos');
+  q.push({ titulo: 'Riscos mais apontados nas PTRs', sub: fanMesRot(mes), corpo: anBarrasHtml(rsc.itens.map((t, i) => ({ rotulo: t, valor: ptrMes.filter(f => (f.marcados || {})['riscos|' + i]).length })).filter(x => x.valor).sort((a, b) => b.valor - a.valor).slice(0, 8), null, '#a32d2d') });
+  // PAVE: itens respondidos "N"
+  const naoConf = {};
+  paveMes.forEach(f => Object.entries(f.respostas || {}).forEach(([n, r]) => { if(r === 'N' && n !== '32') naoConf[n] = (naoConf[n] || 0) + 1; }));
+  const txtItem = (n) => { for(const b of FM_PAVE_BLOCOS){ const i = b.itens.find(x => x[0] === n); if(i) return n + ' · ' + i[1]; } return n; };
+  q.push({ titulo: 'PAVE: itens respondidos "Não"', sub: fanMesRot(mes) + ' · ' + ncs + ' não conformidade(s) registrada(s) · fogo não autorizado ' + fogoNao + 'x', larga: true,
+    corpo: Object.keys(naoConf).length ? anBarrasHtml(Object.entries(naoConf).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([n, v]) => ({ rotulo: txtItem(n).slice(0, 90), valor: v })), null, '#c98a1c') : anVazio('Nenhum item com "Não" nas PAVEs do mês.') });
+  // listas de pendências
+  const linha = (txt, sub, id, tipo) => `<button type="button" class="lv-card" data-fan="${tipo}|${escaparHtml(id)}"><span class="lv-card-topo"><b>${escaparHtml(txt)}</b></span><span class="lv-sub">${escaparHtml(sub)}</span></button>`;
+  const pend = [].concat(
+    venc5.map(a => linha('APR ' + (a.modeloNumero || '') + ' · ' + (a.titulo || ''), (a.frenteNome || '') + ' · ' + aprVenceTxt(aprDiasVencer(a)), a.id, 'apr')),
+    ptrPend.slice(0, 15).map(f => linha((f.numero || 'PTR') + ' · ' + fmTitulo(f), 'Falta assinar: ' + FM_PTR_PAPEIS.filter(p => !(f.assinaturas || {})[p[0]]).map(p => p[1].split(' (')[0]).join(', '), f.id, 'fm')),
+    paveFalta.slice(0, 15).map(f => linha((f.numero || 'PAVE') + ' · ' + fmTitulo(f), 'Faltam: ' + fmAnexosFaltando(f).join(', '), f.id, 'fm')));
+  q.push({ titulo: 'Pendências', sub: 'Toque para abrir', larga: true, corpo: pend.length ? pend.join('') : anVazio('Nada pendente.') });
+  const anos = [...new Set([calHoje().slice(0, 7)].concat(meses))].sort().reverse();
+  corpo.innerHTML = `<div class="fan-filtro"><label class="lv-campo">Mês<select id="fan-mes">${anos.map(m => `<option value="${m}" ${m === mes ? 'selected' : ''}>${fanMesRot(m)}</option>`).join('')}</select></label></div>` + q.map(agQuadroHtml).join('');
+  corpo.querySelector('#fan-mes').addEventListener('change', (e) => { fanMes = e.target.value; fanRender(); });
+  corpo.querySelectorAll('[data-fan]').forEach(b => b.addEventListener('click', () => {
+    const [t, id] = b.dataset.fan.split('|');
+    if(t === 'apr'){ const a = aprLista.find(x => x.id === id); if(a) aprAbrir(a); } else fmAbrirPorId(id);
+  }));
+}
+document.getElementById('fan-voltar').addEventListener('click', () => irPara('view-apr'));
 
 /* ======================= ligações ======================= */
 document.getElementById('q-btn-nova').addEventListener('click', qNovaFicha);
